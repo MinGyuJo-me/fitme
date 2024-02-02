@@ -37,9 +37,9 @@ function Diet() {
         <div class="blog-area style-two">
             
 	<div class="container">
-    <div class="col-lg-12" style={{border:"1px solid red"}}>
+    <div class="col-lg-12 d-flex justify-content-center" style={{border:"1px solid red"}}>
             <div class="row">
-			<div class="col-lg-6 col-md-6">
+			<div class="col-lg-6 col-md-12" style={{ width: "300px" }}>
 				<div class="sideber-box">
 					<div class="tag-body">
 						<div class="profile-image-box">
@@ -68,7 +68,7 @@ function Diet() {
 					</div>
 				</div>
 			</div>
-            <div class="col-lg-6 col-md-6">
+            <div class="col-lg-6 col-md-12" style={{ width: "600px" }}>
 				<div class="sideber-box">
 					<div class="tag-body">
 						<div class="profile-image-box">
