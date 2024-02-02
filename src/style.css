@@ -209,6 +209,7 @@ ul.sub-menu li a {
 .slider-button {
     display: inline-block;
     margin-right: 28px;
+    margin-top: 50px;
 }
 .slider-btn {
     display: inline-block;
@@ -327,8 +328,9 @@ ul.sub-menu li a {
     letter-spacing: 0px;
     font-weight: 400;
     font-size: 75px;
-    color: #fff;
+    color: #F8A532;
     text-transform: capitalize;
+    text-shadow: 2px 2px 5px black;
 }
 .slider-area.style-two .slider-title h3 {
     line-height: 26px;
