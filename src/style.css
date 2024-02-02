@@ -2448,11 +2448,20 @@ ul.sub-menu li a {
     margin-bottom: 40px;
     padding: 35px 30px 35px;
     border-radius: 8px;
+    height: 400px;
     background: #F6F4EC;
 }
-.sidebar-search {
+
+.sidebar-map-box{
+    height: 280px;
+    background-color: #F6F6F6;
+    border-radius: 10px;
+    border:1px solid rgba(0, 0, 0, 0.194);
+}
+.sidebar-search{
     position: relative;
 }
+
 .form-control {
     display: block;
     width: 100%;
