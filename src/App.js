@@ -3,36 +3,35 @@ import {useEffect} from 'react';
 import Main from './views/main/Main';
 
 
-import './css/bootstrap.min.css';
+import './assets/css/bootstrap.min.css';
 
-import './css/owl.carousel.min.css';
+import './assets/css/owl.carousel.min.css';
 
-import './css/nivo-slider.css';
+import './assets/css/nivo-slider.css';
 
-import './css/animate.css';
+import './assets/css/animate.css';
 
-import './css/animated-text.css';
+import './assets/css/animated-text.css';
 
-import './css/all.min.css';
+import './assets/css/all.min.css';
 
-import './css/flaticon.css';
+import './assets/css/flaticon.css';
 
-import './css/theme-default.css';
+import './assets/css/theme-default.css';
 
-import './css/meanmenu.min.css';
+import './assets/css/meanmenu.min.css';
 
-import './css/font-awesome.min.css';
+import './assets/css/font-awesome.min.css';
 
 import './style.css';
 
-import './css/owl.transitions.css';
+import './assets/css/owl.transitions.css';
 
 import './venobox/venobox.css';
 
-import './css/widget.css';
+import './assets/css/widget.css';
 
-import './css/responsive.css';
-
+import './assets/css/responsive.css';
 
 function App() {
   return (

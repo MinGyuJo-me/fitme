@@ -1,14 +1,17 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {Link} from 'react-router-dom';
 import React from 'react';
 
+
+import Header from '../component/header/Header';
+import HeaderTop from '../component/headerTop/HeaderTop';
 
 
 
 function Main() {
   return (
-    <div style={{border:"1px solid blue"}}>
-
+    <div>
+        <HeaderTop/>
+        <Header/>
 
         {/*
         <div class="loader-wrapper">
@@ -18,113 +21,13 @@ function Main() {
         </div>
         */}
 
-        
-        <div class="header-top">
-            <div class="container-fluid">
-                <div class="row align-items-center">
-                    <div class="col-lg-8">
-                        <div class="top-content">
-                            <p>
-                                <a href="#"><i class="fa fa-envelope-o"></i> example@example.com</a>
-                                <span><i class="fa fa-map-marker"></i> 1st Floor New World.</span>
-                                <a href="#"><i class="fa fa-phone"></i> +880 320 432 242</a>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="tops-content">
-                            <div class="tops-title">
-                                <span>Follow Us</span>
-                            </div>
-                            <div class="social-icon">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="top-right-btn">
-                                <a href="#">Get A Quote</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {/*
-        <!-- ============================================================== -->
-        <!-- Start - main-header Section -->
-        <!-- ============================================================= -->
-    */}
-        <header class="main-header">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="sticky-header" class="nav-menu">
-                            <div class="header-logo">
-                                <a href="index.html"><img src="assets/images/logo.png" alt=""/></a>
-                                <a class="main_sticky" href="index.html"><img src="assets/images/logo-2.png" alt=""/></a>
-                            </div>
-                            <div class="header-menu">
-                                <ul>
-                                    <li>
-                                        <a href="">Fitme</a>
-                                    </li>
-
-                                    <li><a href="gallery.html">Management</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="#">Food</a></li>
-                                            <li><a href="#">Workout</a></li>
-                                        </ul>
-                                    </li>
-
-
-                                    <li><a href="gallery.html">Commnuity</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="#">자유 게시판</a></li>
-                                            <li><a href="#">찍먹</a></li>
-                                        </ul>
-                                    </li>
-
-
-                                    <li><a href="gallery.html">MYPAGE</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="#">Profile</a></li>
-                                            <li><a href="#">security</a></li>
-                                            <li><a href="#">exercise</a></li>
-                                            <li><a href="#">diet</a></li>
-                                            <li><a href="#">bulletin board</a></li>
-                                            <li><a href="#">Video board</a></li>
-                                        </ul>
-                                    </li>
-
-                                                                        
-                                    <li><a href="#">chatting</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog-grid.html">GPT chat</a></li>
-                                            <li><a href="blog-list.html">messenger</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li>
-                                        <a href="#">Alarm</a>
-                                    </li>
-
-                                    <li><a href="contact.html">Login</a></li>
-                                </ul>
-                                <div class="search-box-btn search-box-outer"><i class="fas fa-search"></i></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
         {/*
-            <!-- ============================================================== -->
-            <!-- Start - Mobile-Menu- Section -->
-            <!-- ============================================================= -->
+        <!-- ============================================================== -->
+        <!-- Start - Mobile-Menu- Section -->
+        <!-- ============================================================= -->
         */}
+
+
     <div class="mobile-menu-area d-sm-block d-md-block d-lg-none ">
         <div class="mobile-menu">
             <nav class="itsoft_menu">
@@ -166,6 +69,7 @@ function Main() {
             </nav>
         </div>
     </div>
+
     {/*
         <!--==================================================-->
         <!-- Start  slider Area -->
@@ -173,19 +77,21 @@ function Main() {
     */}
     <div class="owl-carousel pb-next slider_list">
         <div class="slider-area style-two align-items-center d-flex">
+        <video muted autoPlay loop style={{position:"absolute", width:"100%", height:"100%"}}>
+            <source src="/videos/main_title.mp4" type="video/mp4"/>
+        </video>
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6 col-md-6">
                         <div class="slider-content">
                             <div class="slider-title">
-                                <h1>For your Health <br/> with <span>FitMe</span></h1>
-                                <p>Authoritatively maintain turnkey processes before distinctive our  food <br/> Efficiently more facilitate ethical imperatives</p>
+                                <h1 className="text-orange">For your Health <br/> with <span>FitMe</span></h1>
                             </div>
                             <div class="slider-button">
-                                <a href="#">Shop now<i class="bi bi-arrow-right"></i></a>
+                                <a href="#">Login now<i class="bi bi-arrow-right"></i></a>
                             </div>
                             <div class="slider-btn">
-                                <a href="#">About us<i class="bi bi-arrow-right"></i></a>
+                                <a href="#">About more<i class="bi bi-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -205,7 +111,7 @@ function Main() {
                     <div class="col-lg-6 col-md-6">
                         <div class="slider-content">
                             <div class="slider-thumb">
-                                <img src="assets/images/cat.png" alt=""/>
+                                <img src="../../assets/images/cat.png" alt=""/>
                             </div>
                         </div>
                     </div>
@@ -255,7 +161,7 @@ function Main() {
                         <div class="single-feature-box">
                             <div class="feature-content">
                                 <div class="feature-thumb">
-                                    <img src="assets/images/cat2.png" alt=""/>
+                                    <img src="../../assets/images/cat2.png" alt=""/>
                                 </div>
                                 <div class="feature-title">
                                     <a href="#">Soft Drinks</a>
