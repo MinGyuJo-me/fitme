@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {useEffect} from 'react';
 import Main from './views/main/Main';
-
+import Community from './views/social/community/Community';
 
 import './assets/css/bootstrap.min.css';
 
@@ -39,6 +39,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path={"/"} element={<Main/>}/>
+          <Route path={"/community"} element={<Community/>}/>
         </Routes>
       </BrowserRouter>
     </div>
