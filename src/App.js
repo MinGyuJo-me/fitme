@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {useEffect} from 'react';
 import Main from './views/main/Main';
 import Community from './views/social/community/Community';
+import Recipe from './views/social/recipe/Recipe';
 
 import './assets/css/bootstrap.min.css';
 
@@ -40,6 +41,7 @@ function App() {
         <Routes>
           <Route path={"/"} element={<Main/>}/>
           <Route path={"/community"} element={<Community/>}/>
+          <Route path={"/recipe"} element={<Recipe/>}/>
         </Routes>
       </BrowserRouter>
     </div>

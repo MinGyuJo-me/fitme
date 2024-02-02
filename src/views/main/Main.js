@@ -77,7 +77,7 @@ function Main() {
     */}
     <div className="owl-carousel pb-next slider_list">
         <div className="slider-area style-two align-items-center d-flex">
-        <video muted autoPlay loop style={{position:"absolute", width:"100%", height:"100%"}}>
+        <video muted autoPlay loop style={{position:"absolute", width:"100vw", height:"100%", position:"absolute"}}>
             <source src="/videos/main_title.mp4" type="video/mp4"/>
         </video>
             <div className="container">
