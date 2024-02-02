@@ -4,6 +4,15 @@ import Main from './views/main/Main';
 import Community from './views/social/community/Community';
 import Recipe from './views/social/recipe/Recipe';
 
+
+import SignIn from './views/signin/SignIn';
+import SignUp from './views/signup/SignUp';
+
+
+import Diet from './views/management/diet/Diet';
+import Workout from './views/management/workout/Workout';
+
+
 import './assets/css/bootstrap.min.css';
 
 import './assets/css/owl.carousel.min.css';
@@ -39,9 +48,21 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
+          {/* 메인화면 */}
           <Route path={"/"} element={<Main/>}/>
+
+          {/* 게시판 라우터 commnuity - 게시판   recipe - 찍먹 */}
           <Route path={"/community"} element={<Community/>}/>
           <Route path={"/recipe"} element={<Recipe/>}/>
+
+          {/* 회원가입 라우터 signin - 로그인   signup - 회원가입 */}
+          <Route path={"/signin"} element={<SignIn/>}/>
+          <Route path={"/signup"} element={<SignUp/>}/>
+
+          {/* 회원 관리 메뉴 */}
+          <Route path={"/diet"} element={<Diet/>}/>
+          <Route path={"/workout"} element={<Workout/>}/>
+          
         </Routes>
       </BrowserRouter>
     </div>

@@ -185,20 +185,10 @@ function Community() {
 
                     
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="sideber-search-box">
-                            <div class="sidebar-search">
-                                <input  class="form-control" type="text" name="search" placeholder="Search...."/>
-                                <button class="button" type="submit"><i class="fas fa-search"></i></button>
-                            </div>
-                        </div>
-
-
-
-
-                        <div class="sideber-box">
+                    <div class="sideber-box">
                             <div class="sideber-content">
                                 <div class="sideber-title">
-                                    <h3>Categories</h3>
+                                    <h3>Friends</h3>
                                 </div>
                             </div>
                             <div class="tag-body">
@@ -207,6 +197,18 @@ function Community() {
                                     <li><a href="#">Diet</a></li>
                                     <li><a href="#">Common</a></li>
                                 </ul>
+                            </div>
+                        </div>
+
+
+                        <div class="sideber-search-box">
+                            <div className="sidebar-map-box">
+
+                            </div>
+                            
+                            <div class="sidebar-search">
+                                <input  class="form-control" type="text" name="search" placeholder="Search...."/>
+                                <button class="button" type="submit"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
                     </div>
