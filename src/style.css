@@ -2271,6 +2271,11 @@ ul.sub-menu li a {
 .blog-content {
     padding: 25px 27px 26px;
 }
+
+.blog-content p{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 .blog-thumb img {
     width: 100%;
     border-radius: 5px 5px 0 0px;
@@ -2290,6 +2295,21 @@ ul.sub-menu li a {
     border-radius: 4px;
     letter-spacing: 1px;
 }
+
+.blog-left{
+    display: flex;
+    height: 90px;
+    align-content: center;
+    place-items: center;
+    margin-bottom: 40px;
+}
+
+
+.bl1{
+    margin-bottom: 0px;
+}
+
+
 .blog-left a {
     display: inline-block;
     font-size: 14px;
@@ -2320,6 +2340,62 @@ ul.sub-menu li a {
 .blog-left span:hover{
     color: #A3CF6A;
 }
+
+.blog-icon{
+    width: 90px;
+    height: 100%;
+    border:3px solid #7DA33B;
+    margin-right: 20px;
+    border-radius: 50%;
+    background-image: url(../src/assets/images/1.png);
+    background-size: cover;
+}
+
+.blog-post-detail{
+    display: flex;
+    text-align: center;
+    width: 280px;
+    margin-left: 20px;
+    justify-content: space-around;
+}
+
+.blog-description{
+    height: 90px;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-post-description-title{
+    color: #255946;
+    font-weight: bold;
+
+}
+
+.blog-post-description-content{
+    color: #333;
+}
+
+
+.blog-post-description-button{
+    margin: auto;
+    font-size: 12px;
+    width: 90%;
+    margin-top: 10px;
+    border-radius: 20px;
+    color:#ffffff;
+    background-color: #A3CF6A;
+    border: none;
+    box-shadow: 0px 0px 5px 1px rgb(0, 0, 0);
+}
+
+.blog-post-description{
+    height: 90px;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
 .blog-content h2 a {
     display: inline-block;
     font-size: 22px;
@@ -2357,6 +2433,33 @@ ul.sub-menu li a {
     letter-spacing: 2px;
     font-style: italic;
 }
+
+.blog-button{
+    position: relative;
+    display: flex;
+    height: 40px;
+    place-items: center;
+}
+
+.blog-button-container{
+    position: absolute;
+    display: flex;
+    right: 0;
+    width: 150px;
+    height: 100%;
+    box-sizing: border-box;
+    justify-content: space-around;
+}
+
+.blog-button-item{
+    border-radius: 50%;
+    background-color: #A3CF6A;
+    box-sizing: border-box;
+    height: 100%;
+    width: 40px;
+    box-shadow: 0px 0px 5px 1px rgb(0, 0, 0);
+}
+
 .blog-area .owl-dots {
     text-align: center;
     position: absolute;
@@ -2521,6 +2624,15 @@ button.button i {
     border-radius: 8px;
     background: #F6F4EC;
 }
+
+/**/
+.friend-icon{
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+}
+
+
 .tag-body ul li {
     list-style: none;
     transition: .3s;
