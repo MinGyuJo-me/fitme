@@ -177,7 +177,7 @@ ul.sub-menu li a {
 <!-- ============================================================== -->*/
 .slider-area {
     height: 750px;
-    background: url(assets/images/bg.jpg);
+    background: url(../../assets/images/bg.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -315,7 +315,7 @@ ul.sub-menu li a {
 <!-- ============================================================== -->*/
 .slider-area.style-two {
     height: 750px;
-    background: url(assets/images/hero-bg1.png);
+    background: url(../../assets/images/hero-bg1.png);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -452,7 +452,7 @@ ul.sub-menu li a {
 <!-- Start  breadcumb-area   Css -->
 <!-- ============================================================== -->*/
 .breadcumb-area {
-    background: url(assets/images/community_title.jpg);
+    background: url(../../assets/images/community_title.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -495,7 +495,7 @@ ul.sub-menu li a {
 }
 .single-offer-box {
     padding: 34px 180px 55px 40px;
-    background: url(assets/images/offer-bg.jpg);
+    background: url(../../assets/images/offer-bg.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -547,7 +547,7 @@ ul.sub-menu li a {
 }
 .single-offer-box.upper {
     padding: 34px 180px 50px 40px;
-    background: url(assets/images/offer-.jpg);
+    background: url(../../assets/images/offer-.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -561,7 +561,7 @@ ul.sub-menu li a {
 
 .single-offer-box.style-one {
     padding: 34px 180px 55px 40px;
-    background: url(assets/images/offer1.jpg);
+    background: url(../../assets/images/offer1.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -571,7 +571,7 @@ ul.sub-menu li a {
 }
 .single-offer-box.style-two  {
     padding: 34px 180px 55px 40px;
-    background: url(assets/images/offer2.jpg);
+    background: url(../../assets/images/offer2.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -585,7 +585,7 @@ ul.sub-menu li a {
 <!-- ============================================================== -->*/
 .about-area {
     padding: 95px 0px 150px 0px;
-    background: url(assets/images/bg.jpg);
+    background: url(../../assets/images/bg.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -648,7 +648,7 @@ ul.sub-menu li a {
 <!-- ============================================================== -->*/
 .call-do-action {
     padding: 95px 0px 95px 0px;
-    background: url(assets/images/offer2.jpg);
+    background: url(../../assets/images/offer2.jpg);
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -907,7 +907,7 @@ ul.sub-menu li a {
 <!-- Start  counter-area   Css -->
 <!-- ============================================================== -->*/
 .counter-area {
-    background: url(assets/images/counter-bg.jpg);
+    background: url(../../assets/images/counter-bg.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     padding: 50px 0px 90px 0px;
@@ -943,7 +943,7 @@ ul.sub-menu li a {
 <!-- Start  counter-area style-two  Css -->
 <!-- ============================================================== -->*/
 .counter-area.style-two {
-    background: url(assets/images/counter-bg2.jpg);
+    background: url(../../assets/images/counter-bg2.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     padding: 50px 0px 90px 0px;
@@ -1142,7 +1142,7 @@ ul.sub-menu li a {
 <!-- Start  testimonial   Css -->
 <!-- ============================================================== -->*/
 .testimonial_section {
-    background: url(assets/images/offer2.jpg);
+    background: url(../../assets/images/offer2.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1402,7 +1402,7 @@ ul.sub-menu li a {
     background:#EFB443;
 }
 .product-area.style-two .singles-products {
-    background: url(assets/images/carousel-bg.png);
+    background: url(../../assets/images/carousel-bg.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -1643,7 +1643,7 @@ ul.sub-menu li a {
 <!-- ============================================================== -->*/
 .call-do-action.upper {
     padding: 65px 0px 285px 0px;
-    background: url(assets/images/offer2.jpg);
+    background: url(../../assets/images/offer2.jpg);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1678,7 +1678,7 @@ ul.sub-menu li a {
     border-radius: 5px;
 }
 .company-icon-box {
-    background: url(assets/images/gardening-slide01.jpg);
+    background: url(../../assets/images/gardening-slide01.jpg);
     padding: 25px 15px 25px 20px;
     border-radius: 5px;
 }
@@ -1798,7 +1798,7 @@ ul.sub-menu li a {
     padding: 40px 0px 0px 0px;
 }
 .countdown-area.style-two .row.backg {
-    background: url(assets/images/counter-bg2.jpg);
+    background: url(../../assets/images/counter-bg2.jpg);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -1841,7 +1841,7 @@ ul.sub-menu li a {
 <!-- ============================================================== -->*/
 .testimonials-section {
     padding: 70px 0 70px;
-    background: url(assets/images/testi-bg.jpg);
+    background: url(../../assets/images/testi-bg.jpg);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -2099,7 +2099,7 @@ ul.sub-menu li a {
     padding: 50px 0 95px;
 }
 .countdown-area .row.backg {
-    background: url(assets/images/countdown-bg.jpg);
+    background: url(../../assets/images/countdown-bg.jpg);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -2132,7 +2132,7 @@ ul.sub-menu li a {
 <!-- Start  testimonial-area  Css -->
 <!-- ============================================================== -->*/
 .testimonial-area {
-    background: url(assets/images/testimonial-bg.jpg);
+    background: url(../../assets/images/testimonial-bg.jpg);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -2985,7 +2985,7 @@ margin-bottom: 0;
     left: -185px;
 }
 .about-single-box.upper {
-    background: url(assets/images/about-bg02.png);
+    background: url(../../assets/images/about-bg02.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -3037,7 +3037,7 @@ margin-bottom: 0;
 <!-- Start  service-area   Css -->
 <!-- ============================================================== -->*/
 .service-area.upper-2 {
-    background: url(assets/images/service-bg00.png);
+    background: url(../../assets/images/service-bg00.png);
     background-size: cover;
     padding: 80px 0px 80px 0px;
     background-position: center center;
@@ -3130,7 +3130,7 @@ margin-bottom: 0;
 <!-- Start  clint-testi   Css -->
 <!-- ============================================================== -->*/
 .clint-testi {
-    background: url(assets/images/testimonial_bg.jpg);
+    background: url(../../assets/images/testimonial_bg.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -3418,7 +3418,7 @@ margin-bottom: 0;
 <!-- ============================================================== -->*/
 .footer-top {
     padding: 70px 0 50px;
-    background: url(assets/images/cal-do-right-bg.jpg);
+    background: url(../../assets/images/cal-do-right-bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -3468,7 +3468,7 @@ margin-bottom: 0;
 <!-- Start  footer-area   Css -->
 <!-- ============================================================== -->*/
 .footer_section {
-    background: url(assets/images/call-do-bg.jpg);
+    background: url(../../assets/images/call-do-bg.jpg);
     background-position: bottom center;
     background-repeat: no-repeat;
     background-color: #2A5944;
@@ -3640,7 +3640,7 @@ margin-bottom: 0;
 <!-- Start  footer-top-2  Css -->
 <!-- ============================================================== -->*/
 .footer-top-2 {
-    background: url(assets/images/offer2.jpg);
+    background: url(../../assets/images/offer2.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     padding: 90px 0px 90px 0px;
@@ -4205,10 +4205,12 @@ margin-bottom: 0;
 }
 .loaded .loader-wrapper {
   visibility: hidden;
+  display: none;
 }
 .loaded .loader {
   top: -100%;
   opacity: 0;
 }
+
 
 

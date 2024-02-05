@@ -1,23 +1,25 @@
 import {Link} from 'react-router-dom';
-import React from 'react';
+import React, {useEffect} from 'react';
+import $ from 'jquery';
 
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
 import Image_test from '../../../assets/images/blog-3.jpg';
 
 function Community() {
+    useEffect(()=>{
+        $('body').addClass('loaded');
+    });
   return (
     <div>
         <HeaderTop/>
         <Header/>
 
-        {/*
         <div className="loader-wrapper">
             <div className="loader"></div>
             <div className="loder-section left-section"></div>
             <div className="loder-section right-section"></div>
         </div>
-        */}
 
         {/*
         <!--==================================================-->
