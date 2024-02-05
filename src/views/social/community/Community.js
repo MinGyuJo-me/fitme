@@ -1,23 +1,26 @@
 import {Link} from 'react-router-dom';
-import React from 'react';
-
+import React, {useEffect} from 'react';
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
 import Image_test from '../../../assets/images/blog-3.jpg';
+import './Community.css';
+import $ from 'jquery';
 
 function Community() {
+    useEffect(()=>{
+        $('body').addClass('loaded');
+    });
+
   return (
     <div>
         <HeaderTop/>
         <Header/>
 
-        {/*
         <div className="loader-wrapper">
             <div className="loader"></div>
             <div className="loder-section left-section"></div>
             <div className="loder-section right-section"></div>
         </div>
-        */}
 
         {/*
         <!--==================================================-->
@@ -40,6 +43,8 @@ function Community() {
                 </div>
             </div>
         </div>
+
+        
         {/*
         <!--==================================================-->
         <!-- Start blog-area -->
@@ -48,19 +53,84 @@ function Community() {
         <div class="blog-area style-two">
             <div class="container">
                 <div class="row">
+                    <div class="col-lg-12 col-sm-12 friendlist">
+                        <div class="blog-single-box upper friend-icon-box">
+                            <div className='friend-icon-item'>
+                                <div className='blog-icon bi1'>
+                                </div>
+                                <div className='blog-icon-description'>
+                                    조동훈
+                                </div>
+                            </div>
+                            <div className='friend-icon-item'>
+                                <div className='blog-icon bi1'>
+                                </div>
+                                <div className='blog-icon-description'>
+                                    조동훈
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-lg-8">
+
+
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="blog-single-box upper">
+                            <div class="blog-content">
+                                <div class="blog-left bl1">
+                                    <div className="blog-icon">
+                                    </div>
+                                    <div className='blog-description'>
+                                        <a href="#">Jo-dong-hun</a>
+                                        <a href="#">서울시 강남구 서초동 서초대로</a>
+                                        <span>January 27, 2023</span>
+                                    </div>
+
+                                    <div className='blog-post-detail'>
+                                        <div className='blog-post-description'>
+                                            <div className="blog-post-description-title">POST</div>
+                                            <div className="blog-post-description-content">2023</div>
+                                        </div>
+                                        <div className='blog-post-description'>
+                                            <div className="blog-post-description-title">Follower</div>
+                                            <div className="blog-post-description-content">2023</div>
+                                            <button className="blog-post-description-button">친구 추가</button>
+                                        </div>
+                                        <div className='blog-post-description'>
+                                            <div className="blog-post-description-title">Following</div>
+                                            <div className="blog-post-description-content">2023</div>
+                                            <button className="blog-post-description-button">친구 추가</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="col-lg-12 col-sm-12">
                         <div class="blog-single-box upper">
                             <div class="blog-thumb">
                                 <img src={require('../../../assets/images/blog-0.jpg')} alt=""/>
                                 <div class="blog-btn">
-                                    <a href="#">Exercise</a>
+                                    <div>1/5</div>
                                 </div>
                             </div>
                             <div class="blog-content">
+
                                 <div class="blog-left">
-                                    <a href="#">Jo-dong-hun</a>
-                                    <span>January 27, 2023</span>
+                                    <div className="blog-icon">
+                                    </div>
+                                    <div className='blog-description'>
+                                        <a href="#">Jo-dong-hun</a>
+                                        <a href="#">서울시 강남구 서초동 서초대로</a>
+                                        <span>January 27, 2023</span>
+                                    </div>
                                 </div>
 
                                 <h2><a href="blog-details.html">이번에 새로 산 차.</a></h2>
@@ -68,13 +138,20 @@ function Community() {
                                 <p>Nostra dapibus varius et semper semper rutrum ad risus felis eros. Cursus libero viverra tempus netus diam vestibulum lorem tincidunt congue porta. Non ligula egestas commodo massa. Lorem non sit vivamus convallis elit mollis. Viverra sodales feugiat
                                     dsfdsafadsfadsfadsfdasdsfdsafadsfads
                                 </p>
-                                s
                                 <div class="blog-button">
                                     <a href="#">read more</a>
+                                    <div className="blog-button-container">
+                                        <div className='blog-button-item'></div>
+                                        <div className='blog-button-item'></div>
+                                        <div className='blog-button-item'></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
+
                     <div class="col-lg-12 col-sm-12">
                         <div class="blog-single-box upper">
                             <div class="blog-thumb">
@@ -193,7 +270,12 @@ function Community() {
                             </div>
                             <div class="tag-body">
                                 <ul>
-                                    <li><a href="#">Exercise</a></li>
+                                    <li>
+                                        <div className="friend-icon">
+                                            ddd
+                                        </div>
+                                        <a href="#">Exercise</a>
+                                    </li>
                                     <li><a href="#">Diet</a></li>
                                     <li><a href="#">Common</a></li>
                                 </ul>
