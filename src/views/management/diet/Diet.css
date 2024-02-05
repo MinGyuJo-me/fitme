@@ -1,0 +1,36 @@
+.chart-info {
+    display: inline-block;
+    border: 1px solid black;
+    width: 50%;
+    height: 500px;
+    border-collapse: collapse;
+}
+
+.chart-info-container {
+
+    display: inline-block;
+    width: 100%;
+    height: 560px;
+    margin-top: 200px;
+}
+
+.main-titles-chart h2 {
+    color: #255946;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+    position: relative;
+    z-index: 1;
+    text-align: left;
+    margin-left: 55px;
+}
+ .main-titles-chart h2::before {
+    content: '';
+    position: absolute;
+    height: 3px;
+    width: 40px;
+    background: #87C03D;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -50px;
+}
