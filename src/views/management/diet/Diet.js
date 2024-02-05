@@ -151,10 +151,10 @@ function Diet() {
 				<div className="main-titles-chart">
 					<h2>CHART DESCRIPTION</h2>
 				</div>
-				<div className='chart-info'>
+				<div className='chart-info-left'>
 
 				</div>
-				<div className='chart-info'>
+				<div className='chart-info-right'>
 
 				</div>
 			</div>
