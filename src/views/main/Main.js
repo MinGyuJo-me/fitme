@@ -1,13 +1,10 @@
 import {Link} from 'react-router-dom';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import {Transition} from 'react-transition-group';
-import $ from 'jquery';
-import ReactOwlCarousel from 'react-owl-carousel';
 
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
-
+import $ from 'jquery';
 
 function Main() {
     useEffect(()=>{

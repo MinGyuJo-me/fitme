@@ -1,15 +1,16 @@
 import {Link} from 'react-router-dom';
 import React, {useEffect} from 'react';
-import $ from 'jquery';
-
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
 import Image_test from '../../../assets/images/blog-3.jpg';
+import './Community.css';
+import $ from 'jquery';
 
 function Community() {
     useEffect(()=>{
         $('body').addClass('loaded');
     });
+
   return (
     <div>
         <HeaderTop/>
@@ -42,6 +43,8 @@ function Community() {
                 </div>
             </div>
         </div>
+
+        
         {/*
         <!--==================================================-->
         <!-- Start blog-area -->
@@ -49,6 +52,28 @@ function Community() {
         */}
         <div class="blog-area style-two">
             <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 friendlist">
+                        <div class="blog-single-box upper friend-icon-box">
+                            <div className='friend-icon-item'>
+                                <div className='blog-icon bi1'>
+                                </div>
+                                <div className='blog-icon-description'>
+                                    조동훈
+                                </div>
+                            </div>
+                            <div className='friend-icon-item'>
+                                <div className='blog-icon bi1'>
+                                </div>
+                                <div className='blog-icon-description'>
+                                    조동훈
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-lg-8">
 
@@ -93,7 +118,7 @@ function Community() {
                             <div class="blog-thumb">
                                 <img src={require('../../../assets/images/blog-0.jpg')} alt=""/>
                                 <div class="blog-btn">
-                                    <a href="#">Exercise</a>
+                                    <div>1/5</div>
                                 </div>
                             </div>
                             <div class="blog-content">
