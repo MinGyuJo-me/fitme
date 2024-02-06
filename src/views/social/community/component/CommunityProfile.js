@@ -9,7 +9,7 @@ function CommunityProfile() {
                         <div className='blog-description'>
                             <a href="#">Jo-dong-hun</a>
                             <a href="#">서울시 강남구 서초동 서초대로</a>
-                            <span>January 27, 2023</span>
+                            <span>January 27, 2023.</span>
                         </div>
 
                         <div className='blog-post-detail'>
