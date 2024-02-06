@@ -1,25 +1,26 @@
 import {Link} from 'react-router-dom';
-import React from 'react';
 
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
-
-
+import $ from 'jquery';
 
 function Main() {
+    useEffect(()=>{
+        $('body').addClass('loaded');
+    });
+
   return (
     <div>
         <HeaderTop/>
         <Header/>
 
-        {/*
         <div className="loader-wrapper">
             <div className="loader"></div>
             <div className="loder-section left-section"></div>
             <div className="loder-section right-section"></div>
         </div>
-        */}
 
         {/*
         <!-- ============================================================== -->
@@ -72,10 +73,10 @@ function Main() {
 
     {/*
         <!--==================================================-->
-        <!-- Start  slider Area -->class
+        <!-- 메인 영상
         <!--==================================================-->
     */}
-    <div className="owl-carousel pb-next slider_list">
+    <div>
         <div className="slider-area style-two align-items-center d-flex">
         <video muted autoPlay loop style={{position:"absolute", width:"100vw", height:"100%", position:"absolute"}}>
             <source src="/videos/main_title.mp4" type="video/mp4"/>
@@ -105,6 +106,8 @@ function Main() {
                 </div>
             </div>
         </div>
+
+        
         <div className="slider-area upper align-items-center d-flex">
             <div className="container">
                 <div className="row align-items-center">
@@ -393,7 +396,7 @@ function Main() {
                             <h2>“Agrofarm! is the Real and Best Organic Store”</h2>
                         </div>
                     </div>
-                    <div className="owl-carousel testis_lists">
+                    <div className="testis_lists">
                         <div className="testi_content">
                             <div className="testi_title">
                                 <p>Ballan wrasse climbing gourami amur pike Arctic char, steelhead sprat sea lamprey grunion. Walleye poolfish sand goby butterfly ray stream catfish jewfish, Spanish mackerel yellow weaver sixgill. Sandperch flyingfish yellowfin cutthroat trout grouper.</p>
