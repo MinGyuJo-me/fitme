@@ -50,10 +50,10 @@ function Recipe() {
                     <div class="col-lg-12">
                         <div class="section-title">
                             <div class="sub-title">
-                                <h5>RECENT PROJECT LIST</h5>
+                                <h5 style={{fontSize:"40px"}}>찍먹</h5>
                             </div>
                             <div class="main-title">
-                                <h2>Explore Our Projects</h2>
+                                <h2 style={{fontFamily:"Lobster"}}>RECIPE LIST</h2>
                             </div>
                         </div>
                     </div>
@@ -63,11 +63,11 @@ function Recipe() {
                         <div class="portfolio_nav text-center">
                             <div class="portfolio_menu">
                                 <ul class="menu-filtering">
-                                    <li class="current_menu_item" data-filter="*">All WORKS</li>
-                                    <li data-filter=".physics">FARMING</li>
-                                    <li data-filter=".cemes">FRUITS</li>
-                                    <li data-filter=".math">ORGANIC</li>
-                                    <li data-filter=".maths">VEGETABLE</li>
+                                    <li class="current_menu_item" data-filter="*">전체</li>
+                                    <li data-filter=".physics">카테고리1</li>
+                                    <li data-filter=".cemes">카테고리2</li>
+                                    <li data-filter=".math">카테고리3</li>
+                                    <li data-filter=".maths">카테고리4</li>
                                 </ul>
                             </div>
                         </div>
