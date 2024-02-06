@@ -4,8 +4,15 @@ function FriendListSideBar() {
     return (
         <div class="sideber-box">
             <div class="sideber-content">
-                <div class="sideber-title">
-                    <h3>Friends</h3>
+                <div class="sideber-title st1">
+                    <div>
+                        <div className='title'>Friends</div>
+                        <div className='title'>4,432</div>
+                    </div>
+                    <div>
+                        <div className='title'>Online</div>
+                        <div className='title'>1,322</div>
+                    </div>
                 </div>
             </div>
             {/*친구 목록*/}
@@ -27,8 +34,9 @@ function FriendContainer(){
             <div className="friends-icon">
                 <img src={require('../../../../assets/images/2.jpg')}></img>
             </div>
-            <div className='friends-list-body-description' style={{border:"1px solid red"}}>
-                dddd
+            <div className='friends-list-body-description'>
+                <div>조동훈</div>
+                <div>3days ago....</div>
             </div>
         </div>
     )

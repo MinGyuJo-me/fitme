@@ -1,0 +1,90 @@
+
+.friends-icon{
+    position: relative;;
+    border: 3px solid #0000008b;
+    overflow: hidden;
+    border-radius: 50%;
+    height: 70px;
+    width: 70px;
+}
+
+.friends-icon img{
+    width: 100%;
+    height: 100%;
+}
+
+
+.friend-list-body{
+    box-shadow: inset 3px 3px 5px 1px rgba(0, 0, 0, 0.301);
+    border-radius: 50px;
+    padding: 5px;
+    display: flex;
+    height: 80px;
+    margin-bottom: 13px;
+}
+
+
+.friend-list-body:hover{
+    box-shadow:3px 3px 5px 1px rgba(0, 0, 0, 0.301);
+    cursor: pointer;
+}
+
+
+.friend-icon > img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+}
+
+
+
+.friends-list-body-description{
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+}
+
+.friends-list-body-description div{
+    font-size: 15px;
+    padding-left: 20px;
+    height: 33%;
+}
+
+
+.friends-list-body-description div:nth-child(1){
+    font-weight: bold;
+    font-size: 20px;
+    color: #255946;
+}
+
+.sideber-content .st1{
+    display: flex;
+    margin-bottom: 20px;
+}
+
+
+.st1{
+    display: flex;
+    justify-content: center;
+    gap:30px
+}
+.st1 div{
+    width: 40%;
+}
+
+.st1 .title{
+    width: 100%;
+    border-left: 5px solid #255946;
+    padding-left: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.st1 .title:nth-child(2){
+    font-weight: normal;
+    font-size: 17px;
+    border-left: 5px solid #255946;
+}
