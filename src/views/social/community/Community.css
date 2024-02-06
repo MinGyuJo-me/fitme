@@ -1,7 +1,7 @@
 .blog-button-container{
     position: absolute;
     display: flex;
-    right: 0;
+    right:0;
     width: 150px;
     height: 100%;
     box-sizing: border-box;
@@ -9,14 +9,28 @@
 }
 
 .blog-button-item{
+    position: relative;
     border-radius: 50%;
-    background-color: #A3CF6A;
     box-sizing: border-box;
     height: 100%;
     width: 40px;
+    padding: 5px;
     box-shadow: inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 }
 
+.blog-button-item:hover{
+    transition: all 0.4s;
+    background-color: #7DA33B;
+}
+
+.blog-button-item > img{
+    position: absolute;
+    left:0; right: 0; top:0; bottom: 0;
+    margin: auto;
+    width: 75%;
+    height: 75%;
+}
 .blog-icon{
     width: 90px;
     height: 100%;
@@ -25,6 +39,7 @@
     border-radius: 50%;
     background-image: url(../../../assets/images/1.png);
     background-size: cover;
+    box-shadow: 0px 0px 5px 1px black;
 }
 
 .bi1{
@@ -91,6 +106,7 @@
     color: #fff;
     border-radius: 4px;
     letter-spacing: 1px;
+    box-shadow: 0px 0px 5px 1px black;
 }
 
 .friendlist{
@@ -125,4 +141,40 @@
     transform: translateY(-5px);
     cursor: pointer;
 }
+
+
+.sidebar-search > .search-button{
+    border: none;
+    transform: translateY(11px);
+}
+.icon-manipulate{
+    scale: 1.4;
+}
+.search-button:hover{
+    transform: rotateY('120deg');
+    transition: all 2s;
+}
+.friend-list-body{
+    display: flex;
+    height: 70px;
+    margin-bottom: 10px;
+}
+.friends-icon{
+    border: 1px solid rgb(92, 5, 5);
+    overflow: hidden;
+    border-radius: 50%;
+    height: 70px;
+    width: 70px;
+}
+
+.friend-icon > img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+}
+
+
+
+
 
