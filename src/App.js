@@ -1,4 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AnimatePresence} from 'framer-motion';
+
+
 import {useEffect} from 'react';
 import Main from './views/main/Main';
 import Community from './views/social/community/Community';
@@ -46,25 +49,27 @@ import './assets/css/responsive.css';
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          {/* 메인화면 */}
-          <Route path={"/"} element={<Main/>}/>
+      <AnimatePresence>
+        <BrowserRouter>
+          <Routes>
+            {/* 메인화면 */}
+            <Route path={"/"} element={<Main/>}/>
 
-          {/* 게시판 라우터 commnuity - 게시판   recipe - 찍먹 */}
-          <Route path={"/community"} element={<Community/>}/>
-          <Route path={"/recipe"} element={<Recipe/>}/>
+            {/* 게시판 라우터 commnuity - 게시판   recipe - 찍먹 */}
+            <Route path={"/community"} element={<Community/>}/>
+            <Route path={"/recipe"} element={<Recipe/>}/>
 
-          {/* 회원가입 라우터 signin - 로그인   signup - 회원가입 */}
-          <Route path={"/signin"} element={<SignIn/>}/>
-          <Route path={"/signup"} element={<SignUp/>}/>
+            {/* 회원가입 라우터 signin - 로그인   signup - 회원가입 */}
+            <Route path={"/signin"} element={<SignIn/>}/>
+            <Route path={"/signup"} element={<SignUp/>}/>
 
-          {/* 회원 관리 메뉴 */}
-          <Route path={"/diet"} element={<Diet/>}/>
-          <Route path={"/workout"} element={<Workout/>}/>
-          
-        </Routes>
-      </BrowserRouter>
+            {/* 회원 관리 메뉴 */}
+            <Route path={"/diet"} element={<Diet/>}/>
+            <Route path={"/workout"} element={<Workout/>}/>
+            
+          </Routes>
+        </BrowserRouter>
+      </AnimatePresence>
     </div>
   );
 }

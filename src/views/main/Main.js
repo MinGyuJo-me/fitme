@@ -5,6 +5,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
 import $ from 'jquery';
+import Wrapper from '../component/Wrapper/Wrapper';
 
 function Main() {
     useEffect(()=>{
@@ -12,6 +13,7 @@ function Main() {
     });
 
   return (
+    <Wrapper>
     <div>
         <HeaderTop/>
         <Header/>
@@ -589,6 +591,7 @@ function Main() {
         </div>
         
     </div>
+    </Wrapper>
   );
 }
 
