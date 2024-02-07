@@ -21,12 +21,12 @@ function CommunityProfile() {
                             <div className='blog-post-description'>
                                 <div className="blog-post-description-title">Follower</div>
                                 <div className="blog-post-description-content">2023</div>
-                                <button className="blog-post-description-button">Following</button>
+                                <button className="blog-post-description-button">DM</button>
                             </div>
                             <div className='blog-post-description'>
                                 <div className="blog-post-description-title">Following</div>
                                 <div className="blog-post-description-content">2023</div>
-                                <button className="blog-post-description-button">+Friend</button>
+                                <button className="blog-post-description-button">Add Friend</button>
                             </div>
                         </div>
                 </div>

@@ -10,11 +10,13 @@ import Loader from '../../component/loader/Loader';
 import CommunityProfile from './component/CommunityProfile';
 import CommunityFriendListHeader from './component/CommunityFriendListHeader';
 import Breadcumb from '../../component/Breadcumb/Breadcumb';
-import CommunityBoard from './component/CommunityBoard';
+import CommunityBoard from './crud/CommunityBoard';
 import Footer from '../../component/footer/Footer';
 import MapBox from './component/MapBox';
 import FriendListSideBar from './component/FriendListSideBar';
 import CommnunitySearch from './component/CommunitySearch';
+import CommunityBoardWriteModal from './crud/CommunityBoardWriteModal';
+import CommunityBoardViewModal from './crud/CommunityBoardViewModal';
 
 function Community() {
     useEffect(()=>{
@@ -49,6 +51,8 @@ function Community() {
                         <CommunityBoard writer="PARK-SANG-NYEONG" position="영등포" postDate="January 27, 2023"
                                         title="내가 새로 산 차1" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
                         />
+
+                        <CommunityBoardWriteModal/>
                     </div>
 
                     <div className="col-lg-4 col-md-6 col-sm-12">
@@ -59,8 +63,9 @@ function Community() {
             </div>
         </div>
         {/*푸터 영역*/}
+        <CommunityBoardViewModal/>
         <Footer/>
-
+        
     </div>
   );
 }
