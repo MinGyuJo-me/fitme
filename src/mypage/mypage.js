@@ -154,16 +154,16 @@ function MyPage() {
 	<div className="company-info-section">
 		<div className="sideber-box">
 		<div className="col-lg-calorie" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-            <div>평범한 제목</div>
-            <div id="status" style={{border:"1px solid red", borderRadius:"5px", height:300}}>ddd</div>
-            <div>평범한 제목</div>
-            <div id="status" style={{border:"1px solid red", height:300}}>ddd</div>
-            <div>평범한 제목</div>
-            <div id="status" style={{border:"1px solid red", height:300}}>ddd</div>
-            <div>평범한 제목</div>
-            <div id="status" style={{border:"1px solid red", height:300}}>ddd</div>
-            <div>평범한 제목</div>
-            <div id="status" style={{border:"1px solid red", height:300}}>ddd</div>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
 		</div>
 		</div>
 	</div>
@@ -261,7 +261,7 @@ function MypageBulletinBoardLayout(){
           <MypageBulletinBoardContainer/>
           <button 
           className='detail-button' 
-          style={{ marginTop: '-1160px', left:'880px', border:'none' , background:'none' }}>
+          style={{marginTop: '-1160px', left:'880px', border:'none' , background:'none' }}>
             <FontAwesomeIcon icon={faEllipsisV} />
           </button>
         </div>
