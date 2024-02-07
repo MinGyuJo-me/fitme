@@ -11,6 +11,7 @@ import Recipe from './views/social/recipe/Recipe';
 import SignIn from './views/signin/SignIn';
 import SignUp from './views/signup/SignUp';
 
+import MyPage from './views/mypage/mypage';
 
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
@@ -62,6 +63,9 @@ function App() {
             {/* 회원가입 라우터 signin - 로그인   signup - 회원가입 */}
             <Route path={"/signin"} element={<SignIn/>}/>
             <Route path={"/signup"} element={<SignUp/>}/>
+
+            {/* 마이페이지 */}
+            <Route path={'/mypage'} element={<MyPage/>}/>
 
             {/* 회원 관리 메뉴 */}
             <Route path={"/diet"} element={<Diet/>}/>
