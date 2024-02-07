@@ -1,4 +1,12 @@
-import './CommunityBoard.css';
+import {Link} from 'react-router-dom';
+import React, { useState,useEffect,useRef} from 'react';
+//npm install axios
+import axios from 'axios';
+
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+
 
 function CommunityBoard() {
     return (
