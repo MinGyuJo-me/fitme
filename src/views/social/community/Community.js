@@ -63,7 +63,9 @@ function Community() {
             </div>
         </div>
         {/*푸터 영역*/}
-        <CommunityBoardViewModal/>
+        <CommunityBoardViewModal writer="PARK-SANG-NYEONG" position="영등포" postDate="January 27, 2023"
+                                        title="내가 새로 산 차1" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
+                        />
         <Footer/>
         
     </div>

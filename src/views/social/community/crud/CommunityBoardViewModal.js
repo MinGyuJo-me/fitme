@@ -8,7 +8,7 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './CommunityBoardViewModal.css';
 
-function CommunityBoardViewModal() {
+function CommunityBoardViewModal(props) {
 
     const options = {
         margin:10,
@@ -22,15 +22,81 @@ function CommunityBoardViewModal() {
 
 
     return (
-        <div className='container'>
-            <div class="row" style={{gap:"20px"}}>
-                <div class="col-5" style={{border:"1px solid red"}}>
-                Column
-                </div>
-                <div class="col-5" style={{border:"1px solid red"}}>
-                Column
+        <div className='row justify-content-md-center' style={{border:"1px solid red", backgroundColor:"blue"}}>
+            <div className="col-lg-5 col-sm-5">
+                <div className="blog-single-box upper">
+                    <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
+                        <div className="blog-icon bi1">
+                        </div>
+                        <div className='blog-description'>
+                            <a href="#"><i className="fas fa-address-card"></i> {props.writer}</a>
+                            <a href="#"><i className="fas fa-map-marker"></i> {props.position}</a>
+                            <span><i className="far fa-calendar-alt"></i> {props.postDate}</span>
+                        </div>
+                    </div>
+                    <div>
+                    <OwlCarousel {...options}>
+                        <div className="blog-thumb">
+                            <img src={require('../../../../assets/images/3.jpg')} alt="" style={{height:600}}/>
+                            <div className="blog-btn">
+                            <div>1/2</div>
+                        </div>
+                        </div>
+                        <div className="blog-thumb">
+                            <img src={require('../../../../assets/images/2.jpg')} alt="" style={{height:600}}/>
+                            <div className="blog-btn">
+                            <div>2/2</div>
+                        </div>
+                        </div>
+                    </OwlCarousel>
+                    </div>
+                    
+                    <div className="blog-content">
+                        <div style={{display:"flex", height:"35px"}}>
+                            <button className='blog-content-button' style={{width:"35px", marginRight:"10px"}}>▼</button> <h2><a href="blog-details.html">{props.title}</a></h2>
+                        </div>
+                        <p>
+                            {props.comment}
+                        </p>
+                        <div className="blog-button">
+                            <a href="#">read more</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div className="col-lg-5 col-sm-5" >
+                <div className="blog-single-box upper" style={{height:"97%"}}>
+                    <div className="blog-content" style={{height:"90%"}}>
+                        <div className='blog-comment'  style={{border:"1px solid red", height:"100%"}}>
+                            <table style={{border:"1px solid red", width:"100%"}}>
+                                <tr style={{height:"50px"}}>
+                                    <td style={{width:"13%", border:"1px solid red",  textAlign:"center"}}>조동훈</td>
+                                    <td style={{paddingLeft:"20px"}}>작성한 댓글 내용</td>
+                                    <td style={{width:"15%", border:"1px solid red", textAlign:"center"}}>2016.03.05</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div className="blog-content">
+                        <div className="blog-button">
+                            <input type="text" style={{width:"70%"}}></input>
+                            <div className="blog-button-container">
+                                <div className='blog-button-item'>
+                                    <img src={require('../images/chat_bubble.png')}/>
+                                </div>
+                                <div className='blog-button-item'>
+                                    <img src={require('../images/heart.png')}/>
+                                </div>
+                                <div className='blog-button-item'>
+                                    <img src={require('../images/scrap.png')}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     );
   }
