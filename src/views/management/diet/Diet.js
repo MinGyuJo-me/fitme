@@ -40,17 +40,186 @@ import Modal from "./modal";
 import FileUploadBox from './FileUploadBox';
 import AutoCompleteSearch from './AutoCompleteSearch'
 
+//nav
+import { useNavigate } from "react-router-dom";
+
+//chart.js
+import { Chart as ChartJS,
+	RadialLinearScale,
+	BarElement,
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Title,
+	ArcElement, 
+	Tooltip, 
+	Filler,
+	Legend } from 'chart.js';
+import { Doughnut,Bar,Line,Radar } from 'react-chartjs-2';
+  
+//기본 Line 차트
+//https://react-chartjs-2.js.org/examples/line-chart
+ChartJS.register(RadialLinearScale,CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Filler,Legend);
+
+export const options = {
+	responsive: true,
+	plugins: {
+		legend: {
+		},
+		title: {
+		display: true,
+		text: '',
+		},
+	},
+};
+
+
 var id = null;
+var ipAddress = '192.168.0.44';
+
+//이미지서버 연결 
+async function imageData(code){
+	return await new Promise((resolve,reject)=>{
+	  try{
+		axios.get(`http://192.168.0.44:5050/image/${code}`)
+		.then((response)=>{
+			  // console.log(response.data);
+			resolve("data:image/png;base64,"+response.data['image']);
+		})
+	  }
+	  catch(err){reject(err)};
+	},2000);
+  }
+
+
 
 function Diet() {
 	const [mark, setMark] = useState([]);
-	const [value, onChange] = useState(new Date());
 	const [selectedFood, setSelectedFood] = useState('');
 	
+	//유저 정보
+	const [accountData, setAccount ] = useState([]);
+
+	//다이어트 캘린더용
+	const [dietCal,setDietCal] = useState();
+
+	//네비게이트 
+	const navigate = useNavigate();
 
 	//모달창 업데이트 딜리트 출력
 	const [isOpen, setIsOpen] = useState();
 	const [selectOne, setSelect ] = useState();
+
+	//하루 데이타
+	const [value, onChange] = useState(new Date());
+	const [data_, setData] = useState();
+	const [data1_, setData1] = useState();
+	const [data2_, setData2] = useState();
+	const [labels_, setLabels] = useState();
+	const [labels1_, setLabels1] = useState();
+	const [labels2_, setLabels2] = useState();
+	const [mealTime, setMealTime ] = useState([]);
+
+	//로그인 확인
+	useEffect(()=>{
+		function getCookie(name) { //로그인 여부 확인
+			const cookies = document.cookie.split(';');
+			for (let i = 0; i < cookies.length; i++) {
+			  const cookie = cookies[i].trim();
+			  if (cookie.startsWith(name + '=')) {
+				return cookie.substring(name.length + 1);
+			  }
+			}
+			return null;
+		  }
+		  
+		const myCookieValue = getCookie('Authorization');
+		// console.log('myCookieValue',myCookieValue);
+		if(myCookieValue == null){ //로그인 확인
+		navigate('/signin');
+		}
+
+		axios.get(`/api/v1/foodworks/account`, {
+		headers: {
+			'Authorization' : `${myCookieValue}`,
+			'Content-Type' : 'application/json; charset=UTF-8'
+		}
+		})
+		.then(response => {
+		var proflieData = response.data;
+		if(proflieData.accountNo != null) setDietCal(proflieData.accountNo);
+		// console.log('data',proflieData);
+		if(proflieData.image!=null){
+			imageData(proflieData.image).then((test)=>{
+			// console.log('1');
+				proflieData.image = test;
+				setAccount(proflieData);
+			})
+		}else{
+			imageData(1).then((test)=>{
+			// console.log('1');
+				proflieData.image = test;
+				setAccount(proflieData);
+			})
+		}
+		})
+		.catch(error => console.log('error',error))
+	},[]);
+	//캘린더 부분 추가
+	useEffect(()=>{
+		//프로필 코드 
+		if(dietCal != null){
+		axios.get(`http://${ipAddress}:5000/account/${dietCal}?hobby=diet`)
+		.then(response =>{
+			//날짜 일정 추가 창
+			// console.log(response.data['diet']);
+			setMark(response.data['diet']);
+			return response.data;
+		})
+		}
+	},[dietCal])
+
+	//하루 데이타
+	useEffect(() => {
+		setMealTime([]);
+		if(dietCal != null){
+		  axios.get(`http://${ipAddress}:5000/diet/${dietCal}?date=`+moment(value).format("YYYY-MM-DD")) //<---머지시 50 을 44로 변경
+		  .then(response =>{
+			  console.log(response.data['foodDiary']);
+			  setMealTime(response.data['foodDiary']);
+	  
+			  var data1_ =[];
+			  var labels1_ = [];
+			  var data2_ =[];
+			  var labels2_ = [];
+			  for(let i=0; i<response.data['chart2'].length;i++){
+				data1_.push(response.data['chart1'][i].size);
+				labels1_.push(response.data['chart1'][i].name);
+				data2_.push(response.data['chart2'][i].size);
+				labels2_.push(response.data['chart2'][i].name);
+			  } 
+			  setData(data1_);
+			  setLabels(labels1_);
+			  setData1(data2_);
+			  setLabels1(labels2_);
+	  
+			  return response.data['chart3'];
+			})
+		  .then(message =>{
+			var data1_ =[];
+			var labels1_ = [];
+			for(let i=0; i<message.length;i++){
+			  data1_.push(message[i].size);
+			  // console.log(message[i].size)
+			  labels1_.push(message[i].name);
+			} 
+			setData2(data1_);
+			setLabels2(labels1_);
+		  });
+		}
+	  },[value]);
+
 
 	const toggleModal = (e) => {
 		id = e.target.parentElement.children[0].value != null ? e.target.parentElement.children[0] : -1;
@@ -89,6 +258,45 @@ function Diet() {
 		});
 		// console.log(formData);
 	};
+
+	//chart.js data
+	const data2 = {
+		labels:labels2_,
+		datasets: [
+		{
+			label: '섭취 시간',
+			data: data2_,
+			borderColor: 'rgb(255, 99, 132)',
+			backgroundColor: 'rgba(255, 99, 132, 0.5)',
+		},
+		// {
+		//   label: 'Dataset 2',
+		//   data: [600,500,400,300,200,100],
+		//   borderColor: 'rgb(53, 162, 235)',
+		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
+		// },
+		],
+	};
+	const data1 = {
+		labels:labels1_,
+		datasets: [
+		{
+			fill: true,
+			label: '하루 영양소 섭취량',
+			data: data1_,
+			borderColor: 'rgb(255, 99, 132)',
+			backgroundColor: 'rgba(255, 99, 132, 0.5)',
+		},
+		// {
+		//   label: 'Dataset 2',
+		//   data: [600,500,400,300,200,100],
+		//   borderColor: 'rgb(53, 162, 235)',
+		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
+		// },
+		],
+	};
+
+
   return (
     <div>
         <HeaderTop/>
@@ -126,26 +334,26 @@ function Diet() {
 			<div className="col-lg-6 col-md-12" style={{ width: "200px" }}>
 				<div className="sidebar-box">
 						<div className="profile-image-box">
-						<img class="profile-icon" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+						<img class="profile-icon" src={accountData.image}
 							width="200px" height="200px" alt="profile-icon"/>
 						</div>
-						<div className="profile-name">마인규</div>
+						<div className="profile-name">{accountData.name}</div>
 						<div className="profile-description">
 							<div className="profile-description-item">
 								<span className="text-style-title">Height</span><br/>
-								<span className="text-style-description">200</span>
+								<span className="text-style-description">{accountData.height}</span>
 							</div>
 							<div className="profile-description-item">
 								<span className="text-style-title">Weight</span><br/>
-								<span className="text-style-description">200</span>
+								<span className="text-style-description">{accountData.weight}</span>
 							</div>
 							<div className="profile-description-item">
 								<span className="text-style-title">Gender</span><br/>
-								<span className="text-style-description">남성</span>
+								<span className="text-style-description">{accountData.gender==='M'?'남성':'여성'}</span>
 							</div>
 							<div className="profile-description-item">
 								<span className="text-style-title">Age</span><br/>
-								<span className="text-style-description">23</span>
+								<span className="text-style-description">{accountData.age}</span>
 							</div>
 						</div>
 					</div>
@@ -202,29 +410,33 @@ function Diet() {
 				</div>
 			</div>
 			<OwlCarousel items={3}  margin={20} loop autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["⟪","⟫"]} dots >
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="blog-single-box">
-						<div class="blog-thumb">
-							<img src={require('./images/pizza.jpg')} alt="pizza"/>
-							<div class="blog-btn">
-								<a href="#">아침</a>
-							</div>
-						</div>
-						<div class="blog-content">
-							<div class="blog-left">
-								<span>January 27, 2023</span>
-							</div>
-							<h2>피자조아</h2>
-							<p>남의 돈으로 먹는 피자가 제일 맛있습니다.</p>
-							<p>200g</p>
-							<div class="blog-button">
-								<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
+				{mealTime.map((test)=>(
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="blog-single-box">
+								<div class="blog-thumb">
+									<img src={test[4]} alt="pizza"/>
+									<input type='hidden' value={test[0]} />
+									<div class="blog-btn">
+										<a href="#">아침</a>
+									</div>
+								</div>
+								{console.log("test",test[1])}
+								<div class="blog-content">
+									<div class="blog-left">
+										<span>{test[3]}</span>
+									</div>
+									<h2>{test[1]}</h2>
+									<p>{test[2]}</p>
+									<p>{test[5]}g</p>
+									<div class="blog-button">
+										<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+				))}
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="blog-single-box">
@@ -362,10 +574,10 @@ function Diet() {
 					<h2>CHART DESCRIPTION</h2>
 				</div>
 				<div className='chart-info-left'>
-
+					<Bar options={options} data={data2} />
 				</div>
 				<div className='chart-info-right'>
-
+					<Line options={options} data={data1} />
 				</div>
 			</div>
 
