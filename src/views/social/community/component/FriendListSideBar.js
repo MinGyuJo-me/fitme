@@ -2,9 +2,9 @@ import './FriendListSideBar.css';
 
 function FriendListSideBar() {
     return (
-        <div class="sideber-box">
-            <div class="sideber-content">
-                <div class="sideber-title st1">
+        <div className="sideber-box">
+            <div className="sideber-content">
+                <div className="sideber-title st1">
                     <div>
                         <div className='title'>Friends</div>
                         <div className='title'>4,432</div>
@@ -37,6 +37,8 @@ function FriendContainer(){
             <div className='friends-list-body-description'>
                 <div>조동훈</div>
                 <div>3days ago....</div>
+            </div>
+            <div className="friend-status">
             </div>
         </div>
     )

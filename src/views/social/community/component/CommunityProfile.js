@@ -1,8 +1,8 @@
 function CommunityProfile() {
     return (
-        <div class="col-lg-12 col-sm-12" >
-            <div class="blog-single-box upper" style={{padding:"10px 0px"}}>
-                <div class="blog-left bl1" style={{padding:"60px 0px"}}>
+        <div className="col-lg-12 col-sm-12" >
+            <div className="blog-single-box upper" style={{padding:"10px 0px"}}>
+                <div className="blog-left bl1" style={{padding:"60px 0px"}}>
                     <div style={{display:"flex"}}>
                         <div className="blog-icon bi1">
                         </div>

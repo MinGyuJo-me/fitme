@@ -14,6 +14,7 @@ import CommunityBoard from './component/CommunityBoard';
 import Footer from '../../component/footer/Footer';
 import MapBox from './component/MapBox';
 import FriendListSideBar from './component/FriendListSideBar';
+import CommnunitySearch from './component/CommunitySearch';
 
 function Community() {
     useEffect(()=>{
@@ -32,19 +33,25 @@ function Community() {
         <Breadcumb/>
 
         {/*게시글 영역*/}
-        <div class="blog-area style-two">
-            <div class="container">
+        <div className="blog-area style-two">
+            <div className="container">
                 <CommunityFriendListHeader/>
-                <div class="row">
-                    <div class="col-lg-8">
+                <div className="row">
+                    <div className="col-lg-8">
                         {/*특정 사용자 프로필 영역*/}
                         <CommunityProfile/>
+                        {/*게시 혹은 검색 부분*/}
+                        <CommnunitySearch/>
                         {/*게시글 박스*/}
-                        <CommunityBoard/>
-                        <CommunityBoard/>
+                        <CommunityBoard writer="JO-DONG-HUN" position="서울시 강남구 서초동 서초대로" postDate="January 27, 2023"
+                                        title="내가 새로 산 차" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
+                        />
+                        <CommunityBoard writer="PARK-SANG-NYEONG" position="영등포" postDate="January 27, 2023"
+                                        title="내가 새로 산 차1" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
+                        />
                     </div>
 
-                    <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div className="col-lg-4 col-md-6 col-sm-12">
                         <FriendListSideBar/>
                         <MapBox/>
                     </div>
@@ -53,6 +60,7 @@ function Community() {
         </div>
         {/*푸터 영역*/}
         <Footer/>
+
     </div>
   );
 }

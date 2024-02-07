@@ -8,32 +8,57 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 
 
-function CommunityBoard() {
+function CommunityBoard(props) {
+
+    const options = {
+        margin:10,
+        loop: true,
+        items: 1,
+        dots:false,
+        autoplay:true,
+        autoplayTimeout: 4500,
+        smartSpeed: 450,
+    };
+
+
     return (
-        <div class="col-lg-12 col-sm-12">
-        <div class="blog-single-box upper">
-            <div class="blog-left" style={{padding:"60px 0px 40px 0px"}}>
+        <div className="col-lg-12 col-sm-12">
+        <div className="blog-single-box upper">
+            <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                 <div className="blog-icon bi1">
                 </div>
                 <div className='blog-description'>
-                    <a href="#"><i className="fas fa-address-card"></i> Jo-dong-hun</a>
-                    <a href="#"><i className="fa fa-home"></i> 서울시 강남구 서초동 서초대로</a>
-                    <span><i className="far fa-calendar-alt"></i> January 27, 2023</span>
+                    <a href="#"><i className="fas fa-address-card"></i> {props.writer}</a>
+                    <a href="#"><i className="fas fa-map-marker"></i> {props.position}</a>
+                    <span><i className="far fa-calendar-alt"></i> {props.postDate}</span>
                 </div>
             </div>
-            <div class="blog-thumb">
-                <img src={require('../../../../assets/images/3.jpg')} alt="" style={{height:600}}/>
-                <div class="blog-btn">
-                    <div>1/5</div>
+            <div>
+            <OwlCarousel {...options}>
+                <div className="blog-thumb">
+                    <img src={require('../../../../assets/images/3.jpg')} alt="" style={{height:600}}/>
+                    <div className="blog-btn">
+                    <div>1/2</div>
                 </div>
+                </div>
+                <div className="blog-thumb">
+                    <img src={require('../../../../assets/images/2.jpg')} alt="" style={{height:600}}/>
+                    <div className="blog-btn">
+                    <div>2/2</div>
+                </div>
+                </div>
+            </OwlCarousel>
             </div>
-            <div class="blog-content">
-                <h2><button className='blog-content-button'>▼</button><a href="blog-details.html">이번에 새로 산 차.</a></h2>
+            
+            <div className="blog-content">
+                <div style={{display:"flex", height:"35px"}}>
+                    <button className='blog-content-button' style={{width:"35px", marginRight:"10px"}}>▼</button> <h2><a href="blog-details.html">{props.title}</a></h2>
+                </div>
+            
                 
-                <p>Nostra dapibus varius et semper semper rutrum ad risus felis eros. Cursus libero viverra tempus netus diam vestibulum lorem tincidunt congue porta. Non ligula egestas commodo massa. Lorem non sit vivamus convallis elit mollis. Viverra sodales feugiat
-                    dsfdsafadsfadsfadsfdasdsfdsafadsfads
+                <p>{props.comment}
                 </p>
-                <div class="blog-button">
+                <div className="blog-button">
                     <a href="#">read more</a>
                     <div className="blog-button-container">
                         <div className='blog-button-item'>
