@@ -71,7 +71,7 @@ function CommunityBoardViewModal(props) {
                         <div className='blog-comment'  style={{border:"1px solid red", height:"100%"}}>
                             <table style={{border:"1px solid red", width:"100%"}}>
                                 <tr style={{height:"50px"}}>
-                                    <td style={{width:"13%", border:"1px solid red",  textAlign:"center"}}>조동훈</td>
+                                    <td style={{width:"13%", border:"1px solid red",  textAlign:"center"}}>조동훈,,</td>
                                     <td style={{paddingLeft:"20px"}}>작성한 댓글 내용</td>
                                     <td style={{width:"15%", border:"1px solid red", textAlign:"center"}}>2016.03.05</td>
                                 </tr>
