@@ -15,7 +15,6 @@ import Footer from '../../component/footer/Footer';
 import MapBox from './component/MapBox';
 import FriendListSideBar from './component/FriendListSideBar';
 
-
 function Community() {
     useEffect(()=>{
         $('body').addClass('loaded');
