@@ -1,7 +1,7 @@
 .blog-button-container{
     position: absolute;
     display: flex;
-    right: 0;
+    right:0;
     width: 150px;
     height: 100%;
     box-sizing: border-box;
@@ -9,14 +9,28 @@
 }
 
 .blog-button-item{
+    position: relative;
     border-radius: 50%;
-    background-color: #A3CF6A;
     box-sizing: border-box;
     height: 100%;
     width: 40px;
-    box-shadow: inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    box-shadow: inset 2px 2px 5px 1px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 }
 
+.blog-button-item:hover{
+    transition: all 0.4s;
+    background-color: #7DA33B;
+}
+
+.blog-button-item > img{
+    position: absolute;
+    left:0; right: 0; top:0; bottom: 0;
+    margin: auto;
+    width: 75%;
+    height: 75%;
+}
 .blog-icon{
     width: 90px;
     height: 100%;
@@ -25,6 +39,7 @@
     border-radius: 50%;
     background-image: url(../../../assets/images/1.png);
     background-size: cover;
+    box-shadow: 0px 0px 5px 1px black;
 }
 
 .bi1{
@@ -32,11 +47,15 @@
     height: 80px;
 }
 
+.bl1{
+    display: flex;
+    justify-content: space-around;
+}
+
 .blog-post-detail{
     display: flex;
     text-align: center;
-    width: 280px;
-    margin-left: 20px;
+    width: 300px;
     justify-content: space-around;
 }
 
@@ -45,6 +64,11 @@
     display: flex;
     flex-direction: column;
 }
+
+.blog-description > a{
+    font-size: 30px;
+}
+
 
 .blog-post-description-title{
     color: #255946;
@@ -60,13 +84,16 @@
 .blog-post-description-button{
     margin: auto;
     font-size: 12px;
-    width: 90%;
+    width:95%;
     margin-top: 10px;
     border-radius: 20px;
-    color:#ffffff;
-    background-color: #A3CF6A;
+    font-weight: bold;
     border: none;
-    box-shadow: inset 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.blog-post-description-button:hover{
+    box-shadow:2px 2px 5px 1px rgba(0, 0, 0, 0.5);
 }
 
 .blog-post-description{
@@ -77,9 +104,10 @@
     text-align: center;
 }
 
+
 .blog-btn div{
     position: absolute;
-    bottom: 420px;
+    bottom: 20px;
     right: 20px;
     display: inline-block;
     background: #ED9E2B;
@@ -91,6 +119,7 @@
     color: #fff;
     border-radius: 4px;
     letter-spacing: 1px;
+    box-shadow: 0px 0px 5px 1px black;
 }
 
 .friendlist{
@@ -98,11 +127,13 @@
 }
 
 .friend-icon-box{
+    padding-top: 20px;
     padding-left: 30px;
     padding-right: 30px;
-    height: 150px;
+    padding-bottom: 0px;
+    height: 170px;
     display: flex;
-    gap:15px
+    gap:15px;
 }
 
 
@@ -110,7 +141,7 @@
     display: flex;
     flex-direction: column;
     width: 100px;
-    margin-top: 15px;
+    height: 140px;
 }
 
 
@@ -126,3 +157,15 @@
     cursor: pointer;
 }
 
+
+.sidebar-search > .search-button{
+    border: none;
+    transform: translateY(11px);
+}
+.icon-manipulate{
+    scale: 1.4;
+}
+.search-button:hover{
+    transform: rotateY('120deg');
+    transition: all 2s;
+}

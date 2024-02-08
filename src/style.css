@@ -2270,6 +2270,7 @@ ul.sub-menu li a {
 }
 .blog-content {
     padding: 25px 27px 26px;
+    border-radius: 0px 0px 5px 5px;
 }
 
 .blog-content p{
@@ -2301,12 +2302,13 @@ ul.sub-menu li a {
     height: 90px;
     align-content: center;
     place-items: center;
-    margin:20px 10px 20px 10px;
+    margin-bottom: 20px;
 }
 
 
 .bl1{
     margin-bottom: 0px;
+    
 }
 
 

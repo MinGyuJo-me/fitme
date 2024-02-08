@@ -1,0 +1,132 @@
+.sb-rjm1 {
+    margin-top: 70px;
+}
+
+.form_row{
+    font-weight: bold;
+}
+  
+.main-titles {
+    position: absolute;
+    top: 15px;
+    left: 0;
+}
+.title h1{
+    height: 20px ;
+    display: flex;
+    gap: 20;
+    position: relative;
+}
+   
+.pib-rjm1 {
+    width: 300px;
+    height: 300px;
+}
+  
+.sideber-item {
+    background-color: #FFF;
+    border-radius: 5px;
+    flex-grow: 1;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.form_box{
+    width: 200px;
+    white-space: pre-wrap;
+}
+  
+.image-container {
+    width: 50%;
+    height: 70%;
+    position: relative;
+}
+  
+.ibox {
+    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.mypage-bulletinBoard-layout{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2,1fr);
+    gap:20px 10px;
+    place-items: center center;
+}
+
+.mypage-bulletinBoard-container{
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    height: 100%;
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.4);
+    margin: 85px;
+    text-align: center;
+}
+
+.mbi1{
+    background-image: url(https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg);
+    background-size: cover;
+    margin-top: 10px;
+    height: 58%;
+    box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+}
+
+.mbi2{
+    border-radius: 20px;
+    border:2px solid #00000075;
+    font-weight: 600;
+    margin-top: 15px;
+    height: 10%;
+}
+
+.mbi3{
+    border-radius: 20px;
+    border:2px solid #00000075;
+    margin-top: 4px;
+    height: 10%;
+}
+
+.mypage-youtubeBoard-layout{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2,1fr);
+    gap:20px 10px;
+    place-items: center;
+}
+
+.mypage-youtube-container{
+    border:5px solid #60B159;
+    background-color: black;
+    border-radius: 10px;
+    height: 90%;
+    width: 85%;
+    cursor: pointer;
+}
+
+.detail-button{
+    position: relative;
+    text-align: center;
+    right: 10px;
+    top: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 20px;
+    cursor: pointer;
+}
