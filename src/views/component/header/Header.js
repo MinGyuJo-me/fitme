@@ -18,15 +18,15 @@ function Header() {
                                         <Link to="/">Fitme</Link>
                                     </li>
 
-                                    <li><Link to="/">Management</Link>
+                                    <li><Link to="/diet">Management</Link>
                                         <ul className="sub-menu">
-                                            <li><Link to="/diet">Food</Link></li>
+                                            <li><Link to="/diet">Diet</Link></li>
                                             <li><Link to="/workout">Workout</Link></li>
                                         </ul>
                                     </li>
 
 
-                                    <li><Link to="/">Social</Link>
+                                    <li><Link to="/community">Social</Link>
                                         <ul className="sub-menu">
                                             <li><Link to="/community">Community</Link></li>
                                             <li><Link to="/recipe">찍먹</Link></li>
@@ -56,7 +56,7 @@ function Header() {
                                         <Link to="/">Alarm</Link>
                                     </li>
 
-                                    <li><Link to="signin">Login</Link></li>
+                                    <li><Link to="/signin">Login</Link></li>
                                 </ul>
                             </div>
                         </div>
