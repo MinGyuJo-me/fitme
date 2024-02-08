@@ -140,8 +140,8 @@ function SignIn() {
                             <div class="breadcumb-title">
                                 <h1>Community</h1>
                             </div>
-                            <div class="breadcumb-content-text">
-                            <a href="index.html"> Social <i class="fas fa-angle-right"></i><span>Community</span></a>
+                            <div className="breadcumb-content-text">
+                            <a href="index.html"> Social <i className="fas fa-angle-right"></i><span>Community</span></a>
                             </div>
                         </div>
                     </div>
