@@ -1,28 +1,8 @@
 import {Link} from 'react-router-dom';
 import React from 'react';
 
-import Header from '../component/header/Header';
-import HeaderTop from '../component/headerTop/HeaderTop';
-
-function SignUp() {
-  return (
-    <div>
-        <HeaderTop/>
-        <Header/>
-
-        {/*
-        <div className="loader-wrapper">
-            <div className="loader"></div>
-            <div className="loder-section left-section"></div>
-            <div className="loder-section right-section"></div>
-        </div>
-        */}
-
-                {/*
-        <!--==================================================-->
-        <!-- Start breadcumb-area -->
-        <!--==================================================-->
-        */}
+function Breadcumb() {
+    return (
         <div className="breadcumb-area d-flex align-items-center">
             <div className="container">
                 <div className="row">
@@ -39,10 +19,12 @@ function SignUp() {
                 </div>
             </div>
         </div>
-        
-    </div>
-  );
-}
+    );
+  }
+  
+  export default Breadcumb;
+  
 
-export default SignUp;
+
+
 

@@ -115,7 +115,7 @@ function SignIn() {
       };
     
   return (
-    <div>
+    <div style={{paddingBottom:"80px"}}>
         <HeaderTop/>
         <Header/>
 
@@ -132,7 +132,7 @@ function SignIn() {
         <!-- Start breadcumb-area -->
         <!--==================================================-->
         */}
-        <div class="breadcumb-area d-flex align-items-center">
+        <div class="breadcumb-area d-flex align-items-center" style={{marginBottom:"100px"}}>
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
@@ -140,8 +140,8 @@ function SignIn() {
                             <div class="breadcumb-title">
                                 <h1>Community</h1>
                             </div>
-                            <div class="breadcumb-content-text">
-                            <a href="index.html"> Social <i class="fas fa-angle-right"></i><span>Community</span></a>
+                            <div className="breadcumb-content-text">
+                            <a href="index.html"> Social <i className="fas fa-angle-right"></i><span>Community</span></a>
                             </div>
                         </div>
                     </div>
@@ -153,17 +153,15 @@ function SignIn() {
           <h1 className="login-heading">환영합니다!</h1>
           <h2 className="login-heading">LOGIN</h2>
           <form onSubmit={handleSubmit} method='post'>
-            <input
-              type="text"
-              name="username"
+            <input type="text"name="username"
               value={formData.username}
               onChange={handleInputChange}
               pattern={emailRegex}
               title='이메일 형식으로 입력 해주세요.'
               className="text-field"
               placeholder="Email"
-              ref={usernameRef}
-            /><br />
+              ref={usernameRef}/>
+            <br />
             {formErrors.username && (
               <p style={{ color: 'red', fontSize: '14px' }}>{formErrors.username}</p>
             )}
