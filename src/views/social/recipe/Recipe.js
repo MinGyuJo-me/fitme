@@ -7,7 +7,6 @@ import Image_test from '../../../assets/images/blog-3.jpg';
 
 function Recipe() {
   return (
-    <Wrapper>
         <div>
             <HeaderTop/>
             <Header/>
@@ -383,22 +382,6 @@ function Recipe() {
         <!----- Start Search Popup Area ----->
         <!--==================================================-->
         */}
-
-        {/*
-        <!-- scroll strat============  -->
-        */}
-        <div className="scroll-area">
-            <div className="top-wrap">
-                <div className="go-top-btn-wraper">
-                    <div className="go-top go-top-button">
-                        <i className="fa fa-angle-double-up" aria-hidden="true"></i>
-                        <i className="fa fa-angle-double-up" aria-hidden="true"></i>
-                    </div>
-                </div>
-            </div>
-            {/*
-            <!-- scroll end============  -->
-            */}
         </div>
     </div>
   );
