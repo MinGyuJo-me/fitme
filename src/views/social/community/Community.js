@@ -2,6 +2,7 @@ import {Link} from 'react-router-dom';
 import React, {useEffect} from 'react';
 import './Community.css';
 import $ from 'jquery';
+import Wrapper from '../../component/Wrapper/Wrapper';
 
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';

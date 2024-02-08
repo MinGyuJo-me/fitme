@@ -4,12 +4,14 @@ import React from 'react';
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
 import Image_test from '../../../assets/images/blog-3.jpg';
+import Wrapper from '../../component/Wrapper/Wrapper';
 
 function Recipe() {
   return (
-    <div>
-        <HeaderTop/>
-        <Header/>
+    <Wrapper>
+        <div>
+            <HeaderTop/>
+            <Header/>
 
         {/*
         <div className="loader-wrapper">
@@ -371,10 +373,6 @@ function Recipe() {
                     </div>
                 </div>
             </div>
-        </div>
-
-
-
 
 
 
@@ -411,11 +409,11 @@ function Recipe() {
                     </div>
                 </div>
             </div>
+            {/*
+            <!-- scroll end============  -->
+            */}
         </div>
-        {/*
-        <!-- scroll end============  -->
-        */}
-    </div>
+    </Wrapper>
   );
 }
 
