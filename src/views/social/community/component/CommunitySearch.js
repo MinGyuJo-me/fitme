@@ -18,6 +18,16 @@ function CommunitySearch() {
                 <button className="button search-button" type="submit"><i className="fas fa-search icon-manipulate"></i></button>
             </div>
         </div>
+
+
+
+        <div className="col-lg-12 col-sm-12" style={{display:"flex", gap:"5%"}}>
+            <div className="sidebar-search" style={{width:"80%"}}>
+                <input  className="form-control" type="text" name="search" placeholder="Search...."/>
+                <button className="button search-button" type="submit"><i className="fas fa-search icon-manipulate" style={{position:"relative"}}></i></button>
+                <button className="community-search-button" style={{position:"absolute", right:-140, bottom:15, borderRadius:"3px",width:"120px",height:"50px"}}>POST</button>
+            </div>
+        </div>
         </div>
     );
   }

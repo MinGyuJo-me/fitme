@@ -33,17 +33,17 @@ function Community() {
         <Loader/>
         {/* 제목 배경화면 */}
         <Breadcumb/>
-
+        
         {/*게시글 영역*/}
         <div className="blog-area style-two">
             <div className="container">
                 <CommunityFriendListHeader/>
                 <div className="row">
                     <div className="col-lg-8">
-                        {/*특정 사용자 프로필 영역*/}
-                        <CommunityProfile/>
                         {/*게시 혹은 검색 부분*/}
                         <CommnunitySearch/>
+                        {/*특정 사용자 프로필 영역*/}
+                        <CommunityProfile/>
                         {/*게시글 박스*/}
                         <CommunityBoard writer="JO-DONG-HUN" position="서울시 강남구 서초동 서초대로" postDate="January 27, 2023"
                                         title="내가 새로 산 차" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
