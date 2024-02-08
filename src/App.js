@@ -14,6 +14,7 @@ import SignUp from './views/signup/SignUp';
 
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
+import MyPage from './views/mypage/MyPage';
 
 
 import './assets/css/bootstrap.min.css';
@@ -67,6 +68,8 @@ function App() {
             <Route path={"/diet"} element={<Diet/>}/>
             <Route path={"/workout"} element={<Workout/>}/>
             
+
+            <Route path={"/mypage"} element={<MyPage/>}/>
           </Routes>
         </BrowserRouter>
       </AnimatePresence>
