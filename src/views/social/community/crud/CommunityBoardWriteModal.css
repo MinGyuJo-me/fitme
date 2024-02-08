@@ -1,0 +1,23 @@
+.community-write-button{
+    width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    border:1px solid #ced4da;
+    background-color: #F6F6F6;
+    color: #212529;
+}
+
+.blog-image-button{
+    font-family: 'Trebuchet MS';
+    font-size: 30px;
+    position: absolute;
+    z-index: 5;
+    width: 140px;
+    height: 60px;
+    border-radius: 30px;
+    left:0; right: 0;
+    bottom: 0; top:0;
+    margin: auto;
+    border:5px solid #c2cfdb;
+    background-color: #F6F6F6;
+}
