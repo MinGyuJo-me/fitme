@@ -7,22 +7,11 @@ import Image_test from '../../../assets/images/blog-3.jpg';
 
 function Recipe() {
   return (
+    <Wrapper>
         <div>
             <HeaderTop/>
             <Header/>
 
-        {/*
-        <div className="loader-wrapper">
-            <div className="loader"></div>
-            <div className="loder-section left-section"></div>
-            <div className="loder-section right-section"></div>
-        </div>
-        */}
-        {/*
-        <!--==================================================-->
-        <!-- Start breadcumb-area -->
-        <!--==================================================-->
-        */}
         <div className="breadcumb-area d-flex align-items-center">
             <div className="container">
                 <div className="row">
@@ -394,6 +383,22 @@ function Recipe() {
         <!----- Start Search Popup Area ----->
         <!--==================================================-->
         */}
+
+        {/*
+        <!-- scroll strat============  -->
+        */}
+        <div className="scroll-area">
+            <div className="top-wrap">
+                <div className="go-top-btn-wraper">
+                    <div className="go-top go-top-button">
+                        <i className="fa fa-angle-double-up" aria-hidden="true"></i>
+                        <i className="fa fa-angle-double-up" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+            {/*
+            <!-- scroll end============  -->
+            */}
         </div>
     </div>
   );
