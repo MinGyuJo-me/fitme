@@ -13,6 +13,8 @@ import SignUp from './views/signup/SignUp';
 
 import MyPage from './views/mypage/mypage';
 
+import Messenger from './views/chatting/messenger/Messenger'
+
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
 
@@ -70,7 +72,10 @@ function App() {
             {/* 회원 관리 메뉴 */}
             <Route path={"/diet"} element={<Diet/>}/>
             <Route path={"/workout"} element={<Workout/>}/>
-            
+
+            {/* 채팅 */}
+            <Route path={"/messenger"} element={<Messenger/>}/>
+
           </Routes>
         </BrowserRouter>
       </AnimatePresence>
