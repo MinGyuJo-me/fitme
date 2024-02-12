@@ -75,13 +75,13 @@ export const options = {
 
 
 var id = null;
-var ipAddress = '192.168.0.44';
+var ipAddress = '192.168.0.15';
 
 //이미지서버 연결 
 async function imageData(code){
 	return await new Promise((resolve,reject)=>{
 	  try{
-		axios.get(`http://192.168.0.44:5050/image/${code}`)
+		axios.get(`http://192.168.0.15:5050/image/${code}`)
 		.then((response)=>{
 			  // console.log(response.data);
 			resolve("data:image/png;base64,"+response.data['image']);
@@ -146,22 +146,24 @@ function Diet() {
 		}
 		})
 		.then(response => {
-		var proflieData = response.data;
-		if(proflieData.accountNo != null) setDietCal(proflieData.accountNo);
-		// console.log('data',proflieData);
-		if(proflieData.image!=null){
-			imageData(proflieData.image).then((test)=>{
-			// console.log('1');
-				proflieData.image = test;
-				setAccount(proflieData);
-			})
-		}else{
-			imageData(1).then((test)=>{
-			// console.log('1');
-				proflieData.image = test;
-				setAccount(proflieData);
-			})
-		}
+			var proflieData = response.data;
+			console.log('proflieData',proflieData);
+			if(proflieData.accountNo != null) setDietCal(proflieData.accountNo);
+			console.log('data',proflieData);
+			if(proflieData.image!=null){
+				imageData(proflieData.image).then((test)=>{
+					// console.log('1');
+					proflieData.image = test;
+					setAccount(proflieData);
+				})
+			}else{
+				imageData(1).then((test)=>{
+					
+					// proflieData.image = test;
+					// console.log('proflieData',proflieData);
+					setAccount(proflieData);
+				})
+			}
 		})
 		.catch(error => console.log('error',error))
 	},[]);
