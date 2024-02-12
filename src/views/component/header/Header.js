@@ -48,7 +48,7 @@ function Header() {
                                     <li><Link to="/">chatting</Link>
                                         <ul className="sub-menu">
                                             <li><Link to="/">GPT chat</Link></li>
-                                            <li><Link to="/">messenger</Link></li>
+                                            <li><Link to="/messenger">messenger</Link></li>
                                         </ul>
                                     </li>
 
