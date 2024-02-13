@@ -113,6 +113,7 @@ function CreateReadChat() {
                 // console.log('>>>', json_body);
                 axios.get(`/api/v1/chat/list/room/${num}`)
                 .then(res=>{
+                    console.log('res.data',res.data);
                     setChatList(res.data); //웹소켓은 아니지만 대충 속이기
                     
                 })
