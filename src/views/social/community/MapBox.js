@@ -4,7 +4,7 @@ function MapBox() {
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=4d9dd00732640dd19cdec8b5df78eee6&autoload=false`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=6a5e15de70e02e5170488cc321958391&autoload=false`;
     document.head.appendChild(script);
 
     script.onload = () => {
