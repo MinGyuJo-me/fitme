@@ -3,15 +3,14 @@
   border: hidden;
   display: inline-block;
   width: 100%;
-  height: 400px;
-  margin-top: 100px;
-  margin-bottom: 125px;
+  height: 630px;
+  margin-top: 125px;
 }
 
 .chart-info-left {
   float: left;
   width: 50%;
-  height: 300px;
+  height: 500px;
   border-right: none;
   border-radius: 15px 0 0 15px;
   background-color: #FFFFFF;
@@ -21,7 +20,7 @@
 .chart-info-right {
   float: right;
   width: 50%;
-  height: 300px;
+  height: 500px;
   border-radius: 0 15px 15px 0;
   background-color: #FFFFFF;
   box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, 0.1);
@@ -38,7 +37,7 @@
   z-index: 1;
   text-align: left;
   margin-left: 55px;
-  margin-bottom: 50px;
+  margin-bottom: 80px;
 }
 
 .main-titles-chart h2::before {
@@ -320,8 +319,9 @@ abbr[title] {
 
 /*캘린더 css 끝*/
 
-/*식단 추가 버튼*/
-.add-siksa-button {
+/*추가 버튼*/
+.add-siksa-button,
+.add-workout-button {
   background: none;
   border: none;
   padding: 0;
@@ -332,7 +332,7 @@ abbr[title] {
   margin-left: 1050px;
 }
 
-/*식단 추가 아이콘*/
+/*추가 아이콘*/
 .add-siksa-icon,
 .add-workout-icon {
   width: 100%;
@@ -341,10 +341,11 @@ abbr[title] {
   background-size: cover;
 }
 
-/*식단 추가 버튼 끝*/
+/*추가 버튼 끝*/
 
-/*식단 수정 버튼*/
-.edit-siksa-button {
+/*수정 버튼*/
+.edit-siksa-button,
+.edit-workout-button {
   background: none;
   border: none;
   margin: auto;
@@ -354,7 +355,7 @@ abbr[title] {
   cursor: pointer;
 }
 
-/*식단 수정 버튼*/
+/*수정 버튼 */
 
 
 /* major container for exercise */
@@ -373,10 +374,10 @@ abbr[title] {
 }
 
 /* modal창 */
-.modalBody {
+.modalBody_w {
   position: absolute;
-  width: 1000px;
-  height: 700px;
+  width: 800px;
+  height: 500px;
   padding: 40px;
   text-align: center;
   background-color: rgb(255, 255, 255);
@@ -384,7 +385,6 @@ abbr[title] {
   box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
   z-index: 10000;
   overflow-y: hidden;
-  overflow-y: scroll;
 }
 
 #modalCloseBtn {
@@ -404,103 +404,31 @@ abbr[title] {
 /* =========== modal창 끝 =========== */
 
 
-/* =========== 파일업로드박스 =========== */
-
-p {
-  margin: 0;
-}
-
-.icon {
-  width: 100px;
-  height: 100px;
-  pointer-events: none;
-}
-
-.file {
-  display: none;
-}
-
-.file::file-selector-button {
-  font-size: 14px;
-  background: #fff;
-  border: 1px solid #111;
-  border-radius: 12px;
-  padding: 4px 32px;
-  cursor: pointer;
-}
-
-.preview {
-  width: 500px;
-  height: 300px;
+/* =========== 운동페이지-TODAY WORKOUT===========*/
+.major-icon-workout {
   margin: auto;
-  background-color: #fff;
-  border-radius: 5px;
-  border: 3px dashed #eee;
-  padding: 70px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-top: 10px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-size: cover;
+}
+
+.edit-workout-button {
+  background: none;
+  border: none;
+  padding: 5px;
+  margin: auto;
+  margin-top: 0px;
+  margin-left: 15px;
+  width: 150px;
+  height: 150px;
+  filter: drop-shadow(2px 2px 2px #808080);
   cursor: pointer;
 }
 
-.preview:hover {
-  border-color: #111;
-}
-
-.preview.active {
-  background-color: #efeef3;
-  border-color: #111;
-}
-
-.preview_msg {
-  font-size: 18px;
-  margin: 20px 0 10px;
-  font-weight: bold;
-}
-
-.preview_desc {
-  margin: 0;
-  font-size: 14px;
-  color: lightgray;
-}
-
-.preview_info {
-  width: 100%;
-  list-style: none;
-  padding: 0;
-  gap: 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-.preview_info .info_key {
-  display: block;
-  font-weight: 500;
-  font-size: 12px;
-  margin-bottom: 4px;
-}
-
-.preview_info .info_value {
-  font-size: 14px;
-}
-
-/* =========== 파일업로드박스 끝 =========== */
-
-/* =========== 식단페이지-모달 내용물 ===========*/
-.modal-add-label {
-  font-size: 14px;
-  /*border: dashed 1px black;*/
-}
-
-.file_upload {
-  display: inline-block;
-  border: dashed 1px black;
-  margin-top: 15px;
-}
-
-
-.modal-food-list {
+/* =========== 운동페이지-모달 내용물 ===========*/
+.modal-workout-list {
   display: flex;
   flex-direction: column;
   /*영역 구분용 점선*/
@@ -508,26 +436,19 @@ p {
   border-collapse: collapse;
 }
 
-.modal-food-list input[type="search"] {
+.modal-workout-list input[type="text"] {
   order: 1;
-  width: 400px;
+  padding-right: 0px;
+  height: 35px;
 }
 
-.modal-food-list input[type="text"] {
+.modal-workout-list input[type="number"] {
   order: 2;
   padding-right: 0px;
-  height: 30px;
+  height: 20px;
 }
 
-.modal-food-list input[name="FOOD_WEIGHT"] {
-  order: 3;
-  height: 50px;
-  resize: none;
-  overflow-y: hidden;
-  overflow-y: scroll;
-}
-
-.modal-food-list input[name="MEMO"] {
+.modal-workout-list input[name="MEMO"] {
   order: 3;
   height: 150px;
   resize: none;
@@ -536,15 +457,22 @@ p {
 }
 
 
-.modal-food-chart {
+.modal-workout-chart {
   display: inline-block;
   margin-top: 10px;
+  /*border: dashed 1px black;*/
   width: 350px;
+}
+
+.modal-add-label {
+  font-size: 14px;
+  /*border: dashed 1px black;*/
 }
 
 .submit-btn-modal {
   display: block;
   margin: 0 auto;
+  margin-top: 10px;
 }
 
 .reset-btn-modal {
@@ -563,5 +491,4 @@ p {
 }
 
 
-
-/* =========== 식단페이지-모달 내용물 끝 ===========*/
+/* =========== 운동페이지-모달 내용물 끝 ===========*/

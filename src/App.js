@@ -13,13 +13,10 @@ import SignUp from './views/signup/SignUp';
 
 import Messenger from './views/chatting/messenger/Messenger'
 
-
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
 import Mypage from './views/mypage/MyPage'
 
-
-import Game from './views/game/Game';
 
 import './assets/css/bootstrap.min.css';
 
@@ -50,6 +47,7 @@ import './venobox/venobox.css';
 import './assets/css/widget.css';
 
 import './assets/css/responsive.css';
+import FindPassword from './views/findpassword/findPassword.js';
 
 function App() {
   return (
@@ -75,8 +73,8 @@ function App() {
             <Route path={"/diet"} element={<Diet/>}/>
             <Route path={"/workout"} element={<Workout/>}/>
 
-            {/* 게임 */}
-            <Route path={"/game"} element={<Game/>}/>
+            {/* 채팅 */}
+            <Route path={"/messenger"} element={<Messenger/>}/>
 
           </Routes>
         </BrowserRouter>

@@ -18,14 +18,6 @@ function Header() {
                                         <Link to="/">Fitme</Link>
                                     </li>
 
-                                    <li>
-                                        <Link to="/game">Game</Link>
-                                        <ul className="sub-menu">
-                                            <li><Link to="/game/ranking">Ranking</Link></li>
-                                            <li><Link to="/game/room">Room</Link></li>
-                                        </ul>
-                                    </li>
-
                                     <li><Link to="/diet">Management</Link>
                                         <ul className="sub-menu">
                                             <li><Link to="/diet">Diet</Link></li>
@@ -56,7 +48,7 @@ function Header() {
                                     <li><Link to="/">chatting</Link>
                                         <ul className="sub-menu">
                                             <li><Link to="/">GPT chat</Link></li>
-                                            <li><Link to="/">messenger</Link></li>
+                                            <li><Link to="/messenger">messenger</Link></li>
                                         </ul>
                                     </li>
 
