@@ -17,6 +17,7 @@ import Messenger from './views/chatting/messenger/Messenger'
 
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
+import MyPage from './views/mypage/MyPage';
 
 
 import './assets/css/bootstrap.min.css';
@@ -73,12 +74,11 @@ function App() {
             {/* 회원 관리 메뉴 */}
             <Route path={"/diet"} element={<Diet/>}/>
             <Route path={"/workout"} element={<Workout/>}/>
+              
+            <Route path={"/mypage"} element={<MyPage/>}/>
 
             {/* 채팅 */}
             <Route path={"/messenger"} element={<Messenger/>}/>
-
-             {/* 채팅 */}
-             <Route path={"/findPassword"} element={<FindPassword/>}/>
 
           </Routes>
         </BrowserRouter>
