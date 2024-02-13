@@ -19,15 +19,25 @@ import CommnunitySearch from './component/CommunitySearch';
 import CommunityBoardWriteModal from './crud/CommunityBoardWriteModal';
 import CommunityBoardViewModal from './crud/CommunityBoardViewModal';
 import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
+//플로팅
+//npm i --save react-floating-action-button
+//리액트 모달
+//npm install --save react-modal
+import Modal from 'react-modal';
+
+import FloatingBar from '../../component/floatingBar/FloatingBar';
 
 function Community() {
     useEffect(()=>{
         $('body').addClass('loaded');
     });
-
   return (
     <div>
-        {/* 챗봇용 플로팅 */}
+        {/* 챗봇용 플로팅1 */}
+        {/*
+        <FloatingBar/>
+        */}
+        {/* 챗봇용 플로팅2 */}
         <ChatbotFloating/>
         {/*헤더 위*/}
         <HeaderTop/>
