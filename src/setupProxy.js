@@ -15,7 +15,10 @@ module.exports = function (app) {
   );
   app.use(
     createProxyMiddleware('/api/v1/foodworks/account', { //주소를 변수 처라 하면서 크로스 오리진
-      target: 'http://192.168.0.14:8080',
+      target: 'http://192.168.0.44:8080',
+      changeOrigin: true,
+    }),
+  );      target: 'http://192.168.0.14:8080',
       changeOrigin: true,
     }),
   ); 
