@@ -22,9 +22,9 @@ function CommunityBoardViewModal(props) {
 
 
     return (
-        <div className='row justify-content-md-center' style={{border:"1px solid red", backgroundColor:"blue"}}>
+        <div className='row justify-content-md-center' style={{border:"1px solid red", width:"1800px"}}>
             <div className="col-lg-5 col-sm-5">
-                <div className="blog-single-box upper">
+                <div className="blog-single-box upper" style={{backgroundColor:"#F6F4EC"}}>
                     <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                         <div className="blog-icon bi1">
                         </div>
@@ -66,14 +66,29 @@ function CommunityBoardViewModal(props) {
             </div>
 
             <div className="col-lg-5 col-sm-5" >
-                <div className="blog-single-box upper" style={{height:"97%"}}>
+                <div className="blog-single-box upper" style={{height:"97%", backgroundColor:"#F6F4EC"}}>
                     <div className="blog-content" style={{height:"90%"}}>
-                        <div className='blog-comment'  style={{border:"1px solid red", height:"100%"}}>
-                            <table style={{border:"1px solid red", width:"100%"}}>
-                                <tr style={{height:"50px"}}>
-                                    <td style={{width:"13%", border:"1px solid red",  textAlign:"center"}}>조동훈,,</td>
-                                    <td style={{paddingLeft:"20px"}}>작성한 댓글 내용</td>
-                                    <td style={{width:"15%", border:"1px solid red", textAlign:"center"}}>2016.03.05</td>
+                        <div className='blog-comment'  style={{backgroundColor:"#FFF", height:"100%", borderRadius:"5px"}}>
+                            <table style={{width:"100%"}}>
+                                <tr style={{height:"55px"}}>
+                                    <td style={{width:"12%", textAlign:"center"}}>조동훈</td>
+                                    <td style={{padding:"0px 10px"}}>작성한 댓글 내용</td>
+                                    <td style={{width:"15%", textAlign:"center"}}>2016.03.05</td>
+                                </tr>
+                                <tr style={{height:"55px"}}>
+                                    <td style={{width:"12%", textAlign:"center"}}>조동훈</td>
+                                    <td style={{padding:"0px 10px"}}>작성한 댓글 내용 작성한 댓글 내용작성한 댓글 내용작성한 댓글 내용작성한 댓글 내용</td>
+                                    <td style={{width:"15%", textAlign:"center"}}>2016.03.05</td>
+                                </tr>
+                                <tr style={{height:"55px"}}>
+                                    <td style={{width:"12%", textAlign:"center"}}>조동훈</td>
+                                    <td style={{padding:"0px 10px"}}>작성한 댓글 내용</td>
+                                    <td style={{width:"15%", textAlign:"center"}}>2016.03.05</td>
+                                </tr>
+                                <tr style={{height:"55px"}}>
+                                    <td style={{width:"12%", textAlign:"center"}}>조동훈</td>
+                                    <td style={{padding:"0px 10px"}}>작성한 댓글 내용</td>
+                                    <td style={{width:"15%", textAlign:"center"}}>2016.03.05</td>
                                 </tr>
                             </table>
                         </div>
@@ -96,7 +111,6 @@ function CommunityBoardViewModal(props) {
                     </div>
                 </div>
             </div>
-
         </div>
     );
   }
