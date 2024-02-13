@@ -1,6 +1,7 @@
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 import Header from '../component/header/Header';
@@ -9,7 +10,6 @@ import './Login.css';
 
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
-
 const LOGIN_API = '/login';
 
 function SignIn() {
@@ -113,7 +113,8 @@ function SignIn() {
         // 각 소셜 로그인 OAuth2 인증임
         window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
       };
-    
+      
+   
   return (
     <div style={{paddingBottom:"80px"}}>
         <HeaderTop/>
@@ -132,12 +133,12 @@ function SignIn() {
         <!-- Start breadcumb-area -->
         <!--==================================================-->
         */}
-        <div class="breadcumb-area d-flex align-items-center" style={{marginBottom:"100px"}}>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="breacumb-content">
-                            <div class="breadcumb-title">
+        <div className="breadcumb-area d-flex align-items-center" style={{marginBottom:"100px"}}>
+            <div className="container">
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className="breacumb-content">
+                            <div className="breadcumb-title">
                                 <h1>Community</h1>
                             </div>
                             <div className="breadcumb-content-text">
@@ -186,7 +187,11 @@ function SignIn() {
             <input type="checkbox" id="remember-check" /> 아이디 저장하기
           </label>
           <div className="links">
-            <a href="#">비밀번호를 잊어버리셨나요?</a><br />
+            {/* <a href="#">비밀번호를 잊어버리셨나요?</a><br /> */}
+            <a href="#" onClick={(e) =>{ 
+              e.preventDefault();
+              navigate('/findPassword')
+              }}>비밀번호를 잊어버리셨나요?</a><br />
             <p>계정이 없으신가요? <a href="/SignUp">회원가입</a></p>
           </div>
           <div className="hr-sect">또는</div>
