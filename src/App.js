@@ -14,6 +14,7 @@ import SignUp from './views/signup/SignUp';
 
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
+import MyPage from './views/mypage/MyPage';
 
 
 import Game from './views/game/Game';
@@ -68,10 +69,12 @@ function App() {
             {/* 회원 관리 메뉴 */}
             <Route path={"/diet"} element={<Diet/>}/>
             <Route path={"/workout"} element={<Workout/>}/>
+              
+            <Route path={"/mypage"} element={<MyPage/>}/>
 
-            {/* 게임 메뉴 */}
-            <Route path={"/game"} element={<Game/>}/>
-            
+            {/* 채팅 */}
+            <Route path={"/messenger"} element={<Messenger/>}/>
+
           </Routes>
         </BrowserRouter>
       </AnimatePresence>
