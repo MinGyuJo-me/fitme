@@ -38,51 +38,6 @@ import styled from 'styled-components';
 //componants
 import Modal from "./modal";
 
-
-var id = null;
-
-var accountId = 4;
-var ipAddress = '192.168.0.44';
-
-export const data = {
-	labels: ['Red', 'Good', 'Orange', 'Yellow', 'Green', 'Blue'], //범례
-	datasets: [
-	  {
-		data: [10, 15, 3, 5, 7, 2],
-		backgroundColor: [
-		
-		  'rgba(255, 99, 132, 1)',
-		  'rgba(54, 162, 235, 1)',
-		  'rgba(255, 206, 86, 1)',
-		  'rgba(75, 192, 192, 1)',
-		  'rgba(153, 102, 255, 1)',
-		  'rgba(255, 159, 64, 1)',
-		],
-		borderColor: [
-		  'rgba(255, 255, 255, 1)',
-		],
-		borderWidth: 0,
-		cutoutPercentage: 50,
-		
-	  },
-	],
-  };
-  
-  //테스트--------------------------
-  
-  export const options1 = {
-	responsive: true,
-	plugins: {
-	  legend: {
-	  },
-	  title: {
-		display: true,
-		text: 'Chart.js Line Chart',
-	  },
-	},
-};
-
-
 var id = null;
 var ipAddress = '192.168.0.110';
 
@@ -208,31 +163,6 @@ async function imageData(code){
   }
 //
 
-//
-//좋아요
-const testLike = (e) => {
-	var btnLike = e.target.children[0].value;
-	var dateLike = e.target.children[1].value;
-	console.log('dateLike : ', dateLike.length)
-	if(dateLike.length <= 0){
-		axios.post(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
-			headers: {
-				'Content-Type':'multipart/form-data',
-			}
-		})
-		e.target.children[1].value = new Date();
-		e.target.style.backgroundColor = 'rgb(255, 0, 200)';
-	}else{
-		axios.delete(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
-			header: {
-				'Content-Type':'multipart/form-data',
-			}
-		})
-		e.target.style.backgroundColor = 'rgb(96, 177, 89)';
-		e.target.children[1].value = '';
-	}
-}
-//
 
 function Workout() {
 	const [mark, setMark] = useState([]);	//
