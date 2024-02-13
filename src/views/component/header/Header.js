@@ -18,6 +18,14 @@ function Header() {
                                         <Link to="/">Fitme</Link>
                                     </li>
 
+                                    <li>
+                                        <Link to="/game">Game</Link>
+                                        <ul className="sub-menu">
+                                            <li><Link to="/game/ranking">Ranking</Link></li>
+                                            <li><Link to="/game/room">Room</Link></li>
+                                        </ul>
+                                    </li>
+
                                     <li><Link to="/diet">Management</Link>
                                         <ul className="sub-menu">
                                             <li><Link to="/diet">Diet</Link></li>

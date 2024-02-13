@@ -16,6 +16,8 @@ import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
 
 
+import Game from './views/game/Game';
+
 import './assets/css/bootstrap.min.css';
 
 import './assets/css/owl.carousel.min.css';
@@ -66,6 +68,9 @@ function App() {
             {/* 회원 관리 메뉴 */}
             <Route path={"/diet"} element={<Diet/>}/>
             <Route path={"/workout"} element={<Workout/>}/>
+
+            {/* 게임 메뉴 */}
+            <Route path={"/game"} element={<Game/>}/>
             
           </Routes>
         </BrowserRouter>
