@@ -45,7 +45,7 @@ function SignUp() {
   };
 
   const handleEmailCode = () => {
-    axios.get(`/user/mailCheck?email=${userEmail}`)
+    axios.get(`/mailCheck?email=${userEmail}`)
       .then(response => {
         console.log('응답:', response.data);
         setemailCodeCode(response.data);
@@ -108,8 +108,9 @@ function SignUp() {
     formData.append('age', age);
     formData.append('gender', gender);
     formData.append('hobby', inter);
+
     axios.post(`/joinMember`, formData, {
-      // axios.post(`http://192.168.0.44:3000/joinMember`, formData, {
+      // axios.post(`http://192.168.0.118:3000/joinMember`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -182,12 +183,12 @@ function SignUp() {
         <!-- Start breadcumb-area -->
         <!--==================================================-->
         */}
-        <div class="breadcumb-area d-flex align-items-center" style={{marginBottom:"100px"}}>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="breacumb-content">
-                            <div class="breadcumb-title">
+        <div className="breadcumb-area d-flex align-items-center" style={{marginBottom:"100px"}}>
+            <div className="container">
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className="breacumb-content">
+                            <div className="breadcumb-title">
                                 <h1>Community</h1>
                             </div>
                             <div className="breadcumb-content-text">
@@ -211,6 +212,8 @@ function SignUp() {
             title="이메일 형식으로 입력하세요."
             className="text-field"
             placeholder="이메일"
+            value={userEmail}
+            onChange={e => setUserEmail(e.target.value)}
           />
 
           <button id="mail-Check-Btn" 
