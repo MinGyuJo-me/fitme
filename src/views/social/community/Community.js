@@ -18,6 +18,7 @@ import FriendListSideBar from './component/FriendListSideBar';
 import CommnunitySearch from './component/CommunitySearch';
 import CommunityBoardWriteModal from './crud/CommunityBoardWriteModal';
 import CommunityBoardViewModal from './crud/CommunityBoardViewModal';
+import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 
 function Community() {
     useEffect(()=>{
@@ -26,6 +27,8 @@ function Community() {
 
   return (
     <div>
+        {/* 챗봇용 플로팅 */}
+        <ChatbotFloating/>
         {/*헤더 위*/}
         <HeaderTop/>
         {/*헤더 메인 메뉴*/}
@@ -68,7 +71,6 @@ function Community() {
                                         title="내가 새로 산 차1" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
                         />
         <Footer/>
-        
     </div>
   );
 }

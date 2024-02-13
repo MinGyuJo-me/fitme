@@ -1,7 +1,10 @@
 import {Link} from 'react-router-dom';
 import React, { useState,useEffect,useRef} from 'react';
+
 //npm install axios
 import axios from 'axios';
+
+
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -19,7 +22,6 @@ function CommunityBoardViewModal(props) {
         autoplayTimeout: 4500,
         smartSpeed: 450,
     };
-
 
     return (
         <div className='row justify-content-md-center' style={{border:"1px solid red", width:"1800px"}}>
@@ -68,7 +70,7 @@ function CommunityBoardViewModal(props) {
             <div className="col-lg-5 col-sm-5" >
                 <div className="blog-single-box upper" style={{height:"97%", backgroundColor:"#F6F4EC"}}>
                     <div className="blog-content" style={{height:"90%"}}>
-                        <div className='blog-comment'  style={{backgroundColor:"#FFF", height:"100%", borderRadius:"5px"}}>
+                        <div className='blog-comment'  style={{backgroundColor:"#FFF", height:"103%", borderRadius:"5px", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}}>
                             <table style={{width:"100%"}}>
                                 <tr style={{height:"55px"}}>
                                     <td style={{width:"12%", textAlign:"center"}}>조동훈</td>
@@ -95,7 +97,8 @@ function CommunityBoardViewModal(props) {
                     </div>
                     <div className="blog-content">
                         <div className="blog-button">
-                            <input type="text" style={{width:"70%"}}></input>
+                            <input type="text" style={{width:"70%", height:"45px", borderRadius:"5px", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}}></input>
+                            <button type="submit" style={{position:"absolute", right:"210px", borderRadius:"5px", backgroundColor:"#F6F6F6", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.2)"}}>submit</button>
                             <div className="blog-button-container">
                                 <div className='blog-button-item'>
                                     <img src={require('../images/chat_bubble.png')}/>
