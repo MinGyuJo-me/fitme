@@ -11,6 +11,8 @@ import Recipe from './views/social/recipe/Recipe';
 import SignIn from './views/signin/SignIn';
 import SignUp from './views/signup/SignUp';
 
+import Messenger from './views/chatting/messenger/Messenger'
+
 
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
@@ -45,6 +47,7 @@ import './venobox/venobox.css';
 import './assets/css/widget.css';
 
 import './assets/css/responsive.css';
+import FindPassword from './views/findpassword/findPassword.js';
 
 function App() {
   return (
@@ -66,7 +69,13 @@ function App() {
             {/* 회원 관리 메뉴 */}
             <Route path={"/diet"} element={<Diet/>}/>
             <Route path={"/workout"} element={<Workout/>}/>
-            
+
+            {/* 채팅 */}
+            <Route path={"/messenger"} element={<Messenger/>}/>
+
+             {/* 채팅 */}
+             <Route path={"/findPassword"} element={<FindPassword/>}/>
+
           </Routes>
         </BrowserRouter>
       </AnimatePresence>
