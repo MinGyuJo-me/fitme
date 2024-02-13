@@ -48,6 +48,7 @@ import './venobox/venobox.css';
 import './assets/css/widget.css';
 
 import './assets/css/responsive.css';
+import FindPassword from './views/findpassword/findPassword.js';
 
 function App() {
   return (
@@ -75,6 +76,9 @@ function App() {
 
             {/* 채팅 */}
             <Route path={"/messenger"} element={<Messenger/>}/>
+
+             {/* 채팅 */}
+             <Route path={"/findPassword"} element={<FindPassword/>}/>
 
           </Routes>
         </BrowserRouter>

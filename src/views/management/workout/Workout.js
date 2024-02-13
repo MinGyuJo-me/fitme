@@ -80,7 +80,12 @@ export const data = {
 		text: 'Chart.js Line Chart',
 	  },
 	},
-  };
+};
+
+
+var id = null;
+var ipAddress = '192.168.0.110';
+
   
   const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
   
@@ -187,11 +192,12 @@ export const data = {
   
   }
 
+//
 //이미지서버 연결 
 async function imageData(code){
 	return await new Promise((resolve,reject)=>{
 	  try{
-		axios.get(`http://192.168.0.44:5050/image/${code}`)
+		axios.get(`http://192.168.0.15:5050/image/${code}`)
 		.then((response)=>{
 			  // console.log(response.data);
 			resolve("data:image/png;base64,"+response.data['image']);
@@ -200,237 +206,282 @@ async function imageData(code){
 	  catch(err){reject(err)};
 	},2000);
   }
+//
 
-
+//
+//좋아요
+const testLike = (e) => {
+	var btnLike = e.target.children[0].value;
+	var dateLike = e.target.children[1].value;
+	console.log('dateLike : ', dateLike.length)
+	if(dateLike.length <= 0){
+		axios.post(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
+			headers: {
+				'Content-Type':'multipart/form-data',
+			}
+		})
+		e.target.children[1].value = new Date();
+		e.target.style.backgroundColor = 'rgb(255, 0, 200)';
+	}else{
+		axios.delete(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
+			header: {
+				'Content-Type':'multipart/form-data',
+			}
+		})
+		e.target.style.backgroundColor = 'rgb(96, 177, 89)';
+		e.target.children[1].value = '';
+	}
+}
+//
 
 function Workout() {
-  const [value, onChange] = useState(new Date());
-  const [data_, setData] = useState();
-  const [labels_, setLabels] = useState();
-  const [workout, setWorkout ] = useState([]);
-  const [selectedWorkout, setSelectedWorkout] = useState('');
-  const [mark, setMark] = useState([]);
-
-  const [accountData, setAccount ] = useState([]);
-
- //모달창 업데이트 딜리트 출력
- const [isOpen, setIsOpen] = useState();
- const [selectOne, setSelect ] = useState();
-
- const toggleModal = (e) => {
-   id = e.target.parentElement.children[0].children[0].value != null ? e.target.parentElement.children[0].children[0] : -1;
-   console.log('id:',e.target.parentElement.children[0].children[0].value)
-   setIsOpen(id.value != null ? id.value : -1);
- };
-
- useEffect(()=>{
-   // console.log(isOpen);
-   var list_ = new Array();
-   axios.get(`http://${ipAddress}:5000/workout/${accountId}?calId=${isOpen}`)
-   .then(response =>{
-     // console.log(response.data == null);
-     // setSelect(new Array(response.data))
-     if(response.data != null){
-       for(var i = 0; i < response.data.length; i++){
-         list_.push(response.data[i]);
-       }
-     }
-     // console.log('list_',list_.length);
-     setSelect(list_);
-   })
-   // setSelect //사용\
-   
- },[isOpen])
- const [calPut, setCalput ] = useState(); //업데이트
- // const [calDel, setCalDel ] = useState(); //딜리트용
-
- const handleWorkoutSelect = value => {
-    setSelectedWorkout(value);
- };
-
-
- const [formData, setFormData] = useState({
-   DESCRIPTION: '',
-   CATEGORY: '',
-   ACCURACY: '',
-   COUNTS: '',
-   MEMO: '',
-   WEIGHT: ''
- });
-
- const handleImageChange = (image) => {
-   setFormData({
-     ...formData,
-     CATEGORY: image, // 이미지 정보를 formData에 추가
-   });
- };
-
- const handleInputChange = (e) => {
-   const { name, value } = e.target;
-   setFormData({
-     ...formData,
-     [name]: value,
-   });
-   console.log(formData);
- };
-
- const setCalDel = (e) => {
-  if(true){ //confirm넣을 자리
-    console.log("delete",id.parentElement.parentElement);
-    axios.delete(`http://${ipAddress}:5000/workout/${e.target.parentElement[0].value}`,{})
-    .then(response => {
-      setIsOpen(false);
-      console.log(response.data);
-      id.parentElement.parentElement.remove();
-    })
-  }
- }
-
- const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData2 = e.target;
-    console.log(selectedWorkout)
-  // console.log(formData[formData.length -2].value); //작동확인
-  // FormData 객체 생성
-  const formData1 = new FormData();
-
-  const workoutData = new Array();
-
-  // 각 폼 필드를 FormData 객체에 추가
-  for (const key in formData){
-    // if(key == 'WORKOUT' || key == '')
-    console.log(key,':',formData[key])
-    formData1.append(key, formData[key]);
-  }
-
-
-   if(formData2[formData2.length -2].value == '수정'){
-      console.log(String(formData2[2].value).split()[0])
-      console.log("put");
-    }else{
-      var endTime = String(e.target.children[1].children[0].children[0].children[1].children[0].value).split()[0]
-      console.log(e.target)
-      formData1.append('END_DATE', endTime);
-      console.log(formData1);
-      console.log("post",formData['CATEGORY'] == '');
-      var img_form = 0;
-
-      axios.post(`http://${ipAddress}:5000/workout/${accountId}`, formData1, {
-        headers:{
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(response => {
-        // console.log("주소:", response);
-        swal({title:"입력 성공!",icon:"success"})  
-        //서버에 데이터 입력 성공시 모달창 닫기
-        setIsOpen(false);
-      })
-      .catch(error => {
-        console.error('서버 오류:', error);
-        swal({title:"입력 실패",icon:"error"})
-      });
-    }
- };
-
- const navigate = useNavigate();
-  useEffect(() => {
-    function getCookie(name) { //로그인 여부 확인
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.startsWith(name + '=')) {
-          return cookie.substring(name.length + 1);
-        }
-      }
-      return null;
-    }
-
-    const myCookieValue = getCookie('Authorization');
-      console.log('myCookieValue',myCookieValue == null);
-      if(myCookieValue == null){ //로그인 확인
-        navigate('/signin');
-      }
-
-    //프로필 코드 
-    axios.get(`http://${ipAddress}:5000/account/${accountId}?hobby=workout`)
-    .then(response =>{
-      var proflieData = response.data['account']
-      if(proflieData[6]!=null){
-        imageData(proflieData[6]).then((test)=>{
-          proflieData[6] = test;
-          setAccount(proflieData);
-        })
-      }else{
-        async function test(t1){return await imageData(t1)};
-        test(1).then((test)=>{
-          proflieData[6] = test;
-          setAccount(proflieData);
-        })
-      }
-      //날짜 일정 추가 창
-      setMark(response.data['workout']);
-      return response.data;
-    })
-
-}, []
-)
-useEffect(() => {
-  axios.get(`http://${ipAddress}:5000/workout/${accountId}?date=`+moment(value).format("YYYY-MM-DD")) //<---머지시 50 을 44로 변경
-  .then(response =>{
-  
-    setWorkout(response.data['workout']);
-    return response.data['chart1'];
-  })
-  .then(message =>{
-    var data1_ =[];
-    var labels1_ = [];
-    for(let i=0; i<message.length;i++){
-      data1_.push(message[i].size);
-      labels1_.push(message[i].name);
-    } 
-    setData(data1_);
-    setLabels(labels1_);
-  });
-},[value]);
-
-
-  const data = {
-    labels: labels_, //범례
-    datasets: [
-      {
-        data: data_,
-        backgroundColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderColor: [
-          'rgba(255, 255, 255, 1)',
-        ],
-        borderWidth: 1,
-        cutoutPercentage: 50,
-      },
-    ],
-  };
-  const options = { //<Doughnut data={data}  options={options}/>에 적용
-    maintainAspectRatio: false, // 필요에 따라 조정 //옆에 태그들 무시?1
-    plugins: {
-      legend: {
-        display: true, //범례 표시여부
-        align: 'center',
-        position: 'right',
-        onClick: 0,
-      },
-
-  },
-};
-
+	const [mark, setMark] = useState([]);	//
+	const [selectedWorkout, setSelectedWorkout] = useState('');	//
 	
-  return (
+	//유저 정보
+	const [accountData, setAccount ] = useState([]);	//
+
+	//운동 캘린더용
+	const [workoutCal,setWorkoutCal] = useState();	//
+
+	//네비게이트 
+	const navigate = useNavigate();	//
+
+	//모달창 업데이트 딜리트 출력
+	const [isOpen, setIsOpen] = useState();	//
+	const [selectOne, setSelect ] = useState();	//
+
+	//하루 데이타
+	const [value, onChange] = useState(new Date());	//
+	const [data_, setData] = useState();	//
+	const [labels_, setLabels] = useState();	//
+    const [workout, setWorkout ] = useState([]);	//
+
+	//
+	const toggleModal = (e) => {
+		id = e.target.parentElement.children[0].value != null ? e.target.parentElement.children[0] : -1;
+		setIsOpen(id.value != null ? id.value : -1)
+	}
+	//
+
+	//
+	//로그인 확인
+	useEffect(()=>{
+		function getCookie(name) { //로그인 여부 확인
+			const cookies = document.cookie.split(';');
+			for (let i = 0; i < cookies.length; i++) {
+			  const cookie = cookies[i].trim();
+			  if (cookie.startsWith(name + '=')) {
+				return cookie.substring(name.length + 1);
+			  }
+			}
+			return null;
+		}
+		  
+		const myCookieValue = getCookie('Authorization');
+		// console.log('myCookieValue',myCookieValue);
+		if(myCookieValue == null){ //로그인 확인
+		navigate('/signin');
+		}
+
+		axios.get(`/api/v1/foodworks/account`, {
+		headers: {
+			'Authorization' : `${myCookieValue}`,
+			'Content-Type' : 'application/json; charset=UTF-8'
+		}
+		})
+		.then(response => {
+		var proflieData = response.data;
+		if(proflieData.accountNo != null) {
+			setWorkoutCal(proflieData.accountNo);
+		};
+		if(proflieData.image!=null){
+			imageData(proflieData.image).then((test)=>{
+				proflieData.image = test;
+				setAccount(proflieData);
+			})
+		}else{
+			imageData(1).then((test)=>{
+				proflieData.image = test;
+				setAccount(proflieData);
+			})
+		}
+	})
+	.catch(error => console.log('error',error))
+	},[]);
+	//
+
+	//
+	//캘린더 부분 추가
+	useEffect(()=>{
+		//프로필 코드 
+		if(workoutCal != null){
+		axios.get(`http://${ipAddress}:5000/account/${workoutCal}?hobby=workout`)
+		.then(response =>{
+			//날짜 일정 추가 창
+			// console.log(response.data['workout']);
+			setMark(response.data['workout']);
+			onChange(new Date());
+			return response.data;
+		})
+		}
+	},[workoutCal])
+	//
+
+	//
+	const setCalDel = (e) => {
+		if(true){ //confirm넣을 자리
+		  console.log("delete",id.parentElement.parentElement);
+		  axios.delete(`http://${ipAddress}:5000/workout/${e.target.parentElement[0].value}`,{})
+		  .then(response => {
+			setIsOpen(false);
+			console.log(response.data);
+			id.parentElement.parentElement.remove();
+		  })
+		}
+	}
+	//
+
+	//
+	//하루 데이타
+	useEffect(() => {
+		setWorkout([]);
+		if(workoutCal != null){
+		  axios.get(`http://${ipAddress}:5000/workout/${workoutCal}?date=`+moment(value).format("YYYY-MM-DD"))
+			.then(response =>{
+				console.log(response.data['workout']);
+				setWorkout(response.data['workout']);
+				return response.data['chart1'];
+			})
+
+			.then(message =>{
+				var data1_ =[];
+				var labels1_ = [];
+				for(let i=0; i<message.length;i++){
+					data1_.push(message[i].size);
+					labels1_.push(message[i].name);
+				} 
+				setData(data1_);
+				setLabels(labels1_);
+			});
+		}
+	},[value]);
+	//
+
+	//
+	const handleWorkoutSelect = value => {
+		setSelectedWorkout(value);
+	  };
+	//
+	
+	//
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const formData2 = e.target;
+		const formData1 = new FormData();
+		const workoutData = new Array();
+
+		// 각 폼 필드를 FormData 객체에 추가
+		for (const key in formData){
+		// if(key == 'WORKOUT' || key == '')
+		console.log(key,':',formData[key])
+		formData1.append(key, formData[key]);
+		}
+
+		if(formData2[formData2.length -2].value == '수정'){
+			console.log(String(formData2[2].value).split()[0])
+			console.log("put");
+		}else{
+		var endTime = String(e.target.children[1].children[0].children[0].children[1].children[0].value).split()[0]
+		console.log(e.target)
+		formData1.append('END_DATE', endTime);
+		console.log(formData1);
+		console.log("post",formData['CATEGORY'] == '');
+		var img_form = 0;
+
+		axios.post(`http://${ipAddress}:5000/workout/${workoutCal}`, formData1, {
+			headers:{
+			'Content-Type': 'multipart/form-data',
+			},
+		})
+		.then(response => {
+			// console.log("주소:", response);
+			swal({title:"입력 성공!",icon:"success"})  
+			//서버에 데이터 입력 성공시 모달창 닫기
+			setIsOpen(false);
+		})
+		.catch(error => {
+			console.error('서버 오류:', error);
+			swal({title:"입력 실패",icon:"error"})
+		});
+		}
+  	};
+	//
+
+	//
+	const [formData, setFormData] = useState({
+		DESCRIPTION: '',
+		CATEGORY: '',
+		ACCURACY: '',
+		COUNTS: '',
+		MEMO: '',
+		WEIGHT: ''
+	});
+	//
+	//
+	const handleImageChange = (image) => {
+		setFormData({
+		...formData,
+		CATEGORY: image, // 이미지 정보를 formData에 추가
+		});
+	};
+	//
+
+	//
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
+		setFormData({
+		...formData,
+		[name]: value,
+		});
+		// console.log(formData);
+	};
+	//
+	
+	//
+	// const data = {
+	// 	labels: labels_, //범례
+	// 	datasets: [{
+	// 		data: data_,
+	// 		backgroundColor: [
+	// 			'rgba(255, 99, 132, 1)',
+	// 			'rgba(54, 162, 235, 1)',
+	// 			'rgba(255, 206, 86, 1)',
+	// 			'rgba(75, 192, 192, 1)',
+	// 			'rgba(153, 102, 255, 1)',
+	// 			'rgba(255, 159, 64, 1)',
+	// 		],
+	// 		borderColor: [
+	// 			'rgba(255, 255, 255, 1)',
+	// 		],
+	// 		borderWidth: 1,
+	// 		cutoutPercentage: 50,
+	// 	},],
+	// };
+	// const options = { //<Doughnut data={data}  options={options}/>에 적용
+	// 	maintainAspectRatio: false, // 필요에 따라 조정 //옆에 태그들 무시?1
+	// 	plugins: {
+	// 		legend: {
+	// 			display: true, //범례 표시여부
+	// 			align: 'center',
+	// 			position: 'right',
+	// 			onClick: 0,
+	// 		},
+	// 	},
+	// };
+	//
+
+  	return (
     <div>
         <HeaderTop/>
         <Header/>
@@ -555,21 +606,22 @@ useEffect(() => {
 							<div class="blog-single-box">
 								<div class="blog-thumb">
 									<div type="button" className="edit-workout-button" onClick={toggleModal}>
-										<img src={test[4]} alt="pizza"/>
+										{/* <img src={test[4]} alt="운동"/> */}
 										<input type='hidden' value={test[0]} />
+										<div className="major-icon-workout" style={{backgroundImage: `url(${test[test.length-1]})` }} />
 									</div>
-									<div class="blog-btn">
-										<a href="#">아침</a>
-									</div>
+									{/* <div class="blog-btn">
+										<a href="#">{test[3]}</a>
+									</div> */}
 								</div>
 								{console.log("test",test[1])}
 								<div class="blog-content">
-									<div class="blog-left">
+									{/* <div class="blog-left">
 										<span>{test[3]}</span>
-									</div>
-									<h2>{test[1]}</h2>
-									<p>{test[2]}</p>
-									<p>{test[5]}</p>
+									</div> */}
+									<h2>{test[3]}</h2>
+									<p>{test[6]} All counts</p>
+									<p>{test[7]} kg</p>
 									<div class="blog-button">
 										<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
 									</div>
@@ -580,85 +632,88 @@ useEffect(() => {
 				</div>
 				))}
 			</OwlCarousel>
+			
+			{workout.length >= 0 ?						
+				<div>
+					<button type="button" className="add-workout-button" onClick={toggleModal}>
+						<div className="add-siksa-icon" 
+							// style={{ backgroundImage: `url(${img_plus6})` }}
+						></div>
+					</button>
+					{isOpen && (
+						<Modal
+						open={isOpen}
+						onClose={() => {
+							setSelectedWorkout('');
+							setIsOpen(false);
+						}}
+						> 
+						<div className="modal-addfood-label">
+						<h2>운동을 추가/수정해 주세요!</h2>
+						</div>
+						
+						{/* <form onSubmit={console.log("post")}> */}
+						<form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
+						{/* {selectOne == '' || selectOne == null ? ''
+							: 
+							// <input type="hidden" value={selectOne[0]}/>
+						} */}
+						<div className="date_picker">
+							<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+							<DemoContainer components={['DateTimePicker']}>
+							<DateTimePicker 
 
-			<div>
-			<button type="button" className="add-workout-button" onClick={toggleModal}>
-			<div className="add-siksa-icon" style={{ backgroundImage: `url(${require('./images/plus6.png')})` }}></div>
-			</button>
-			{isOpen && (
-                <Modal
-                  open={isOpen}
-                  onClose={() => {
-                    setSelectedWorkout('');
-                    setIsOpen(false);
-                  }}
-                > 
-                <div className="modal-addfood-label">
-                  <h2>운동을 추가해 주세요!</h2>
-                </div>
-                
-                {/* <form onSubmit={console.log("post")}> */}
-                <form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
-                  {/* {selectOne == '' || selectOne == null ? ''
-                    : 
-                    // <input type="hidden" value={selectOne[0]}/>
-                  } */}
-                  <div className="date_picker">
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-                    <DemoContainer components={['DateTimePicker']}>
-                    <DateTimePicker 
-
-                    // value={selectOne != null ? selectOne[5] : ''}
-                    label="날짜와 시간 설정" 
-                    // value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
-                    slotProps={{
-                      textField: {
-                        size: "small",
-                        format: 'YYYY-MM-DD HH:mm'
-                      },
-                    }}
-                    />
-                    </DemoContainer>
-                    </LocalizationProvider>
-                    </div>
-                    {/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
-                    <div className="date_picker">
-                      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko"></LocalizationProvider>
-                      </div>
-                      <div className="modal-workout-list">
-                    {/* <input type="text" name="DESCRIPTION" placeholder="제목" onChange={handleInputChange} /> */}
-                    <select name="CATEGORY" value={selectOne != null ? selectOne[3] : ''} onChange={handleInputChange}>
-                      <option value='' selected>-- 운동 종류 --</option>
-                      <option value="데드리프트">데드리프트(Deadlift)</option>
-                      <option value="스쿼트">스쿼트(squat)</option>
-                      <option value="벤치프레스">벤치프레스(bench press)</option>
-                      <option value="팔굽혀펴기">팔굽혀펴기(Push-up)</option>
-                      <option value="윗몸 일으키기">윗몸 일으키기(SitUp)</option>
-                    </select>
-                    <input type="text" name="DESCRIPTION" 
-                    // value={selectOne != null ? selectOne[1] : ''} 
-                    placeholder="제목" onChange={handleInputChange} />
-                    <input type="number" name="COUNTS" min="1" 
-                    // value={selectOne != null ? selectOne[7] : ''} 
-                    placeholder="횟수" onChange={handleInputChange} />
-                    <input type="number" name="WEIGHT" step="0.01" min="0" 
-                    // value={selectOne != null ? selectOne[8] : ''} 
-                    placeholder="무게" onChange={handleInputChange} />
-                    <input type="text" name="MEMO" 
-                    // value={selectOne != null ? selectOne[2] : ''} 
-                    placeholder="내용" onChange={handleInputChange} />
-                    </div>
-                    <input type="submit"  value="확인"
-                    // value={selectOne != '' ? "수정": "등록"} 
-                    className="submit-btn-modal"/>
-                     {/*  {selectOne == '' ? ''
-                        : 
-                        <input type="reset" value="삭제" onClick={setCalDel} className="reset-btn-modal"/>
-                      } */}
-                  </form>
-                </Modal>
-                )}
-				</div>
+							// value={selectOne != null ? selectOne[5] : ''}
+							label="날짜와 시간 설정" 
+							// value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
+							slotProps={{
+							textField: {
+								size: "small",
+								format: 'YYYY-MM-DD HH:mm'
+							},
+							}}
+							/>
+							</DemoContainer>
+							</LocalizationProvider>
+							</div>
+							{/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
+							<div className="date_picker">
+							<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko"></LocalizationProvider>
+							</div>
+							<div className="modal-workout-list">
+							{/* <input type="text" name="DESCRIPTION" placeholder="제목" onChange={handleInputChange} /> */}
+							<select name="CATEGORY" value={selectOne != null ? selectOne[3] : ''} onChange={handleInputChange}>
+							<option value='' selected>-- 운동 종류 --</option>
+							<option value="데드리프트">데드리프트(Deadlift)</option>
+							<option value="스쿼트">스쿼트(squat)</option>
+							<option value="벤치프레스">벤치프레스(bench press)</option>
+							<option value="팔굽혀펴기">팔굽혀펴기(Push-up)</option>
+							<option value="윗몸 일으키기">윗몸 일으키기(SitUp)</option>
+							</select>
+							<input type="text" name="DESCRIPTION" 
+							value={selectOne != null ? selectOne[1] : ''} 
+							placeholder="제목" onChange={handleInputChange} />
+							<input type="number" name="COUNTS" min="1" 
+							value={selectOne != null ? selectOne[7] : ''} 
+							placeholder="횟수" onChange={handleInputChange} />
+							<input type="number" name="WEIGHT" step="0.01" min="0" 
+							value={selectOne != null ? selectOne[8] : ''} 
+							placeholder="무게" onChange={handleInputChange} />
+							<input type="text" name="MEMO" 
+							value={selectOne != null ? selectOne[2] : ''} 
+							placeholder="내용" onChange={handleInputChange} />
+							</div>
+							<input type="submit" value={selectOne != '' ? "수정": "등록"} className="submit-btn-modal"/>
+							{selectOne == '' ? ''
+							: 
+							<input type="reset" value="삭제" onClick={setCalDel} className="reset-btn-modal"/>
+							}
+						</form>
+						</Modal>
+						)}
+				</div>      //466
+			:''
+			}
 	</div>
 	</div>
     </div>
