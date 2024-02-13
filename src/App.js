@@ -72,8 +72,8 @@ function App() {
               
             <Route path={"/mypage"} element={<MyPage/>}/>
 
-            {/* 채팅 */}
-            <Route path={"/messenger"} element={<Messenger/>}/>
+            {/* 게임 */}
+            <Route path={"/game"} element={<Game/>}/>
 
           </Routes>
         </BrowserRouter>
