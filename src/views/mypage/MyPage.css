@@ -4,12 +4,15 @@
 
 .form_row{
     font-weight: bold;
+
 }
   
-.main-titles {
+.main-titles h1{
     position: absolute;
-    top: 15px;
-    left: 0;
+    height: 20px ;
+    display: flex;
+    gap: 20;
+    color: #255946;
 }
 .title h1{
     height: 20px ;

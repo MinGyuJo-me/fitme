@@ -20,6 +20,10 @@ function CommunityBoard(props) {
         smartSpeed: 450,
     };
 
+    const getValue = (e) =>{
+        console.log(e.target);
+    }
+
 
     return (
         <div className="col-lg-12 col-sm-12">
@@ -29,7 +33,7 @@ function CommunityBoard(props) {
                 </div>
                 <div className='blog-description'>
                     <a href="#"><i className="fas fa-address-card"></i> {props.writer}</a>
-                    <a href="#"><i className="fas fa-map-marker"></i> {props.position}</a>
+                    <a href="#" onClick={getValue}><i className="fas fa-map-marker"></i> {props.position}</a>
                     <span><i className="far fa-calendar-alt"></i> {props.postDate}</span>
                 </div>
             </div>

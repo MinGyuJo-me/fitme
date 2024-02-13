@@ -40,15 +40,15 @@ function MyPage() {
         </div>
 
 
-                <div className="company-info-section">
+        <div className="company-info-section">
             <div className="container">
                 <div className="sideber-box sb-rjm1" style={{ height: 500, display: 'flex', gap: 20, alignSelf: 'flex-start', position: 'relative' }}>
-                    <div className='main-titles' style={{ marginTop: '-30px' }}>
-                        <h3>회원 정보</h3>
+                    <div className='main-titles' style={{ marginTop: '-60px',marginLeft:'-30px' }}>
+                        <h1>회원 정보</h1>
                     </div>
                     <div className='sideber-item'>
-                        <img src={require('../../assets/images/testi1.jpg')} alt="프로필 사진" style={{ width: '50%', height: '70%' }} />
-                        <div className="form_row" style={{marginBottom:'82px'}}>
+                        <img src={require('../../assets/images/testi1.jpg')} alt="프로필 사진" style={{ width: '40%', height: '100%' }} />
+                        <div className="form_row" style={{marginLeft:'82px',fontSize:'20px'}}>
                             <div className="col-lg-6 col-md-6">
                                 <div className="form_box">
                                     <span className="label">닉네임:</span>
@@ -86,14 +86,21 @@ function MyPage() {
                                 </div>
                             </div>
                         </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        
+        <div className="company-info-section">
+            <div className="container">
+                <div className="sideber-box sb-rjm1" style={{ height: 500, display: 'flex', gap: 20, alignSelf: 'flex-start', position: 'relative' }}>
+                    <div className='main-titles' style={{ marginTop: '-60px',marginLeft:'-30px' }}>
+                        <h1>게임 기록</h1>
                     </div>
                     <div className='sideber-item'>
-                        <img id='ibox' src={require('../../assets/images/testi2.jpg')} alt="게임 프로필 사진" style={{ width: '50%', height: '70%' }} />
-                        <div className='main-titles' style={{ marginTop: '-30px' ,top: '50%', left: '50%', marginTop: '-265px', marginLeft: '-10px'}}>
-                            <h3>게임 기록</h3>
-                        </div>
-                        <div className="form_row">
-                            <div className="col-lg-6 col-md-6">
+                        <img src={require('../../assets/images/testi2.jpg')} alt="프로필 사진" style={{ width: '40%', height: '100%' }} />
+                        <div className="form_row" style={{marginLeft:'82px',fontSize:'20px'}}>
+                        <div className="col-lg-6 col-md-6">
                                 <div className="form_box">
                                     <span className="label">닉네임:</span>
                                     <span className="value" id="username">JohnDoe123</span>
@@ -142,7 +149,7 @@ function MyPage() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
             </div>
         </div>
