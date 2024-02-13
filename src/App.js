@@ -11,13 +11,11 @@ import Recipe from './views/social/recipe/Recipe';
 import SignIn from './views/signin/SignIn';
 import SignUp from './views/signup/SignUp';
 
-import MyPage from './views/mypage/mypage';
-
 import Messenger from './views/chatting/messenger/Messenger'
 
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
-import MyPage from './views/mypage/MyPage';
+import Mypage from './views/mypage/MyPage'
 
 
 import './assets/css/bootstrap.min.css';
@@ -69,13 +67,11 @@ function App() {
             <Route path={"/signup"} element={<SignUp/>}/>
 
             {/* 마이페이지 */}
-            <Route path={'/mypage'} element={<MyPage/>}/>
+            <Route path={'/mypage'} element={<Mypage/>}/>
 
             {/* 회원 관리 메뉴 */}
             <Route path={"/diet"} element={<Diet/>}/>
             <Route path={"/workout"} element={<Workout/>}/>
-              
-            <Route path={"/mypage"} element={<MyPage/>}/>
 
             {/* 채팅 */}
             <Route path={"/messenger"} element={<Messenger/>}/>

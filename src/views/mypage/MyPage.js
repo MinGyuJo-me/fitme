@@ -1,15 +1,216 @@
 import {Link} from 'react-router-dom';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-/*import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';*/
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
 import './MyPage.css';
 
+import { useNavigate } from "react-router-dom";
+
+import axios from 'axios';
+
+import { Chart as ChartJS,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    ArcElement, 
+    Tooltip, 
+    Legend } from 'chart.js';
+import { Doughnut,Bar,Line } from 'react-chartjs-2';
+  
+ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Legend);
+
+
+
+var ipAddress = '192.168.0.15';
+
+async function imageData(code){
+    return await new Promise((resolve,reject)=>{
+        try{
+            axios.get(`http://192.168.0.15:5050/image/${code}`)
+            .then((response)=>{
+                // console.log(response.data);
+                resolve("data:image/png;base64,"+response.data['image']);
+            })
+        }
+        catch(err){reject(err)};
+    },2000);
+}
+
 function MyPage() {
-  return (
+    const [accountData, setAccount ] = useState([]);
+    const [accountNo, setAccountNo] = useState();
+    const [myCookie, setMyCookie] = useState();
+
+    const [mark, setMark] = useState([]);
+
+    const [data1_, setData1] = useState();
+    const [data2_, setData2] = useState();
+    const [labels1_, setLabels1] = useState();
+    const [labels2_, setLabels2] = useState();
+
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        function getCookie(name) { //로그인 여부 확인
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+                return cookie.substring(name.length + 1);
+            }
+          }
+          return null;
+        }
+        
+        const myCookieValue = getCookie('Authorization');
+        setMyCookie(myCookieValue);
+        // console.log('myCookieValue',myCookieValue);
+        if(myCookieValue == null){ //로그인 확인
+            navigate('/signin');
+        }
+    
+        
+        axios.get('/api/v1/mypages/account', {
+            headers: {
+                'Authorization' : `${myCookieValue}`,
+                'Content-Type' : 'application/json; charset=UTF-8'
+            }
+        })
+        .then(response => {
+            var proflieData = response.data;
+            console.log('proflieData',proflieData);
+            setAccountNo(proflieData.accountNo);
+            if(proflieData.image!=null){
+                imageData(proflieData.image).then((test)=>{
+                    proflieData.image = test;
+                    setAccount(proflieData);
+                })
+            }else{
+                imageData('1').then((test)=>{
+                    proflieData.image = test;
+                    setAccount(proflieData);
+                })
+            }
+        })
+        .catch(error => console.log(error))
+    },[])
+
+    useEffect(()=>{
+        // axios.get(`http://localhost:8080/api/v1/mypages/games/${accountNo}`, {
+        //     headers: {
+        //         'Authorization' : `${myCookie}`,
+        //         'Content-Type' : 'application/json; charset=UTF-8'
+        //     }
+        // })
+        // .then(response => {
+        //     console.log('games',response.data);
+        // })
+        // .catch(error => console.log(error));
+        console.log('accountNo',accountNo);
+        if(accountNo != null){
+            axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
+                .then(response =>{
+                //날짜 일정 추가 창
+                console.log('diet',response.data);
+                setMark(response.data['diet']);
+                return response.data;
+            })
+            axios.get(`/api/v1/mypages/workAccuracy/${accountNo}`, {
+                headers: {
+                    'Authorization' : `${myCookie}`,
+                    'Content-Type' : 'application/json; charset=UTF-8'
+                }
+            })
+            .then(response => {
+                console.log('workAccuracy',response.data);
+            })
+            .catch(error => console.log(error));
+            axios.get(`/api/v1/mypages/workBigThree/${accountNo}`, {
+                headers: {
+                    'Authorization' : `${myCookie}`,
+                    'Content-Type' : 'application/json; charset=UTF-8'
+                }
+            })
+            .then(response => {
+                console.log('workBigThree',response.data);
+            })
+            .catch(error => console.log(error));
+            axios.get(`/api/v1/chat/list/${accountNo}`,{
+                headers: {
+                    'Authorization' : `${myCookie}`,
+                    'Content-Type' : 'application/json; charset=UTF-8'
+                }
+            })
+            .then(response => {
+                console.log('chat/list',response.data);
+            })
+            .catch(error => console.log('/chat/list',error));
+            
+            const date = new Date() 
+            // console.log(`${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`);
+        }
+    },[accountNo]);
+    
+    //차트
+    const data1 = {
+        labels:labels1_,
+        datasets: [
+            {
+              fill: true,
+              label: '하루 영양소 섭취량',
+              data: data1_,
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+                fill: true,
+                label: 'Dataset 2',
+                data: [600,500,400,300,200,100],
+                borderColor: 'rgb(53, 162, 235)',
+                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            },
+          ],
+        };
+    const data2 = {
+        labels:labels2_,
+        datasets: [
+        {
+            label: '섭취 시간',
+            data: data2_,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+        // {
+        //   label: 'Dataset 2',
+        //   data: [600,500,400,300,200,100],
+        //   borderColor: 'rgb(53, 162, 235)',
+        //   backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        // },
+        ],
+    };
+    const options = {
+        maintainAspectRatio: false,
+        responsive: true,
+        plugins: {
+            legend: {
+            },
+            title: {
+            display: true,
+            text: '',
+            },
+        },
+    };
+
+
+
+    return (
     <div>
         <HeaderTop/>
         <Header/>
@@ -40,31 +241,31 @@ function MyPage() {
         </div>
 
 
-        <div className="company-info-section">
+                <div className="company-info-section">
             <div className="container">
                 <div className="sideber-box sb-rjm1" style={{ height: 500, display: 'flex', gap: 20, alignSelf: 'flex-start', position: 'relative' }}>
-                    <div className='main-titles' style={{ marginTop: '-60px',marginLeft:'-30px' }}>
-                        <h1>회원 정보</h1>
+                    <div className='main-titles' style={{ marginTop: '-30px' }}>
+                        <h3>회원 정보</h3>
                     </div>
                     <div className='sideber-item'>
-                        <img src={require('../../assets/images/testi1.jpg')} alt="프로필 사진" style={{ width: '40%', height: '100%' }} />
-                        <div className="form_row" style={{marginLeft:'82px',fontSize:'20px'}}>
+                        <img id='ibox' src={accountData.image} /*src={require('../../../assets/images/blog-0.jpg')}*/ alt="프로필 사진" style={{ width: '50%', height: '70%' }} />
+                        <div className="form_row">
                             <div className="col-lg-6 col-md-6">
                                 <div className="form_box">
                                     <span className="label">닉네임:</span>
-                                    <span className="value" id="username"  /* 폰트 바꾸는 방법 style={{fontFamily:"Lobster"}}*/>JohnDoe123</span>
+                                    <span className="value" id="username"  style={{fontFamily:"Lobster"}}>JohnDoe123</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
                                 <div className="form_box">
                                     <span className="label">이름:</span>
-                                    <span className="value" id="name">John Doe</span>
+                                    <span className="value" id="name">{accountData.name}</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
                                 <div className="form_box">
                                     <span className="label">주소:</span>
-                                    <span className="value" id="address">123 Main St</span>
+                                    <span className="value" id="address">{accountData.address}</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
@@ -76,31 +277,24 @@ function MyPage() {
                             <div className="col-lg-6 col-md-6">
                                 <div className="form_box">
                                     <span className="label">성별:</span>
-                                    <span className="value" id="gender">남성</span>
+                                    <span className="value" id="gender">{accountData.gender === 'M'? '남성':'여성'}</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
                                 <div className="form_box">
                                     <span className="label">취미:</span>
-                                    <span className="value" id="interest">운동</span>
+                                    <span className="value" id="interest">{accountData.hobby === 'E'? '운동':'식단'}</span>
                                 </div>
                             </div>
                         </div>
-                    </div>                    
-                </div>
-            </div>
-        </div>
-        
-        <div className="company-info-section">
-            <div className="container">
-                <div className="sideber-box sb-rjm1" style={{ height: 500, display: 'flex', gap: 20, alignSelf: 'flex-start', position: 'relative' }}>
-                    <div className='main-titles' style={{ marginTop: '-60px',marginLeft:'-30px' }}>
-                        <h1>게임 기록</h1>
                     </div>
                     <div className='sideber-item'>
-                        <img src={require('../../assets/images/testi2.jpg')} alt="프로필 사진" style={{ width: '40%', height: '100%' }} />
-                        <div className="form_row" style={{marginLeft:'82px',fontSize:'20px'}}>
-                        <div className="col-lg-6 col-md-6">
+                        <img id='ibox' src="dog.jpg" alt="게임 프로필 사진" style={{ width: '50%', height: '70%' }} />
+                        <div className='main-titles' style={{ marginTop: '-30px' ,top: '50%', left: '50%', marginTop: '-265px', marginLeft: '-10px'}}>
+                            <h3>게임 기록</h3>
+                        </div>
+                        <div className="form_row">
+                            <div className="col-lg-6 col-md-6">
                                 <div className="form_box">
                                     <span className="label">닉네임:</span>
                                     <span className="value" id="username">JohnDoe123</span>
@@ -149,7 +343,7 @@ function MyPage() {
                                 </div>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,16 +354,22 @@ function MyPage() {
 	</div>
 	<div className="company-info-section">
 		<div className="sideber-box">
-                <div className="col-lg-calorie" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-                        <div>맛있는거</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>맛있는거</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>맛있는거</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                </div>
+		<div className="col-lg-calorie" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란1</div>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                <Line options={options} data={data1} />
             </div>
-        </div>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란3</div>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란4</div>
+            <div>맛있는거</div>
+            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란5</div>
+		</div>
+		</div>
+	</div>
     </div>
   
 
@@ -179,18 +379,12 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
-                <div className="col-lg-inbody" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-                        <div>건강</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>건강</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>건강</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                </div>               
+                <div className="col-lg-inbody">
+                <div id="status-inbody"></div>
+                </div>
             </div>
         </div>
     </div>
-
 
     <div className="container">
         <div className="title">
@@ -198,14 +392,9 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
-                <div className="col-lg-workout-progress" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-                        <div>운동</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>운동</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>운동</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                </div> 
+                <div className="col-lg-inbody">
+                    <div id="status-workout-progress"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -217,18 +406,12 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
-                <div className="col-lg-meal-statistics" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-                        <div>음식</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>음식</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>음식</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
+                <div className="col-lg-inbody">
+                    <div id="status-meal-statistics"></div>
                 </div>
             </div>
         </div>
     </div>
-
 
     <div className="container">
         <div className="title">
@@ -236,19 +419,12 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
-                <div className="col-lg-workout-statistics" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-                        <div>운동부위</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>운동부위</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
-                        <div>운동부위</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란</div>
+                <div className="col-lg-inbody">
+                    <div id="status-workout-statistics"></div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="status-workout-statistics"></div>
 
     <div className="container">       
         <div className="title">
@@ -289,7 +465,7 @@ function MypageBulletinBoardLayout(){
           <button 
           className='detail-button' 
           style={{marginTop: '-1160px', left:'880px', border:'none' , background:'none' }}>
-            {/*<FontAwesomeIcon icon={faEllipsisV} />*/}
+            <FontAwesomeIcon icon={faEllipsisV} />
           </button>
         </div>
     );
@@ -320,7 +496,7 @@ function MypageBulletinBoardLayout(){
             <MypageYoutubeContainer/>
             <button className='detail-button' 
             style={{ marginTop: '-800px', left:'880px', border:'none' , background:'none'}}>
-               {/* <FontAwesomeIcon icon={faEllipsisV} />*/}
+                <FontAwesomeIcon icon={faEllipsisV} />
             </button>
             
           </div>

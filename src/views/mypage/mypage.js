@@ -28,12 +28,12 @@ ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement
 
 
 
-var ipAddress = '192.168.0.44';
+var ipAddress = '192.168.0.15';
 
 async function imageData(code){
     return await new Promise((resolve,reject)=>{
         try{
-            axios.get(`http://192.168.0.44:5050/image/${code}`)
+            axios.get(`http://192.168.0.15:5050/image/${code}`)
             .then((response)=>{
                 // console.log(response.data);
                 resolve("data:image/png;base64,"+response.data['image']);
@@ -93,7 +93,7 @@ function MyPage() {
                     setAccount(proflieData);
                 })
             }else{
-                imageData(1).then((test)=>{
+                imageData('1').then((test)=>{
                     proflieData.image = test;
                     setAccount(proflieData);
                 })
