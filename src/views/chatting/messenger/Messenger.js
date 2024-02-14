@@ -4,11 +4,15 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 
+
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
 import './Messenger.css';
 //chat
 import * as StompJs from '@stomp/stompjs';
+//componants
+import Modal from "./modal";
+
 let chatNo = 0;
 function getCookie(name) { //로그인 여부 확인
     const cookies = document.cookie.split(';');
@@ -42,6 +46,29 @@ function Messenger() {
           scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
         }
       };
+    //모달창 업데이트 딜리트 출력
+    const [isOpen, setIsOpen] = useState();
+
+    useEffect(() => {
+        // Add or remove the 'no-scroll' class to the html and body elements based on the modal's open state
+        if (isOpen) {
+          document.documentElement.style.overflow = 'hidden';  // Prevent scrolling on html
+          document.body.style.overflow = 'hidden';  // Prevent scrolling on body
+        } else {
+          document.documentElement.style.overflow = 'auto';  // Allow scrolling on html
+          document.body.style.overflow = 'auto';  // Allow scrolling on body
+        }
+    
+        // Cleanup: Remove the added classes when the component unmounts or modal is closed
+        return () => {
+          document.documentElement.style.overflow = 'auto';  // Ensure scrolling is allowed on html on unmount
+          document.body.style.overflow = 'auto';  // Ensure scrolling is allowed on body on unmount
+        };
+      }, [isOpen]);
+    
+      const toggleModal = () => {
+        setIsOpen(!isOpen);
+      };
 
     function chatRoom(e){
         // console.log('채팅방 번호:',e.target.children[0].value);
@@ -61,7 +88,7 @@ function Messenger() {
         })
     }
 
-
+    
 
     const connect = () => {
         client.current = new StompJs.Client({
@@ -255,8 +282,25 @@ function Messenger() {
           <div className="chat-with">Chat with Vincent Porter</div>
           <div className="chat-num-messages">already 1 902 messages</div>
         </div>
-        <i className="fa fa-plus-square"></i>
-      </div>
+        <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}></i>
+        {isOpen && (
+                <Modal
+                  open={isOpen}
+                  onClose={() => {
+                    setIsOpen(false);
+                  }}
+                > 
+                <div className="modal-addfood-label">
+                  <h2>채팅방에 친구를 추가해 보세요!</h2>
+                </div>
+                
+                {/* <form onSubmit={console.log("post")}> */}
+                <form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
+                  
+                </form>
+                </Modal>
+                    )}
+        </div>
       
       <div className="chat-history">
         <ul>
@@ -289,7 +333,7 @@ function Messenger() {
       </div> 
       
         <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)}>
-            <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" onChange={handleChange} rows="3"></textarea>
+            <textarea name="message-to-send" id="message-to-send" placeholder ="메시지를 입력해 주세요" onChange={handleChange} rows="3"></textarea>
             <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>      
 
             

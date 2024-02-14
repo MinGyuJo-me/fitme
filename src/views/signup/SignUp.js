@@ -7,14 +7,13 @@ import './Register.css';
 import DaumPost from './DaumPost';  // DaumPost 컴포넌트
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
-import Breadcumb from '../component/Breadcumb/Breadcumb';
 
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
 const pnumRegex = '^\\d{11}$';
 
 function SignUp() {
-  const [password, setPassword] = useState('');
+    const [password, setPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [genderMessage, setGenderMessage] = useState('');
   const [interMessage, setInterMessage] = useState('');
@@ -46,7 +45,7 @@ function SignUp() {
   };
 
   const handleEmailCode = () => {
-    axios.get(`/mailCheck?email=${userEmail}`)
+    axios.get(`/user/mailCheck?email=${userEmail}`)
       .then(response => {
         console.log('응답:', response.data);
         setemailCodeCode(response.data);
@@ -109,9 +108,8 @@ function SignUp() {
     formData.append('age', age);
     formData.append('gender', gender);
     formData.append('hobby', inter);
-
     axios.post(`/joinMember`, formData, {
-      // axios.post(`http://192.168.0.118:3000/joinMember`, formData, {
+      // axios.post(`http://192.168.0.44:3000/joinMember`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -179,12 +177,28 @@ function SignUp() {
         </div>
         */}
 
-        {/* 제목 배경화면 */}
-        <Breadcumb title="signup" content="Account" subContent="signup"/>
-
-
-
-        <form className="login-form" onSubmit={handleRegister} method='post' style={{marginTop:"100px"}}>
+                {/*
+        <!--==================================================-->
+        <!-- Start breadcumb-area -->
+        <!--==================================================-->
+        */}
+        <div class="breadcumb-area d-flex align-items-center" style={{marginBottom:"100px"}}>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breacumb-content">
+                            <div class="breadcumb-title">
+                                <h1>Community</h1>
+                            </div>
+                            <div className="breadcumb-content-text">
+                            <a href="index.html"> Social <i className="fas fa-angle-right"></i><span>Community</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form className="login-form" onSubmit={handleRegister} method='post'>
         <h2 className="login-heading">회원 가입</h2>
         <h5 className="login-heading">다양한 서비스를 즐겨보세요!</h5>
         <br />
@@ -197,8 +211,6 @@ function SignUp() {
             title="이메일 형식으로 입력하세요."
             className="text-field"
             placeholder="이메일"
-            value={userEmail}
-            onChange={e => setUserEmail(e.target.value)}
           />
 
           <button id="mail-Check-Btn" 
@@ -209,15 +221,33 @@ function SignUp() {
           </button>
         </div>
 
-        <input
-          type="text"
-          id="emailCodeInput"
-          className="mail-check-input"
-          placeholder="인증번호 입력"
-          onBlur={handleCodeCheck}
-        />
-        
-        <button id="mail-Check-submit" className="verification-button-submit" > 확인 </button>
+
+        <div id="info__email">
+          <input
+            id="emailCodeInput"
+            type="text"
+            name="email"
+            title="이메일 형식으로 입력하세요."
+            className="text-field"
+            placeholder="인증번호 입력"
+            onBlur={handleCodeCheck}
+          />
+
+          <button id="mail-Check-Btn" 
+                  className="verification-button" 
+                  onClick={handleEmailCode}
+                  disabled={emailButtonDisabled}
+                  >확인
+          </button>
+        </div>
+
+
+
+
+
+
+
+
 
         <input
           type="password"
@@ -238,7 +268,7 @@ function SignUp() {
        
         <div className="info" id="info__birth" name='birth'>
           <div>
-            <input type="number" min="1900" max="2500" name="year" className="year" placeholder="년도(4자리)" />
+            <input type="number" min="1900" max="2500" name="year" className="year" placeholder="년도(4자리)"/>
             <select className="month">
               <option value="">월</option>
               <option value="">1월</option>
