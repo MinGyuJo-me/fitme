@@ -1,7 +1,9 @@
 import React, { useState,useEffect,useRef} from 'react';
 import {Link, useParams} from 'react-router-dom';
 
-import './Messenger.css'
+
+/************************* css 주석처리       ***************************/
+/*import './Messenger.css'*/
 
 //헤더
 import Header from '../../component/header/Header';

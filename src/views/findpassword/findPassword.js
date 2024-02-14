@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import './findPassword.css'; // CSS 파일 import
+
+//***************************************************************** */
+//import './findPassword.css'; // CSS 파일 import
+//***************************************************************** */
 
 function FindPassword() {
   const [email, setEmail] = useState('');
