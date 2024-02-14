@@ -45,10 +45,10 @@ function CommunityBoardWriteModal() {
                 
                 <div className="blog-content" style={{display:"flex", flexDirection:"column", gap:"10px"}}>
                     <div>
-                        <input type="text" style={{width:"100%", textAlign:"center"}} placeholder='제목을 입력하세요'></input>
+                        <input type="text" style={{width:"100%", textAlign:"center", border:"none", borderRadius:"5px", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}} placeholder='제목을 입력하세요'></input>
                     </div>
                     <div>
-                        <textarea style={{width:"100%", height:"200px"}}></textarea>
+                        <textarea style={{width:"100%", height:"200px", border:"none", borderRadius:"5px", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}}></textarea>
                     </div>
                     <div style={{display:"flex", flexDirection:"row-reverse", gap:"10px"}}>
                         <button className="community-write-button">Back</button>
