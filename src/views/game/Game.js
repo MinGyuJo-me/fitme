@@ -29,16 +29,47 @@ function Game() {
             <div className="row">
               <div className="col-lg-12">
                 <div className="row">
-                  <div className="col-lg-8 col-md-8 game-layout" style={{marginRight:"50px"}}>
-                  </div>
-                  <div className="col-lg-3 col-md-3 game-layout">
-                    <div className="row">
-                      <div className='col-lg-12' style={{border:"1px solid red"}}>
 
+
+
+                  <div className="col-lg-8 col-md-8 game-notice-layout" style={{marginRight:"50px"}}>
+                    <div className="row">
+                      공지사항, 알림
+                    </div>
+                  </div>
+
+
+
+                  <div className="col-lg-8 col-md-8 game-layout" style={{marginRight:"50px"}}>
+                    <div className="row">
+                      <div className='col-lg-11 game-room-layout'>
+                          일반 게임방 보기
                       </div>
                     </div>
-                    
                   </div>
+
+
+
+
+
+                  <div className="col-lg-3 col-md-3 game-profile-layout">
+                    <div className="row">
+                      <div className='col-lg-10 game-profile'>
+                          프로필 사진
+                      </div>
+                      <div className='col-lg-10 game-profile-name'>
+                          프로필 기록 (승패)
+                      </div>
+
+                      <div className='col-lg-10 game-play-button-layout'>
+                          <button className="game-play-button">일반 게임</button>
+                          <button className="game-play-button">랭킹 게임</button>
+                      </div>
+                    </div>
+                  </div>
+
+
+
                 </div>
               </div>
             </div>

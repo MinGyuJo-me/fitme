@@ -2,4 +2,76 @@
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.343);
     border-radius: 10px;
     height: 600px;
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-profile{
+    margin: auto;
+    height: 250px;
+    border-radius: 10px;
+    border:3px solid lightgray;
+}
+
+.game-profile-name{
+    margin: auto;
+    height: 180px;
+    border-radius: 10px;
+    border:3px solid lightgray;
+    top:15px;
+}
+
+.game-play-button-layout{
+    margin: auto;
+    top:70px;
+    height: 70px;
+    border-radius: 10px;
+    border:3px solid lightgray;
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    gap:30px;
+}
+
+
+.game-play-button{
+    border-radius: 10px;
+    width: 90px;
+    height: 70%;
+}
+
+
+.game-room-notice{
+    margin: auto;
+    height: 50px;
+    border-radius: 10px;
+    border:3px solid lightgray;
+}
+
+
+.game-room-layout{
+    margin: auto;
+    height: 500px;
+    border-radius: 10px;
+    top:15px;
+    border:3px solid lightgray;
+}
+
+.game-notice-layout{
+    border-radius: 10px;
+    height: 50px;
+    border:3px solid lightgray;
+    margin-bottom: 20px;
+}
+
+
+.game-profile-layout{
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.343);
+    border-radius: 10px;
+    height: 670px;
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    top:-70px;
 }
