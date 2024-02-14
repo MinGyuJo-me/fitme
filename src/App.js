@@ -13,7 +13,8 @@ import Messenger from './views/chatting/messenger/Messenger'
 
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
-import Mypage from './views/mypage/MyPage.js';
+import MyPage from './views/mypage/MyPage.js';
+import findPassword from './views/findpassword/FindPassword.js';
 import Game from './views/game/Game.js';
 
 
@@ -64,9 +65,10 @@ function App() {
             {/* 회원가입 라우터 signin - 로그인   signup - 회원가입 */}
             <Route path={"/signin"} element={<SignIn/>}/>
             <Route path={"/signup"} element={<SignUp/>}/>
+            <Route path={"/findpassword"} element={<FindPassword/>}/>
 
             {/* 마이페이지 */}
-            <Route path={'/mypage'} element={<Mypage/>}/>
+            <Route path={'/mypage'} element={<MyPage/>}/>
 
             {/* 회원 관리 메뉴 */}
             <Route path={"/diet"} element={<Diet/>}/>

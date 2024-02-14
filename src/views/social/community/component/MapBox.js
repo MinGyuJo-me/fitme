@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import './MapBox.css'
 
 function MapBox(props) {
     const [map, setMap] = useState(null);
     const [markers, setMarkers] = useState([]);
     const [keyword, setKeyword] = useState('');
+    const [showError, setShowError] = useState(false);
 
     useEffect(() => {
         // Kakao 지도 API 로드
@@ -56,8 +58,13 @@ function MapBox(props) {
                     // 검색 결과 반환
                     resolve(result);
                 } else {
-                    // 검색 실패 시 에러 처리
-                    reject(new Error('장소 검색에 실패했습니다.'));
+                    // 검색 실패 시 지도 위에 텍스트 표시
+                    setShowError(true);
+
+                    // 일정 시간 후에 오류 메시지 숨기기
+                    setTimeout(() => {
+                        setShowError(false);
+                    }, 3000);
                 }
             });
         });
@@ -106,15 +113,13 @@ function MapBox(props) {
         setMarkers(newMarkers);
     };
 
-    const handleMapItemClick = (e) => {
-      const address = e.target.getAttribute('data-address'); // 클릭된 요소의 data-address 속성값을 가져옴
-      props.onValueChange(address); // 주소값을 부모 컴포넌트로 전달
-  };
-  
-
     return (
         <div className="sideber-search-box">
-            <div id="map" className="sidebar-map-box"></div>
+            <div id="map" className="sidebar-map-box">
+            {showError && (
+                <div id="errorText" className="error-text">장소 검색에 실패했습니다.</div>
+            )}
+            </div>
             <div className="sidebar-search">
                 <form onSubmit={handleSubmit}>
                     <input
