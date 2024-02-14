@@ -13,6 +13,7 @@ function Main() {
     });
 
   return (
+    <Wrapper>
     <div>
         <HeaderTop/>
         <Header/>
@@ -108,6 +109,336 @@ function Main() {
             </div>
         </div>
 
+        
+        <div className="slider-area upper align-items-center d-flex">
+            <div className="container">
+                <div className="row align-items-center">
+                    <div className="col-lg-6 col-md-6">
+                        <div className="slider-content">
+                            <div className="slider-thumb" style={{width:270, height:450, marginLeft:100}}>
+                                <img src={require('./images/show.png')} style={{width:"100%", height:"100%"}} alt=""/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-6 col-md-6">
+                        <div className="slider-content">
+                            <div className="slider-title">
+                                <h3>나의 몸을 위한 안드로이드 어플</h3>
+                                <h1>Fit your <span>body</span></h1>
+                                <p>안드로이드 이러한 기능을 제공한다는 소개(수정 예정)<br/> 안드로이드 이러한 기능을 제공한다는 소개(수정 예정)</p>
+                            </div>
+                            <div className="slider-button">
+                                <a href="#">Download App <i className="bi bi-arrow-right"></i></a>
+                            </div>
+                            <div className="slider-btn">
+                                <a href="#">About more <i className="bi bi-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/*
+        <!--==================================================-->
+        <!-- Start  offer-area -->
+        <!--==================================================-->
+    */}
+    <div className="offer-area style-two">
+        <div className="container">
+            <div className="row">
+                <div className="col-lg-6 col-md-6">
+                    <div className="single-offer-box style-one">
+                        <div className="offer-content">
+                            <div className="offer-title">
+                                <h2>Get 15% Off all Vegitables</h2>
+                            </div>
+                            <div className="offer-titles">
+                                <h3>Fresh Vegetables And Organic Fruits</h3>
+                            </div>
+                        </div>
+                        <div className="offer-button">
+                            <a href="#">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-lg-6 col-md-6">
+                    <div className="single-offer-box style-two">
+                        <div className="offer-content">
+                            <div className="offer-title">
+                                <h2>Get 10% Off all Fruits</h2>
+                            </div>
+                            <div className="offer-titles">
+                                <h3>Fresh Vegetables And Organic Fruits</h3>
+                            </div>
+                        </div>
+                        <div className="offer-button">
+                            <a href="#">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/*
+        <!--==================================================-->
+        <!-- Start products -area -->
+        <!--==================================================-->
+    */}
+    
+    {/*
+        <!--==================================================-->
+        <!-- Start  coundown-area-->
+        <!--==================================================-->
+    */}
+    <div className="about-section">
+        <div className="container">
+            <div className="row">
+                <div className="col-lg-6 col-md-6">
+                    <div className="about-images">
+                        <img src="assets/images/about-img.png" alt=""/>
+                    </div>
+                </div>
+                <div className="col-lg-6 col-md-6">
+                    <div className="section-titles">
+                        <div className="main-titles">
+                            <h2>Fresh Vegetable Everyday</h2>
+                        </div>
+                    </div>
+                    <div className="abouts-content">
+                        <div className="abouts-titles">
+                            <h2>Your Best Online Organic Food Recipes agrofarm</h2>
+                        </div>
+                        <div className="abouts-discription">
+                            <p>Ballan wrasse climbing gourami amur pike Arctic char, steelhead sprat sea lamprey grunion. Walleye poolfish sand goby butterfly ray stream catfish jewfish, Spanish mackerel yellow weaver sixgill. Sandperch flyingfish yellowfin cutthroat trout grouper. Amprey grunion. Walleye poolfish sand butterfly ray stream catfish jewfish, Spanish.</p>
+                        </div>
+                        <div className="about-tmbs">
+                            <img src="assets/images/author-img.png" alt=""/>
+                        </div>
+                        <div className="author-name">
+                            <h2>John Smith</h2>
+                            <span>CEO and Founder</span>
+                        </div>
+                        <div className="signature">
+                            <img src="assets/images/signature.png" alt=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/*
+        <!--==================================================-->
+        <!-- Start portfolio area -->
+        <!--==================================================-->
+    */}
+        <div className="portfolio_area pt-80 pb-70" id="portfolio">
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="portfolio_nav">
+                            <div className="portfolio_menu">
+                                <ul className="menu-filtering">
+                                    <li className="current_menu_item" data-filter="*">All Products</li>
+                                    <li data-filter=".physics" >Dry Foods</li>
+                                    <li data-filter=".cemes" >Fresh Fruits</li>
+                                    <li data-filter=".math" >Vegetables</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="row image_load">
+                    <div className="col-lg-3 col-md-6 col-sm-12 grid-item physics math">
+                        <div className="single-product">
+                        <div className="product-thumb">
+                            <img src="assets/images/product-4.jpg" alt=""/>
+                            <div className="product-icon">
+                                <ul>
+                                    <li><a href="#"><i className="fa fa-heart-o"></i></a></li>
+                                    <li><a href="#"><i className="fa fa-cart-plus"></i></a></li>
+                                    <li><a href="#"><i className="fa fa-eye"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="product-content">
+                            <div className="product-category">
+                                <a href="#">Vegetables</a>
+                            </div>
+                            <div className="product-title">
+                                <h2><a href="#">Taza Palm Fruit</a></h2>
+                            </div>
+                            <div className="product-price">
+                                <h3>56.00৳ </h3>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div className="col-lg-3 col-md-6 col-sm-12 grid-item cemes">
+                        <div className="single-product">
+                        <div className="product-thumb">
+                            <img src="assets/images/product-3.jpg" alt=""/>
+                            <div className="product-icon">
+                                <ul>
+                                    <li><a href="#"><i className="fa fa-heart-o"></i></a></li>
+                                    <li><a href="#"><i className="fa fa-cart-plus"></i></a></li>
+                                    <li><a href="#"><i className="fa fa-eye"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="product-content">
+                            <div className="product-category">
+                                <a href="#">Fresh Fruits</a>
+                            </div>
+                            <div className="product-title">
+                                <h2><a href="#">Fresh Strawberry</a></h2>
+                            </div>
+                            <div className="product-price">
+                                <h3>12.00৳ </h3>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div className="col-lg-3 col-md-6 col-sm-12 grid-item cemes">
+                        <div className="single-product">
+                        <div className="product-thumb">
+                            <img src="assets/images/product-1.jpg" alt=""/>
+                            <div className="product-icon">
+                                <ul>
+                                    <li><a href="#"><i className="fa fa-heart-o"></i></a></li>
+                                    <li><a href="#"><i className="fa fa-cart-plus"></i></a></li>
+                                    <li><a href="#"><i className="fa fa-eye"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="product-content">
+                            <div className="product-category">
+                                <a href="#">Dry Foods</a>
+                            </div>
+                            <div className="product-title">
+                                <h2><a href="#">Bangladeshi Papaya</a></h2>
+                            </div>
+                            <div className="product-price">
+                                <h3>50.00৳ </h3>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div className="col-lg-3 col-md-6 col-sm-12 grid-item cemes math">
+                        <div className="single-product">
+                        <div className="product-thumb">
+                            <img src="assets/images/product-2.jpg" alt=""/>
+                            <div className="product-icon">
+                                <ul>
+                                    <li><a href="#"><i className="fa fa-heart-o"></i></a></li>
+                                    <li><a href="#"><i className="fa fa-cart-plus"></i></a></li>
+                                    <li><a href="#"><i className="fa fa-eye"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="product-content">
+                            <div className="product-category">
+                                <a href="#">Fresh Fruits</a>
+                            </div>
+                            <div className="product-title">
+                                <h2><a href="#">Taza & Fresh Orange</a></h2>
+                            </div>
+                            <div className="product-price">
+                                <h3>30.00৳ </h3>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/*
+            <!--==================================================-->
+            <!-- Start  coundown-area  style-two-->
+            <!--==================================================-->
+        */}
+    <div className="countdown-area style-two">
+        <div className="container">
+            <div className="row backg">
+                <div className="col-lg-6 col-md-6">
+                    <div className="section-titles">
+                        <div className="main-titles">
+                            <h2>Best Deals This Week</h2>
+                            <p>Ballan wrasse climbing amur pike Arctic char of the organic <br/> lamprey grunion. Walleye poolfish sandition done.</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-lg-6 col-md-6">
+                    <div id="countdown">
+                        <ul>
+                            <li><span id="days"></span>days</li>
+                            <li><span id="hours"></span>Hours</li>
+                            <li><span id="minutes"></span>Minutes</li>
+                            <li><span id="seconds"></span>Seconds</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/*
+        <!--==================================================-->
+        <!-- Start footer-area -->
+        <!--==================================================-->
+    */}
+    <div className="testimonials-section">
+        <div className="container">
+            <div className="row align-items-center">
+                <div className="col-lg-6 col-md-6">
+                    <div className="section-titles">
+                        <div className="main-titles">
+                            <h2>What Our Clients Say</h2>
+                        </div>
+                        <div className="testi_title">
+                            <h2>“Agrofarm! is the Real and Best Organic Store”</h2>
+                        </div>
+                    </div>
+                    <div className="testis_lists">
+                        <div className="testi_content">
+                            <div className="testi_title">
+                                <p>Ballan wrasse climbing gourami amur pike Arctic char, steelhead sprat sea lamprey grunion. Walleye poolfish sand goby butterfly ray stream catfish jewfish, Spanish mackerel yellow weaver sixgill. Sandperch flyingfish yellowfin cutthroat trout grouper.</p>
+                            </div>
+                            <div className="testi_thumb">
+                                <img src="assets/images/project5.jpg" alt=""/>
+                            </div>
+                            <div className="client-info">
+                                <h2>David Alexon</h2>
+                                <span>Manager</span>
+                            </div>
+                            <div className="testi_img">
+                                <img src="assets/images/quote.png" alt=""/>
+                            </div>
+                        </div>
+                        <div className="testi_content">
+                            <div className="testi_title">
+                                <p>Ballan wrasse climbing gourami amur pike Arctic char, steelhead sprat sea lamprey grunion. Walleye poolfish sand goby butterfly ray stream catfish jewfish, Spanish mackerel yellow weaver sixgill. Sandperch flyingfish yellowfin cutthroat trout grouper.</p>
+                            </div>
+                            <div className="testi_thumb">
+                                <img src="assets/images/project5.jpg" alt=""/>
+                            </div>
+                            <div className="client-info">
+                                <h2>David Alexon</h2>
+                                <span>Manager</span>
+                            </div>
+                            <div className="testi_img">
+                                <img src="assets/images/quote.png" alt=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-lg-6 col-md-6">
+                    <div className="testmoni_tmb">
+                        <img src="assets/images/testi-img.png" alt=""/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {/*
         <!--==================================================-->
@@ -237,29 +568,30 @@ function Main() {
                 </div>
             </form>
         </div>
-            {/*
-                <!--==================================================-->
-                <!----- Start Search Popup Area ----->
-                <!--==================================================-->
-            */}
-
-            {/*
-                <!--==================================================-->
-                <!----- Start Scroll ----->
+        {/*
             <!--==================================================-->
-            */}
-            <div className="scroll-area">
-                <div className="top-wrap">
-                    <div className="go-top-btn-wraper">
-                        <div className="go-top go-top-button">
-                            <i className="fa fa-angle-double-up" aria-hidden="true"></i>
-                            <i className="fa fa-angle-double-up" aria-hidden="true"></i>
-                        </div>
+            <!----- Start Search Popup Area ----->
+            <!--==================================================-->
+        */}
+
+        {/*
+            <!--==================================================-->
+            <!----- Start Scroll ----->
+        <!--==================================================-->
+        */}
+        <div className="scroll-area">
+            <div className="top-wrap">
+                <div className="go-top-btn-wraper">
+                    <div className="go-top go-top-button">
+                        <i className="fa fa-angle-double-up" aria-hidden="true"></i>
+                        <i className="fa fa-angle-double-up" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
         </div>
+        
     </div>
+    </Wrapper>
   );
 }
 

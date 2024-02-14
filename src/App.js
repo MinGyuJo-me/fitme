@@ -1,10 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AnimatePresence} from 'framer-motion';
 
+
 import {useEffect} from 'react';
 import Main from './views/main/Main';
 import Community from './views/social/community/Community';
 import Recipe from './views/social/recipe/Recipe';
+
 
 import SignIn from './views/signin/SignIn';
 import SignUp from './views/signup/SignUp';
@@ -13,8 +15,7 @@ import Messenger from './views/chatting/messenger/Messenger'
 
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
-import Mypage from './views/mypage/MyPage.js';
-import Game from './views/game/Game.js';
+import Mypage from './views/mypage/MyPage'
 
 
 import './assets/css/bootstrap.min.css';
@@ -46,7 +47,7 @@ import './venobox/venobox.css';
 import './assets/css/widget.css';
 
 import './assets/css/responsive.css';
-import FindPassword from './views/findpassword/FindPassword.js';
+import FindPassword from './views/findpassword/findPassword.js';
 
 function App() {
   return (
@@ -74,9 +75,6 @@ function App() {
 
             {/* 채팅 */}
             <Route path={"/messenger"} element={<Messenger/>}/>
-
-            {/*게임 페이지*/}
-            <Route path={"/game"} element={<Game/>}/>
 
           </Routes>
         </BrowserRouter>
