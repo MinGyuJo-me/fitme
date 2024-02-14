@@ -7,9 +7,9 @@ import Image_test from '../../../assets/images/blog-3.jpg';
 
 function Recipe() {
   return (
-    <div>
-        <HeaderTop/>
-        <Header/>
+        <div>
+            <HeaderTop/>
+            <Header/>
 
         <div className="breadcumb-area d-flex align-items-center">
             <div className="container">
@@ -382,7 +382,6 @@ function Recipe() {
         <!----- Start Search Popup Area ----->
         <!--==================================================-->
         */}
-
         </div>
     </div>
   );
