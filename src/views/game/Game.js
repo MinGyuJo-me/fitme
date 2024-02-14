@@ -25,13 +25,19 @@ function Game() {
         <Loader/>
 
         <div className="blog-area style-two">
-          <div style={{width:"1600px", margin:"auto"}}>
+          <div className="container">
             <div className="row">
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-8 col-md-8 game-layout" style={{marginRight:"50px"}}>
                   </div>
                   <div className="col-lg-3 col-md-3 game-layout">
+                    <div className="row">
+                      <div className='col-lg-12' style={{border:"1px solid red"}}>
+
+                      </div>
+                    </div>
+                    
                   </div>
                 </div>
               </div>

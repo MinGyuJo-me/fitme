@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom';
 import React, { useState,useEffect,useRef} from 'react';
-//npm install axios
-import axios from 'axios';
+import axios from 'axios'; //npm install axios
+import { useNavigate } from "react-router-dom";
 
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
@@ -40,8 +40,7 @@ import Modal from "./modal";
 import FileUploadBox from './FileUploadBox';
 import AutoCompleteSearch from './AutoCompleteSearch'
 
-//nav
-import { useNavigate } from "react-router-dom";
+
 
 //chart.js
 import { Chart as ChartJS,
@@ -76,13 +75,13 @@ export const options = {
 
 
 var id = null;
-var ipAddress = '192.168.0.44';
+var ipAddress = '192.168.0.15';
 
 //이미지서버 연결 
 async function imageData(code){
 	return await new Promise((resolve,reject)=>{
 	  try{
-		axios.get(`http://192.168.0.44:5050/image/${code}`)
+		axios.get(`http://192.168.0.15:5050/image/${code}`)
 		.then((response)=>{
 			  // console.log(response.data);
 			resolve("data:image/png;base64,"+response.data['image']);
@@ -147,22 +146,24 @@ function Diet() {
 		}
 		})
 		.then(response => {
-		var proflieData = response.data;
-		if(proflieData.accountNo != null) setDietCal(proflieData.accountNo);
-		// console.log('data',proflieData);
-		if(proflieData.image!=null){
-			imageData(proflieData.image).then((test)=>{
-			// console.log('1');
-				proflieData.image = test;
-				setAccount(proflieData);
-			})
-		}else{
-			imageData(1).then((test)=>{
-			// console.log('1');
-				proflieData.image = test;
-				setAccount(proflieData);
-			})
-		}
+			var proflieData = response.data;
+			console.log('proflieData',proflieData);
+			if(proflieData.accountNo != null) setDietCal(proflieData.accountNo);
+			console.log('data',proflieData);
+			if(proflieData.image!=null){
+				imageData(proflieData.image).then((test)=>{
+					// console.log('1');
+					proflieData.image = test;
+					setAccount(proflieData);
+				})
+			}else{
+				imageData(1).then((test)=>{
+					
+					// proflieData.image = test;
+					// console.log('proflieData',proflieData);
+					setAccount(proflieData);
+				})
+			}
 		})
 		.catch(error => console.log('error',error))
 	},[]);
@@ -334,7 +335,7 @@ function Diet() {
 			<div className="col-lg-6 col-md-12" style={{ width: "200px" }}>
 				<div className="sidebar-box">
 						<div className="profile-image-box">
-						<img class="profile-icon" src={accountData.image}
+						<img className="profile-icon" src={accountData.image}
 							width="200px" height="200px" alt="profile-icon"/>
 						</div>
 						<div className="profile-name">{accountData.name}</div>
@@ -397,93 +398,67 @@ function Diet() {
             </div>
 
 			</div>
-			<div className="blog-area">
+			
 		<div className="container">
+
+		<div className='chart-info-container'>
+				<div className="main-titles-chart">
+					<h2>CHART DESCRIPTION</h2>
+				</div>
+				<div className='chart-info-left'>
+					<Bar options={options} data={data2} />
+				</div>
+				<div className='chart-info-right'>
+					<Line options={options} data={data1} />
+				</div>
+			</div>
+
 			<div className="row">
 				<div className="col-lg-12">
 					<div className="section-titles">
 						<div className="main-titles">
 							<h2>FOOD DIARY</h2>
-							
 						</div>
 					</div>
 				</div>
 			</div>
-			<OwlCarousel items={3}  margin={20} loop autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["⟪","⟫"]} dots >
+
+			
+			
+			<OwlCarousel key={mealTime.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["⟪","⟫"]} dots >
 				{mealTime.map((test)=>(
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="blog-single-box">
-								<div class="blog-thumb">
-									<img src={test[4]} alt="pizza"/>
-									<input type='hidden' value={test[0]} />
-									<div class="blog-btn">
+				<div className="item">
+					<div className="row">
+						<div className="col-lg-12">
+							<div className="blog-single-box">
+								<div className="blog-thumb">
+									<div type="button" className="edit-siksa-button" onClick={toggleModal}>
+										<img src={test[4]} alt="pizza"/>
+										<input type='hidden' value={test[0]} />
+									</div>
+									<div className="blog-btn">
 										<a href="#">아침</a>
 									</div>
 								</div>
 								{console.log("test",test[1])}
-								<div class="blog-content">
-									<div class="blog-left">
+								<div className="blog-content">
+									<div className="blog-left">
 										<span>{test[3]}</span>
 									</div>
 									<h2>{test[1]}</h2>
 									<p>{test[2]}</p>
-									<p>{test[5]}g</p>
-									<div class="blog-button">
-										<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
+									<p>{test[5]}</p>
+									<div className="blog-button">
+										<a href="#">read more <i className="fa fa-long-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+				</div>
 				))}
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="blog-single-box">
-						<div class="blog-thumb">
-							<img src={require('./images/pizza.jpg')} alt="pizza"/>
-							<div class="blog-btn">
-								<a href="#">점심</a>
-							</div>
-						</div>
-						<div class="blog-content">
-							<div class="blog-left">
-								<span>January 27, 2023</span>
-							</div>
-							<h2>피자조아</h2>
-							<p>남의 돈으로 먹는 피자가 제일 맛있습니다.</p>
-							<p>200g</p>
-							<div class="blog-button">
-								<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="blog-single-box">
-						<div class="blog-thumb">
-							<img src={require('./images/pizza.jpg')} alt="pizza"/>
-							<div class="blog-btn">
-								<a href="#">저녁</a>
-							</div>
-						</div>
-						<div class="blog-content">
-							<div class="blog-left">
-								<span>January 27, 2023</span>
-							</div>
-							<h2>피자조아</h2>
-							<p>남의 돈으로 먹는 피자가 제일 맛있습니다.</p>
-							<p>200g</p>
-							<div class="blog-button">
-								<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 			</OwlCarousel>
+
 			<div>
 			<button type="button" className="add-siksa-button" onClick={toggleModal}>
 			<div className="add-siksa-icon" style={{ backgroundImage: `url(${require('./images/plus6.png')})` }}></div>
@@ -569,22 +544,10 @@ function Diet() {
                 </Modal>
                 )}
 				</div>
-			<div className='chart-info-container'>
-				<div className="main-titles-chart">
-					<h2>CHART DESCRIPTION</h2>
-				</div>
-				<div className='chart-info-left'>
-					<Bar options={options} data={data2} />
-				</div>
-				<div className='chart-info-right'>
-					<Line options={options} data={data1} />
-				</div>
-			</div>
-
+			
 	</div>
 	</div>
     </div>
-	</div>
 
   );
 }

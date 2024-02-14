@@ -1,15 +1,16 @@
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
+import Breadcumb from '../component/Breadcumb/Breadcumb';
 import './Login.css';
 
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
-
 const LOGIN_API = '/login';
 
 function SignIn() {
@@ -113,9 +114,10 @@ function SignIn() {
         // 각 소셜 로그인 OAuth2 인증임
         window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
       };
-    
+      
+   
   return (
-    <div>
+    <div style={{paddingBottom:"80px"}}>
         <HeaderTop/>
         <Header/>
 
@@ -127,43 +129,22 @@ function SignIn() {
         </div>
         */}
 
-                {/*
-        <!--==================================================-->
-        <!-- Start breadcumb-area -->
-        <!--==================================================-->
-        */}
-        <div class="breadcumb-area d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="breacumb-content">
-                            <div class="breadcumb-title">
-                                <h1>Community</h1>
-                            </div>
-                            <div className="breadcumb-content-text">
-                            <a href="index.html"> Social <i className="fas fa-angle-right"></i><span>Community</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {/* 제목 배경화면 */}
+        <Breadcumb title="Login" content="Account" subContent="Login"/>
 
-        <div className="login-form">
+        <div className="login-form" style={{marginTop:"100px"}}>
           <h1 className="login-heading">환영합니다!</h1>
           <h2 className="login-heading">LOGIN</h2>
           <form onSubmit={handleSubmit} method='post'>
-            <input
-              type="text"
-              name="username"
+            <input type="text"name="username"
               value={formData.username}
               onChange={handleInputChange}
               pattern={emailRegex}
               title='이메일 형식으로 입력 해주세요.'
               className="text-field"
               placeholder="Email"
-              ref={usernameRef}
-            /><br />
+              ref={usernameRef}/>
+            <br />
             {formErrors.username && (
               <p style={{ color: 'red', fontSize: '14px' }}>{formErrors.username}</p>
             )}
@@ -188,7 +169,11 @@ function SignIn() {
             <input type="checkbox" id="remember-check" /> 아이디 저장하기
           </label>
           <div className="links">
-            <a href="#">비밀번호를 잊어버리셨나요?</a><br />
+            {/* <a href="#">비밀번호를 잊어버리셨나요?</a><br /> */}
+            <a href="#" onClick={(e) =>{ 
+              e.preventDefault();
+              navigate('/findPassword')
+              }}>비밀번호를 잊어버리셨나요?</a><br />
             <p>계정이 없으신가요? <a href="/SignUp">회원가입</a></p>
           </div>
           <div className="hr-sect">또는</div>
