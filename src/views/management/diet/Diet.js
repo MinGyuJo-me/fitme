@@ -335,7 +335,7 @@ function Diet() {
 			<div className="col-lg-6 col-md-12" style={{ width: "200px" }}>
 				<div className="sidebar-box">
 						<div className="profile-image-box">
-						<img class="profile-icon" src={accountData.image}
+						<img className="profile-icon" src={accountData.image}
 							width="200px" height="200px" alt="profile-icon"/>
 						</div>
 						<div className="profile-name">{accountData.name}</div>
@@ -427,29 +427,29 @@ function Diet() {
 			
 			<OwlCarousel key={mealTime.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["⟪","⟫"]} dots >
 				{mealTime.map((test)=>(
-				<div class="item">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="blog-single-box">
-								<div class="blog-thumb">
+				<div className="item">
+					<div className="row">
+						<div className="col-lg-12">
+							<div className="blog-single-box">
+								<div className="blog-thumb">
 									<div type="button" className="edit-siksa-button" onClick={toggleModal}>
 										<img src={test[4]} alt="pizza"/>
 										<input type='hidden' value={test[0]} />
 									</div>
-									<div class="blog-btn">
+									<div className="blog-btn">
 										<a href="#">아침</a>
 									</div>
 								</div>
 								{console.log("test",test[1])}
-								<div class="blog-content">
-									<div class="blog-left">
+								<div className="blog-content">
+									<div className="blog-left">
 										<span>{test[3]}</span>
 									</div>
 									<h2>{test[1]}</h2>
 									<p>{test[2]}</p>
 									<p>{test[5]}</p>
-									<div class="blog-button">
-										<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
+									<div className="blog-button">
+										<a href="#">read more <i className="fa fa-long-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>

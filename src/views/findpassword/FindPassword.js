@@ -1,71 +1,196 @@
-import React, { useState } from 'react';
 
-//***************************************************************** */
-//import './findPassword.css'; // CSS 파일 import
-//***************************************************************** */
+import {Link} from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import '../signup/Register.css';
+import './findPassword.css'
+
+import Header from '../component/header/Header';
+import HeaderTop from '../component/headerTop/HeaderTop';
+
+const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
+const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
+const pnumRegex = '^\\d{11}$';
 
 function FindPassword() {
-  const [email, setEmail] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [step, setStep] = useState(1); // 1: 이메일 입력, 2: 인증코드 입력, 3: 새 비밀번호 입력
+  const [password, setPassword] = useState('');
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const [popup, setPopup] = useState(false);
+  const navigate = useNavigate();
+  const formData = new FormData();
+  const [userEmail, setUserEmail] = useState('');
+  const [emailCode, setemailCodeCode] = useState('');
+  const [emailCodeMatch, setEmailCodeMatch] = useState(true);
+  const [emailButtonDisabled, setemailButtonDisabled] = useState(false);
 
-  const handleEmailSubmit = (e) => {
-    e.preventDefault();
-    // 이메일을 서버로 보내고, 유효한 이메일인지 확인하는 코드 작성
-    // 서버에서 이메일 전송 후 인증코드를 발급하도록 요청
-
-    // 인증코드 입력 단계로 전환
-    setStep(2);
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };  
+  let addressChk = 0;
+  const handleOpenDaumPost = () => {
+    addressChk = 1;
+    setPopup(true);
   };
 
-  const handleVerificationCodeSubmit = (e) => {
-    e.preventDefault();
-    // 인증코드를 서버로 보내고, 올바른 코드인지 확인하는 코드 작성
+  const handleEmailCode = () => {
+    axios.get(`/user/mailCheck?email=${userEmail}`)
+      .then(response => {
+        console.log('응답:', response.data);
+        setemailCodeCode(response.data);
+        alert('인증 코드가 전송되었습니다.');
+      })
+      .catch(error => {
+        console.error('에러:', error);
+        alert('인증 코드 전송에 실패했습니다.');
+      });
+  };
+  const handleCodeCheck = () => {
+    const inputCode = document.getElementById('verificationCodeInput').value;
 
-    // 새 비밀번호 입력 단계로 전환
-    setStep(3);
+    if (inputCode === emailCode) {
+      setEmailCodeMatch(true);
+      alert('인증 코드가 일치합니다!');
+      setemailButtonDisabled(true);
+    } else {
+      setEmailCodeMatch(false);
+      alert('인증 코드가 일치하지 않습니다. 다시 시도해주세요.');
+    }
   };
 
-  const handlePasswordChangeSubmit = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
-    // 새 비밀번호를 서버로 보내고, 변경하는 코드 작성
-    alert('비밀번호가 성공적으로 변경되었습니다.');
+    if(addressChk == 1) return;
+    //유효성 체크
+    if(e.target.name.value.length == 0){alert('id'); return;}
+    if(e.target.email.value.length == 0) {alert('email'); return;}
+    if(e.target.password.value.length == 0) {alert('password'); return;}
+    if(e.target.passwordchk.value !== e.target.password.value) {alert('passwordchk'); return;}
 
-    // 비밀번호 찾기 과정 종료 후 다른 페이지로 이동하도록 코드 작성
+    // var child = e.target.children;
+    //보낼 값
+    formData.append('name', e.target.name.value);
+    formData.append('username', e.target.email.value);
+    formData.append('password', e.target.password.value);    
+    axios.post(`/joinMember`, formData, {
+      // axios.post(`http://192.168.0.44:3000/joinMember`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        alert('성공');
+        navigate('/signin');
+      })
+      .catch((error) => {
+        console.error('서버 오류:', error);
+        alert('에러');
+      });
+    
+    return;
+
+
+    // 비밀번호 확인
+    const passwordChk = formData.get('passwordchk');
+
+    if (password !== passwordChk) {
+      setPasswordMatch(false);
+      return;
+    } else {
+      setPasswordMatch(true);
+    }
+
+    // FormData 확인
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
   };
 
   return (
-    <div>
-      {step === 1 && (
-        <form className="step1" onSubmit={handleEmailSubmit}>
-          <label>
-            이메일:
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </label>
-          <button type="submit">인증메일 발송</button>
-        </form>
-      )}
-      {step === 2 && (
-        <form className="step2" onSubmit={handleVerificationCodeSubmit}>
-          <label>
-            인증코드:
-            <input type="text" value={verificationCode} onChange={(e) => setVerificationCode(e.target.value)} required />
-          </label>
-          <button type="submit">인증 확인</button>
-        </form>
-      )}
-      {step === 3 && (
-        <form className="step3" onSubmit={handlePasswordChangeSubmit}>
-          <label>
-            새 비밀번호:
-            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-          </label>
-          <button type="submit">비밀번호 변경</button>
-        </form>
-      )}
+    <div >
+        <HeaderTop/>
+        <Header/>
+
+        {/*
+        <div className="loader-wrapper">
+            <div className="loader"></div>
+            <div className="loder-section left-section"></div>
+            <div className="loder-section right-section"></div>
+        </div>
+        */}
+
+                {/*
+        <!--==================================================-->
+        <!-- Start breadcumb-area -->
+        <!--==================================================-->
+        */}
+        <div class="breadcumb-area d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breacumb-content">
+                            <div class="breadcumb-title">
+                                <h1>Community</h1>
+                            </div>
+                            <div className="breadcumb-content-text">
+                            <a href="index.html"> Social <i className="fas fa-angle-right"></i><span>Community</span></a>
+                            </div>
+                        </div>
+                    </div>
+               
+               </div>
+            </div>
+        </div>
+        <form className="login-form lg-f" onSubmit={handleRegister} method='post'>
+        <h2 className="login-heading" >비밀번호 찾기</h2>
+        <h5 className="login-heading">다양한 서비스를 즐겨보세요!</h5>
+        <br />
+        <div id="info__email">
+          <input
+            type="text"
+            name="email"
+            pattern={emailRegex}
+            title="이메일 형식으로 입력하세요."
+            className="text-field"
+            placeholder="이메일"
+          />
+
+          <button id="mail-Check-Btn" 
+                  className="verification-button" 
+                  onClick={handleEmailCode}
+                  disabled={emailButtonDisabled}
+                  >인증
+          </button>
+        </div>
+
+        <div style={{ position: 'relative' }}>
+          <input
+            type="text"
+            id="emailCodeInput"
+            className="mail-check-input mci"
+            placeholder="인증번호 입력"
+            onBlur={handleCodeCheck}
+          />
+            <button id="mail-Check-submit" 
+            className="verification-button-submit mcs">확인</button>
+        </div>
+
+        <input
+          type="password"
+          name="password"
+          pattern={passwordRegex}
+          title="8~12자 & 숫자,영어,특수문자가 포함되어야 합니다."
+          className="text-field"
+          placeholder="비밀번호"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+        <input type="password" name="passwordchk" className="text-field" placeholder="비밀번호 확인" />
+        {!passwordMatch && (
+          <p style={{ color: 'red', fontSize: '14px', marginTop: '-10px' }}>비밀번호가 일치하지 않습니다.</p>
+        )}
+      </form>
     </div>
   );
 }
-
 export default FindPassword;

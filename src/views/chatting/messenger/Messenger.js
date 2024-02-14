@@ -1,22 +1,15 @@
-import React, { useState,useEffect,useRef} from 'react';
-import {Link, useParams} from 'react-router-dom';
-
-
-/************************* css 주석처리       ***************************/
-/*import './Messenger.css'*/
-
-//헤더
-import Header from '../../component/header/Header';
-import HeaderTop from '../../component/headerTop/HeaderTop';
-
+import {Link} from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-
 import axios from 'axios';
 
+
+import Header from '../../component/header/Header';
+import HeaderTop from '../../component/headerTop/HeaderTop';
+import './Messenger.css';
 //chat
 import * as StompJs from '@stomp/stompjs';
 let chatNo = 0;
-
 function getCookie(name) { //로그인 여부 확인
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -26,9 +19,8 @@ function getCookie(name) { //로그인 여부 확인
       }
     }
     return null;
-  }
-
-function CreateReadChat() {
+}
+function Messenger() {
     const [chatList, setChatList] = useState([]);
     const [chat, setChat] = useState('');
     const [chatNo,setChatNo] = useState();
@@ -56,11 +48,12 @@ function CreateReadChat() {
         // chatNo = e.target.children[0].value;
         e.preventDefault();
         var s = document.getElementById('chatRoomNo');
-        s.value = e.target.children[0].value
-        setChatRoomKing(e.target.children[1].value);
-        console.log('확인:',s.value);
-        setChatNo(s.value);
-        axios.get(`/api/v1/chat/list/room/${s.value}`)
+        // console.log('채팅방',e.target.parentElement.children[0].value);
+        s.value = e.target.parentElement.children[0].value;
+        setChatRoomKing(e.target.parentElement.children[1].value);
+        // console.log('확인:',s.value);
+        setChatNo(e.target.parentElement.children[0].value);
+        axios.get(`/api/v1/chat/list/room/${e.target.parentElement.children[0].value}`)
         .then(res=>{
             // console.log('채팅 내용',res.data);
             setChatList(res.data);
@@ -115,7 +108,6 @@ function CreateReadChat() {
                 // console.log('>>>', json_body);
                 axios.get(`/api/v1/chat/list/room/${num}`)
                 .then(res=>{
-                    console.log('res.data',res.data);
                     setChatList(res.data); //웹소켓은 아니지만 대충 속이기
                     
                 })
@@ -130,14 +122,15 @@ function CreateReadChat() {
     };
   
     const handleChange = (event) => { // 채팅 입력 시 state에 값 설정
-      setChat(event.target.value);
+        setChat(event.target.value);
     };
   
     const handleSubmit = (event, chat) => { // 보내기 버튼 눌렀을 때 publish
         // console.log('event',event.target.children[0].value);
-        var num = event.target.children[0].value;
-        // console.log('chat',chat);
-        scrollToBottom();
+        var num = event.target.children[1].value;
+        console.log('chat',chat);
+        console.log('num',num);
+        // scrollToBottom();
         event.preventDefault();
     
         publish(num,chat);
@@ -157,8 +150,9 @@ function CreateReadChat() {
         .then(response => {
             var proflieData = response.data;
             if(proflieData.accountNo != null) {
-            setUserId(proflieData.accountNo);
-            setName(proflieData.name);
+                // console.log(proflieData.accountNo);
+                setUserId(proflieData.accountNo);
+                setName(proflieData.name);
             }
         })
         .catch(error => console.log('error',error))
@@ -206,131 +200,134 @@ function CreateReadChat() {
         }
 
     }
-  
-    return (
-        <div>
-            <div>
-                <input type='button' onClick={insertChatRoom} value='방추가'/>
-                {chattingRoom.map((chat)=>(
-                    <div onClick={chatRoom}>
-                        <input type='hidden' value={chat.chattingNo}/>
-                        <input type='hidden' value={chat.accountNo}/>
-                        {chat.chattingNick} : {chat.count}명
-                    </div>
-                ))}
-            </div>
-            <div>
-                <div class="wrap">
-                <input type='hidden' value={chatNo}/>
-                {chatRoomKing != null? <input type='button' onClick={deleteChatRoom} value={userId == chatRoomKing? '방제거':'방나가기'}/>:''}
-                <div>{chatRoomKing}</div>
-                <div class="main-chat"> 
-                {chatList.map((chat)=>(
-                    chat.accountNo != userId?
-                    <div class="friend-chat">
-                        {/* <img class="profile-img" src="./pic/default.png" alt="쀼프로필사진"> */}
-                        <div class="friend-chat-col">
-                            <span class="profile-name">{chat.name}</span>
-                            <span class="balloon">{chat.chatComment}</span>
-                        </div>
-                        <time datetime="07:30:00+09:00">{chat.time.split(' ')[1]}</time>
-                    </div>
-                    :
-                    <div class="me-chat">
-                        <div class="me-chat-col">
-                            <span class="balloon">{chat.chatComment}</span>
-                        </div>
-                        <time datetime="07:33:00+09:00">{chat.time.split(' ')[1]}</time>
-                    </div>
-                ))}
-                </div>
-            </div>
-            <form onSubmit={(event) => handleSubmit(event, chat)}>
-                <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>
-                <div>
-                    <input type={'text'} name={'chatInput'} onChange={handleChange} value={chat} />
-                </div>
-                <input type={'submit'} value={'의견 보내기'} />
-            </form>
-        </div>
-        </div>
-    );
-  }
+   
+  return (
+    <div style={{paddingBottom:"80px"}}>
+        <HeaderTop/>
+        <Header/>
 
-
-function Messenger() {
-
-    const [accountNo, setAccountNo] = useState();
-    const [myCookie, setMyCookie] = useState();
-
-    
-
-    const navigate = useNavigate();
-
-    useEffect(()=>{
-        function getCookie(name) { //로그인 여부 확인
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-              const cookie = cookies[i].trim();
-              if (cookie.startsWith(name + '=')) {
-                return cookie.substring(name.length + 1);
-              }
-            }
-            return null;
-          }
-          
-          const myCookieValue = getCookie('Authorization');
-        //   setMyCookie(myCookieValue);
-        //   console.log('myCookieValue',myCookieValue);
-          if(myCookieValue == null){ //로그인 확인
-            navigate('/signin');
-          }
-      
-          
-          axios.get('/api/v1/foodworks/account', {
-            headers: {
-              'Authorization' : `${myCookieValue}`,
-              'Content-Type' : 'application/json; charset=UTF-8'
-            }
-          })
-          .then(response => {
-            console.log('response',response.data);
-            setAccountNo(response.data.accountNo);
-          })
-          .catch(error => console.log(error))
-
-    },[])
-
-    
-
-    return(
-        <div>
-            <HeaderTop/>
-            <Header/>
-            <div className="breadcumb-area d-flex align-items-center">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="breacumb-content">
-                                <div className="breadcumb-title">
-                                    <h1>Management</h1>
-                                </div>
-                                <div className="breadcumb-content-text">
-                                <a href="index.html">Diet</a>
-                                </div>
+        <div className="breadcumb-area d-flex align-items-center">
+            <div className="container">
+                <div className="row">
+                    <div className="col-lg-12">
+                        <div className="breacumb-content">
+                            <div className="breadcumb-title">
+                                <h1>Management</h1>
+                            </div>
+                            <div className="breadcumb-content-text">
+                            <a href="index.html">chat</a>
                             </div>
                         </div>
                     </div>
-                </div> 
-            </div>
-            <h1>목차</h1>
-
-            
-            <div>
-                <CreateReadChat/>
+                </div>
             </div>
         </div>
-    );
+        <div className="blog-area style-two"></div>
+
+        <div className="c_container clearfix">
+    <div className="people-list" id="people-list">
+      <div className="search">
+        <input type="text" placeholder="search" />
+        <i className="fa fa-search"></i>
+      </div>
+      <ul className="list">
+        {chattingRoom.map((chat)=>(
+            <li className="clearfix">
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />
+            <div className="about" onClick={chatRoom}>
+                <input type='hidden' value={chat.chattingNo}/>
+                <input type='hidden' value={chat.accountNo}/>
+                <div className="name">{chat.chattingNick}</div>
+                <div className="status">
+                <i className="fa fa-circle online"></i> {chat.count}명
+                </div>
+            </div>
+            </li>
+        ))}
+      </ul>
+    </div>
+    
+    <div className="chat">
+      <div className="chat-header clearfix">
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
+        
+        <div className="chat-about">
+          <div className="chat-with">Chat with Vincent Porter</div>
+          <div className="chat-num-messages">already 1 902 messages</div>
+        </div>
+        <i className="fa fa-plus-square"></i>
+      </div>
+      
+      <div className="chat-history">
+        <ul>
+            {chatList.map((chat)=>(
+                chat.accountNo != userId?
+                    <li className="clearfix">
+                        <div className="message-data align-right">
+                        <span className="message-data-time" >{chat.time.split(' ')[1]}</span> &nbsp; &nbsp;
+                        <span className="message-data-name" >{chat.name}</span> <i className="fa fa-circle me"></i>
+                        
+                        </div>
+                        <div className="message other-message float-right">
+                            {chat.chatComment}
+                        </div>
+                    </li>
+                :
+                    <li>
+                        <div className="message-data">
+                        <span className="message-data-name"><i className="fa fa-circle online"></i>{chat.name}</span>
+                        <span className="message-data-time">{chat.time.split(' ')[1]}</span>
+                        </div>
+                        <div className="message my-message">
+                            {chat.chatComment}
+                        </div>
+                    </li>
+            ))}
+          
+        </ul>
+        
+      </div> 
+      
+        <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)}>
+            <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" onChange={handleChange} rows="3"></textarea>
+            <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>      
+
+            
+            
+            <button>Send</button>
+
+        </form> 
+      
+    </div> 
+    
+  </div> 
+
+    <script id="message-template" type="text/x-handlebars-template">
+    <li className="clearfix">
+        <div className="message-data align-right">
+        <span className="message-data-time" >{/*{{time}}*/}, Today</span> &nbsp; &nbsp;
+        <span className="message-data-name" >Olia</span> <i className="fa fa-circle me"></i>
+        </div>
+        <div className="message other-message float-right">
+        {/*{{messageOutput}}*/}
+        </div>
+    </li>
+    </script>
+
+    <script id="message-response-template" type="text/x-handlebars-template">
+    <li>
+        <div className="message-data">
+        <span className="message-data-name"><i className="fa fa-circle online"></i> Vincent</span>
+        <span className="message-data-time">{/*{{time}}*/}, Today</span>
+        </div>
+        <div className="message my-message">
+        {/*{{response}}*/}
+        </div>
+    </li>
+    </script>
+    </div>
+  );
 }
+
 
 export default Messenger;

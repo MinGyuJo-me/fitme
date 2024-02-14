@@ -38,114 +38,22 @@ import styled from 'styled-components';
 //componants
 import Modal from "./modal";
 
-var id = null;
-var ipAddress = '192.168.0.110';
 
-  
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  
-  export const data1 = {
-	labels,
-	datasets: [
-	  {
-		label: 'Dataset 1',
-		data: [100,200,300,400,500,600],
-		borderColor: 'rgb(255, 99, 132)',
-		backgroundColor: 'rgba(255, 99, 132, 0.5)',
-	  },
-	  {
-		label: 'Dataset 2',
-		data: [600,500,400,300,200,100],
-		borderColor: 'rgb(53, 162, 235)',
-		backgroundColor: 'rgba(53, 162, 235, 0.5)',
-	  },
-	],
-  };
-  
-  export const options2 = {
+export const options = {
 	responsive: true,
 	plugins: {
-	  legend: {
-	  },
-	  title: {
+		legend: {
+		},
+		title: {
 		display: true,
-		text: 'Chart.js Bar Chart',
-	  },
+		text: '',
+		},
 	},
-  };
-  export const data2 = {
-	labels,
-	datasets: [
-	  {
-		label: 'Dataset 1',
-		data: [100,200,300,400,500,600],
-		backgroundColor: 'rgba(255, 99, 132, 0.5)',
-	  },
-	  {
-		label: 'Dataset 2',
-		data: [600,500,400,300,200,100],
-		backgroundColor: 'rgba(53, 162, 235, 0.5)',
-	  },
-	],
-  };
-  //-------------------------------
-  
-  
-  
-  
-  const options = { //<Doughnut data={data}  options={options}/>에 적용
-	maintainAspectRatio: false, // 필요에 따라 조정 //옆에 태그들 무시?
-	
-	
-	plugins: {
-	  
-	  legend: {
-		
-		display: true, //범례 표시여부
-		align: 'center',
-		position: 'right',
-		onClick: 0,
-	  },
-	},
-	
-	layout: {
-	  padding: {
-		  left: 0,
-		  right: 100,
-		  top: 10,
-		  bottom: 10
-	  }
-	}
-  };
-  //좋아요
-  const testLike = (e) => {
-	// var btn = document.querySelector(e.target,' > input');
-	var btnLike = e.target.children[0].value;
-	var dateLike = e.target.children[1].value;
-	console.log('dateLike',dateLike.length)
-	// console.log('싫어요',btnLike,':',dateLike);
-	// console.log('싫어요',new Date(),':',dateLike);
-	// console.log('styled',e.target.style.backgroundColor)
-	if(dateLike.length <= 0){
-	  axios.post(`http://${ipAddress}:5000/calendarLike/`+btnLike, {
-		headers: {
-		  'Content-Type': 'multipart/form-data',
-		}
-	  })
-	  e.target.children[1].value = new Date();
-	  e.target.style.backgroundColor = 'rgb(255, 0, 200)';
-	}else{
-	  // console.log('delete');
-	  axios.delete(`http://${ipAddress}:5000/calendarLike/`+btnLike, {
-		headers: {
-		  'Content-Type': 'multipart/form-data',
-		}
-	  })
-	  e.target.style.backgroundColor = 'rgb(96, 177, 89)';
-	  e.target.children[1].value = '';
-	}
-  
-  }
+};
+
+
+var id = null;
+var ipAddress = '192.168.0.110';
 
 //
 //이미지서버 연결 
@@ -163,6 +71,31 @@ async function imageData(code){
   }
 //
 
+/*
+//좋아요
+const testLike = (e) => {
+	var btnLike = e.target.children[0].value;
+	var dateLike = e.target.children[1].value;
+	console.log('dateLike : ', dateLike.length)
+	if(dateLike.length <= 0){
+		axios.post(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
+			headers: {
+				'Content-Type':'multipart/form-data',
+			}
+		})
+		e.target.children[1].value = new Date();
+		e.target.style.backgroundColor = 'rgb(255, 0, 200)';
+	}else{
+		axios.delete(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
+			header: {
+				'Content-Type':'multipart/form-data',
+			}
+		})
+		e.target.style.backgroundColor = 'rgb(96, 177, 89)';
+		e.target.children[1].value = '';
+	}
+}
+*/
 
 function Workout() {
 	const [mark, setMark] = useState([]);	//
@@ -453,7 +386,7 @@ function Workout() {
 			<div className="col-lg-6 col-md-12" style={{ width: "200px" }}>
 				<div className="sidebar-box">
 						<div className="profile-image-box">
-						<img class="profile-icon" src={accountData.image}
+						<img className="profile-icon" src={accountData.image}
 							width="200px" height="200px" alt="profile-icon"/>
 						</div>
 						<div className="profile-name">{accountData.name}</div>
@@ -530,30 +463,30 @@ function Workout() {
 			</div>
 			<OwlCarousel key={workout.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["⟪","⟫"]} dots >
 				{workout.map((test)=>(
-				<div class="item">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="blog-single-box">
-								<div class="blog-thumb">
+				<div className="item">
+					<div className="row">
+						<div className="col-lg-12">
+							<div className="blog-single-box">
+								<div className="blog-thumb">
 									<div type="button" className="edit-workout-button" onClick={toggleModal}>
 										{/* <img src={test[4]} alt="운동"/> */}
 										<input type='hidden' value={test[0]} />
 										<div className="major-icon-workout" style={{backgroundImage: `url(${test[test.length-1]})` }} />
 									</div>
-									{/* <div class="blog-btn">
+									{/* <div className="blog-btn">
 										<a href="#">{test[3]}</a>
 									</div> */}
 								</div>
 								{console.log("test",test[1])}
-								<div class="blog-content">
-									{/* <div class="blog-left">
+								<div className="blog-content">
+									{/* <div className="blog-left">
 										<span>{test[3]}</span>
 									</div> */}
 									<h2>{test[3]}</h2>
 									<p>{test[6]} All counts</p>
 									<p>{test[7]} kg</p>
-									<div class="blog-button">
-										<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
+									<div className="blog-button">
+										<a href="#">read more <i className="fa fa-long-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
