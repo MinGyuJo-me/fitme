@@ -1,8 +1,8 @@
 import {Link} from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
@@ -465,7 +465,7 @@ function MypageBulletinBoardLayout(){
           <button 
           className='detail-button' 
           style={{marginTop: '-1160px', left:'880px', border:'none' , background:'none' }}>
-            {/*<FontAwesomeIcon icon={faEllipsisV} />*/}
+            <FontAwesomeIcon icon={faEllipsisV} />
           </button>
         </div>
     );
@@ -496,7 +496,7 @@ function MypageBulletinBoardLayout(){
             <MypageYoutubeContainer/>
             <button className='detail-button' 
             style={{ marginTop: '-800px', left:'880px', border:'none' , background:'none'}}>
-                {/*<FontAwesomeIcon icon={faEllipsisV} />*/}
+                <FontAwesomeIcon icon={faEllipsisV} />
             </button>
             
           </div>
