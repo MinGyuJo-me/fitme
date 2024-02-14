@@ -30,6 +30,9 @@ body {
 .people-list {
   width: 260px;
   float: left;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding-bottom: 8px;
 }
 
 .people-list .search {
@@ -44,6 +47,7 @@ body {
   background: #6A6C75;
   width: 90%;
   font-size: 14px;
+  
 }
 
 .people-list .fa-search {
@@ -81,6 +85,7 @@ body {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   color: #434651;
+  border: 1px solid black;
 }
 
 .chat .chat-header {
@@ -112,6 +117,7 @@ body {
   color: #D8DADF;
   font-size: 20px;
   margin-top: 12px;
+  cursor: pointer;
 }
 
 .chat .chat-history {
@@ -243,3 +249,4 @@ body {
   clear: both;
   height: 0;
 }
+

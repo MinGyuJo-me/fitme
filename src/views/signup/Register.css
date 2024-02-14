@@ -24,6 +24,7 @@
     font-size: 14px;
 }
 
+
 .submit-btn {
     color: white;
     width: 260px;
@@ -139,9 +140,10 @@
 
 .verification-button-submit {
     position: absolute;
-    top: 260px;
-    right: 25px;
-    margin-top: 6px;
+    top: 820px;
+    right: 510px;
+    margin-top: 10px;
+    margin-right: -15px;
     background-color: #1BBC9B;
     color: white;
     border: none;
@@ -321,7 +323,7 @@ input[name="address"] {
     left: -2px;
     top: 700px;
     height: 100%;
-    width: 100%;
+    width: 50%;
     border: 2px solid #333333;
     border-radius: 2px;
 }
@@ -350,3 +352,12 @@ input[name="address"] {
     cursor: pointer;
 }
 
+
+input[type="number"]::placeholder{
+    color:lightgray;
+}
+
+
+input[type="text"]::placeholder{
+    color:lightgray;
+}

@@ -41,19 +41,18 @@ const DaumPost = (props) => {
         };
 
         return (
-            <div>
+            <div style={{position:"fixed" ,width:"500px", height:"700px", right:0, left:0, margin:"auto", top:"30%", zIndex:5, borderRadius:"1px solid red"}}>
                 {isOpen && (
                     <div>
                         <DaumPostcode
-                            className="postmodal"
                             autoClose
                             onComplete={complete}
                         />
-                        <button className="postmodal-close" onClick={handleClose}>✖</button>
+                        <button className="postmodal-close" onClick={handleClose} style={{width:"50px",position:"absolute", right:0, left:0, margin:"auto"}}>✖</button>
                     </div>
                 )}
                 {!isOpen && (
-                <button className="searchaddress-button-re" onClick={handleOpen}>⟳</button>
+                <button className="searchaddress-button-re" onClick={handleOpen} >⟳</button>
                 )}
             </div>
         );
