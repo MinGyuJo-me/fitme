@@ -1,10 +1,7 @@
 import {Link} from 'react-router-dom';
 import React, { useState,useEffect,useRef} from 'react';
-
 //npm install axios
 import axios from 'axios';
-
-
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -23,10 +20,11 @@ function CommunityBoardViewModal(props) {
         smartSpeed: 450,
     };
 
+
     return (
-        <div className='row justify-content-md-center' style={{border:"1px solid red", width:"1800px"}}>
+        <div className='row justify-content-md-center' style={{border:"1px solid red", backgroundColor:"blue"}}>
             <div className="col-lg-5 col-sm-5">
-                <div className="blog-single-box upper" style={{backgroundColor:"#F6F4EC"}}>
+                <div className="blog-single-box upper">
                     <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                         <div className="blog-icon bi1">
                         </div>
@@ -68,37 +66,21 @@ function CommunityBoardViewModal(props) {
             </div>
 
             <div className="col-lg-5 col-sm-5" >
-                <div className="blog-single-box upper" style={{height:"97%", backgroundColor:"#F6F4EC"}}>
+                <div className="blog-single-box upper" style={{height:"97%"}}>
                     <div className="blog-content" style={{height:"90%"}}>
-                        <div className='blog-comment'  style={{backgroundColor:"#FFF", height:"103%", borderRadius:"5px", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}}>
-                            <table style={{width:"100%"}}>
-                                <tr style={{height:"55px"}}>
-                                    <td style={{width:"12%", textAlign:"center"}}>조동훈</td>
-                                    <td style={{padding:"0px 10px"}}>작성한 댓글 내용</td>
-                                    <td style={{width:"15%", textAlign:"center"}}>2016.03.05</td>
-                                </tr>
-                                <tr style={{height:"55px"}}>
-                                    <td style={{width:"12%", textAlign:"center"}}>조동훈</td>
-                                    <td style={{padding:"0px 10px"}}>작성한 댓글 내용 작성한 댓글 내용작성한 댓글 내용작성한 댓글 내용작성한 댓글 내용</td>
-                                    <td style={{width:"15%", textAlign:"center"}}>2016.03.05</td>
-                                </tr>
-                                <tr style={{height:"55px"}}>
-                                    <td style={{width:"12%", textAlign:"center"}}>조동훈</td>
-                                    <td style={{padding:"0px 10px"}}>작성한 댓글 내용</td>
-                                    <td style={{width:"15%", textAlign:"center"}}>2016.03.05</td>
-                                </tr>
-                                <tr style={{height:"55px"}}>
-                                    <td style={{width:"12%", textAlign:"center"}}>조동훈</td>
-                                    <td style={{padding:"0px 10px"}}>작성한 댓글 내용</td>
-                                    <td style={{width:"15%", textAlign:"center"}}>2016.03.05</td>
+                        <div className='blog-comment'  style={{border:"1px solid red", height:"100%"}}>
+                            <table style={{border:"1px solid red", width:"100%"}}>
+                                <tr style={{height:"50px"}}>
+                                    <td style={{width:"13%", border:"1px solid red",  textAlign:"center"}}>조동훈,,</td>
+                                    <td style={{paddingLeft:"20px"}}>작성한 댓글 내용</td>
+                                    <td style={{width:"15%", border:"1px solid red", textAlign:"center"}}>2016.03.05</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                     <div className="blog-content">
                         <div className="blog-button">
-                            <input type="text" style={{width:"70%", height:"45px", borderRadius:"5px", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}}></input>
-                            <button type="submit" style={{position:"absolute", right:"210px", borderRadius:"5px", backgroundColor:"#F6F6F6", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.2)"}}>submit</button>
+                            <input type="text" style={{width:"70%"}}></input>
                             <div className="blog-button-container">
                                 <div className='blog-button-item'>
                                     <img src={require('../images/chat_bubble.png')}/>
@@ -114,6 +96,7 @@ function CommunityBoardViewModal(props) {
                     </div>
                 </div>
             </div>
+
         </div>
     );
   }

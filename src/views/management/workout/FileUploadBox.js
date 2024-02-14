@@ -83,8 +83,8 @@ const FileUploadBox = ({ onImageChange }) => {
       {!uploadedInfo && (
         <>
           <Logo />
-          <p className="preview_msg">클릭 혹은 이미지 파일을 이곳에 드롭하세요!</p>
-          <p className="preview_desc">최대 3MB</p>
+          <p className="preview_msg">클릭 혹은 파일을 이곳에 드롭하세요.</p>
+          <p className="preview_desc">파일당 최대 3MB</p>
         </>
       )}
     </label>
