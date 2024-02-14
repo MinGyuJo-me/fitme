@@ -13,7 +13,6 @@ function Main() {
     });
 
   return (
-    <Wrapper>
     <div>
         <HeaderTop/>
         <Header/>
@@ -108,7 +107,7 @@ function Main() {
                 </div>
             </div>
         </div>
-    </div>
+
 
     {/*
         <!--==================================================-->
@@ -238,8 +237,29 @@ function Main() {
                 </div>
             </form>
         </div>
+            {/*
+                <!--==================================================-->
+                <!----- Start Search Popup Area ----->
+                <!--==================================================-->
+            */}
+
+            {/*
+                <!--==================================================-->
+                <!----- Start Scroll ----->
+            <!--==================================================-->
+            */}
+            <div className="scroll-area">
+                <div className="top-wrap">
+                    <div className="go-top-btn-wraper">
+                        <div className="go-top go-top-button">
+                            <i className="fa fa-angle-double-up" aria-hidden="true"></i>
+                            <i className="fa fa-angle-double-up" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    </Wrapper>
   );
 }
 

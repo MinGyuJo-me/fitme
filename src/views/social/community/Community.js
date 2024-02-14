@@ -43,7 +43,7 @@ function Community() {
         {/* 로딩 애니메이션*/}
         <Loader/>
         {/* 제목 배경화면 */}
-        <Breadcumb/>
+        <Breadcumb title="Commnunity" content="social" subContent="community"/>
         
         {/*게시글 영역*/}
         <div className="blog-area style-two">
