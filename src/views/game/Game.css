@@ -35,7 +35,11 @@
     top:10px;
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
     background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
 }
+
+
 
 .game-play-button-layout{
     margin: auto;
