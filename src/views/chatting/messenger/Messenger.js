@@ -77,6 +77,9 @@ function Messenger() {
         var s = document.getElementById('chatRoomNo');
         // console.log('채팅방',e.target.parentElement.children[0].value);
         s.value = e.target.parentElement.children[0].value;
+        
+        subscribe(e.target.parentElement.children[0].value); //채팅방 연결 테스트
+
         setChatRoomKing(e.target.parentElement.children[1].value);
         // console.log('확인:',s.value);
         setChatNo(e.target.parentElement.children[0].value);
@@ -96,7 +99,7 @@ function Messenger() {
             onConnect: (data) => {
                 console.log('success');
                 client.current.publish({
-                    destination: '/pub/chat/join',
+                    destination: '/pub/join',
                     body: JSON.stringify({
                         chattingNo: 0,
                         accountNo: userId,
@@ -105,7 +108,6 @@ function Messenger() {
                 });
             },
         });
-        
         client.current.activate();
     };
   
@@ -116,10 +118,10 @@ function Messenger() {
         client.current.publish({
             destination: '/pub/chat',
             body: JSON.stringify({
-            chattingNo: num,
-            accountNo: userId,
-            name: name,
-            chatComment: chat
+              chattingNo: num,
+              accountNo: userId,
+              name: name,
+              chatComment: chat
             }),
         });
     
