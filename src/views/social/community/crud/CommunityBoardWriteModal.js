@@ -1,15 +1,13 @@
-import {Link} from 'react-router-dom';
-import React, { useState,useEffect,useRef} from 'react';
-//npm install axios
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './CommunityBoardWriteModal.css';
+import axios from 'axios';
 
 function CommunityBoardWriteModal() {
-
+    
     const options = {
         margin:10,
         loop: true,
@@ -20,26 +18,46 @@ function CommunityBoardWriteModal() {
         smartSpeed: 450,
     };
 
+    const [selectedFiles, setSelectedFiles] = useState([]);
+
+    function convertToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    const handleFileChange = (event) => {
+        const files = event.target.files;
+        const fileArray = Array.from(files);
+        fileArray.forEach(file => {
+            convertToBase64(file);
+            setSelectedFiles(pre => [...pre,file]);
+        })
+        console.log(fileArray);
+    };
+
 
     return (
         <div className="col-lg-12 col-sm-12">
             <div className="blog-single-box upper" style={{backgroundColor:"#F6F4EC"}}>
                 
                 <div style={{position:"relative"}}>
-                    <button className="blog-image-button">Images</button>
+                    <label for="file" className='blog-image-button'>Images</label>
+                    <input type="file" id="file" style={{ display: "none" }} multiple onChange={handleFileChange}/>
                     <OwlCarousel {...options}>
-                        <div className="blog-thumb">
-                            <img src={require('../../../../assets/images/3.jpg')} alt="" style={{height:600}}/>
+                        {selectedFiles.map((file, index) => (
+                            <div className="blog-thumb" key={index}>
+                                <img src={URL.createObjectURL(file)} alt="" style={{ height: 600 }} />
+                                {/* Convert file to base64 */}
                                 <div className="blog-btn">
-                                <div>1/2</div>
+                                    <div>{`${index + 1}/${selectedFiles.length}`}</div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="blog-thumb">
-                            <img src={require('../../../../assets/images/2.jpg')} alt="" style={{height:600}}/>
-                                <div className="blog-btn">
-                                <div>2/2</div>
-                            </div>
-                        </div>
+                            
+                        ))}
                     </OwlCarousel>
                 </div>
                 
@@ -59,6 +77,8 @@ function CommunityBoardWriteModal() {
         </div>
     );
   }
+
+  
   
   export default CommunityBoardWriteModal;
   
