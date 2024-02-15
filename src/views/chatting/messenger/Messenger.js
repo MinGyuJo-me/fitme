@@ -36,7 +36,7 @@ function Messenger() {
     const [userId,setUserId] = useState();
   
     // const { apply_id } = useParams();
-    const client = useRef({});
+    const client = useRef();
     
     const scrollRef = useRef();
     
@@ -155,12 +155,15 @@ function Messenger() {
     const handleSubmit = (event, chat) => { // 보내기 버튼 눌렀을 때 publish
         // console.log('event',event.target.children[0].value);
         var num = event.target.children[1].value;
+        event.target.children[0].value = '';
+        
         console.log('chat',chat);
         console.log('num',num);
         // scrollToBottom();
         event.preventDefault();
     
         publish(num,chat);
+        
     };
     
     useEffect(() => {
@@ -320,7 +323,7 @@ function Messenger() {
       <div className="chat-history">
         <ul>
             {chatList.map((chat)=>(
-                chat.accountNo != userId?
+                chat.accountNo == userId?
                     <li className="clearfix">
                         <div className="message-data align-right">
                         <span className="message-data-time" >{chat.time.split(' ')[1]}</span> &nbsp; &nbsp;
@@ -347,14 +350,10 @@ function Messenger() {
         
       </div> 
       
-        <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)}>
+        <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
             <textarea name="message-to-send" id="message-to-send" placeholder ="메시지를 입력해 주세요" onChange={handleChange} rows="3"></textarea>
             <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>      
-
-            
-            
             <button>Send</button>
-
         </form> 
       
     </div> 
