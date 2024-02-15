@@ -8,6 +8,8 @@ import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
 import $ from 'jquery';
 import Wrapper from '../component/Wrapper/Wrapper';
+
+import GameRoomSearch from './component/GameRoomSearch';
 import './Game.css';
 
 
@@ -52,12 +54,12 @@ function Game() {
         <div className="blog-area style-two game-background-style">
           <div className="container">
             <div className="row">
-              <div className="col-lg-12">
+              <div className="col-lg-12 col-md-12">
                 <div className="row">
                   <div className="col-lg-8 col-md-8 game-notice-layout" style={{marginRight:"50px"}}>
                     
                       <div className='notice-box'>
-                        <OwlCarousel {...options}>
+                        <OwlCarousel {...options} className='notice-box-item'>
                           <div>공지사항: 내용</div>
                           <div>게임 기록 알림: 내용</div>
                         </OwlCarousel>
@@ -67,7 +69,11 @@ function Game() {
 
                   <div className="col-lg-8 col-md-8 game-layout" style={{marginRight:"50px"}}>
                     <div className="row">
-                      <div className='col-lg-11 game-room-layout'>
+                      <div className='col-lg-11 col-md-11'>
+                        <GameRoomSearch/>
+                      </div>
+
+                      <div className='col-lg-11 col-md-11 game-room-layout'>
                         <GameRoomContainer/>
                         <GameRoomContainer/>
                         <GameRoomContainer/>
@@ -80,13 +86,13 @@ function Game() {
 
                   <div className="col-lg-3 col-md-3 game-profile-layout">
                     <div className="row">
-                      <div className='col-lg-10 game-profile'>
+                      <div className='col-lg-10 col-md-10 game-profile'>
                       </div>
-                      <div className='col-lg-10 game-profile-name'>
+                      <div className='col-lg-10 col-md-10 game-profile-name'>
                           프로필 기록 (승패)
                       </div>
 
-                      <div className='col-lg-10 game-play-button-layout'>
+                      <div className='col-lg-10 col-md-10 game-play-button-layout'>
                           <button className="game-play-button">일반 게임</button>
                           <button className="game-play-button">랭킹 게임</button>
                       </div>

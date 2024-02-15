@@ -3,7 +3,7 @@
 }
 .game-layout{
     border-radius: 5px;
-    height: 600px;
+    height: 670px;
     padding: 20px 0px;
     display: flex;
     flex-direction: column;
@@ -90,7 +90,7 @@
 .game-profile-layout{
     border:1px solid lightgray;
     border-radius: 5px;
-    height: 670px;
+    height: 740px;
     padding: 20px 0px;
     display: flex;
     flex-direction: column;
@@ -124,3 +124,18 @@
     display: none;
 }
 
+
+
+.game-search-layout{
+    margin: auto;
+    height: 50px;
+    border-radius: 5px;
+    border:1px solid lightgray;
+    padding: 10px;
+    background-color: #F6F4EC;
+    margin-bottom: 10px;
+}
+
+.notice-box-item{
+    margin-left: 15px;
+}
