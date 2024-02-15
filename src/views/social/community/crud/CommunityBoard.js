@@ -20,16 +20,15 @@ function CommunityBoard(props) {
         smartSpeed: 450,
     };
 
-
     return (
         <div className="col-lg-12 col-sm-12">
         <div className="blog-single-box upper">
             <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
-                <div className="blog-icon bi1">
+                <div className="blog-icon bi1"  style={{backgroundImage: `url(${props.image})`}}>
                 </div>
                 <div className='blog-description'>
-                    <a href="#"><i className="fas fa-address-card"></i> {props.writer}</a>
-                    <a href="#"><i className="fas fa-map-marker"></i> {props.position}</a>
+                    <a href="#"><i className="fas fa-address-card"></i> {props.name}</a>
+                    <a href="#"><i className="fas fa-map-marker"></i> {props.address}</a>
                     <span><i className="far fa-calendar-alt"></i> {props.postDate}</span>
                 </div>
             </div>
@@ -79,8 +78,3 @@ function CommunityBoard(props) {
   }
   
   export default CommunityBoard;
-  
-
-
-
-
