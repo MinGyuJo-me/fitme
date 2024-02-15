@@ -53,7 +53,7 @@ export const options = {
 
 
 var id = null;
-var ipAddress = '192.168.0.14';
+var ipAddress = '192.168.0.15';
 
 //
 //이미지서버 연결 
