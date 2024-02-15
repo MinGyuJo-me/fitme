@@ -38,6 +38,17 @@
     margin-top: 10px;
 }
 
+.gameroom-description div:nth-child(2){
+    margin-top: 5px;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.gameroom-description div:nth-child(3){
+    margin-top: 5px;
+    margin-left: 20px;
+    font-size: 14px;
+}
 .gameroom-description span{
     display: inline-block;
     margin-left: 10px;
