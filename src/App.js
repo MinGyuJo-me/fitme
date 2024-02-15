@@ -13,7 +13,7 @@ import Messenger from './views/chatting/messenger/Messenger'
 
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
-import MyPage from './views/mypage/mypage.js';
+import MyPage from './views/mypage/mypage.js'; 
 import findPassword from './views/findpassword/FindPassword.js';
 import Game from './views/game/Game.js';
 
