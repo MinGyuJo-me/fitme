@@ -296,7 +296,6 @@ function MyPage() {
                     <div className='main-titles' style={{ top: '10px', marginTop: '-30px' }}>
                         <h1>게임 기록</h1>
                     </div>
-
                     <div className='sideber-item' style={{overflow:'hidden'}}>
                         <img id='ibox' src={accountData.image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
                         <div className="form_row">
