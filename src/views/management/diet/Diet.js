@@ -240,12 +240,45 @@ function Diet() {
 		  });
 		}
 	  },[value]);
+	//VIEW
+	useEffect(()=>{
+		// console.log(isOpen);
+		if(isOpen != 'true'){
+			var list_ = new Array();
+			if(dietCal != null){
+			  axios.get(`http://${ipAddress}:5000/diet/${dietCal}?calId=${isOpen}`)
+			  .then(response =>{
+				// console.log(response.data == null);
+				// setSelect(new Array(response.data))
+				if(response.data != null){
+				  for(var i = 0; i < response.data.length; i++){
+					list_.push(response.data[i]);
+				  }
+				}
+				console.log('list_',list_);
+				setSelect(list_);
+			  })
+			}
+		}
+	},[isOpen])
+	//DELETE
+	const setCalDel = (e) => {
+		if(true){ //confirm넣을자리
+			console.log("delete",id.parentElement.parentElement);
+			// axios.delete(`http://${ipAddress}:5000/diet/${e.target.parentElement[0].value}`)
+			// .then(response => {
+			// 	setIsOpen(false);
+			// 	// console.log(response.data);
+			// 	id.parentElement.parentElement.remove();
+			// })
+		}
+	}
 
 
 	const toggleModal = (e) => {
-		id = e.target.parentElement.children[0].value != null ? e.target.parentElement.children[0] : -1;
-		// console.log(id.value)
-		setIsOpen(id.value != null ? id.value : -1);
+		id = e.target.parentElement.children[1] != null ? e.target.parentElement.children[1].value : true;
+		// console.log('e.target',id)
+		setIsOpen(id);
 	};
 
 	const handleFoodSelect = value => {
@@ -260,7 +293,78 @@ function Diet() {
 		});
 	};
 	
-	const handleSubmit = (e) => {}
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const formData2 = e.target;
+		// console.log(selectedFood);
+		
+		
+		// console.log(formData[formData.length -2].value); //작동확인
+		const formData1 = new FormData();
+	
+		const foodData = new Array();
+		// 각 폼 필드를 FormData 객체에 추가
+		for (const key in formData) {
+		// console.log(key,':',formData[key]);
+		if(key == 'FOOD' || key == 'FOOD_WEIGHT'){
+			foodData.push(formData[key])
+			if(key == 'FOOD'){
+			// console.log(key, selectedFood);
+			formData1.append(key, selectedFood);
+			}else{
+			formData1.append(key, formData[key]);
+			}
+		}else{
+			// console.log(key, formData[key]);
+			formData1.append(key, formData[key]);
+		}
+		}
+	
+		if(formData2[formData2.length -2].value == '수정'){
+		// console.log(String(formData2[2].value).split()[0])
+		// console.log('put',formData1);
+		//폼데이타 안들어가서 직접 수정
+	
+		axios.put(`http://${ipAddress}:5000/diet/${dietCal}`, formData1, {
+			headers: {
+			'Content-Type': 'multipart/form-data',
+			},
+		})
+		.then(response => {
+			// console.log("주소:", response);
+			swal({title:"수정 성공!",icon:"success"})  
+			//서버에 데이터 입력 성공시 모달창 닫기
+			setIsOpen(false);
+		})
+		.catch(error => {
+			// console.error('서버 오류:', error);
+			swal({title:"입력 실패",icon:"error"})
+		});
+		}else{
+			var endTime = String(e.target.children[1].children[0].children[0].children[1].children[0].value).split()[0]
+			// console.log(endTime);
+			formData1.append('END_DATE', endTime);
+			// console.log(formData1);
+			setSelectedFood('');
+			// console.log("post",formData['DIET_IMAGE'] == '');
+			axios.post(`http://${ipAddress}:5000/diet/${dietCal}`, formData1, {
+				headers: {
+				'Content-Type': 'multipart/form-data',
+				},
+			})
+			.then(response => {
+				// console.log("주소:", response);
+				swal({title:"입력 성공!",icon:"success"})  
+				//서버에 데이터 입력 성공시 모달창 닫기
+				setIsOpen(false);
+			})
+			.catch(error => {
+				console.error('서버 오류:', error);
+				swal({title:"입력 실패",icon:"error"})
+			});
+		
+		}
+	};
 
 	const [formData, setFormData] = useState({
 		DESCRIPTION: '',
@@ -460,7 +564,7 @@ function Diet() {
 										<a href="#">아침</a>
 									</div>
 								</div>
-								{console.log("test",test[1])}
+								{/* {console.log("test",test)} */}
 								<div class="blog-content">
 									<div class="blog-left">
 										<span>{test[3]}</span>
@@ -510,7 +614,7 @@ function Diet() {
                     <DateTimePicker 
                     // value={selectOne != null ? selectOne[5] : ''}
                     label="날짜와 시간 설정" 
-                    // value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
+                    value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
                     slotProps={{
                       textField: {
                         size: "small",
@@ -530,36 +634,30 @@ function Diet() {
                     <div className="modal-food-list">
                       <AutoCompleteSearch onSelect={handleFoodSelect} />
                       <input type="text" name="DESCRIPTION" 
-					//   value={selectOne != null ? selectOne[1] : ''}
+					  value={selectOne != null ? selectOne[1] : ''}
 					   placeholder="제목" onChange={handleInputChange} />
                       <input type="text" name="FOOD" 
-					//   value={(selectedFood != null && selectedFood.length != 0)? selectedFood : selectOne != null ? selectOne[3]:''}
+					  value={(selectedFood != null && selectedFood.length != 0)? selectedFood : selectOne != null ? selectOne[3]:''}
 					   placeholder="음식" onChange={handleInputChange} readOnly/>
                       <input type="text" name="FOOD_WEIGHT" 
-					//   value={selectOne != null ? selectOne[7] : ''} 
+					  value={selectOne != null ? selectOne[7] : ''} 
 					  placeholder="음식무게" onChange={handleInputChange} />
                       <input type="text" name="MEMO" 
-					//   value={selectOne != null ? selectOne[2] : ''} 
+					  value={selectOne != null ? selectOne[2] : ''} 
 					  placeholder="내용" onChange={handleInputChange} />
                     </div>
                     <div className="modal-food-chart">
-                      {/* <Radar data={data4} /> */}
+                      {/* <Radar data={data} /> */}
                     </div>
-                    {/* <div className="modal-food-chart">
-                      <Doughnut data={data}  options={options}/>
-                    </div>
-                    <div className="modal-food-chart">
-                      <Doughnut data={data}  options={options}/>
-                    </div> */}
-                    <input type="submit" value="확인" 
-					// value={selectOne != '' ? "수정": "등록"} 
+                    <input type="submit"
+					value={selectOne != '' ? "수정": "등록"} 
 					className="submit-btn-modal"/>
-                    {/* {selectOne == '' ? ''
+                    {selectOne == '' ? ''
                       : 
                       <input type="reset" value="삭제" 
-					//   onClick={setCalDel} 
+					  onClick={setCalDel} 
 					  className="reset-btn-modal"/>
-                    } */}
+                    }
                   </form>
                 </Modal>
                 )}
