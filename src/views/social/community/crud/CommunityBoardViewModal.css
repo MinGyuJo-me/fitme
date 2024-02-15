@@ -21,3 +21,48 @@
     border:5px solid #c2cfdb;
     background-color: #F6F6F6;
 }
+
+.blog-comment{
+    position: relative;
+    background-color:#FFF;
+    height:103%;
+    border-radius:5px;
+    box-shadow:0px 0px 5px 1px rgba(0,0,0,0.1);
+    overflow-y: scroll;
+}
+
+.blog-comment::-webkit-scrollbar{
+    display: none;
+}
+
+
+.blog-comment-table{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.blog-comment tr{
+    height:55px;
+}
+
+.blog-comment td{
+    border-bottom: 3px solid #c2cfdb;
+    font-size: 15px;
+}
+
+
+.blog-comment td:nth-child(1){
+    width: 12%;
+    text-align: center;
+}
+
+.blog-comment td:nth-child(2){
+    padding-left: 20px;
+    width: 70%;
+}
+
+.blog-comment td:nth-child(3){
+    width: 25%;
+    text-align: center;
+}
