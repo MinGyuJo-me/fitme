@@ -17,9 +17,10 @@ function FindPassword() {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState('');
   const [emailCode, setemailCodeCode] = useState('');
-  const [emailCodeMatch, setEmailCodeMatch] = useState('');
+  const [emailInput, setEmailInput] = useState('');
   const [emailButtonDisabled, setemailButtonDisabled] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  const [emailCodeMatch, setEmailCodeMatch] = useState(false);
 
   const handlePasswordChange = (e) => {
     // setPassword(e.target.value);
@@ -27,9 +28,6 @@ function FindPassword() {
 
     // 이메일 입력 값 가져오기
     const userEmail = e.target.email.value;
-
-    // 인증 코드 입력 값 가져오기
-    const inputCode = e.target.emailCodeMatch.value;
 
     // 새 비밀번호 입력 값 가져오기
     const newPassword = e.target.passwordchk.value;
@@ -47,18 +45,15 @@ function FindPassword() {
     };
 
     // 서버로 데이터 전송
-    axios.post('/passwordReset', requestData)
-        .then(response => {
-            // 서버 응답 처리
-            console.log(response.data);
-            alert('비밀번호가 성공적으로 변경되었습니다.');
-            // 로그인 페이지로 이동 또는 다른 작업 수행
-        })
-        .catch(error => {
-            // 에러 처리
-            console.error('에러:', error.response.data);
-            alert('비밀번호 변경에 실패했습니다. 재시도해주세요.');
-        });
+    axios.post('/updatepwd', requestData) 
+      .then(response => {          
+          console.log(response.data);
+          alert('비밀번호가 성공적으로 변경되었습니다.');          
+      })
+      .catch(error => {         
+          console.error('에러:', error.response.data);
+          alert('비밀번호 변경에 실패했습니다. 재시도해주세요.');
+      });
   };  
 
 
@@ -75,18 +70,13 @@ function FindPassword() {
       });
   };
   const handleCodeCheck = () => {
-    const inputCode = document.getElementById('verificationCodeInput').value;
-
-    if (inputCode === emailCode) {
+    if (emailInput == emailCode) {      
       setEmailCodeMatch(true);
-      alert('인증 코드가 일치합니다!');
-      setemailButtonDisabled(true);
-    } else {
-      setEmailCodeMatch(false);
+      alert('인증 코드가 일치합니다!');      
+    } else {  
       alert('인증 코드가 일치하지 않습니다. 다시 시도해주세요.');
     }
   };
-  
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -132,15 +122,17 @@ function FindPassword() {
         <div style={{ position: 'relative' }}>
           <input
             type="text"            
-            value={emailCodeMatch}
+            value={emailInput}
+            id="emailCodeInput"
             className="mail-check-input"
-            onChange={e => setEmailCodeMatch(e.target.value)}            
+            onChange={e => setEmailInput(e.target.value)}            
             placeholder="인증번호 입력"
           />
           <button
             id="mail-Check-submit"
 
             className="verification-button-submit mcs"
+            onClick={handleCodeCheck} 
             style={{ position: 'absolute', right:'20px', top: '25%', transform: 'translateY(-50%)' }}
 
           >
@@ -160,7 +152,8 @@ function FindPassword() {
             id="password-Check-submit" 
             className="verification-button-submit pcs"
 
-            style={{ position: 'absolute', right:'20px', top: '25%', transform: 'translateY(-50%)' }} 
+            style={{ position: 'absolute', right:'20px', top: '25%', transform: 'translateY(-50%)',
+            display: emailCodeMatch ? 'block' : 'none' }} 
 
             > 수정 
           </button>         

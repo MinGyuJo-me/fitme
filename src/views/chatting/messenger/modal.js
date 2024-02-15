@@ -53,12 +53,9 @@ const handleRemoveFriend = (friendName) => {
 
 
   return (
-    <div className="Modal" onMouseDown={closeModal}>
-
-      <div className="modalBody" onMouseDown={(e) => e.stopPropagation()}>
-
-        <button id="modalCloseBtn" onMouseDown={closeModal}>
-
+    <div className="Modal" onMouseDown={props.onClose}>
+      <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{ width: '30%' }}>
+        <button id="modalCloseBtn" onMouseDown={props.onClose}>
           ✖
         </button>
         {props.children}
