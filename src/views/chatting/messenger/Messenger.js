@@ -11,7 +11,7 @@ import './Messenger.css';
 //chat
 import * as StompJs from '@stomp/stompjs';
 //componants
-import { Modal } from 'react-bootstrap';
+import Modal from "./modal";
 
 let chatNo = 0;
 function getCookie(name) { //로그인 여부 확인
@@ -165,28 +165,43 @@ function Messenger() {
     
     useEffect(() => {
         const myCookieValue = getCookie('Authorization');
-    
-        // console.log(`Bearer ${myCookieValue}`);
-        //자바 스프링
+        
         axios.get(`/api/v1/foodworks/account`, {
-            headers: {
-            'Authorization' : `${myCookieValue}`,
-            'Content-Type' : 'application/json; charset=UTF-8'
-            }
+          headers: {
+            'Authorization': `${myCookieValue}`,
+            'Content-Type': 'application/json; charset=UTF-8'
+          }
         })
         .then(response => {
-            var proflieData = response.data;
-            if(proflieData.accountNo != null) {
-                // console.log(proflieData.accountNo);
-                setUserId(proflieData.accountNo);
-                setName(proflieData.name);
-            }
+          var profileData = response.data;
+          if (profileData.accountNo != null) {
+            setUserId(profileData.accountNo);
+            setName(profileData.name);
+          }
         })
-        .catch(error => console.log('error',error))
+        .catch(error => console.log('error', error))
             
         connect();
         return () => disconnect();
-    }, []);
+      }, []);
+      
+      // handleSubmit 함수를 모달이 열릴 때 호출되는 이벤트 리스너에 연결
+      useEffect(() => {
+        if (isOpen) {
+          const handleKeyDown = (event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              handleSubmit(event, chat);
+            }
+          };
+      
+          document.addEventListener('keydown', handleKeyDown);
+      
+          return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+          };
+        }
+      }, [isOpen]);
 
     useEffect(()=>{
         if(userId != null){
