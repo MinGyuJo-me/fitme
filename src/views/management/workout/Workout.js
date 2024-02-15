@@ -53,7 +53,7 @@ export const options = {
 
 
 var id = null;
-var ipAddress = '192.168.0.15';
+var ipAddress = '192.168.0.14';
 
 //
 //이미지서버 연결 
@@ -245,6 +245,7 @@ function Workout() {
   useEffect(()=>{
 		// console.log(isOpen);
     if(isOpen != 'true'){
+      setFormData([]);
       var list_ = new Array();
       if(workoutCal != null){
         axios.get(`http://${ipAddress}:5000/workout/${workoutCal}?calId=${isOpen}`)
@@ -284,11 +285,32 @@ function Workout() {
 		}
 
 		if(formData2[formData2.length -2].value == '수정'){
-			console.log(String(formData2[2].value).split()[0])
+      var endTime = e.target.children[1].children[0].children[0].children[1].children[0].value;
+      var accountNo = e.target.children[0].value;
+      // console.log(accountNo);
+      formData1.append('END_DATE', endTime);
+			// console.log(String(formData2[2].value).split()[0])
+      axios.put(`http://${ipAddress}:5000/workout/${accountNo}`, formData1, {
+        headers:{
+        'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(response => {
+        console.log("주소:", response.data);
+        swal({title:"입력 성공!",icon:"success"})  
+        //서버에 데이터 입력 성공시 모달창 닫기
+        console.log('날짜',value);
+        callis(workoutCal,value);//새롭게 데이타 추가
+
+        setIsOpen(false);
+      })
+      .catch(error => {
+        console.error('서버 오류:', error);
+        swal({title:"입력 실패",icon:"error"})
+      });
 			console.log("put");
 		}else{
-      var endTime = e.target.children[0].children[0].children[0].children[1].children[0].value;
-      // console.log(e.target.children[0].children[0].children[0].children[1].children[0].value)
+      var endTime = e.target.children[1].children[0].children[0].children[1].children[0].value;
       formData1.append('END_DATE', endTime);
       console.log(formData1);
       console.log("post",formData['CATEGORY'] == '');
@@ -299,7 +321,7 @@ function Workout() {
         },
       })
       .then(response => {
-        // console.log("주소:", response);
+        console.log("주소:", response.data);
         swal({title:"입력 성공!",icon:"success"})  
         //서버에 데이터 입력 성공시 모달창 닫기
         console.log('날짜',value);
@@ -338,8 +360,8 @@ function Workout() {
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 		setFormData({
-		...formData,
-		[name]: value,
+      ...formData,
+      [name]: value,
 		});
 		// console.log(formData);
 	};
@@ -545,25 +567,25 @@ function Workout() {
 							</div>
 							<div className="modal-workout-list">
 							{/* <input type="text" name="DESCRIPTION" placeholder="제목" onChange={handleInputChange} /> */}
-							<select name="CATEGORY" value={selectOne != null ? selectOne[3] : ''} onChange={handleInputChange}>
-							<option value='' selected={selectOne == null ? "selected" : ''} >-- 운동 종류 --</option>
-							<option value="데드리프트" selected={selectOne != null && selectOne[3]=="데드리프트" ? "selected" : ''}>데드리프트(Deadlift)</option>
-							<option value="스쿼트" selected={selectOne != null && selectOne[3]=="스쿼트" ? "selected" : ''}>스쿼트(squat)</option>
-							<option value="벤치프레스" selected={selectOne != null && selectOne[3]=="벤치프레스" ? "selected" : ''}>벤치프레스(bench press)</option>
-							<option value="팔굽혀펴기" selected={selectOne != null && selectOne[3]=="팔굽혀펴기" ? "selected" : ''}>팔굽혀펴기(Push-up)</option>
-							<option value="윗몸 일으키기" selected={selectOne != null && selectOne[3]=="윗몸 일으키기" ? "selected" : ''}>윗몸 일으키기(SitUp)</option>
+							<select name="CATEGORY" onChange={handleInputChange}>
+                <option value='' selected={selectOne == null ? "selected" : ''} >-- 운동 종류 --</option>
+                <option value="데드리프트" selected={selectOne != null && selectOne[3]=="데드리프트" ? "selected" : ''}>데드리프트(Deadlift)</option>
+                <option value="스쿼트" selected={selectOne != null && selectOne[3]=="스쿼트" ? "selected" : ''}>스쿼트(squat)</option>
+                <option value="벤치프레스" selected={selectOne != null && selectOne[3]=="벤치프레스" ? "selected" : ''}>벤치프레스(bench press)</option>
+                <option value="팔굽혀펴기" selected={selectOne != null && selectOne[3]=="팔굽혀펴기" ? "selected" : ''}>팔굽혀펴기(Push-up)</option>
+                <option value="윗몸 일으키기" selected={selectOne != null && selectOne[3]=="윗몸 일으키기" ? "selected" : ''}>윗몸 일으키기(SitUp)</option>
 							</select>
 							<input type="text" name="DESCRIPTION" 
-							value={selectOne != null ? selectOne[1] : ''} 
+							value={formData.DESCRIPTION != null ? formData.DESCRIPTION : selectOne != null ? selectOne[1] : ''} 
 							placeholder="제목" onChange={handleInputChange} />
 							<input type="number" name="COUNTS" min="1" 
-							value={selectOne != null ? selectOne[7] : ''} 
+							value={formData.COUNTS != null ? formData.COUNTS : selectOne != null ? selectOne[7] : ''} 
 							placeholder="횟수" onChange={handleInputChange} />
 							<input type="number" name="WEIGHT" step="0.01" min="0" 
-							value={selectOne != null ? selectOne[8] : ''} 
+							value={formData.WEIGHT != null ? formData.WEIGHT : selectOne != null ? selectOne[8] : ''} 
 							placeholder="무게" onChange={handleInputChange} />
 							<input type="text" name="MEMO" 
-							value={selectOne != null ? selectOne[2] : ''} 
+							value={formData.MEMO != null ? formData.MEMO : selectOne != null ? selectOne[2] : ''} 
 							placeholder="내용" onChange={handleInputChange} />
 							</div>
 							<input type="submit" value={selectOne != '' ? "수정": "등록"} className="submit-btn-modal"/>
