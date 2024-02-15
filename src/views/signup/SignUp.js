@@ -7,13 +7,14 @@ import './Register.css';
 import DaumPost from './DaumPost';  // DaumPost 컴포넌트
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
+import Breadcumb from '../component/Breadcumb/Breadcumb';
 
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
 const pnumRegex = '^\\d{11}$';
 
 function SignUp() {
-    const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [genderMessage, setGenderMessage] = useState('');
   const [interMessage, setInterMessage] = useState('');
@@ -25,7 +26,8 @@ function SignUp() {
   const [userEmail, setUserEmail] = useState('');
   const [emailCode, setemailCodeCode] = useState('');
   const [emailCodeMatch, setEmailCodeMatch] = useState(true);
-  const [emailButtonDisabled, setemailButtonDisabled] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
+  
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -45,7 +47,7 @@ function SignUp() {
   };
 
   const handleEmailCode = () => {
-    axios.get(`/user/mailCheck?email=${userEmail}`)
+    axios.get(`/mailCheck?email=${userEmail}`)
       .then(response => {
         console.log('응답:', response.data);
         setemailCodeCode(response.data);
@@ -57,16 +59,17 @@ function SignUp() {
       });
   };
   const handleCodeCheck = () => {
-    const inputCode = document.getElementById('verificationCodeInput').value;
-
-    if (inputCode === emailCode) {
+    if (emailInput == emailCode) {      
       setEmailCodeMatch(true);
-      alert('인증 코드가 일치합니다!');
-      setemailButtonDisabled(true);
-    } else {
+      alert('인증 코드가 일치합니다!');      
+    } else {     
       setEmailCodeMatch(false);
       alert('인증 코드가 일치하지 않습니다. 다시 시도해주세요.');
     }
+  };
+
+  const handleInputChange = (e) => {
+    setEmailInput(e.target.value);
   };
 
   const handleRegister = (e) => {
@@ -91,7 +94,7 @@ function SignUp() {
     // console.log(document.querySelector('input[name="gender"]:checked').id=='select_m' ? 'm' : 'w' );
     console.log(document.querySelector('input[name="inter"]:checked') == null);
 
-    // const year = e.target.year.value;
+     // const year = e.target.year.value;
     // 
     const age = currentYear - year + 1;
     const gender = document.querySelector('input[name="gender"]:checked').id=='select_m' ? 'M' : 'W';
@@ -108,8 +111,9 @@ function SignUp() {
     formData.append('age', age);
     formData.append('gender', gender);
     formData.append('hobby', inter);
+
     axios.post(`/joinMember`, formData, {
-      // axios.post(`http://192.168.0.44:3000/joinMember`, formData, {
+      // axios.post(`http://192.168.0.118:3000/joinMember`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -125,24 +129,24 @@ function SignUp() {
     
     return;
 
-    // 성별 선택 확인
-    const genderSelected = document.querySelector('input[name="gender"]:checked');
-    if (!genderSelected) {
-      setGenderMessage('성별을 선택하세요.');
-      return;
-    } else {
-      setGenderMessage('');
-    }
+   // 성별 선택 확인
+   const genderSelected = document.querySelector('input[name="gender"]:checked');
+   if (!genderSelected) {
+     setGenderMessage('성별을 선택하세요.');
+     return;
+   } else {
+     setGenderMessage('');
+   }
 
-    // 관심사 선택 확인
-    const interSelected = document.querySelector('input[name="inter"]:checked');
+     // 관심사 선택 확인
+     const interSelected = document.querySelector('input[name="inter"]:checked');
 
-    if (!interSelected) {
-      setGenderMessage('관심사를 선택하세요.');
-      return;
-    } else {
-      setGenderMessage('');
-    }
+     if (!interSelected) {
+       setGenderMessage('관심사를 선택하세요.');
+       return;
+     } else {
+       setGenderMessage('');
+     }
 
     // 비밀번호 확인
     const passwordChk = formData.get('passwordchk');
@@ -158,9 +162,6 @@ function SignUp() {
     for (var pair of formData.entries()) {
       console.log(pair[0] + ', ' + pair[1]);
     }
-
-    
-    // 
     
   };
 
@@ -169,36 +170,10 @@ function SignUp() {
         <HeaderTop/>
         <Header/>
 
-        {/*
-        <div className="loader-wrapper">
-            <div className="loader"></div>
-            <div className="loder-section left-section"></div>
-            <div className="loder-section right-section"></div>
-        </div>
-        */}
+        {/* 배경화면 */}
+        <Breadcumb title="signup" content="Account" subContent="signup"/>
 
-                {/*
-        <!--==================================================-->
-        <!-- Start breadcumb-area -->
-        <!--==================================================-->
-        */}
-        <div class="breadcumb-area d-flex align-items-center" style={{marginBottom:"100px"}}>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="breacumb-content">
-                            <div class="breadcumb-title">
-                                <h1>Community</h1>
-                            </div>
-                            <div className="breadcumb-content-text">
-                            <a href="index.html"> Social <i className="fas fa-angle-right"></i><span>Community</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <form className="login-form" onSubmit={handleRegister} method='post'>
+         <form className="login-form" onSubmit={handleRegister} method='post' style={{marginTop:"100px"}}>
         <h2 className="login-heading">회원 가입</h2>
         <h5 className="login-heading">다양한 서비스를 즐겨보세요!</h5>
         <br />
@@ -211,43 +186,35 @@ function SignUp() {
             title="이메일 형식으로 입력하세요."
             className="text-field"
             placeholder="이메일"
+            value={userEmail}
+            onChange={e => setUserEmail(e.target.value)}
           />
 
           <button id="mail-Check-Btn" 
                   className="verification-button" 
-                  onClick={handleEmailCode}
-                  disabled={emailButtonDisabled}
+                  onClick={handleEmailCode}                  
                   >인증
           </button>
         </div>
 
 
         <div id="info__email">
-          <input
-            id="emailCodeInput"
-            type="text"
-            name="email"
-            title="이메일 형식으로 입력하세요."
-            className="text-field"
-            placeholder="인증번호 입력"
-            onBlur={handleCodeCheck}
-          />
-
-          <button id="mail-Check-Btn" 
-                  className="verification-button" 
-                  onClick={handleEmailCode}
-                  disabled={emailButtonDisabled}
-                  >확인
-          </button>
+        <input
+        type="text"
+        id="emailCodeInput"
+        className="mail-check-input"
+        placeholder="인증번호 입력"
+        value={emailInput}
+        onChange={handleInputChange}
+      />
+      <button
+        id="mail-Check-submit"
+        className="verification-button"
+        onClick={handleCodeCheck}        
+      >
+        확인
+      </button>
         </div>
-
-
-
-
-
-
-
-
 
         <input
           type="password"
@@ -268,8 +235,8 @@ function SignUp() {
        
         <div className="info" id="info__birth" name='birth'>
           <div>
-            <input type="number" min="1900" max="2500" name="year" className="year" placeholder="년도(4자리)"/>
-            <select className="month">
+          <input type="number" min="1900" max="2500" name="year" className="year" placeholder="년도(4자리)" />
+          <select className="month">
               <option value="">월</option>
               <option value="">1월</option>
               <option value="">2월</option>
@@ -288,17 +255,17 @@ function SignUp() {
           </div>
         </div>
         <div id="find_adress">
-          <input type="text" id="postcode" name="postcode" placeholder="우편번호" value={postcode} readOnly />
-          
-          <button className="searchaddress-button" onClick={handleOpenDaumPost}>주소 검색</button>
-          {popup && <DaumPost handleAddressChange={handleAddressChange} />}
+        <input type="text" id="postcode" name="postcode" placeholder="우편번호" value={postcode} readOnly />
+
+        <button className="searchaddress-button" onClick={handleOpenDaumPost}>주소 검색</button>
+        {popup && <DaumPost handleAddressChange={handleAddressChange} />}
         </div>
           <input type="text"  id="address" name="address" placeholder="주소" value={address} readOnly/> 
           <input type="text" id="detailAddress" name="detailaddress" placeholder="상세주소"/>
         <div className="hr-sect">선택해주세요!</div>
         <div className="section-heading">성별</div>
         <div className="select_gender">
-          <input type="radio" id="select_m" name="gender" />
+        <input type="radio" id="select_m" name="gender" />
           <label htmlFor="select_m">남성</label>
           <input type="radio" id="select_f" name="gender" />
           <label htmlFor="select_f">여성</label>

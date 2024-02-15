@@ -9,7 +9,7 @@ module.exports = function (app) {
   );
   app.use(
     createProxyMiddleware('/joinMember', { //주소를 변수 처라 하면서 크로스 오리진
-      target: 'http://192.168.0.15:8080',
+      target: 'http://192.168.0.118:8080',
       changeOrigin: true,
     }),
   );
