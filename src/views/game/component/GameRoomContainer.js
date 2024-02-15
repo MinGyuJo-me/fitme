@@ -12,6 +12,7 @@ function GameRoomContainer() {
 
       <div className="gameroom-description">
         <div style={{fontSize:"20px", fontWeight:"600"}}>같이 게임할 사람 구해요<span>2023.04.12 14:23</span></div>
+        <div>플레이 시간: 13 minutes</div>
         <div>방 생성자: 조동훈</div>
       </div>
 

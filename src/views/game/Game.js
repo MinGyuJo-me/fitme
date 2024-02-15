@@ -18,6 +18,18 @@ import GameRoomContainer from './component/GameRoomContainer';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
+import GameRoomSideProfile from './component/GameRoomSideProfile';
+
+import styled from "styled-components";
+
+const StyledHeader = styled.div`
+  background: white;
+`;
+
+
+
+
+
 
 function Game() {
     const options = {
@@ -45,11 +57,12 @@ function Game() {
         {/*헤더 위*/}
         <HeaderTop/>
         {/*헤더 메인 메뉴*/}
+        <StyledHeader>
         <Header/>
+        </StyledHeader>
         {/* 로딩 애니메이션*/}
         <Loader/>
 
-        <Breadcumb title="game" content="game" subContent="room"/>
 
         <div className="blog-area style-two game-background-style">
           <div className="container">
@@ -57,11 +70,11 @@ function Game() {
               <div className="col-lg-12 col-md-12">
                 <div className="row">
                   <div className="col-lg-8 col-md-8 game-notice-layout" style={{marginRight:"50px"}}>
-                    
                       <div className='notice-box'>
                         <OwlCarousel {...options} className='notice-box-item'>
-                          <div>공지사항: 내용</div>
-                          <div>게임 기록 알림: 내용</div>
+                          <div> <i className='fas fa-bell'></i> [공지사항] 2023년 07월 23일. 게임 업데이트 관련 안내</div>
+                          <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇ님이 랭킹 게임에서 35 Points를 얻었습니다.</div>
+                          <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다.</div>
                         </OwlCarousel>
                       </div>
                     
@@ -78,29 +91,16 @@ function Game() {
                         <GameRoomContainer/>
                         <GameRoomContainer/>
                         <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
                       </div>
                     </div>
                   </div>
 
-
-
-                  <div className="col-lg-3 col-md-3 game-profile-layout">
-                    <div className="row">
-                      <div className='col-lg-10 col-md-10 game-profile'>
-                      </div>
-                      <div className='col-lg-10 col-md-10 game-profile-name'>
-                          프로필 기록 (승패)
-                      </div>
-
-                      <div className='col-lg-10 col-md-10 game-play-button-layout'>
-                          <button className="game-play-button">일반 게임</button>
-                          <button className="game-play-button">랭킹 게임</button>
-                      </div>
-                    </div>
-                  </div>
-
-
-
+                  {/*게임 프로필 영역*/}
+                  <GameRoomSideProfile/>
                 </div>
               </div>
             </div>
