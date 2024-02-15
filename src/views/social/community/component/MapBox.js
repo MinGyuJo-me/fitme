@@ -130,7 +130,7 @@ function MapBox(props) {
                         onChange={handleInputChange}
                         placeholder="Search...."
                     />
-                    <button className="button search-button" type="submit">
+                    <button className="button search-button" type="submit" style={{top:'8px'}}>
                         <i className="fas fa-search icon-manipulate"></i>
                     </button>
                 </form>
