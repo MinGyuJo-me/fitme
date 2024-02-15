@@ -48,6 +48,7 @@ function Community() {
     const [boards, setBoards] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -107,6 +108,41 @@ function Community() {
         .catch(error => console.log(error));
     }, []);
 
+    // 특정 게시글 상세 조회
+    useEffect(() => {
+        axios.get('http://192.168.0.15:8080/api/v1/boards', {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            const updatedBoards = await Promise.all(response.data.map(async board => {
+                const image = await imageData(board.image);
+                board.image = image;
+                return board;
+            }));
+    
+            setBoards(updatedBoards);
+        })
+        .catch(error => console.log(error));
+    }, []);
+
+    //모달창 외부 스크롤 방지
+    useEffect(() => {
+        if (isOpen) {
+          document.documentElement.style.overflow = 'hidden';
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.documentElement.style.overflow = 'auto';
+          document.body.style.overflow = 'auto';
+        }
+        return () => {
+          document.documentElement.style.overflow = 'auto';
+          document.body.style.overflow = 'auto';
+        };
+      }, [isOpen]);
+
 
   return (
     <div>
@@ -154,12 +190,14 @@ function Community() {
                                 likes={board.like}
                                 title={board.title}
                                 comment={board.boardComment}
+                                isOpen={isOpen}
+                                setIsOpen={setIsOpen}
                             />
                         ))}
                         
                         {showModal && (
                             <Modal onClose={() => setShowModal(false)}>
-                               <CommunityBoardWriteModal/>
+                               <CommunityBoardWriteModal accountNo={userInfo.accountNo}/>
                             </Modal>
                         )}
                         
@@ -173,9 +211,26 @@ function Community() {
             </div>
         </div>
         {/*푸터 영역*/}
-        <CommunityBoardViewModal writer="PARK-SANG-NYEONG" position="영등포" postDate="January 27, 2023"
-                                        title="내가 새로 산 차1" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
-                        />
+        {isOpen && (
+            <Modal
+            open={isOpen}
+            onClose={() => {
+              setIsOpen(false);
+            }}
+          >
+            <CommunityBoardViewModal 
+                // bno={board.bno} 
+                // name={board.name}
+                // image={board.image}
+                // address={board.address}
+                // postDate={board.postDate}
+                // likes={board.like}
+                // title={board.title}
+                // comment={board.boardComment}
+            />
+          </Modal>
+            
+        )}
         <Footer/>
     </div>
   );
