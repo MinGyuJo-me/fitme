@@ -27,7 +27,7 @@ function Modal(props) {
 
   return (
     <div className="Modal" onMouseDown={closeModal}>
-      <div className="modalBody_w" onMouseDown={(e) => e.stopPropagation()}>
+      <div className="modalBody" onMouseDown={(e) => e.stopPropagation()}>
         <button id="modalCloseBtn" onMouseDown={closeModal}>
           ✖
         </button>
