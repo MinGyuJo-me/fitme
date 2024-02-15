@@ -71,31 +71,32 @@ async function imageData(code){
   }
 //
 
-/*
+
 //좋아요
-const testLike = (e) => {
-	var btnLike = e.target.children[0].value;
-	var dateLike = e.target.children[1].value;
-	console.log('dateLike : ', dateLike.length)
+const workLike = (e) => {
+	var btnLike = e.target.parentElement.children[0].value;
+	var dateLike = e.target.parentElement.children[1].value;
+	console.log('dateLike : ', dateLike.length);
 	if(dateLike.length <= 0){
 		axios.post(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
 			headers: {
 				'Content-Type':'multipart/form-data',
 			}
 		})
-		e.target.children[1].value = new Date();
-		e.target.style.backgroundColor = 'rgb(255, 0, 200)';
+    e.target.src = require('./images/heart.png');
+    e.target.parentElement.children[1].value =new Date();
+    console.log('e.target.src',e.target.src);
 	}else{
 		axios.delete(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
 			header: {
 				'Content-Type':'multipart/form-data',
 			}
 		})
-		e.target.style.backgroundColor = 'rgb(96, 177, 89)';
-		e.target.children[1].value = '';
+    e.target.src = require('./images/empty-heart.png');
+    e.target.parentElement.children[1].value ='';
 	}
 }
-*/
+
 
 function Workout() {
 	const [mark, setMark] = useState([]);	//
@@ -507,8 +508,18 @@ function Workout() {
 									<h2>{test[3]}</h2>
 									<p>{test[6]} All counts</p>
 									<p>{test[7]} kg</p>
-									<div class="blog-button">
-										<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
+									<div class="blog-button" >
+                    <div type="button" className="like-button" onClick={workLike}>
+                      <input type='hidden' value={test[0]} />
+                      <input type='hidden' value={test[8]} />
+                      {
+                      test[8] != null?
+                        <img src={require('./images/heart.png')} alt="like"/>
+                        :
+                        <img src={require('./images/empty-heart.png')} alt="like"/>
+                      }
+                      {/* <img src={require('./images/empty-heart.png')} alt="empty-like"/> */}
+                    </div>
 									</div>
 								</div>
 							</div>
