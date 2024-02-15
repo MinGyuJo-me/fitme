@@ -11,25 +11,58 @@ import Breadcumb from '../component/Breadcumb/Breadcumb';
 
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
-const pnumRegex = '^\\d{11}$';
+
 
 function FindPassword() {
-  const [password, setPassword] = useState('');
-  const [passwordMatch, setPasswordMatch] = useState(true);
-
   const navigate = useNavigate();
-  const formData = new FormData();
   const [userEmail, setUserEmail] = useState('');
   const [emailCode, setemailCodeCode] = useState('');
-  const [emailCodeMatch, setEmailCodeMatch] = useState(true);
+  const [emailCodeMatch, setEmailCodeMatch] = useState('');
   const [emailButtonDisabled, setemailButtonDisabled] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+    // setPassword(e.target.value);
+    e.preventDefault();
+
+    // 이메일 입력 값 가져오기
+    const userEmail = e.target.email.value;
+
+    // 인증 코드 입력 값 가져오기
+    const inputCode = e.target.emailCodeMatch.value;
+
+    // 새 비밀번호 입력 값 가져오기
+    const newPassword = e.target.passwordchk.value;
+
+    // 이메일과 새 비밀번호가 비어 있는지 확인
+    if (!userEmail || !newPassword) {
+        alert('이메일과 새 비밀번호를 모두 입력해주세요.');
+        return;
+    }
+
+    // 서버로 전송할 데이터
+    const requestData = {
+        username: userEmail,       
+        newPassword: newPassword
+    };
+
+    // 서버로 데이터 전송
+    axios.post('/passwordReset', requestData)
+        .then(response => {
+            // 서버 응답 처리
+            console.log(response.data);
+            alert('비밀번호가 성공적으로 변경되었습니다.');
+            // 로그인 페이지로 이동 또는 다른 작업 수행
+        })
+        .catch(error => {
+            // 에러 처리
+            console.error('에러:', error.response.data);
+            alert('비밀번호 변경에 실패했습니다. 재시도해주세요.');
+        });
   };  
 
 
-  const handleEmailCode = () => {
+  const handleEmailCode = (e) => {
     axios.get(`/mailCheck?email=${userEmail}`)
       .then(response => {
         console.log('응답:', response.data);
@@ -58,63 +91,14 @@ function FindPassword() {
   const handleRegister = (e) => {
     e.preventDefault();
     //유효성 체크
-    if(e.target.email.value.length == 0) {alert('email'); return;}
-    if(e.target.password.value.length == 0) {alert('password'); return;}
-    if(e.target.passwordchk.value !== e.target.password.value) {alert('passwordchk'); return;}
-
-    console.log(document.querySelector('input[name="inter"]:checked') == null);
-
-    // var child = e.target.children;
-    //보낼 값
-    formData.append('username', e.target.email.value);
-    formData.append('password', e.target.password.value);    
-
-    axios.post(`/joinMember`, formData, {
-      // axios.post(`http://192.168.0.118:3000/joinMember`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((response) => {
-        alert('성공');
-        navigate('/signin');
-      })
-      .catch((error) => {
-        console.error('서버 오류:', error);
-        alert('에러');
-      });
-    
+    if(e.target.email.value.length == 0) {alert('이메일을 입력하세요'); return;}
     return;
-
-    // 비밀번호 확인
-    const passwordChk = formData.get('passwordchk');
-
-    if (password !== passwordChk) {
-      setPasswordMatch(false);
-      return;
-    } else {
-      setPasswordMatch(true);
-    }
-
-    // FormData 확인
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
-    }
-    
   };
 
   return (
     <div style={{paddingBottom:"80px"}}>
         <HeaderTop/>
         <Header/>
-
-        {/*
-        <div className="loader-wrapper">
-            <div className="loader"></div>
-            <div className="loder-section left-section"></div>
-            <div className="loder-section right-section"></div>
-        </div>
-        */}
 
         {/* 제목 배경화면 */}
         <Breadcumb title="findpassword" content="Account" subContent="findpassword"/>
@@ -123,7 +107,7 @@ function FindPassword() {
 
         <form className="login-form" onSubmit={handleRegister} method='post' style={{marginTop:"100px"}}>
         <h2 className="login-heading">비밀번호 찾기</h2>
-        <h5 className="login-heading">다양한 서비스를 즐겨보세요!</h5>
+        <h5 className="login-heading">이메일 인증 후 비밀번호를 찾으세요.</h5>
         <br />  
         <div id="info__email">
           <input
@@ -147,15 +131,17 @@ function FindPassword() {
 
         <div style={{ position: 'relative' }}>
           <input
-            type="text"
-            id="emailCodeInput"
-            className="mail-check-input mci"
+            type="text"            
+            value={emailCodeMatch}
+            className="mail-check-input"
+            onChange={e => setEmailCodeMatch(e.target.value)}            
             placeholder="인증번호 입력"
           />
           <button
             id="mail-Check-submit"
-            className="verification-button-submit mcs"
+            className="verification-button-submit"
             style={{ position: 'absolute', right:'5px', top: '30%', transform: 'translateY(-50%)' }}
+            onClick={handleCodeCheck}
           >
             확인
           </button>
@@ -166,19 +152,17 @@ function FindPassword() {
             name="passwordchk" 
             className="text-field" 
             placeholder="비밀번호 수정" 
+            value={newPassword}
+            onChange={e => setNewPassword(e.target.value)}
           />        
           <button 
             id="password-Check-submit" 
             className="verification-button-submit pcs"
+            onClick={handlePasswordChange}
             style={{ position: 'absolute', right:'5px', top: '30%', transform: 'translateY(-50%)' }} 
             > 수정 
-          </button>
-          {!passwordMatch && (
-            <p style={{ color: 'red', fontSize: '14px', marginTop: '-10px' }}>비밀번호가 일치하지 않습니다.</p>
-          )}
+          </button>         
         </div>
-       
-
        
         
         <div className=" hs"></div>
@@ -186,7 +170,7 @@ function FindPassword() {
         <input type="submit" value="확인" className="submit-btn subtn" />
         <div className="links">
           <p>
-            이미 계정이 있으신가요? <a href="/signin">로그인</a>
+            비밀번호를 기억하셧나요? <a href="/signin">로그인</a>
           </p>
         </div>
         <p className="agree">
