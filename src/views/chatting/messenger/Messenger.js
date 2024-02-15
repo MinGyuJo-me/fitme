@@ -91,7 +91,24 @@ function Messenger() {
         })
     }
 
-    
+    //엔터키 막기
+    const onEnterSubmit = (e) => {
+      try {
+        if (e.isComposing || e.keyCode === 229) return;
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          const form = e.target.closest('.chat-message');
+          const sendButton = form.querySelector('button');
+          if (!sendButton) {
+            console.error("Button not found inside the form:", form);
+            return;
+          }
+          sendButton.click();
+        }
+      } catch (error) {
+        console.error("Error in onEnterSubmit:", error);
+      }
+    };
 
     const connect = () => {
         client.current = new StompJs.Client({
@@ -352,7 +369,7 @@ function Messenger() {
         
       </div> 
       
-        <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
+      <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)} onKeyDown={onEnterSubmit}>
             <textarea name="message-to-send" id="message-to-send" placeholder ="메시지를 입력해 주세요" onChange={handleChange} rows="3"></textarea>
             <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>      
             <button>Send</button>
