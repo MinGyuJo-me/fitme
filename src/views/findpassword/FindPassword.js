@@ -155,7 +155,7 @@ function FindPassword() {
           <button
             id="mail-Check-submit"
             className="verification-button-submit mcs"
-            style={{ position: 'absolute', right:'5px', top: '30%', transform: 'translateY(-50%)' }}
+            style={{ position: 'absolute', right:'20px', top: '25%', transform: 'translateY(-50%)' }}
           >
             확인
           </button>
@@ -170,7 +170,7 @@ function FindPassword() {
           <button 
             id="password-Check-submit" 
             className="verification-button-submit pcs"
-            style={{ position: 'absolute', right:'5px', top: '30%', transform: 'translateY(-50%)' }} 
+            style={{ position: 'absolute', right:'20px', top: '25%', transform: 'translateY(-50%)' }} 
             > 수정 
           </button>
           {!passwordMatch && (

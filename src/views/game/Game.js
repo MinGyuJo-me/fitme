@@ -8,9 +8,46 @@ import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
 import $ from 'jquery';
 import Wrapper from '../component/Wrapper/Wrapper';
+
+import GameRoomSearch from './component/GameRoomSearch';
 import './Game.css';
 
+
+import GameRoomContainer from './component/GameRoomContainer';
+
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+import GameRoomSideProfile from './component/GameRoomSideProfile';
+
+import styled from "styled-components";
+
+const StyledHeader = styled.div`
+  background: white;
+`;
+
+
+
+
+
+
 function Game() {
+    const options = {
+      animateOut: 'slideOutUp',
+      animateIn: 'slideInUp',
+      margin:10,
+      loop: true,
+      items: 1,
+      dots:false,
+      autoplay:true,
+      autoplayTimeout: 4500,
+      smartSpeed: 4000,
+      mouseDrag: false
+    };
+
+
+
+
     useEffect(()=>{
         $('body').addClass('loaded');
     });
@@ -20,25 +57,50 @@ function Game() {
         {/*헤더 위*/}
         <HeaderTop/>
         {/*헤더 메인 메뉴*/}
+        <StyledHeader>
         <Header/>
+        </StyledHeader>
         {/* 로딩 애니메이션*/}
         <Loader/>
 
-        <div className="blog-area style-two">
+
+        <div className="blog-area style-two game-background-style">
           <div className="container">
             <div className="row">
-              <div className="col-lg-12">
+              <div className="col-lg-12 col-md-12">
                 <div className="row">
-                  <div className="col-lg-8 col-md-8 game-layout" style={{marginRight:"50px"}}>
-                  </div>
-                  <div className="col-lg-3 col-md-3 game-layout">
-                    <div className="row">
-                      <div className='col-lg-12' style={{border:"1px solid red"}}>
-
+                  <div className="col-lg-8 col-md-8 game-notice-layout" style={{marginRight:"50px"}}>
+                      <div className='notice-box'>
+                        <OwlCarousel {...options} className='notice-box-item'>
+                          <div> <i className='fas fa-bell'></i> [공지사항] 2023년 07월 23일. 게임 업데이트 관련 안내</div>
+                          <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇ님이 랭킹 게임에서 35 Points를 얻었습니다.</div>
+                          <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다.</div>
+                        </OwlCarousel>
                       </div>
-                    </div>
                     
                   </div>
+
+                  <div className="col-lg-8 col-md-8 game-layout" style={{marginRight:"50px"}}>
+                    <div className="row">
+                      <div className='col-lg-11 col-md-11'>
+                        <GameRoomSearch/>
+                      </div>
+
+                      <div className='col-lg-11 col-md-11 game-room-layout'>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/*게임 프로필 영역*/}
+                  <GameRoomSideProfile/>
                 </div>
               </div>
             </div>

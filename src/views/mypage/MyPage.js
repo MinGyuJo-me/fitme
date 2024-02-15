@@ -239,103 +239,110 @@ function MyPage() {
         </div>
 
 
-                <div className="company-info-section">
+        <div className="company-info-section">
             <div className="container">
-                <div className="sideber-box sb-rjm1" style={{ height: 500, display: 'flex', gap: 20, alignSelf: 'flex-start', position: 'relative' }}>
-                    <div className='main-titles' style={{ marginTop: '-30px' }}>
-                        <h3>회원 정보</h3>
+                <div className="sideber-box sb-rjm1" style={{ display: 'flex', alignSelf: 'flex-start', position: 'relative' }}>
+                    <div className='main-titles' style={{ top: '10px', marginTop: '-30px' }}>
+                        <h1>회원 정보</h1>
                     </div>
-                    <div className='sideber-item'>
-                        <img id='ibox' src={accountData.image} /*src={require('../../../assets/images/blog-0.jpg')}*/ alt="프로필 사진" style={{ width: '50%', height: '70%' }} />
+                    <div className='sideber-item' style={{overflow:'hidden'}}>
+                        <img id='ibox' src={accountData.image} alt="프로필 사진" style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
                         <div className="form_row">
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'50px'}}>
                                     <span className="label">닉네임:</span>
                                     <span className="value" id="username"  style={{fontFamily:"Lobster"}}>JohnDoe123</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'50px'}}>
                                     <span className="label">이름:</span>
                                     <span className="value" id="name">{accountData.name}</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'50px'}}>
                                     <span className="label">주소:</span>
                                     <span className="value" id="address">{accountData.address}</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'50px'}}>
                                     <span className="label">포인트:</span>
                                     <span className="value" id="point">500</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'50px'}}>
                                     <span className="label">성별:</span>
                                     <span className="value" id="gender">{accountData.gender === 'M'? '남성':'여성'}</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'50px'}}>
                                     <span className="label">취미:</span>
                                     <span className="value" id="interest">{accountData.hobby === 'E'? '운동':'식단'}</span>
                                 </div>
                             </div>
                         </div>
+                    </div>    
+                </div>
+            </div>
+        </div>
+
+        <div className="company-info-section">
+            <div className="container">
+                <div className="sideber-box sb-rjm1" style={{ display: 'flex', alignSelf: 'flex-start', position: 'relative' }} >
+                    <div className='main-titles' style={{ top: '10px', marginTop: '-30px' }}>
+                        <h1>게임 기록</h1>
                     </div>
-                    <div className='sideber-item'>
-                        <img id='ibox' src={accountData.game_image} alt="게임 프로필 사진" style={{ width: '50%', height: '70%' }} />
-                        <div className='main-titles' style={{ marginTop: '-30px' ,top: '50%', left: '50%', marginTop: '-265px', marginLeft: '-10px'}}>
-                            <h3>게임 기록</h3>
-                        </div>
+                    <div className='sideber-item' style={{overflow:'hidden'}}>
+                        <img id='ibox' src={accountData.image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
                         <div className="form_row">
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">닉네임:</span>
                                     <span className="value" id="username">JohnDoe123</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">평균 등수:</span>
                                     <span className="value" id="rank">3.5</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">승률:</span>
                                     <span className="value" id="winrate">50%</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">승:</span>
                                     <span className="value" id="win">30</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">패:</span>
                                     <span className="value" id="lose">30</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">스쿼트:</span>
                                     <span className="value" id="squat">78%</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box"style={{marginBottom:'30px'}}>
                                     <span className="label">윗몸:</span>
                                     <span className="value" id="sit-up">50%</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">팔굽:</span>
                                     <span className="value" id="push-ups">44%</span>
                                 </div>
@@ -345,6 +352,7 @@ function MyPage() {
                 </div>
             </div>
         </div>
+        
 
     <div className="container">
 	<div className="title">
@@ -352,23 +360,33 @@ function MyPage() {
 	</div>
 	<div className="company-info-section">
 		<div className="sideber-box">
-		<div className="col-lg-calorie" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-            <div>맛있는거</div>
-            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란1</div>
-            <div>맛있는거</div>
-            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                <Line options={options} data={data1} />
+		    <div className="col-lg-calorie" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
+                <div>맛있는거</div>
+                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                        <Line options={options} data={data1} />
+                    </div>
+                <div>맛있는거</div>
+                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                        <Line options={options} data={data1} />
+                    </div>
+                <div>맛있는거</div>
+                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                        <Line options={options} data={data1} />
+                    </div>
+                <div>맛있는거</div>
+                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                        <Line options={options} data={data1} />
+                    </div>
+                <div>맛있는거</div>
+                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                        <Line options={options} data={data1} />
+                    </div>
+                </div>
             </div>
-            <div>맛있는거</div>
-            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란3</div>
-            <div>맛있는거</div>
-            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란4</div>
-            <div>맛있는거</div>
-            <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>차트가 들어갈 란5</div>
-		</div>
-		</div>
-	</div>
+	    </div>
     </div>
+
+    
   
 
     <div className="container">
