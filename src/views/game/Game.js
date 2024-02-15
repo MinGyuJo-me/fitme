@@ -10,7 +10,30 @@ import $ from 'jquery';
 import Wrapper from '../component/Wrapper/Wrapper';
 import './Game.css';
 
+
+import GameRoomContainer from './component/GameRoomContainer';
+
+import OwlCarousel from 'react-owl-carousel';
+import 'owl.carousel/dist/assets/owl.carousel.css';
+import 'owl.carousel/dist/assets/owl.theme.default.css';
+
 function Game() {
+    const options = {
+      animateOut: 'slideOutUp',
+      animateIn: 'slideInUp',
+      margin:10,
+      loop: true,
+      items: 1,
+      dots:false,
+      autoplay:true,
+      autoplayTimeout: 4500,
+      smartSpeed: 4000,
+      mouseDrag: false
+    };
+
+
+
+
     useEffect(()=>{
         $('body').addClass('loaded');
     });
@@ -24,38 +47,40 @@ function Game() {
         {/* 로딩 애니메이션*/}
         <Loader/>
 
-        <div className="blog-area style-two">
+        <Breadcumb title="game" content="game" subContent="room"/>
+
+        <div className="blog-area style-two game-background-style">
           <div className="container">
             <div className="row">
               <div className="col-lg-12">
                 <div className="row">
-
-
-
                   <div className="col-lg-8 col-md-8 game-notice-layout" style={{marginRight:"50px"}}>
-                    <div className="row">
-                      공지사항, 알림
-                    </div>
+                    
+                      <div className='notice-box'>
+                        <OwlCarousel {...options}>
+                          <div>공지사항: 내용</div>
+                          <div>게임 기록 알림: 내용</div>
+                        </OwlCarousel>
+                      </div>
+                    
                   </div>
-
-
 
                   <div className="col-lg-8 col-md-8 game-layout" style={{marginRight:"50px"}}>
                     <div className="row">
                       <div className='col-lg-11 game-room-layout'>
-                          일반 게임방 보기
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
+                        <GameRoomContainer/>
                       </div>
                     </div>
                   </div>
 
 
 
-
-
                   <div className="col-lg-3 col-md-3 game-profile-layout">
                     <div className="row">
                       <div className='col-lg-10 game-profile'>
-                          프로필 사진
                       </div>
                       <div className='col-lg-10 game-profile-name'>
                           프로필 기록 (승패)

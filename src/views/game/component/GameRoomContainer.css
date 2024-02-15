@@ -1,0 +1,60 @@
+.gameroom-container{
+    position: relative;
+    height: 120px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    display: flex;
+    gap:20px;
+}
+
+.gameroom-icon{
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    width: 20%;
+    background-image: url("../images/game_squat.png");
+    background-size: 75% 75%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.gameroom-description{
+    box-shadow: inset 0px 0px 4px 1px rgba(0, 0, 0, 0.2);
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.gameroom-button-layout{
+    position: absolute;
+    right: 1%;
+    bottom: 5%;
+    border: 1px solid red;
+    width: 20%;
+    height: 35%;
+    display: flex;
+    gap:10px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.gameroom-button{
+    position: relative;
+    border-radius: 50%;
+    box-sizing: border-box;
+    height: 35px;
+    width: 35px;
+    padding: 5px;
+    box-shadow: inset 2px 2px 5px 1px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.gameroom-button > img{
+    width: 90%;
+    height: 90%;
+}
