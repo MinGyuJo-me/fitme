@@ -11,7 +11,7 @@ import './Messenger.css';
 //chat
 import * as StompJs from '@stomp/stompjs';
 //componants
-import Modal from "./modal";
+import { Modal } from 'react-bootstrap';
 
 let chatNo = 0;
 function getCookie(name) { //로그인 여부 확인
