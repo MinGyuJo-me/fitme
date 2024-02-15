@@ -68,7 +68,7 @@ function MyPage() {
         
         const myCookieValue = getCookie('Authorization');
         setMyCookie(myCookieValue);
-        // console.log('myCookieValue',myCookieValue);
+        console.log('myCookieValue',myCookieValue);
         if(myCookieValue == null){ //로그인 확인
             navigate('/signin');
         }
@@ -95,21 +95,22 @@ function MyPage() {
                     setAccount(proflieData);
                 })
             }
+            if(proflieData.game_image!=null){
+                imageData(proflieData.game_image).then((test)=>{
+                    proflieData.image = test;
+                    setAccount(proflieData);
+                })
+            }else{
+                imageData('1').then((test)=>{
+                    proflieData.game_image = test;
+                    setAccount(proflieData);
+                })
+            }
         })
         .catch(error => console.log(error))
     },[])
 
     useEffect(()=>{
-        // axios.get(`http://localhost:8080/api/v1/mypages/games/${accountNo}`, {
-        //     headers: {
-        //         'Authorization' : `${myCookie}`,
-        //         'Content-Type' : 'application/json; charset=UTF-8'
-        //     }
-        // })
-        // .then(response => {
-        //     console.log('games',response.data);
-        // })
-        // .catch(error => console.log(error));
         console.log('accountNo',accountNo);
         if(accountNo != null){
             axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
