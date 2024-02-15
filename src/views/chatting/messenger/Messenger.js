@@ -110,6 +110,15 @@ function Messenger() {
       }
     };
 
+    //스크롤
+    const chatHistoryRef = useRef();
+
+    useEffect(() => {
+      if (chatHistoryRef.current) {
+        chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+      }
+    }, [chatList]);
+
     const connect = () => {
         client.current = new StompJs.Client({
             brokerURL: 'ws://192.168.0.15:8080/ws',
@@ -339,7 +348,7 @@ function Messenger() {
                     )}
         </div>
       
-      <div className="chat-history">
+      <div className="chat-history" ref={chatHistoryRef}>
         <ul>
             {chatList.map((chat)=>(
                 chat.accountNo == userId?
