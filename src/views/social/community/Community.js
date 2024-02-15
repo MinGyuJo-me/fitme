@@ -69,7 +69,7 @@ function Community() {
 
     // 사용자 정보 프로필 정보 조회
     useEffect(() => {
-        axios.get('http://localhost:8080/api/v1/boards/account', {
+        axios.get('http://192.168.0.15:8080/api/v1/boards/account', {
           headers: {
             'Authorization' : `${myCookieValue}`,
             'Content-Type' : 'application/json; charset=UTF-8'
@@ -89,7 +89,7 @@ function Community() {
 
     // 게시글 전체 목록 조회
     useEffect(() => {
-        axios.get('http://localhost:8080/api/v1/boards', {
+        axios.get('http://192.168.0.15:8080/api/v1/boards', {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'

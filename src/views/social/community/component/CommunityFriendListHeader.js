@@ -44,7 +44,7 @@ function CommunityFriendListHeader() {
     // 친구 목록 조회
     useEffect(() => {
         if (showFriend === false) {
-            axios.get('http://localhost:8080/api/v1/boards/friend', {
+            axios.get('http://192.168.0.15:8080/api/v1/boards/friend', {
                 headers: {
                     'Authorization': `${myCookieValue}`,
                     'Content-Type': 'application/json; charset=UTF-8'
