@@ -286,55 +286,55 @@ function Workout() {
 		}
 
 		if(formData2[formData2.length -2].value == '수정'){
-      var endTime = e.target.children[1].children[0].children[0].children[1].children[0].value;
-      var accountNo = e.target.children[0].value;
-      // console.log(accountNo);
-      formData1.append('END_DATE', endTime);
-			// console.log(String(formData2[2].value).split()[0])
-      axios.put(`http://${ipAddress}:5000/workout/${accountNo}`, formData1, {
-        headers:{
-        'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(response => {
-        console.log("주소:", response.data);
-        swal({title:"입력 성공!",icon:"success"})  
-        //서버에 데이터 입력 성공시 모달창 닫기
-        console.log('날짜',value);
-        callis(workoutCal,value);//새롭게 데이타 추가
+			var endTime = e.target.children[1].children[0].children[0].children[1].children[0].value;
+			var accountNo = e.target.children[0].value;
+			// console.log(accountNo);
+			formData1.append('END_DATE', endTime);
+					// console.log(String(formData2[2].value).split()[0])
+			axios.put(`http://${ipAddress}:5000/workout/${accountNo}`, formData1, {
+				headers:{
+				'Content-Type': 'multipart/form-data',
+				},
+			})
+			.then(response => {
+				console.log("주소:", response.data);
+				swal({title:"입력 성공!",icon:"success"})  
+				//서버에 데이터 입력 성공시 모달창 닫기
+				console.log('날짜',value);
+				callis(workoutCal,value);//새롭게 데이타 추가
 
-        setIsOpen(false);
-      })
-      .catch(error => {
-        console.error('서버 오류:', error);
-        swal({title:"입력 실패",icon:"error"})
-      });
+				setIsOpen(false);
+			})
+			.catch(error => {
+				console.error('서버 오류:', error);
+				swal({title:"입력 실패",icon:"error"})
+			});
 			console.log("put");
 		}else{
-      var endTime = e.target.children[1].children[0].children[0].children[1].children[0].value;
-      formData1.append('END_DATE', endTime);
-      console.log(formData1);
-      console.log("post",formData['CATEGORY'] == '');
+			var endTime = e.target.children[0].children[0].children[0].children[1].children[0].value;
+			formData1.append('END_DATE', endTime);
+			// console.log('end',e.target.children[0].children[0].children[0].children[1].children[0].value);
+			// console.log("post",formData['CATEGORY'] == '');
 
-      axios.post(`http://${ipAddress}:5000/workout/${workoutCal}`, formData1, {
-        headers:{
-        'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(response => {
-        console.log("주소:", response.data);
-        swal({title:"입력 성공!",icon:"success"})  
-        //서버에 데이터 입력 성공시 모달창 닫기
-        console.log('날짜',value);
-        callis(workoutCal,value);//새롭게 데이타 추가
+			axios.post(`http://${ipAddress}:5000/workout/${workoutCal}`, formData1, {
+				headers:{
+				'Content-Type': 'multipart/form-data',
+				},
+			})
+			.then(response => {
+				console.log("주소:", response.data);
+				swal({title:"입력 성공!",icon:"success"})  
+				//서버에 데이터 입력 성공시 모달창 닫기
+				console.log('날짜',value);
+				callis(workoutCal,value);//새롭게 데이타 추가
 
-        setIsOpen(false);
-      })
-      .catch(error => {
-        console.error('서버 오류:', error);
-        swal({title:"입력 실패",icon:"error"})
-      });
-    }
+				setIsOpen(false);
+			})
+			.catch(error => {
+				console.error('서버 오류:', error);
+				swal({title:"입력 실패",icon:"error"})
+			});
+		}
   };
 	//
 
