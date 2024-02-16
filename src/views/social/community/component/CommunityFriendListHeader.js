@@ -4,7 +4,69 @@ import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 
+
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
+
+
 function CommunityFriendListHeader() {
+
+    function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith(name + '=')) {
+            return cookie.substring(name.length + 1);
+          }
+        }
+        return null;
+    }
+    
+    const myCookieValue = getCookie('Authorization');
+
+    const [friendsInfo, setFriendsInfo] = useState([]);
+    const [showFriend, setShowFriend] = useState(false);
+
+    //이미지서버 연결 
+    async function imageData(code){
+        return await new Promise((resolve,reject)=>{
+        try{
+            axios.get(`http://192.168.0.15:5050/image/${code}`)
+            .then((response)=>{
+                resolve("data:image/png;base64,"+response.data['image']);
+            })
+        }
+        catch(err){reject(err)};
+        },2000);
+    }
+
+    // 친구 목록 조회
+    useEffect(() => {
+        if (showFriend === false) {
+            axios.get('http://192.168.0.15:8080/api/v1/boards/friend', {
+                headers: {
+                    'Authorization': `${myCookieValue}`,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                }
+            })
+            .then(response => {
+                console.log(response.data.length);
+                Promise.all(response.data.map(async friend => {
+                    const image = await imageData(friend.image);
+                    friend.image = image;
+                    return friend;
+                }))
+                .then(updatedFriendsInfo => {
+                    setFriendsInfo(updatedFriendsInfo);
+                    setShowFriend(true);
+                })
+                .catch(error => console.log(error));
+            })
+            .catch(error => console.log(error));
+        } 
+    }, [showFriend]);
+
     const friendsOption={
         responsive: {
             0: {
@@ -23,36 +85,33 @@ function CommunityFriendListHeader() {
             <div className="col-lg-12 col-sm-12 friendlist ">
                 <div className="blog-single-box upper friend-icon-box" style={{background:"#F6F4EC"}}>
                     <OwlCarousel items={9} nav={false} dots={false} {...friendsOption}>
-                        <Follower name="조동훈1"/>
-                        <Follower name="조동훈2"/>
-                        <Follower name="조동훈3"/>
-                        <Follower name="조동훈4"/>
-                        <Follower name="조동훈5"/>
-                        <Follower name="조동훈6"/>
-                        <Follower name="조동훈7"/>
-                        <Follower name="조동훈8"/>
-                        <Follower name="조동훈9"/>
-                        <Follower name="조동훈10"/>
+                        {friendsInfo.map(friendInfo => (
+                            <Follower
+                                image={friendInfo.image}
+                                name={friendInfo.name}
+                            />
+                        ))}
                     </OwlCarousel>
                 </div>
             </div>
         </div>
     );
   }
-  
 
-
-  function Follower({name}){
+  function Follower(props){
     return(
         <div className='friend-icon-item'>
-            <div className='blog-icon bi1' style={{boxShadow:"none"}}>
+            <div className='blog-icon bi1' style={{boxShadow:"none", backgroundImage: `url(${props.image})`}}>
             </div>
             <div className='blog-icon-description'>
-                {name}
+                {props.name}
             </div>
         </div>
     )
   }
+
+
+  
   export default CommunityFriendListHeader;
   
 
