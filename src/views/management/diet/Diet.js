@@ -606,16 +606,18 @@ function Diet() {
 									<h2>{test[1]}</h2>
 									<p>{test[2]}</p>
 									<p>{test[5]}</p>
-									<div type="button" className="like-button" onClick={foodLike}>
-										<input type='hidden' value={test[0]} />
-										<input type='hidden' value={test[6]} />
-										{
-										test[6] != null?
-											<img src={require('./images/heart.png')} alt="like"/>
-											:
-											<img src={require('./images/empty-heart.png')} alt="like"/>
-										}
-										{/* <img src={require('./images/empty-heart.png')} alt="empty-like"/> */}
+									<div class="blog-button" >
+										<div type="button" className="like-button" onClick={foodLike}>
+											<input type='hidden' value={test[0]} />
+											<input type='hidden' value={test[6]} />
+											{
+											test[6] != null?
+												<img src={require('./images/heart.png')} alt="like"/>
+												:
+												<img src={require('./images/empty-heart.png')} alt="like"/>
+											}
+											{/* <img src={require('./images/empty-heart.png')} alt="empty-like"/> */}
+										</div>
 									</div>
 								</div>
 							</div>
