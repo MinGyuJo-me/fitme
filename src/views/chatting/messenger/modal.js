@@ -1,7 +1,64 @@
 import React, { useEffect, useState } from "react";
 import './modal.css';
+import axios from "axios";
+
+function getCookie(name) { //로그인 여부 확인
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(name + '=')) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+  return null;
+}
+
+//이미지서버 연결 
+async function imageData(code){
+  return await new Promise((resolve,reject)=>{
+  try{
+      axios.get(`http://192.168.0.15:5050/image/${code}`)
+      .then((response)=>{
+          resolve("data:image/png;base64,"+response.data['image']);
+      })
+  }
+  catch(err){reject(err)};
+  },2000);
+}
 
 function Modal(props) {
+
+  const [friendsInfo, setFriendsInfo] = useState([]);
+  const [showFriend, setShowFriend] = useState(false);
+  const [chatRoomMember,selectChatRoomMember] = useState();
+
+  //친구 리스트
+  useEffect(() => {
+    if (showFriend === false) {
+      const myCookieValue = getCookie('Authorization');
+      axios.get('/api/v1/boards/friend', {
+          headers: {
+              'Authorization': `${myCookieValue}`,
+              'Content-Type': 'application/json; charset=UTF-8'
+          }
+      })
+      .then(response => {
+          console.log(response.data);
+          Promise.all(response.data.map(async friend => {
+              const image = await imageData(friend.image == null ? 41 :friend.image);
+              friend.image = image;
+              return friend;
+          }))
+          .then(updatedFriendsInfo => {
+              setFriendsInfo(updatedFriendsInfo);
+              setShowFriend(true);
+          })
+          .catch(error => console.log(error));
+      })
+      .catch(error => console.log(error));
+    } 
+  }, [showFriend]);
+
   const [selectedFriends, setSelectedFriends] = useState([]); // 선택한 친구 목록 상태 추가
 
   useEffect(() => {
@@ -28,28 +85,37 @@ function Modal(props) {
   }, []);
 
   // 선택한 친구를 추가하거나 삭제하는 함수
-  const handleFriendToggle = (friendName, friendImage, isChecked) => {
+  const handleFriendToggle = ( friendAccountNo,friendName, friendImage, isChecked) => {
     if (isChecked) {
-      setSelectedFriends([...selectedFriends, { name: friendName, image: friendImage }]);
+      setSelectedFriends([...selectedFriends, { name: friendName, image: friendImage, accountNo: friendAccountNo}]);
     } else {
       setSelectedFriends(selectedFriends.filter(friend => friend.name !== friendName));
     }
   };
 // 선택한 친구 삭제 및 해당 친구의 체크박스 선택 해제 함수
-const handleRemoveFriend = (friendName) => {
-  setSelectedFriends(selectedFriends.filter(friend => friend.name !== friendName));
+const handleRemoveFriend = (friendAccountNo) => {
+  setSelectedFriends(selectedFriends.filter(friend => friend.accountNo !== friendAccountNo));
   // 해당 친구의 체크박스 선택 해제
   const friendItems = document.querySelectorAll('.friend-item');
   friendItems.forEach(item => {
-    const nameElement = item.querySelector('.friend-name');
-    if (nameElement && nameElement.textContent.toLowerCase() === friendName.toLowerCase()) {
+    const accountNoElement = item.querySelector('.friend-accountNo');
+    if (accountNoElement && accountNoElement.value == friendAccountNo) {
       const friendCheckbox = item.querySelector('.friend-checkbox');
       if (friendCheckbox) friendCheckbox.checked = false;
     }
   });
 };
 
-
+//채팅방 생성
+// useEffect(()=>{
+//   console.log('selectedFriends',chatRoomMember);
+// },[chatRoomMember])
+function selectChatRoom(e){
+  console.log('selectedFriends',selectedFriends);
+  selectedFriends.forEach((e)=>{console.log('e:',e['accountNo']);})
+  
+  // selectChatRoomMember(selectedFriends);
+}
 
 
   return (
@@ -63,15 +129,17 @@ const handleRemoveFriend = (friendName) => {
           <ul>
             {selectedFriends.map((friend, index) => (
               <div key={index}>
+                <input type="hidden" value={friend.accountNo} />
                 <div className="sfprofile">
                   <div className="finfo">
                     <span className="fname">{friend.name}</span>
-                    <button className="remove-btn" onClick={() => handleRemoveFriend(friend.name)}>✖</button>
+                    <button className="remove-btn" onClick={() => handleRemoveFriend(friend.accountNo)}>✖</button>
                   </div>
                 </div>
               </div>
             ))}
           </ul>
+          {selectedFriends.length != 0 ? <button onClick={()=>selectChatRoom(chatRoomMember)}>1</button> : ''}
         </div>
         <div className="f-search">
           <div className="search-container">
@@ -83,14 +151,17 @@ const handleRemoveFriend = (friendName) => {
           <h2>친구 목록</h2>
           <ul>
             <li>
-              <div className="friend-item">
-                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="친구 이미지" />
-                <div className="friend-info">
-                  <span className="friend-name">장도형</span>
-                  <input type="checkbox" className="friend-checkbox" onChange={(e) => handleFriendToggle("장도형", "프로필 이미지 URL", e.target.checked)} />
+              {friendsInfo.map((friend)=>(
+                <div className="friend-item">
+                  <input type='hidden' className="friend-accountNo" value={friend.accountNo} />
+                  <img src={friend.image} alt="친구 이미지" />
+                  <div className="friend-info">
+                    <span className="friend-name">{friend.name}</span>
+                    <input type="checkbox" className="friend-checkbox" onChange={(e) => handleFriendToggle(friend.accountNo,friend.name, friend.image, e.target.checked)} />
+                  </div>
                 </div>
-              </div>
-              <div className="friend-item">
+              ))}
+              {/* <div className="friend-item">
                 <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="친구 이미지" />
                 <div className="friend-info">
                   <span className="friend-name">이도형</span>
@@ -131,7 +202,7 @@ const handleRemoveFriend = (friendName) => {
                   <span className="friend-name">최현진</span>
                   <input type="checkbox" className="friend-checkbox" onChange={(e) => handleFriendToggle("최현진", "프로필 이미지 URL", e.target.checked)} />
                 </div>
-              </div>             
+              </div>              */}
             </li>
           </ul>
         </div>
