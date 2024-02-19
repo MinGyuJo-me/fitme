@@ -22,11 +22,16 @@ function CommunityBoard(props) {
         props.setIsOpen(true);
     }
 
+    //글 올린 사용자 정보를 전달하기 위해 bno 전달
+    function handleButtonClick(bno) {
+        props.onButtonClicked(bno);
+    }
+
     return (
         <div className="col-lg-12 col-sm-12">
             <div className="blog-single-box upper">
                 <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
-                    <div className="blog-icon bi1"  style={{backgroundImage: `url(${props.image})`}}>
+                    <div className="blog-icon bi1"  style={{backgroundImage: `url(${props.image})`}} onClick={() => handleButtonClick(props.bno)}>
                     </div>
                     <div className='blog-description'>
                         <a href="#"><i className="fas fa-address-card"></i> {props.name}</a>

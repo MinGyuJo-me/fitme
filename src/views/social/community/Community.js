@@ -47,6 +47,7 @@ function Community() {
     
     const [boards, setBoards] = useState([]);
     const [userInfo, setUserInfo] = useState([]);
+    const [clickedFollower, setClickedFollower] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -58,7 +59,7 @@ function Community() {
     async function imageData(code){
         return await new Promise((resolve,reject)=>{
         try{
-            axios.get(`http://192.168.0.15:5050/image/${code}`)
+            axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
             .then((response)=>{
                 // console.log(response.data);
                 resolve("data:image/png;base64,"+response.data['image']);
@@ -70,6 +71,7 @@ function Community() {
 
     // 사용자 정보 프로필 정보 조회
     useEffect(() => {
+        
         axios.get('http://192.168.0.15:8080/api/v1/boards/account', {
           headers: {
             'Authorization' : `${myCookieValue}`,
@@ -86,6 +88,31 @@ function Community() {
         })
         .catch(error => console.log(error))
       }, []);
+
+    useEffect(() => {
+        console.log('useEffect 확인',clickedFollower)
+    }, [clickedFollower])
+
+    function handleFollowerClick(followerInfo) {
+        // 클릭된 팔로워 정보를 상태에 저장
+        setClickedFollower(followerInfo);
+        console.log(followerInfo.accountNo);
+        setUserInfo(followerInfo);
+
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/friends/${followerInfo.accountNo}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error('Error fetching follower info:', error);
+        });
+
+    }
 
 
     // 게시글 전체 목록 조회
@@ -143,6 +170,10 @@ function Community() {
         };
       }, [isOpen]);
 
+    function handleButtonClickedFromChild(bno) {
+        console.log("클릭한 버튼의 bno 값:", bno);
+        axios.get('')
+    }
 
   return (
     <div>
@@ -160,7 +191,7 @@ function Community() {
         {/*게시글 영역*/}
         <div className="blog-area style-two">
             <div className="container">
-                <CommunityFriendListHeader/>
+                <CommunityFriendListHeader handleFollowerClick={handleFollowerClick}/>
                 <div className="row">
                     <div className="col-lg-8">
                         {/*게시 혹은 검색 부분*/}
@@ -179,6 +210,7 @@ function Community() {
                             follower={userInfo.follower}
                             following={userInfo.following}
                         />
+                       
                         {/*게시글 박스*/}
                         {boards.map(board => (
                             <CommunityBoard 
@@ -192,6 +224,7 @@ function Community() {
                                 comment={board.boardComment}
                                 isOpen={isOpen}
                                 setIsOpen={setIsOpen}
+                                onButtonClicked={handleButtonClickedFromChild}
                             />
                         ))}
                         
