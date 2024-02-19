@@ -175,11 +175,10 @@ function Community() {
             }
         })
         .then(async response => {
-            console.log('게시판에서 이미지 선택', response.data);
-            const userInfo = response.data; // 사용자 정보 객체
-            const image = await imageData(userInfo.image); // 이미지 데이터 받아오기
-            userInfo.image = image; // 이미지 필드 업데이트
-            setUserInfo(userInfo); // 사용자 정보 업데이트
+            const userInfo = response.data;
+            const image = await imageData(userInfo.image);
+            userInfo.image = image;
+            setUserInfo(userInfo);
         })
         .catch(error => {
             console.error('axios 요청 중 에러 발생:', error);

@@ -1,7 +1,4 @@
-import {Link} from 'react-router-dom';
-import React, { useState,useEffect,useRef} from 'react';
-//npm install axios
-import axios from 'axios';
+import React from 'react';
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -73,6 +70,7 @@ function CommunityBoard(props) {
                             <div className='blog-button-item'>
                                 <img src={require('../images/heart.png')}/>
                             </div>
+                            
                             <div className='blog-button-item'>
                                 <img src={require('../images/scrap.png')}/>
                             </div>
