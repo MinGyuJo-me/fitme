@@ -120,6 +120,15 @@ function Diet() {
 	const [labels2_, setLabels2] = useState();
 	const [mealTime, setMealTime ] = useState([]);
 
+	//사진데이타 
+	const setYoloFood=(e)=>{
+		console.log('e',e);
+		setSelectedFood(e);
+	}
+
+	// const yoloFoodElement = fileUploadBoxRef.current.querySelector('.yolo_food');
+	// console.log('yoloFoodElement',yoloFoodElement);
+
 	//로그인 확인
 	useEffect(()=>{
 		function getCookie(name) { //로그인 여부 확인
@@ -300,6 +309,7 @@ function Diet() {
 		...formData,
 		DIET_IMAGE: image, // 이미지 정보를 formData에 추가
 		});
+		
 	};
 	
 	const handleSubmit = (e) => {
@@ -650,7 +660,7 @@ function Diet() {
                     <input type="hidden" value={selectOne[0]}/>
                   }
                   <div className="file_upload_diet">
-                  <FileUploadBox onImageChange={handleImageChange} />
+                  <FileUploadBox setFile={setYoloFood} onImageChange={handleImageChange} />
                   </div>
                   <div className="date_picker">
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">

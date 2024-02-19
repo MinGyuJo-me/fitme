@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'
 
 const FileInfo = ({ uploadedInfo }) => (
   <div className="preview_info">
@@ -13,10 +14,11 @@ const Logo = () => (
   </svg>
 );
 
-const FileUploadBox = ({ onImageChange }) => {
+const FileUploadBox = ({ onImageChange,setFile  }) => {
   const [isActive, setActive] = useState(false);
   const [uploadedInfo, setUploadedInfo] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl1, setImageUrl1] = useState();
 
   const handleDragStart = () => setActive(true);
   const handleDragEnd = () => setActive(false);
@@ -66,19 +68,52 @@ const FileUploadBox = ({ onImageChange }) => {
     setFileInfo(file);
   };
   
+  //file 
+  async function imageData(code){
+    const data= new FormData();
+    data.append("base64Encoded",code);
+    return await new Promise((resolve,reject)=>{
+      try{
+        axios.post((`http://192.168.0.15:5000/food`),data)
+        // .then(response=>response.json())
+          .then((response)=>{
+            console.log(response.data);
+            setFile(response.data.food);
+            resolve(response.data.base64);
+          })
+      }
+      catch(err){reject(err)};
+    },2000);
+  }
+
   const FileInfo = ({ uploadedInfo }) => {
-    console.log('uploadedInfo:', uploadedInfo);
+    setImageUrl1(uploadedInfo.url);
   };
+
+  useEffect(()=>{
+    // console.log('imageUrl1',imageUrl1);
+    if(imageUrl1 != null){
+      imageData(imageUrl1).then((test)=>{
+        // console.log('1');
+        // proflieData.image = test;
+        setImageUrl(imageUrl1);
+      })
+    }
+  },[imageUrl1]);
 
   return (
     <label
+      // {imageUrl != null ? '1':''}
+      style={{backgroundImage: `url(data:image/png;base64,${imageUrl})`, 
+              backgroundSize: '100%'
+            }}
       className={`preview${isActive ? ' active' : ''}`}
       onDragEnter={handleDragStart}
       onDragOver={handleDragOver}
       onDragLeave={handleDragEnd}
       onDrop={handleDrop}
     >
-      <input type="file" accept=".png, .jpeg .jpg" className="file" onChange={handleUpload} />
+      <input type="file" accept=".png, .jpeg, .jpg" className="file" onChange={handleUpload} />
       {uploadedInfo && <FileInfo uploadedInfo={uploadedInfo} />}
       {!uploadedInfo && (
         <>
