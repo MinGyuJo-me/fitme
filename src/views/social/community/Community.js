@@ -22,13 +22,9 @@ import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 //플로팅
 //npm i --save react-floating-action-button
 
-
 //리액트 모달
 //npm install --save react-modal
 //import Modal from 'react-modal';
-
-
-
 
 function Community() {
 
@@ -46,10 +42,12 @@ function Community() {
     const myCookieValue = getCookie('Authorization');
     
     const [boards, setBoards] = useState([]);
+    const [loginUser, setLoginUser] = useState([]); //현재 로그인 중인 사용자 정보 저장
     const [userInfo, setUserInfo] = useState([]);
     const [clickedFollower, setClickedFollower] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [accountInfo, setAccountInfo] = useState([]);
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -61,7 +59,6 @@ function Community() {
         try{
             axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
             .then((response)=>{
-                // console.log(response.data);
                 resolve("data:image/png;base64,"+response.data['image']);
             })
         }
@@ -71,32 +68,25 @@ function Community() {
 
     // 사용자 정보 프로필 정보 조회
     useEffect(() => {
-        
         axios.get('http://192.168.0.15:8080/api/v1/boards/account', {
           headers: {
             'Authorization' : `${myCookieValue}`,
             'Content-Type' : 'application/json; charset=UTF-8'
           }
         })
-        .then(response => {
-            
+        .then(response => { 
             imageData(response.data.image).then((image) => {
                 response.data.image = image;
                 setUserInfo(response.data);
+                setLoginUser(response.data);
             })
-            
         })
         .catch(error => console.log(error))
       }, []);
 
-    useEffect(() => {
-        console.log('useEffect 확인',clickedFollower)
-    }, [clickedFollower])
-
+    // 팔로워 클릭 이벤트 핸들러
     function handleFollowerClick(followerInfo) {
-        // 클릭된 팔로워 정보를 상태에 저장
         setClickedFollower(followerInfo);
-        console.log(followerInfo.accountNo);
         setUserInfo(followerInfo);
 
         axios.get(`http://192.168.0.104:8080/api/v1/boards/friends/${followerInfo.accountNo}`, {
@@ -105,13 +95,19 @@ function Community() {
                 'Content-Type': 'application/json; charset=UTF-8'
             }
         })
-        .then(response => {
-            console.log(response.data);
+        .then(async response => {
+            setBoards(response.data);
+            
+            const updatedBoards = await Promise.all(response.data.map(async board => {
+                const image = await imageData(board.image);
+                board.image = image;
+                return board;
+            }));
+            setBoards(updatedBoards);
         })
         .catch(error => {
-            console.error('Error fetching follower info:', error);
+            console.error('Error fetching follower boards:', error);
         });
-
     }
 
 
@@ -157,22 +153,57 @@ function Community() {
 
     //모달창 외부 스크롤 방지
     useEffect(() => {
-        if (isOpen) {
-          document.documentElement.style.overflow = 'hidden';
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.documentElement.style.overflow = 'auto';
-          document.body.style.overflow = 'auto';
-        }
-        return () => {
-          document.documentElement.style.overflow = 'auto';
-          document.body.style.overflow = 'auto';
-        };
-      }, [isOpen]);
+    if (isOpen) {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+    }
+    return () => {
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+    };
+    }, [isOpen]);
 
-    function handleButtonClickedFromChild(bno) {
-        console.log("클릭한 버튼의 bno 값:", bno);
-        axios.get('')
+    //게시글 프로필 클릭 시 사용자 정보 프로필로 출력
+    function handleButtonClickedFromChild(accountNo) {
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/account/${accountNo}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            console.log('게시판에서 이미지 선택', response.data);
+            const userInfo = response.data; // 사용자 정보 객체
+            const image = await imageData(userInfo.image); // 이미지 데이터 받아오기
+            userInfo.image = image; // 이미지 필드 업데이트
+            setUserInfo(userInfo); // 사용자 정보 업데이트
+        })
+        .catch(error => {
+            console.error('axios 요청 중 에러 발생:', error);
+        });
+
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/friends/${accountNo}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            setBoards(response.data);
+            
+            const updatedBoards = await Promise.all(response.data.map(async board => {
+                const image = await imageData(board.image);
+                board.image = image;
+                return board;
+            }));
+            setBoards(updatedBoards);
+        })
+        .catch(error => {
+            console.error('Error fetching follower boards:', error);
+        });
     }
 
   return (
@@ -201,6 +232,7 @@ function Community() {
                         />
                         {/*특정 사용자 프로필 영역*/}
                         <CommunityProfile
+                            accountNo={userInfo.accountNo}
                             username={userInfo.username}
                             name={userInfo.name}
                             address={userInfo.address}
@@ -209,11 +241,14 @@ function Community() {
                             postCount={userInfo.postCount}
                             follower={userInfo.follower}
                             following={userInfo.following}
+                            realation={userInfo.realation}
+                            loginAccountNo={loginUser.accountNo}
                         />
                        
                         {/*게시글 박스*/}
                         {boards.map(board => (
                             <CommunityBoard 
+                                accountNo={board.accountNo}
                                 bno={board.bno} 
                                 name={board.name}
                                 image={board.image}
@@ -230,7 +265,7 @@ function Community() {
                         
                         {showModal && (
                             <Modal onClose={() => setShowModal(false)}>
-                               <CommunityBoardWriteModal accountNo={userInfo.accountNo}/>
+                               <CommunityBoardWriteModal accountNo={loginUser.accountNo}/>
                             </Modal>
                         )}
                         
@@ -265,6 +300,13 @@ function Community() {
             
         )}
         <Footer/>
+        {/* Scroll to top button */}
+        <button
+            className="scroll-to-top-btn"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+            <i className="fas fa-arrow-up"></i>
+        </button>
     </div>
   );
 }

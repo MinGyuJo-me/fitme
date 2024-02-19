@@ -3,17 +3,30 @@ import axios from "axios";
 
 function CommunityProfile(props) {
 
+    function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith(name + '=')) {
+            return cookie.substring(name.length + 1);
+          }
+        }
+        return null;
+    }
+    
+    const myCookieValue = getCookie('Authorization');
+
     const [sendFollow, setSendFollow] = useState([]);
 
     // Follow 버튼 클릭 이벤트
     const handleAddFriendClick = () => {
-
-        setSendFollow([
-            
-        ])
+        const opponentNo = props.accountNo;
         
-        axios.post('http://192.168.0.104:8080/api/v1//boards/follow', {
-            
+        axios.post(`http://192.168.0.104:8080/api/v1/boards/follow`, opponentNo , {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
         })
         .then(response => {
             console.log('친구 추가 요청이 성공했습니다.');
@@ -47,12 +60,12 @@ function CommunityProfile(props) {
                             <div className='blog-post-description'>
                                 <div className="blog-post-description-title">Follower</div>
                                 <div className="blog-post-description-content">{props.follower}</div>
-                                {props.realation ? <button className="blog-post-description-button">Add Friend</button> : ""}
+                                {props.realation || props.loginAccountNo == props.accountNo ? "" : <button className="blog-post-description-button" onClick={handleAddFriendClick}>Add Friend</button>}
                             </div>
                             <div className='blog-post-description'>
                                 <div className="blog-post-description-title">Following</div>
                                 <div className="blog-post-description-content">{props.following}</div>
-                                <button className="blog-post-description-button" onClick={handleAddFriendClick}>DM</button>
+                                <button className="blog-post-description-button">DM</button>
                             </div>
                         </div>
                 </div>

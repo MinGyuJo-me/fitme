@@ -28,7 +28,6 @@ function CommunityFriendListHeader({handleFollowerClick}) {
         try{
             axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
             .then((response)=>{
-                // console.log(response.data);
                 resolve("data:image/png;base64,"+response.data['image']);
             })
         }
@@ -46,7 +45,6 @@ function CommunityFriendListHeader({handleFollowerClick}) {
                 }
             })
                 .then(response => {
-                    console.log(response.data.length);
                     Promise.all(response.data.map(async friend => {
                         const image = await imageData(friend.image);
                         friend.image = image;
@@ -75,12 +73,6 @@ function CommunityFriendListHeader({handleFollowerClick}) {
             }
         }
     }
-
-    // Follower 클릭 시 호출될 함수
-    // const handleFollowerClick = (followerInfo) => {
-    //     // 부모 컴포넌트로 followerInfo를 전달
-    //     console.log("Clicked follower info:", followerInfo);
-    // };
 
     return (
         <div className="row" style={{ marginTop: "-50px", marginBottom: "40px" }}>
