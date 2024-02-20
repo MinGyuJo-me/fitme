@@ -37,6 +37,7 @@ import styled from 'styled-components';
 
 //componants
 import Modal from "./modal";
+import Chatbot from '../../component/chatBot/ChatBot';
 
 
 export const options = {
@@ -610,11 +611,12 @@ function Workout() {
 				</div>      //466
 			:''
 			}
+			<Chatbot/>
 	</div>
 	</div>
     </div>
 	</div>
-
+	
   );
 }
 
