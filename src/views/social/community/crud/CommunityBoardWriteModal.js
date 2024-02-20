@@ -37,7 +37,7 @@ function CommunityBoardWriteModal(props) {
         address: "서울특별시 서초구 서초대로77길 41, 4층 (서초동, 대동Ⅱ)",
         uploads: ''
     });
-    const [inputHidden, setInputHidden] = useState(false); // input 태그 보이기 여부 상태
+    const [inputHidden, setInputHidden] = useState(false); 
 
     function convertToBase64(file) {
         return new Promise((resolve, reject) => {
@@ -52,35 +52,30 @@ function CommunityBoardWriteModal(props) {
         const files = event.target.files;
         const fileArray = Array.from(files);
     
-        // 각 파일의 base64 문자열을 저장할 배열
         const base64Array = [];
     
-        // 모든 파일을 처리하여 base64로 변환하고 배열에 저장
         for (const file of fileArray) {
             const base64String = await convertToBase64(file);
             base64Array.push(base64String);
         }
     
-        // 배열에 저장된 base64 문자열을 모두 보내는 대신, 여러 파일 중 첫 번째 파일의 base64 문자열만 사용할 수도 있습니다.
-        // 여기서는 배열에 저장된 모든 base64 문자열을 보내는 것으로 예시를 보여드리겠습니다.
         setPosts(prevPosts => ({
             ...prevPosts,
-            uploads: base64Array // 모든 base64 문자열을 저장한 배열
+            uploads: base64Array 
         }));
     
         setSelectedFiles(fileArray);
-        setInputHidden(true); // 이미지가 업로드되면 input 태그 숨기기
+        setInputHidden(true); 
     };
     
     const onClickButton = async (e) => {
+        
         setPosts({
             ...posts
         });
     
-        console.log('ddd',posts);
         if (posts.title !== "") {
             try {
-                // 이미지를 Python으로 전송
                 const data = new FormData();
     
                 for (const file of posts.uploads) {
@@ -95,16 +90,14 @@ function CommunityBoardWriteModal(props) {
                 });
                 console.log(imageResponse.data);
     
-                // 이미지를 전송한 후에 boardImages 상태 업데이트
                 setBoardImages(imageResponse.data);
     
-                // 이미지 전송 후 Spring으로 나머지 데이터를 전송
                 const springResponse = await axios.post('http://192.168.0.104:8080/api/v1/boards', {
                     accountNo: props.accountNo,
                     title: posts.title,
                     boardComment: posts.boardComment,
                     address: posts.address,
-                    boardImages: imageResponse.data // 이미지 데이터를 함께 전송
+                    boardImages: imageResponse.data 
                 },{
                     headers: {
                         'Authorization' : `${myCookieValue}`,
