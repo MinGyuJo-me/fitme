@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './Chatbot.css';
 import 'material-symbols';
+import axios from 'axios'; //npm install axios
 
 
-const ChatBot = () => {
+var id = null;
+var ipAddress = '192.168.0.110';
+
+function ChatBot() {
   const [userMessage, setUserMessage] = useState(null);
-  const API_KEY = "//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"; // 여기에 API 키를 붙여넣으세요
   const inputInitHeight = 40; // 텍스트 영역의 초기 높이를 설정하세요
 
 
@@ -19,23 +22,15 @@ const ChatBot = () => {
   }
 
   const generateResponse = async () => {
-    const API_URL = "https://api.openai.com/v1/chat/completions";
+    // const API_URL = "https://api.openai.com/v1/chat/completions";
+    const API_URL = `http://${ipAddress}:5000/chatbot`;
     
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: userMessage }],
-        })
+      const response = await axios.post(API_URL, {
+        message: userMessage,
       });
 
-      const data = await response.json();
-      return data.choices[0].message.content.trim();
+      return response.data.answer;
     } catch (error) {
       console.error("응답 생성 중 오류 발생:", error);
       throw error;
