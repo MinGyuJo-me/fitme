@@ -37,6 +37,7 @@ import styled from 'styled-components';
 
 //componants
 import Modal from "./modal";
+import Chatbot from '../../component/chatBot/ChatBot';
 
 
 export const options = {
@@ -367,6 +368,24 @@ function Workout() {
 		// console.log(formData);
 	};
 
+	//모달창 외부 스크롤 방지
+	useEffect(() => {
+        // Add or remove the 'no-scroll' class to the html and body elements based on the modal's open state
+        if (isOpen) {
+          document.documentElement.style.overflow = 'hidden';  // Prevent scrolling on html
+          document.body.style.overflow = 'hidden';  // Prevent scrolling on body
+        } else {
+          document.documentElement.style.overflow = 'auto';  // Allow scrolling on html
+          document.body.style.overflow = 'auto';  // Allow scrolling on body
+        }
+    
+        // Cleanup: Remove the added classes when the component unmounts or modal is closed
+        return () => {
+          document.documentElement.style.overflow = 'auto';  // Ensure scrolling is allowed on html on unmount
+          document.body.style.overflow = 'auto';  // Ensure scrolling is allowed on body on unmount
+        };
+      }, [isOpen]);
+
   	return (
     <div>
         <HeaderTop/>
@@ -610,11 +629,12 @@ function Workout() {
 				</div>      //466
 			:''
 			}
+			<Chatbot/>
 	</div>
 	</div>
     </div>
 	</div>
-
+	
   );
 }
 
