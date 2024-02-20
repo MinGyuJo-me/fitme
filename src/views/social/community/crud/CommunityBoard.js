@@ -1,9 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 function CommunityBoard(props) {
+
+    function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith(name + '=')) {
+            return cookie.substring(name.length + 1);
+          }
+        }
+        return null;
+    }
+    const myCookieValue = getCookie('Authorization');
+
+    async function imageData(code){
+        return await new Promise((resolve,reject)=>{
+        try{
+            axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
+            .then((response)=>{
+                resolve("data:image/png;base64,"+response.data['image']);
+            })
+        }
+        catch(err){reject(err)};
+        },2000);
+    }
+
+    const [boardImages, setBoardImages] = useState([]);
 
     const options = {
         margin:10,
@@ -19,10 +46,34 @@ function CommunityBoard(props) {
         props.setIsOpen(true);
     }
 
-    //글 올린 사용자 정보를 전달하기 위해 accountNo 전달
     function handleButtonClick(accountNo) {
         props.onButtonClicked(accountNo);
     }
+
+    useEffect(() => {
+        const fetchBoardImages = async () => {
+            try {
+                
+                const response = await axios.get(`http://192.168.0.104:8080/api/v1/boards/images/${props.bno}`, {
+                    headers: {
+                        'Authorization': `${myCookieValue}`,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    }
+                });
+                
+                const updatedImages = await Promise.all(response.data.map(async boardImage => {
+                    const image = await imageData(boardImage);
+                    return image;
+                }));
+
+                setBoardImages(updatedImages);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+    
+        fetchBoardImages(); 
+    }, [props.key])
 
     return (
         <div className="col-lg-12 col-sm-12">
@@ -38,18 +89,14 @@ function CommunityBoard(props) {
                 </div>
                 <div>
                     <OwlCarousel {...options}>
-                        <div className="blog-thumb">
-                            <img src={require('../../../../assets/images/3.jpg')} alt="" style={{height:600}}/>
-                            <div className="blog-btn">
-                                <div>1/2</div>
+                        {boardImages.map((image, index) => (
+                            <div className="blog-thumb" key={index}>
+                                <img src={image} alt="" style={{ height: 600 }} />
+                                <div className="blog-btn">
+                                    <div>{`${index + 1}/${boardImages.length}`}</div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="blog-thumb">
-                            <img src={require('../../../../assets/images/2.jpg')} alt="" style={{height:600}}/>
-                            <div className="blog-btn">
-                                <div>2/2</div>
-                            </div>
-                        </div>
+                        ))}
                     </OwlCarousel>
                 </div>
                 

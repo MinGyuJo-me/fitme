@@ -68,7 +68,7 @@ function Community() {
 
     // 사용자 정보 프로필 정보 조회
     useEffect(() => {
-        axios.get('http://192.168.0.15:8080/api/v1/boards/account', {
+        axios.get('http://192.168.0.104:8080/api/v1/boards/account', {
           headers: {
             'Authorization' : `${myCookieValue}`,
             'Content-Type' : 'application/json; charset=UTF-8'
@@ -247,6 +247,7 @@ function Community() {
                         {/*게시글 박스*/}
                         {boards.map(board => (
                             <CommunityBoard 
+                                key={board.bno}
                                 accountNo={board.accountNo}
                                 bno={board.bno} 
                                 name={board.name}
