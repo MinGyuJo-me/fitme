@@ -8,6 +8,7 @@ import DaumPost from './DaumPost';  // DaumPost 컴포넌트
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
 import Breadcumb from '../component/Breadcumb/Breadcumb';
+import Chatbot from '../component/chatBot/ChatBot';
 
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
@@ -297,6 +298,7 @@ function SignUp() {
           </span>
         </p>
       </form>
+      <Chatbot/>
     </div>
   );
 }

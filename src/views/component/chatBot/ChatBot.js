@@ -3,7 +3,7 @@ import './Chatbot.css';
 import 'material-symbols';
 
 
-const Chatbot = () => {
+const ChatBot = () => {
   const [userMessage, setUserMessage] = useState(null);
   const API_KEY = "//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"; // 여기에 API 키를 붙여넣으세요
   const inputInitHeight = 40; // 텍스트 영역의 초기 높이를 설정하세요
@@ -136,4 +136,4 @@ const Chatbot = () => {
   );
 };
 
-export default Chatbot;
+export default ChatBot;

@@ -71,6 +71,7 @@ function CommunityBoardWriteModal(props) {
     const onClickButton = async (e) => {
 
         e.preventDefault();
+
         
         setPosts({
             ...posts
