@@ -1,0 +1,44 @@
+.detail-button{
+    position: relative;
+    text-align: center;
+    right: 10px;
+    top: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.Gprofile-edit-button-container {
+    position: absolute;
+    top: 20px; 
+    right: 20px; 
+}
+
+.Gprofile-edit-button {
+    padding: 8px 20px;
+    background-color: #1BBC9B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.Gprofile-edit-button:hover {
+    background-color: #1ed2ad;
+}
+.G-button {
+    padding: 8px 20px;
+    background-color: #1BBC9B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: -10px;
+  }
+  
+.G-button:hover {
+    background-color: #1ed2ad;
+  }

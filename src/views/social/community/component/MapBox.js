@@ -110,7 +110,11 @@ function MapBox(props) {
             return marker;
         });
 
-        setMarkers(newMarkers);
+         // 첫 번째 마커가 있는 위치로 지도 이동
+        if (newMarkers.length > 0) {
+            const firstMarkerPosition = newMarkers[0].getPosition();
+            map.panTo(firstMarkerPosition);
+        }
     };
 
     return (
