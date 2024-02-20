@@ -20,11 +20,12 @@
 
 .gameroom-description{
     box-shadow: inset 0px 0px 4px 1px rgba(0, 0, 0, 0.2);
-    background-color: #FFFFFF;
+    background-color: #ffffff9c;
     border-radius: 5px;
     width: 80%;
     display: flex;
     flex-direction: column;
+    color: black;
 }
 
 
@@ -54,7 +55,7 @@
     margin-left: 10px;
     font-weight: normal;
     font-size: 12px;
-    color:rgb(166, 166, 166)
+    color:rgb(53, 53, 53)
 }
 .gameroom-button-layout{
     position: absolute;
@@ -80,6 +81,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    background-color: #ffffffd8;
 }
 
 .gameroom-button > img{

@@ -7,10 +7,7 @@ import Loader from '../component/loader/Loader';
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
 import $ from 'jquery';
-import Wrapper from '../component/Wrapper/Wrapper';
 
-import GameRoomSearch from './component/GameRoomSearch';
-import './Game.css';
 
 import GameRoomContainer from './component/GameRoomContainer';
 
@@ -22,30 +19,13 @@ import GameRoomSideProfile from './component/GameRoomSideProfile';
 import styled from "styled-components";
 import GameRoomMakeModal from './component/GameRoomMakeModal';
 import GameRoomMakeModal_ from './component/GameRoomMakeModal_';
-
+import './GameRoom.css';
 
 const StyledHeader = styled.div`
   background: black;
 `;
 
-function Game() {
-    const options = {
-      animateOut: 'slideOutUp',
-      animateIn: 'slideInUp',
-      margin:10,
-      loop: true,
-      items: 1,
-      dots:false,
-      autoplay:true,
-      autoplayTimeout: 4500,
-      smartSpeed: 4000,
-      mouseDrag: false
-    };
-
-    const [isOpen, setIsOpen] = useState(false);
-
-
-
+function GameRoom() {
     useEffect(()=>{
         $('body').addClass('loaded');
     });
@@ -64,42 +44,64 @@ function Game() {
         <div className="blog-area style-two game-background-style">
           <div className="container">
             <div className="row">
-              <div className="col-lg-12 col-md-12">
+              <div style={{width:"100%"}}>
                 <div className="row">
-                  <div className="col-lg-8 col-md-8 game-notice-layout" style={{marginRight:"50px"}}>
-                      <div className='notice-box'>
-                        {/**************************************************************/}
-                        {/*게임 공지사항, 알람 목록*/}
-                        <OwlCarousel {...options} className='notice-box-item'>
-                          <div> <i className='fas fa-bell'></i> [공지사항] 2023년 07월 23일. 게임 업데이트 관련 안내</div>
-                          <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇ님이 랭킹 게임에서 35 Points를 얻었습니다.</div>
-                         <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다.</div>
-                        </OwlCarousel> 
-                        {/**************************************************************/}
-                      </div>
-                    
-                  </div>
-
-                  <div className="col-lg-8 col-md-8 game-layout" style={{marginRight:"50px"}}>
+                  <div className="col-lg-8 col-md-8 game-match-layout" style={{marginRight:"50px"}}>
                     <div className="row">
-                      <div className='col-lg-11 col-md-11'>
+                      <div className='col-lg-11 col-md-11 game-match-container'>
                         {/**************************************************************/}
-                        {/*게임방 검색 기능 영역 (게임방 검색 기능)*/}
-                        <GameRoomSearch/>
-                        {/**************************************************************/}
-                      </div>
+                        {/*게임 WEB RTC +  영역 (대기실 목록)*/}
+                        
+                        <div className='game-match-container-alarm'>
+                            <div classname="game-match-container-alarm-item"> ㅇㅇㅇ님이 랭킹 게임에서 35 Points를 얻었습니다. </div>
+                            <div classname="game-match-container-alarm-item"> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다. </div>
+                            <div classname="game-match-container-alarm-item"> ㅇㅇㅇ님이 랭킹 게임에서 35 Points를 얻었습니다. </div>
+                            <div classname="game-match-container-alarm-item"> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다. </div>
+                            <div classname="game-match-container-alarm-item"> ㅇㅇㅇ님이 랭킹 게임에서 35 Points를 얻었습니다. </div>
+                            <div classname="game-match-container-alarm-item"> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다. </div>
+                        </div>
+                        
+                        <div className='webRTC-layout'>
+                          
+                          <div className='webRTC-container wc2'>
+                            <div className='webRTC-item'>
+                              내 영상 부분
+                            </div>
+                            <div className='webRTC-item'>
+                              게임 실시간 통계
+                            </div>
+                          </div>
+                          <div className='webRTC-container wc2'>
+                            <div className='webRTC-item'>
+                              내 영상 부분
+                            </div>
+                            <div className='webRTC-item'>
+                              게임 실시간 통계
+                            </div>
+                          </div>
 
-                      <div className='col-lg-11 col-md-11 game-room-layout'>
-                        {/**************************************************************/}
-                        {/*게임방 목록 영역 (대기실 목록)*/}
-                        <GameRoomContainer/>
-                        <GameRoomContainer/>
-                        <GameRoomContainer/>
-                        <GameRoomContainer/>
-                        <GameRoomContainer/>
-                        <GameRoomContainer/>
-                        <GameRoomContainer/>
-                        <GameRoomContainer/>
+                          <div className='webRTC-container wc3'>
+                            <div className="webRTC-button">
+                              <img src={require("./images/gamematchchat.png")}/>
+                            </div>
+                            <div className="webRTC-button">
+                            <img src={require("./images/gamematch_sound.png")}/>
+                            </div>
+                            <div className="webRTC-button">
+                              <img src={require("./images/gamematch_mic.png")}/>
+                            </div>
+                            <div className="webRTC-button">
+                              <img src={require("./images/gamematch_video.png")}/>
+                            </div>
+                            <div className="webRTC-button">
+                            <img src={require("./images/gamematch_quit.png")}/>
+                            </div>
+                          </div>
+
+                          
+
+                        </div>
+                        
                         {/**************************************************************/}
                       </div>
                     </div>
@@ -116,10 +118,6 @@ function Game() {
         </div>
 
 
-        {/**** 게임방 생성 모달 *****/}
-        <GameRoomMakeModal_ open={isOpen} onClose={() => {setIsOpen(false);}}>
-            <GameRoomMakeModal/>
-        </GameRoomMakeModal_>
 
 
 
@@ -239,5 +237,5 @@ function Game() {
   );
 }
 
-export default Game;
+export default GameRoom;
 
