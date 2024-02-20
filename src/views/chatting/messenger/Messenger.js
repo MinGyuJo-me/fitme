@@ -36,7 +36,7 @@ function Messenger() {
     const [userId,setUserId] = useState();
   
     // const { apply_id } = useParams();
-    const client = useRef({});
+    const client = useRef();
     
     const scrollRef = useRef();
     
@@ -77,6 +77,9 @@ function Messenger() {
         var s = document.getElementById('chatRoomNo');
         // console.log('채팅방',e.target.parentElement.children[0].value);
         s.value = e.target.parentElement.children[0].value;
+        
+        subscribe(e.target.parentElement.children[0].value); //채팅방 연결 테스트
+
         setChatRoomKing(e.target.parentElement.children[1].value);
         // console.log('확인:',s.value);
         setChatNo(e.target.parentElement.children[0].value);
@@ -88,7 +91,33 @@ function Messenger() {
         })
     }
 
-    
+    //엔터키 막기
+    const onEnterSubmit = (e) => {
+      try {
+        if (e.isComposing || e.keyCode === 229) return;
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          const form = e.target.closest('.chat-message');
+          const sendButton = form.querySelector('button');
+          if (!sendButton) {
+            console.error("Button not found inside the form:", form);
+            return;
+          }
+          sendButton.click();
+        }
+      } catch (error) {
+        console.error("Error in onEnterSubmit:", error);
+      }
+    };
+
+    //스크롤
+    const chatHistoryRef = useRef();
+
+    useEffect(() => {
+      if (chatHistoryRef.current) {
+        chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+      }
+    }, [chatList]);
 
     const connect = () => {
         client.current = new StompJs.Client({
@@ -96,7 +125,7 @@ function Messenger() {
             onConnect: (data) => {
                 console.log('success');
                 client.current.publish({
-                    destination: '/pub/chat/join',
+                    destination: '/pub/join',
                     body: JSON.stringify({
                         chattingNo: 0,
                         accountNo: userId,
@@ -105,7 +134,6 @@ function Messenger() {
                 });
             },
         });
-        
         client.current.activate();
     };
   
@@ -116,10 +144,10 @@ function Messenger() {
         client.current.publish({
             destination: '/pub/chat',
             body: JSON.stringify({
-            chattingNo: num,
-            accountNo: userId,
-            name: name,
-            chatComment: chat
+              chattingNo: num,
+              accountNo: userId,
+              name: name,
+              chatComment: chat
             }),
         });
     
@@ -155,12 +183,15 @@ function Messenger() {
     const handleSubmit = (event, chat) => { // 보내기 버튼 눌렀을 때 publish
         // console.log('event',event.target.children[0].value);
         var num = event.target.children[1].value;
+        event.target.children[0].value = '';
+        
         console.log('chat',chat);
         console.log('num',num);
         // scrollToBottom();
         event.preventDefault();
     
         publish(num,chat);
+        
     };
     
     useEffect(() => {
@@ -317,10 +348,10 @@ function Messenger() {
                     )}
         </div>
       
-      <div className="chat-history">
+      <div className="chat-history" ref={chatHistoryRef}>
         <ul>
             {chatList.map((chat)=>(
-                chat.accountNo != userId?
+                chat.accountNo == userId?
                     <li className="clearfix">
                         <div className="message-data align-right">
                         <span className="message-data-time" >{chat.time.split(' ')[1]}</span> &nbsp; &nbsp;
@@ -347,14 +378,10 @@ function Messenger() {
         
       </div> 
       
-        <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)}>
+      <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)} onKeyDown={onEnterSubmit}>
             <textarea name="message-to-send" id="message-to-send" placeholder ="메시지를 입력해 주세요" onChange={handleChange} rows="3"></textarea>
             <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>      
-
-            
-            
             <button>Send</button>
-
         </form> 
       
     </div> 

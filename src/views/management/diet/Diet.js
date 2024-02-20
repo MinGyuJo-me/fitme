@@ -120,6 +120,15 @@ function Diet() {
 	const [labels2_, setLabels2] = useState();
 	const [mealTime, setMealTime ] = useState([]);
 
+	//사진데이타 
+	const setYoloFood=(e)=>{
+		console.log('e',e);
+		setSelectedFood(e);
+	}
+
+	// const yoloFoodElement = fileUploadBoxRef.current.querySelector('.yolo_food');
+	// console.log('yoloFoodElement',yoloFoodElement);
+
 	//로그인 확인
 	useEffect(()=>{
 		function getCookie(name) { //로그인 여부 확인
@@ -159,7 +168,7 @@ function Diet() {
 			}else{
 				imageData(1).then((test)=>{
 					
-					// proflieData.image = test;
+					proflieData.image = test;
 					// console.log('proflieData',proflieData);
 					setAccount(proflieData);
 				})
@@ -191,64 +200,72 @@ function Diet() {
 	useEffect(()=>{
 		//프로필 코드 
 		if(dietCal != null){
-		axios.get(`http://${ipAddress}:5000/account/${dietCal}?hobby=diet`)
-		.then(response =>{
-			//날짜 일정 추가 창
-			// console.log(response.data['diet']);
-			setMark(response.data['diet']);
-			return response.data;
-		})
+			callis(dietCal);
 		}
 	},[dietCal])
-
+	function callis(accountNo,date){
+		axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
+		.then(response =>{
+			//날짜 일정 추가 창
+			console.log(response.data['diet']);
+			setMark(response.data['diet']);
+			today(accountNo,date != null ? date : new Date());
+			return response.data;
+		})
+	}
 	//하루 데이타
 	useEffect(() => {
 		setMealTime([]);
 		if(dietCal != null){
-		  axios.get(`http://${ipAddress}:5000/diet/${dietCal}?date=`+moment(value).format("YYYY-MM-DD")) //<---머지시 50 을 44로 변경
-		  .then(response =>{
-			  console.log(response.data['foodDiary']);
-			  setMealTime(response.data['foodDiary']);
-	  
-			  var data1_ =[];
-			  var labels1_ = [];
-			  var data2_ =[];
-			  var labels2_ = [];
-			  for(let i=0; i<response.data['chart2'].length;i++){
-				data1_.push(response.data['chart1'][i].size);
-				labels1_.push(response.data['chart1'][i].name);
-				data2_.push(response.data['chart2'][i].size);
-				labels2_.push(response.data['chart2'][i].name);
-			  } 
-			  setData(data1_);
-			  setLabels(labels1_);
-			  setData1(data2_);
-			  setLabels1(labels2_);
-	  
-			  return response.data['chart3'];
-			})
-		  .then(message =>{
+			today(dietCal,value);
+		}
+	},[value]);
+	
+	function today(accountNo,todaydate){
+		axios.get(`http://${ipAddress}:5000/diet/${accountNo}?date=`+moment(todaydate).format("YYYY-MM-DD")) //<---머지시 50 을 44로 변경
+		.then(response =>{
+			console.log("response.data['foodDiary']",response.data['foodDiary']);
+			setMealTime(response.data['foodDiary']);
+	
+			var data1_ =[];
+			var labels1_ = [];
+			var data2_ =[];
+			var labels2_ = [];
+			for(let i=0; i<response.data['chart2'].length;i++){
+			data1_.push(response.data['chart1'][i].size);
+			labels1_.push(response.data['chart1'][i].name);
+			data2_.push(response.data['chart2'][i].size);
+			labels2_.push(response.data['chart2'][i].name);
+			} 
+			setData(data1_);
+			setLabels(labels1_);
+			setData1(data2_);
+			setLabels1(labels2_);
+	
+			return response.data['chart3'];
+		})
+		.then(message =>{
 			var data1_ =[];
 			var labels1_ = [];
 			for(let i=0; i<message.length;i++){
-			  data1_.push(message[i].size);
-			  // console.log(message[i].size)
-			  labels1_.push(message[i].name);
+				data1_.push(message[i].size);
+				// console.log(message[i].size)
+				labels1_.push(message[i].name);
 			} 
 			setData2(data1_);
 			setLabels2(labels1_);
-		  });
-		}
-	  },[value]);
+		});
+	}
+
 	//VIEW
 	useEffect(()=>{
 		// console.log(isOpen);
 		if(isOpen != 'true'){
+			setFormData([]);
 			var list_ = new Array();
 			if(dietCal != null){
 			  axios.get(`http://${ipAddress}:5000/diet/${dietCal}?calId=${isOpen}`)
 			  .then(response =>{
-				// console.log(response.data == null);
 				// setSelect(new Array(response.data))
 				if(response.data != null){
 				  for(var i = 0; i < response.data.length; i++){
@@ -264,13 +281,14 @@ function Diet() {
 	//DELETE
 	const setCalDel = (e) => {
 		if(true){ //confirm넣을자리
-			console.log("delete",id.parentElement.parentElement);
-			// axios.delete(`http://${ipAddress}:5000/diet/${e.target.parentElement[0].value}`)
-			// .then(response => {
-			// 	setIsOpen(false);
-			// 	// console.log(response.data);
-			// 	id.parentElement.parentElement.remove();
-			// })
+			console.log("delete",e.target.parentElement.children[0].value);
+			axios.delete(`http://${ipAddress}:5000/diet/${e.target.parentElement.children[0].value}`)
+			.then(response => {
+				setIsOpen(false);
+				// console.log(response.data);
+				// id.parentElement.parentElement.remove();
+				callis(dietCal,value);
+			})
 		}
 	}
 
@@ -291,6 +309,7 @@ function Diet() {
 		...formData,
 		DIET_IMAGE: image, // 이미지 정보를 formData에 추가
 		});
+		
 	};
 	
 	const handleSubmit = (e) => {
@@ -301,31 +320,26 @@ function Diet() {
 		
 		// console.log(formData[formData.length -2].value); //작동확인
 		const formData1 = new FormData();
-	
+		
 		const foodData = new Array();
 		// 각 폼 필드를 FormData 객체에 추가
+		console.log("확인",selectedFood)
+		if (selectedFood != null || selectedFood != 0) formData.FOOD = selectedFood;
 		for (const key in formData) {
-		// console.log(key,':',formData[key]);
-		if(key == 'FOOD' || key == 'FOOD_WEIGHT'){
-			foodData.push(formData[key])
-			if(key == 'FOOD'){
-			// console.log(key, selectedFood);
-			formData1.append(key, selectedFood);
-			}else{
+			console.log(key,':',formData[key]);
 			formData1.append(key, formData[key]);
-			}
-		}else{
-			// console.log(key, formData[key]);
-			formData1.append(key, formData[key]);
-		}
 		}
 	
 		if(formData2[formData2.length -2].value == '수정'){
+		var endTime = e.target.children[2].children[0].children[0].children[1].children[0].value;
+      	var accountNo = e.target.children[0].value;
+		console.log('accountNo',endTime);
+		formData1.append('END_DATE', endTime);
 		// console.log(String(formData2[2].value).split()[0])
 		// console.log('put',formData1);
 		//폼데이타 안들어가서 직접 수정
 	
-		axios.put(`http://${ipAddress}:5000/diet/${dietCal}`, formData1, {
+		axios.put(`http://${ipAddress}:5000/diet/${accountNo}`, formData1, {
 			headers: {
 			'Content-Type': 'multipart/form-data',
 			},
@@ -333,7 +347,10 @@ function Diet() {
 		.then(response => {
 			// console.log("주소:", response);
 			swal({title:"수정 성공!",icon:"success"})  
+			
 			//서버에 데이터 입력 성공시 모달창 닫기
+			console.log('날짜',value);
+			callis(dietCal,value);
 			setIsOpen(false);
 		})
 		.catch(error => {
@@ -346,7 +363,7 @@ function Diet() {
 			formData1.append('END_DATE', endTime);
 			// console.log(formData1);
 			setSelectedFood('');
-			// console.log("post",formData['DIET_IMAGE'] == '');
+			// // console.log("post",formData['DIET_IMAGE'] == '');
 			axios.post(`http://${ipAddress}:5000/diet/${dietCal}`, formData1, {
 				headers: {
 				'Content-Type': 'multipart/form-data',
@@ -355,6 +372,7 @@ function Diet() {
 			.then(response => {
 				// console.log("주소:", response);
 				swal({title:"입력 성공!",icon:"success"})  
+				callis(dietCal,value);
 				//서버에 데이터 입력 성공시 모달창 닫기
 				setIsOpen(false);
 			})
@@ -365,6 +383,31 @@ function Diet() {
 		
 		}
 	};
+
+	//좋아요
+	const foodLike = (e) => {
+		var btnLike = e.target.parentElement.children[0].value;
+		var dateLike = e.target.parentElement.children[1].value;
+		console.log('dateLike : ', dateLike.length);
+		if(dateLike.length <= 0){
+			axios.post(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
+				headers: {
+					'Content-Type':'multipart/form-data',
+				}
+			})
+		e.target.src = require('./images/heart.png');
+		e.target.parentElement.children[1].value =new Date();
+		console.log('e.target.src',e.target.src);
+		}else{
+			axios.delete(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
+				header: {
+					'Content-Type':'multipart/form-data',
+				}
+			})
+		e.target.src = require('./images/empty-heart.png');
+		e.target.parentElement.children[1].value ='';
+		}
+	}
 
 	const [formData, setFormData] = useState({
 		DESCRIPTION: '',
@@ -377,6 +420,7 @@ function Diet() {
 	  
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
+		console.log(name,':',value);
 		setFormData({
 		...formData,
 		[name]: value,
@@ -572,8 +616,18 @@ function Diet() {
 									<h2>{test[1]}</h2>
 									<p>{test[2]}</p>
 									<p>{test[5]}</p>
-									<div class="blog-button">
-										<a href="#">read more <i class="fa fa-long-arrow-right"></i></a>
+									<div class="blog-button" >
+										<div type="button" className="like-button" onClick={foodLike}>
+											<input type='hidden' value={test[0]} />
+											<input type='hidden' value={test[6]} />
+											{
+											test[6] != null?
+												<img src={require('./images/heart.png')} alt="like"/>
+												:
+												<img src={require('./images/empty-heart.png')} alt="like"/>
+											}
+											{/* <img src={require('./images/empty-heart.png')} alt="empty-like"/> */}
+										</div>
 									</div>
 								</div>
 							</div>
@@ -601,12 +655,12 @@ function Diet() {
                 
                 {/* <form onSubmit={console.log("post")}> */}
                 <form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
-                  {/* {selectOne == '' || selectOne == null ? ''
+                  {selectOne == '' || selectOne == null ? ''
                     : 
-                    // <input type="hidden" value={selectOne[0]}/>
-                  } */}
+                    <input type="hidden" value={selectOne[0]}/>
+                  }
                   <div className="file_upload_diet">
-                  <FileUploadBox onImageChange={handleImageChange} />
+                  <FileUploadBox setFile={setYoloFood} onImageChange={handleImageChange} />
                   </div>
                   <div className="date_picker">
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
@@ -634,16 +688,16 @@ function Diet() {
                     <div className="modal-food-list">
                       <AutoCompleteSearch onSelect={handleFoodSelect} />
                       <input type="text" name="DESCRIPTION" 
-					  value={selectOne != null ? selectOne[1] : ''}
+					  value={formData.DESCRIPTION != null ? formData.DESCRIPTION : selectOne != null ? selectOne[1] : ''}
 					   placeholder="제목" onChange={handleInputChange} />
                       <input type="text" name="FOOD" 
 					  value={(selectedFood != null && selectedFood.length != 0)? selectedFood : selectOne != null ? selectOne[3]:''}
 					   placeholder="음식" onChange={handleInputChange} readOnly/>
                       <input type="text" name="FOOD_WEIGHT" 
-					  value={selectOne != null ? selectOne[7] : ''} 
+					  value={formData.FOOD_WEIGHT != null ? formData.FOOD_WEIGHT : selectOne != null ? selectOne[7] : ''} 
 					  placeholder="음식무게" onChange={handleInputChange} />
                       <input type="text" name="MEMO" 
-					  value={selectOne != null ? selectOne[2] : ''} 
+					  value={formData.MEMO != null ? formData.MEMO : selectOne != null ? selectOne[2] : ''} 
 					  placeholder="내용" onChange={handleInputChange} />
                     </div>
                     <div className="modal-food-chart">

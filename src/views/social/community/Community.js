@@ -1,11 +1,11 @@
-import {Link} from 'react-router-dom';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './Community.css';
+import axios from 'axios';
 import $ from 'jquery';
-import Wrapper from '../../component/Wrapper/Wrapper';
 
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
+import Modal from './modal';
 
 import Loader from '../../component/loader/Loader';
 import CommunityProfile from './component/CommunityProfile';
@@ -22,16 +22,189 @@ import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 //플로팅
 //npm i --save react-floating-action-button
 
-
 //리액트 모달
 //npm install --save react-modal
 //import Modal from 'react-modal';
 
-
 function Community() {
+
+    function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith(name + '=')) {
+            return cookie.substring(name.length + 1);
+          }
+        }
+        return null;
+    }
+    
+    const myCookieValue = getCookie('Authorization');
+    
+    const [boards, setBoards] = useState([]);
+    const [loginUser, setLoginUser] = useState([]); //현재 로그인 중인 사용자 정보 저장
+    const [userInfo, setUserInfo] = useState([]);
+    const [clickedFollower, setClickedFollower] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [accountInfo, setAccountInfo] = useState([]);
+
     useEffect(()=>{
         $('body').addClass('loaded');
     });
+
+    //이미지서버 연결 
+    async function imageData(code){
+        return await new Promise((resolve,reject)=>{
+        try{
+            axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
+            .then((response)=>{
+                resolve("data:image/png;base64,"+response.data['image']);
+            })
+        }
+        catch(err){reject(err)};
+        },2000);
+    }
+
+    // 사용자 정보 프로필 정보 조회
+    useEffect(() => {
+        axios.get('http://192.168.0.15:8080/api/v1/boards/account', {
+          headers: {
+            'Authorization' : `${myCookieValue}`,
+            'Content-Type' : 'application/json; charset=UTF-8'
+          }
+        })
+        .then(response => { 
+            imageData(response.data.image).then((image) => {
+                response.data.image = image;
+                setUserInfo(response.data);
+                setLoginUser(response.data);
+            })
+        })
+        .catch(error => console.log(error))
+      }, []);
+
+    // 팔로워 클릭 이벤트 핸들러
+    function handleFollowerClick(followerInfo) {
+        setClickedFollower(followerInfo);
+        setUserInfo(followerInfo);
+
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/friends/${followerInfo.accountNo}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            setBoards(response.data);
+            
+            const updatedBoards = await Promise.all(response.data.map(async board => {
+                const image = await imageData(board.image);
+                board.image = image;
+                return board;
+            }));
+            setBoards(updatedBoards);
+        })
+        .catch(error => {
+            console.error('Error fetching follower boards:', error);
+        });
+    }
+
+
+    // 게시글 전체 목록 조회
+    useEffect(() => {
+        axios.get('http://192.168.0.15:8080/api/v1/boards', {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            const updatedBoards = await Promise.all(response.data.map(async board => {
+                const image = await imageData(board.image);
+                board.image = image;
+                return board;
+            }));
+    
+            setBoards(updatedBoards);
+        })
+        .catch(error => console.log(error));
+    }, []);
+
+    // 특정 게시글 상세 조회
+    useEffect(() => {
+        axios.get('http://192.168.0.15:8080/api/v1/boards', {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            const updatedBoards = await Promise.all(response.data.map(async board => {
+                const image = await imageData(board.image);
+                board.image = image;
+                return board;
+            }));
+    
+            setBoards(updatedBoards);
+        })
+        .catch(error => console.log(error));
+    }, []);
+
+    //모달창 외부 스크롤 방지
+    useEffect(() => {
+    if (isOpen) {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+    }
+    return () => {
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+    };
+    }, [isOpen]);
+
+    //게시글 프로필 클릭 시 사용자 정보 프로필로 출력
+    function handleButtonClickedFromChild(accountNo) {
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/account/${accountNo}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            const userInfo = response.data;
+            const image = await imageData(userInfo.image);
+            userInfo.image = image;
+            setUserInfo(userInfo);
+        })
+        .catch(error => {
+            console.error('axios 요청 중 에러 발생:', error);
+        });
+
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/friends/${accountNo}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            setBoards(response.data);
+            
+            const updatedBoards = await Promise.all(response.data.map(async board => {
+                const image = await imageData(board.image);
+                board.image = image;
+                return board;
+            }));
+            setBoards(updatedBoards);
+        })
+        .catch(error => {
+            console.error('Error fetching follower boards:', error);
+        });
+    }
+
   return (
     <div>
         {/* 챗봇용 플로팅 */}
@@ -48,22 +221,53 @@ function Community() {
         {/*게시글 영역*/}
         <div className="blog-area style-two">
             <div className="container">
-                <CommunityFriendListHeader/>
+                <CommunityFriendListHeader handleFollowerClick={handleFollowerClick}/>
                 <div className="row">
                     <div className="col-lg-8">
                         {/*게시 혹은 검색 부분*/}
-                        <CommnunitySearch/>
+                        <CommnunitySearch 
+                            showModal={showModal}
+                            setShowModal={setShowModal}
+                        />
                         {/*특정 사용자 프로필 영역*/}
-                        <CommunityProfile/>
+                        <CommunityProfile
+                            accountNo={userInfo.accountNo}
+                            username={userInfo.username}
+                            name={userInfo.name}
+                            address={userInfo.address}
+                            enrollDate={userInfo.enrollDate}
+                            image={userInfo.image}
+                            postCount={userInfo.postCount}
+                            follower={userInfo.follower}
+                            following={userInfo.following}
+                            realation={userInfo.realation}
+                            loginAccountNo={loginUser.accountNo}
+                        />
+                       
                         {/*게시글 박스*/}
-                        <CommunityBoard writer="JO-DONG-HUN" position="서울시 강남구 서초동 서초대로" postDate="January 27, 2023"
-                                        title="내가 새로 산 차" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
-                        />
-                        <CommunityBoard writer="PARK-SANG-NYEONG" position="영등포" postDate="January 27, 2023"
-                                        title="내가 새로 산 차1" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
-                        />
-
-                        <CommunityBoardWriteModal/>
+                        {boards.map(board => (
+                            <CommunityBoard 
+                                accountNo={board.accountNo}
+                                bno={board.bno} 
+                                name={board.name}
+                                image={board.image}
+                                address={board.address}
+                                postDate={board.postDate}
+                                likes={board.like}
+                                title={board.title}
+                                comment={board.boardComment}
+                                isOpen={isOpen}
+                                setIsOpen={setIsOpen}
+                                onButtonClicked={handleButtonClickedFromChild}
+                            />
+                        ))}
+                        
+                        {showModal && (
+                            <Modal onClose={() => setShowModal(false)}>
+                               <CommunityBoardWriteModal accountNo={loginUser.accountNo}/>
+                            </Modal>
+                        )}
+                        
                     </div>
 
                     <div className="col-lg-4 col-md-6 col-sm-12">
@@ -74,10 +278,34 @@ function Community() {
             </div>
         </div>
         {/*푸터 영역*/}
-        <CommunityBoardViewModal writer="PARK-SANG-NYEONG" position="영등포" postDate="January 27, 2023"
-                                        title="내가 새로 산 차1" comment="asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f asfsfsfsadfasdf adsfsaf sdf asads fasdf sdaf sdf asfasd fsa f"
-                        />
+        {isOpen && (
+            <Modal
+            open={isOpen}
+            onClose={() => {
+              setIsOpen(false);
+            }}
+          >
+            <CommunityBoardViewModal 
+                // bno={board.bno} 
+                // name={board.name}
+                // image={board.image}
+                // address={board.address}
+                // postDate={board.postDate}
+                // likes={board.like}
+                // title={board.title}
+                // comment={board.boardComment}
+            />
+          </Modal>
+            
+        )}
         <Footer/>
+        {/* Scroll to top button */}
+        <button
+            className="scroll-to-top-btn"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+            <i className="fas fa-arrow-up"></i>
+        </button>
     </div>
   );
 }
