@@ -10,8 +10,7 @@
     padding: 20px 0px;
     display: flex;
     flex-direction: column;
-    border:1px solid lightgray;
-    background-color: #FFFFFF;
+    background-color: rgb(34, 34, 34);
     
 }
 
@@ -51,7 +50,9 @@
     align-items: center;
     gap:20px;
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
-    background-color: #FFFFFF;
+    background-color: #3C4852;
+    
+    
 }
 
 
@@ -63,7 +64,8 @@
     box-shadow:0px 0px 2px 1px rgba(0, 0, 0, 0.2);
     width: 100px;
     height: 60%;
-    color:rgb(83, 83, 83);
+    color:rgb(230, 230, 230);
+    background-color: #ffffff60;
 }
 
 .game-play-button:hover{
@@ -86,20 +88,19 @@
     border-radius: 5px;
     height: 50px;
     margin-bottom: 20px;
-    border:1px solid lightgray;
-    background-color: #FFFFFF;
+    color: white;
+    background-color: rgb(34, 34, 34);;
 }
 
 
 .game-profile-layout{
-    border:1px solid lightgray;
     border-radius: 5px;
     height: 740px;
     padding: 20px 0px;
     display: flex;
     flex-direction: column;
     top:-70px;
-    background-color: #F6F4EC;
+    background-color: rgb(34, 34, 34);
 }
 
 
@@ -117,11 +118,10 @@
     margin: auto;
     height: 550px;
     border-radius: 5px;
-    border:1px solid lightgray;
     overflow-y: scroll;
     padding: 10px;
     gap:15px;
-    background-color: #F6F4EC;
+    background-color: #30393D;
 }
 
 .game-room-layout::-webkit-scrollbar{
@@ -139,4 +139,7 @@
     background-color: #F6F4EC;
     margin-bottom: 10px;
 }
+
+
+
 

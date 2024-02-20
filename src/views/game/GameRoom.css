@@ -1,0 +1,119 @@
+.game-match-layout{
+    margin-top: -70px;
+    border-radius: 5px;
+    height: 740px;
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(34, 34, 34);
+}
+
+.game-match-container{
+    margin: auto;
+    height: 690px;
+    border-radius: 5px;
+    padding: 10px;
+    gap:15px;
+    background-color: #3C4852;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.game-match-container-alarm{
+    box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.7);
+    border-radius: 5px;
+    height: 13%;
+    background-color: #ffffff9f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.game-match-container-alarm::-webkit-scrollbar{
+    display: none;
+}
+
+.webRTC-layout{
+    height: 90%;
+    border-radius: 5px;
+    background-color: #ffffff9f;
+    box-shadow:inset 0px 0px 5px 4px rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+}
+
+.webRTC-container{
+    border: 1px solid red;
+    height: 50%;
+    display: flex;
+}
+
+.wc1{
+    padding: 0px 20px;
+    height: 20%;
+    gap:10px;
+    align-items: center;
+}
+
+.wc2{
+    padding: 5px 20px;
+    height: 40%;
+    gap:10px;
+    align-items: center;
+}
+
+.wc3{
+    margin-top: 10px;
+    padding: 0px 20px;
+    height: 10%;
+    gap:10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.webRTC-sub-item{
+    position: relative;
+    background-color: #515151;
+    width:500px;
+    height: 90%;
+    text-align: center;
+    color: rgb(64, 64, 64);
+    line-height: 100px;
+    font-size: 50px;
+}
+
+.webRTC-item{
+    background-color: #515151;
+    width:500px;
+    height: 98%;
+    color: rgb(158, 158, 158);
+    line-height: 300px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.webRTC-button{
+    position: relative;
+    cursor: pointer;
+    background-color: lightgrey;
+    box-shadow: inset 2px 2px 5px 3px rgba(0, 0, 0, 0.399);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.webRTC-button:hover{
+    box-shadow:2px 2px 5px 3px rgba(0, 0, 0, 0.399);
+}
+
+.webRTC-button img{
+    position: absolute;
+    top:0; bottom: 0; right: 0; left: 0;
+    margin: auto;
+    width: 60%;
+    height: 60%;
+}
+

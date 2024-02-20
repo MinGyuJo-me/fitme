@@ -5,6 +5,7 @@
     padding: 15px 5px;
     place-items: center;
     height: 53%;
+    background-color: #3C4852;
 }
 
 .game-profile-name div{
@@ -12,11 +13,12 @@
     height: 25%;
     width: 90%;
     border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.034);
+    background-color:#30393D;
     display: flex;
     line-height: 50px;
     place-items: center;
     font-weight: bold;
+    color: white;
 }
 
 .game-profile-name span:nth-child(1){
@@ -28,9 +30,11 @@
     font-weight: bold;
     font-family: Lobster;
     border-right: 2px solid rgba(0, 0, 0, 0.261);
+    color: rgb(190, 190, 190);
 }
 
 
 .game-profile-name span:nth-child(2){
     padding-left: 10px;
+    color: rgb(116, 116, 116);
 }
