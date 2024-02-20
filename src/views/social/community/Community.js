@@ -26,6 +26,10 @@ import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 //npm install --save react-modal
 //import Modal from 'react-modal';
 
+
+//******************************************************* */
+import CommunityBoardWriteModal_ from './crud/CommunityBoardWriteModal_';
+
 function Community() {
 
     function getCookie(name) {
@@ -264,9 +268,9 @@ function Community() {
                         ))}
                         
                         {showModal && (
-                            <Modal onClose={() => setShowModal(false)}>
+                            <CommunityBoardWriteModal_ onClose={() => setShowModal(false)}>
                                <CommunityBoardWriteModal accountNo={loginUser.accountNo}/>
-                            </Modal>
+                            </CommunityBoardWriteModal_>
                         )}
                         
                     </div>

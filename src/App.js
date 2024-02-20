@@ -14,9 +14,9 @@ import Messenger from './views/chatting/messenger/Messenger'
 import Diet from './views/management/diet/Diet';
 import Workout from './views/management/workout/Workout';
 import MyPage from './views/mypage/MyPage.js'; 
-import findPassword from './views/findpassword/FindPassword.js';
 import Game from './views/game/Game.js';
-
+import GameRoom from './views/game/GameRoom.js'
+import FindPassword from './views/findpassword/FindPassword.js';
 
 import './assets/css/bootstrap.min.css';
 
@@ -47,7 +47,7 @@ import './venobox/venobox.css';
 import './assets/css/widget.css';
 
 import './assets/css/responsive.css';
-import FindPassword from './views/findpassword/FindPassword.js';
+
 
 function App() {
   return (
@@ -79,7 +79,8 @@ function App() {
 
             {/*게임 페이지*/}
             <Route path={"/game"} element={<Game/>}/>
-
+            <Route path={"/game/room"} element={<GameRoom/>}/>
+            
           </Routes>
         </BrowserRouter>
       </AnimatePresence>

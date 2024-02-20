@@ -20,4 +20,14 @@
     margin: auto;
     border:5px solid #c2cfdb;
     background-color: #F6F6F6;
+    line-height: 50px;
+}
+
+.community-modal-select{
+    width: 280px;
+    height: 40px;
+    border-radius: 20px;
+    border:1px solid #ced4da;
+    background-color: #F6F6F6;
+    text-align: center;
 }
