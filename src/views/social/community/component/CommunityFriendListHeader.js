@@ -1,28 +1,22 @@
 import './CommunityFriendListHeader.css';
-
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
-
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
-
-function CommunityFriendListHeader() {
-
+function CommunityFriendListHeader({handleFollowerClick}) {
     function getCookie(name) {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.startsWith(name + '=')) {
-            return cookie.substring(name.length + 1);
-          }
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+                return cookie.substring(name.length + 1);
+            }
         }
         return null;
     }
-    
+
     const myCookieValue = getCookie('Authorization');
 
     const [friendsInfo, setFriendsInfo] = useState([]);
@@ -32,7 +26,7 @@ function CommunityFriendListHeader() {
     async function imageData(code){
         return await new Promise((resolve,reject)=>{
         try{
-            axios.get(`http://192.168.0.15:5050/image/${code}`)
+            axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
             .then((response)=>{
                 resolve("data:image/png;base64,"+response.data['image']);
             })
@@ -41,33 +35,32 @@ function CommunityFriendListHeader() {
         },2000);
     }
 
-    // 친구 목록 조회
+    //친구 데이터 조회
     useEffect(() => {
         if (showFriend === false) {
-            axios.get('http://192.168.0.15:8080/api/v1/boards/friend', {
+            axios.get('http://192.168.0.104:8080/api/v1/boards/friend', {
                 headers: {
                     'Authorization': `${myCookieValue}`,
                     'Content-Type': 'application/json; charset=UTF-8'
                 }
             })
-            .then(response => {
-                console.log(response.data.length);
-                Promise.all(response.data.map(async friend => {
-                    const image = await imageData(friend.image);
-                    friend.image = image;
-                    return friend;
-                }))
-                .then(updatedFriendsInfo => {
-                    setFriendsInfo(updatedFriendsInfo);
-                    setShowFriend(true);
+                .then(response => {
+                    Promise.all(response.data.map(async friend => {
+                        const image = await imageData(friend.image);
+                        friend.image = image;
+                        return friend;
+                    }))
+                        .then(updatedFriendsInfo => {
+                            setFriendsInfo(updatedFriendsInfo);
+                            setShowFriend(true);
+                        })
+                        .catch(error => console.log(error));
                 })
                 .catch(error => console.log(error));
-            })
-            .catch(error => console.log(error));
-        } 
+        }
     }, [showFriend]);
 
-    const friendsOption={
+    const friendsOption = {
         responsive: {
             0: {
                 items: 4
@@ -80,15 +73,18 @@ function CommunityFriendListHeader() {
             }
         }
     }
+
     return (
-        <div className="row" style={{marginTop:"-50px",marginBottom:"40px"}}>
+        <div className="row" style={{ marginTop: "-50px", marginBottom: "40px" }}>
             <div className="col-lg-12 col-sm-12 friendlist ">
-                <div className="blog-single-box upper friend-icon-box" style={{background:"#F6F4EC"}}>
+                <div className="blog-single-box upper friend-icon-box" style={{ background: "#F6F4EC" }}>
                     <OwlCarousel items={9} nav={false} dots={false} {...friendsOption}>
-                        {friendsInfo.map(friendInfo => (
+                        {friendsInfo.map((friendInfo, index) => (
                             <Follower
+                                key={index}
                                 image={friendInfo.image}
                                 name={friendInfo.name}
+                                onClick={() => handleFollowerClick(friendInfo)}
                             />
                         ))}
                     </OwlCarousel>
@@ -96,25 +92,18 @@ function CommunityFriendListHeader() {
             </div>
         </div>
     );
-  }
+}
 
-  function Follower(props){
-    return(
-        <div className='friend-icon-item'>
-            <div className='blog-icon bi1' style={{boxShadow:"none", backgroundImage: `url(${props.image})`}}>
+function Follower(props) {
+    return (
+        <div className='friend-icon-item' onClick={props.onClick}>
+            <div className='blog-icon bi1' style={{ boxShadow: "none", backgroundImage: `url(${props.image})` }}>
             </div>
             <div className='blog-icon-description'>
                 {props.name}
             </div>
         </div>
     )
-  }
+}
 
-
-  
-  export default CommunityFriendListHeader;
-  
-
-
-
-
+export default CommunityFriendListHeader;

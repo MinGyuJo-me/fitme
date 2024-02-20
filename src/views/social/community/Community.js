@@ -22,13 +22,9 @@ import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 //플로팅
 //npm i --save react-floating-action-button
 
-
 //리액트 모달
 //npm install --save react-modal
 //import Modal from 'react-modal';
-
-
-
 
 function Community() {
 
@@ -46,9 +42,12 @@ function Community() {
     const myCookieValue = getCookie('Authorization');
     
     const [boards, setBoards] = useState([]);
+    const [loginUser, setLoginUser] = useState([]); //현재 로그인 중인 사용자 정보 저장
     const [userInfo, setUserInfo] = useState([]);
+    const [clickedFollower, setClickedFollower] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [accountInfo, setAccountInfo] = useState([]);
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -58,9 +57,8 @@ function Community() {
     async function imageData(code){
         return await new Promise((resolve,reject)=>{
         try{
-            axios.get(`http://192.168.0.15:5050/image/${code}`)
+            axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
             .then((response)=>{
-                // console.log(response.data);
                 resolve("data:image/png;base64,"+response.data['image']);
             })
         }
@@ -76,16 +74,41 @@ function Community() {
             'Content-Type' : 'application/json; charset=UTF-8'
           }
         })
-        .then(response => {
-            
+        .then(response => { 
             imageData(response.data.image).then((image) => {
                 response.data.image = image;
                 setUserInfo(response.data);
+                setLoginUser(response.data);
             })
-            
         })
         .catch(error => console.log(error))
       }, []);
+
+    // 팔로워 클릭 이벤트 핸들러
+    function handleFollowerClick(followerInfo) {
+        setClickedFollower(followerInfo);
+        setUserInfo(followerInfo);
+
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/friends/${followerInfo.accountNo}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            setBoards(response.data);
+            
+            const updatedBoards = await Promise.all(response.data.map(async board => {
+                const image = await imageData(board.image);
+                board.image = image;
+                return board;
+            }));
+            setBoards(updatedBoards);
+        })
+        .catch(error => {
+            console.error('Error fetching follower boards:', error);
+        });
+    }
 
 
     // 게시글 전체 목록 조회
@@ -130,19 +153,57 @@ function Community() {
 
     //모달창 외부 스크롤 방지
     useEffect(() => {
-        if (isOpen) {
-          document.documentElement.style.overflow = 'hidden';
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.documentElement.style.overflow = 'auto';
-          document.body.style.overflow = 'auto';
-        }
-        return () => {
-          document.documentElement.style.overflow = 'auto';
-          document.body.style.overflow = 'auto';
-        };
-      }, [isOpen]);
+    if (isOpen) {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+    }
+    return () => {
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+    };
+    }, [isOpen]);
 
+    //게시글 프로필 클릭 시 사용자 정보 프로필로 출력
+    function handleButtonClickedFromChild(accountNo) {
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/account/${accountNo}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            const userInfo = response.data;
+            const image = await imageData(userInfo.image);
+            userInfo.image = image;
+            setUserInfo(userInfo);
+        })
+        .catch(error => {
+            console.error('axios 요청 중 에러 발생:', error);
+        });
+
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/friends/${accountNo}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(async response => {
+            setBoards(response.data);
+            
+            const updatedBoards = await Promise.all(response.data.map(async board => {
+                const image = await imageData(board.image);
+                board.image = image;
+                return board;
+            }));
+            setBoards(updatedBoards);
+        })
+        .catch(error => {
+            console.error('Error fetching follower boards:', error);
+        });
+    }
 
   return (
     <div>
@@ -160,7 +221,7 @@ function Community() {
         {/*게시글 영역*/}
         <div className="blog-area style-two">
             <div className="container">
-                <CommunityFriendListHeader/>
+                <CommunityFriendListHeader handleFollowerClick={handleFollowerClick}/>
                 <div className="row">
                     <div className="col-lg-8">
                         {/*게시 혹은 검색 부분*/}
@@ -170,6 +231,7 @@ function Community() {
                         />
                         {/*특정 사용자 프로필 영역*/}
                         <CommunityProfile
+                            accountNo={userInfo.accountNo}
                             username={userInfo.username}
                             name={userInfo.name}
                             address={userInfo.address}
@@ -178,10 +240,14 @@ function Community() {
                             postCount={userInfo.postCount}
                             follower={userInfo.follower}
                             following={userInfo.following}
+                            realation={userInfo.realation}
+                            loginAccountNo={loginUser.accountNo}
                         />
+                       
                         {/*게시글 박스*/}
                         {boards.map(board => (
                             <CommunityBoard 
+                                accountNo={board.accountNo}
                                 bno={board.bno} 
                                 name={board.name}
                                 image={board.image}
@@ -192,12 +258,13 @@ function Community() {
                                 comment={board.boardComment}
                                 isOpen={isOpen}
                                 setIsOpen={setIsOpen}
+                                onButtonClicked={handleButtonClickedFromChild}
                             />
                         ))}
                         
                         {showModal && (
                             <Modal onClose={() => setShowModal(false)}>
-                               <CommunityBoardWriteModal accountNo={userInfo.accountNo}/>
+                               <CommunityBoardWriteModal accountNo={loginUser.accountNo}/>
                             </Modal>
                         )}
                         
@@ -232,6 +299,13 @@ function Community() {
             
         )}
         <Footer/>
+        {/* Scroll to top button */}
+        <button
+            className="scroll-to-top-btn"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+            <i className="fas fa-arrow-up"></i>
+        </button>
     </div>
   );
 }
