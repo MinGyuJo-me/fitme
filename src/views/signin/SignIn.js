@@ -7,6 +7,7 @@ import axios from 'axios';
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
 import Breadcumb from '../component/Breadcumb/Breadcumb';
+import Chatbot from '../component/chatBot/ChatBot';
 import './Login.css';
 
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
@@ -201,6 +202,7 @@ function SignIn() {
             </span>
           </p>
         </div>
+        <Chatbot/>
     </div>
   );
 }

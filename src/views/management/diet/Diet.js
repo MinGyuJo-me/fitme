@@ -39,6 +39,7 @@ import styled from 'styled-components';
 import Modal from "./modal";
 import FileUploadBox from './FileUploadBox';
 import AutoCompleteSearch from './AutoCompleteSearch'
+import Chatbot from '../../component/chatBot/ChatBot';
 
 
 
@@ -716,7 +717,7 @@ function Diet() {
                 </Modal>
                 )}
 				</div>
-			
+				<Chatbot/>
 	</div>
 	</div>
     </div>

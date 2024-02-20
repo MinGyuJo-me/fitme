@@ -12,6 +12,7 @@ import './Messenger.css';
 import * as StompJs from '@stomp/stompjs';
 //componants
 import Modal from "./modal";
+import ChatBot from '../../component/chatBot/ChatBot';
 
 let chatNo = 0;
 function getCookie(name) { //로그인 여부 확인
@@ -411,6 +412,7 @@ function Messenger() {
         </div>
     </li>
     </script>
+    <ChatBot/>
     </div>
   );
 }

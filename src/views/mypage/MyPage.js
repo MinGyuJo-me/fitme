@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
+import Chatbot from '../component/chatBot/ChatBot';
 import './MyPage.css';
-
 import { useNavigate } from "react-router-dom";
 
 import axios from 'axios';
@@ -463,7 +463,7 @@ function MyPage() {
           {/*마이페이지 유튜브*/}
           <MypageYoutubeLayout/>
         </div>
-
+        <Chatbot/>
     </div>
     </div>
   );
