@@ -4,6 +4,7 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './CommunityBoardWriteModal.css';
 import axios from 'axios';
+import swal from 'sweetalert2';
 
 function CommunityBoardWriteModal(props) {
     function getCookie(name) {
@@ -112,6 +113,16 @@ function CommunityBoardWriteModal(props) {
                 console.error(error);
             }
         }
+
+        swal.fire({title:"등록하시겠습니까?",icon:"question", button:"확인"})
+        .then(value => {
+            if(value)
+                props.setShowModal(false);
+        })
+
+        
+
+        
     };
 
     return (
