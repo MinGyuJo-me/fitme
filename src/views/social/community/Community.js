@@ -29,6 +29,7 @@ import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 
 //******************************************************* */
 import CommunityBoardWriteModal_ from './crud/CommunityBoardWriteModal_';
+import CommunityBoardViewModal_ from './crud/CommunityBoardViewModal_';
 
 function Community() {
 
@@ -284,7 +285,7 @@ function Community() {
         </div>
         {/*푸터 영역*/}
         {isOpen && (
-            <Modal
+            <CommunityBoardViewModal_
             open={isOpen}
             onClose={() => {
               setIsOpen(false);
@@ -300,7 +301,7 @@ function Community() {
                 // title={board.title}
                 // comment={board.boardComment}
             />
-          </Modal>
+          </CommunityBoardViewModal_>
             
         )}
         <Footer/>

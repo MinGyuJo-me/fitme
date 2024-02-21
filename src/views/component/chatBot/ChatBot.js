@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './Chatbot.css';
 import 'material-symbols';
+import axios from 'axios'; //npm install axios
 
+var ipAddress = '192.168.0.110';
 
-const ChatBot = () => {
+function ChatBot() {
   const [userMessage, setUserMessage] = useState(null);
-  const API_KEY = "//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"; // 여기에 API 키를 붙여넣으세요
-  const inputInitHeight = 40; // 텍스트 영역의 초기 높이를 설정하세요
+  const inputInitHeight = 40; // 텍스트 영역의 초기 높이를 설정
 
 
   const createChatLi = (message, className) => {
-    // 전달된 메시지와 클래스 이름으로 채팅 <li> 엘리먼트를 생성합니다
+    // 전달된 메시지와 클래스 이름으로 채팅 <li> 엘리먼트를 생성
     return (
       <li key={Math.random()} className={`chat ${className}`}>
         {className === "outgoing" ? <p>{message}</p> : <><span className="material-symbols-outlined">smart_toy</span><p>{message}</p></>}
@@ -19,23 +20,15 @@ const ChatBot = () => {
   }
 
   const generateResponse = async () => {
-    const API_URL = "https://api.openai.com/v1/chat/completions";
+    // const API_URL = "https://api.openai.com/v1/chat/completions";
+    const API_URL = `http://${ipAddress}:5000/chatbot`;
     
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: userMessage }],
-        })
+      const response = await axios.post(API_URL, {
+        message: userMessage,
       });
 
-      const data = await response.json();
-      return data.choices[0].message.content.trim();
+      return response.data.answer;
     } catch (error) {
       console.error("응답 생성 중 오류 발생:", error);
       throw error;
@@ -46,29 +39,29 @@ const ChatBot = () => {
     const trimmedUserMessage = userMessage.trim();
     if (!trimmedUserMessage) return;
   
-    // 사용자의 메시지를 채팅 상자에 추가합니다
+    // 사용자의 메시지를 채팅 상자에 추가
     setChatbox((prevChatbox) => [...prevChatbox, createChatLi(trimmedUserMessage, "outgoing")]);
   
-    // 입력 텍스트 영역을 지웁니다
+    // 입력 텍스트 영역을 제거
     setUserMessage("");
 
-    // 입력 텍스트 영역의 높이를 초기화합니다
+    // 입력 텍스트 영역의 높이를 초기화
     const textareaElement = document.querySelector(".chat-input textarea");
     textareaElement.style.height = `${inputInitHeight}px`;
   
-    // 응답을 기다리는 동안 "Thinking..." 메시지를 표시합니다
+    // 응답을 기다리는 동안 "Thinking..." 메시지를 표시
     setChatbox((prevChatbox) => [...prevChatbox, createChatLi("Thinking...🤔", "incoming")]);
   
     try {
       const response = await generateResponse();
   
-      // "Thinking..." 메시지를 제거합니다
+      // "Thinking..." 메시지를 제거
       setChatbox((prevChatbox) => prevChatbox.slice(0, -1));
   
-      // 실제 응답을 표시합니다
+      // 실제 응답을 표시
       setChatbox((prevChatbox) => [...prevChatbox, createChatLi(response, "incoming")]);
     } catch (error) {
-      // "Thinking..." 메시지를 제거하고 오류 메시지를 표시합니다
+      // "Thinking..." 메시지를 제거하고 오류 메시지를 표시
       setChatbox((prevChatbox) => {
         const updatedChatbox = prevChatbox.slice(0, -1); // "Thinking..." 메시지 제거
         return [...updatedChatbox, createChatLi("이런! 오류가 발생했습니다.다시 시도해주세요.\n오류가 계속될 경우 관리자에게 문의해 주세요.😰", "incoming error")];
@@ -77,15 +70,15 @@ const ChatBot = () => {
   };
 
   const handleTextareaInput = (e) => {
-     // 내용에 따라 입력 텍스트 영역의 높이를 조절합니다
+     // 내용에 따라 입력 텍스트 영역의 높이를 조절
     e.target.style.height = `${inputInitHeight}px`;
     e.target.style.height = `${e.target.scrollHeight}px`;
-    // 입력된 메시지를 자동 줄바꿈합니다.
+    // 입력된 메시지를 자동 줄바꿈
     e.target.style.whiteSpace = 'pre-wrap';
   }
 
   const handleTextareaKeyDown = (e) => {
-    // Shift 키를 누르지 않고 Enter 키가 눌렸을 때 채팅을 처리합니다
+    // Shift 키를 누르지 않고 Enter 키가 눌렸을 때 채팅을 처리
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleChat();
@@ -98,7 +91,7 @@ const ChatBot = () => {
   ]);
 
   useEffect(() => {
-    // 채팅 상자가 업데이트될 때 마다 가장 아래로 스크롤합니다
+    // 채팅 상자가 업데이트될 때 마다 가장 아래로 스크롤
     const chatboxElement = document.querySelector(".chatbox");
     chatboxElement.scrollTo(0, chatboxElement.scrollHeight);
   }, [chatbox]);
