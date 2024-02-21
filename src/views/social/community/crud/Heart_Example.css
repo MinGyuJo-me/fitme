@@ -70,58 +70,59 @@
 
 
 .heart-icon .i1 {
-  top: -10px;
-  left: 20px;
+  top: -8px;
+  left: 12px;
   background: #D0CFB6;
   -webkit-animation-delay: 1.2s;
   animation-delay: 1.2s;
 }
 
 .heart-icon .i2 {
-  top: -4px;
-  left: 41px;
-  background: #96E0DC;
+  top: 32px;
+  left: 12px;
+  background: #ffe100;
   -webkit-animation-delay: 0s;
   animation-delay: 0s;
 }
 .heart-icon .i3 {
-  top: 16px;
-  left: 48px;
-  background: #9997CA;
+  top: -2px;
+  left: -3px;
+  background: #0800ff;
   -webkit-animation-delay: 0.4s;
   animation-delay: 0.4s;
 }
 .heart-icon .i4 {
-  top: 37px;
-  left: 44px;
-  background: #D4D3BD;
+  top: -2px;
+  left: 27px;
+  background: #ff00a6;
   -webkit-animation-delay: 0.9s;
   animation-delay: 0.9s;
 }
+
 .heart-icon .i5 {
-  top: 47px;
-  left: 21px;
+  top: 12px;
+  left: -8px;
   background: #B993E5;
   -webkit-animation-delay: 0.3s;
   animation-delay: 0.3s;
 }
 .heart-icon .i6 {
-  top: 40px;
-  left: -2px;
-  background: #9d6cd5;
+  top: 12px;
+  left: 32px;
+  background: #1e7200;
   -webkit-animation-delay: 1s;
   animation-delay: 1s;
 }
 .heart-icon .i7 {
-  top: 17px;
-  left: -5px;
+  top: 25px;
+  left: -3px;
   background: #D7A4BE;
   -webkit-animation-delay: 0.7s;
   animation-delay: 0.7s;
 }
 .heart-icon .i8 {
-  top: -6px;
-  left: 0px;
+  top: 25px;
+  left: 27px;
   background: #e7d9a7;
   -webkit-animation-delay: 0.2s;
   animation-delay: 0.2s;
@@ -138,8 +139,8 @@
 }
 100%
 {
-  top:22px;
-  left:22px;
+  top:12px;
+  left:12px;
   opacity:1
 }
 }
