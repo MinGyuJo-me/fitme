@@ -24,8 +24,8 @@ function CommunityBoardViewModal(props) {
     };
 
     return (
-        <div className='row justify-content-md-center' style={{border:"1px solid red", width:"1800px"}}>
-            <div className="col-lg-5 col-sm-5">
+        <div className='row justify-content-md-center' style={{backgroundColor:"lightgray", borderRadius:"5px", paddingTop:"20px"}}>
+            <div className="col-lg-6 col-sm-6">
                 <div className="blog-single-box upper" style={{backgroundColor:"#F6F4EC"}}>
                     <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                         <div className="blog-icon bi1">
@@ -55,7 +55,13 @@ function CommunityBoardViewModal(props) {
                     
                     <div className="blog-content">
                         <div style={{display:"flex", height:"35px"}}>
-                            <button className='blog-content-button' style={{width:"35px", marginRight:"10px"}}>▼</button> <h2><a href="blog-details.html">{props.title}</a></h2>
+                        <select style={{width:"35px", padding:"5px", marginRight:"10px", borderRadius:"0px", border:"3px solid rgba(0, 0, 0, 0.391)", borderRadius:"0px", backgroundColor:"lightgray"}}>
+                            <option value=""></option>
+                            <option value="">신고1</option>
+                            <option value="">수정</option>
+                            <option value="">삭제</option>
+                        </select>
+                        <h2><a href="blog-details.html">{props.title}</a></h2>
                         </div>
                         <p>
                             {props.comment}
@@ -67,7 +73,7 @@ function CommunityBoardViewModal(props) {
                 </div>
             </div>
 
-            <div className="col-lg-5 col-sm-5" >
+            <div className="col-lg-6 col-sm-6" >
                 <div className="blog-single-box upper" style={{height:"97%", backgroundColor:"#F6F4EC"}}>
                     <div className="blog-content" style={{height:"90%"}}>
                         <div className='blog-comment'>
@@ -182,12 +188,9 @@ function CommunityBoardViewModal(props) {
                     </div>
                     <div className="blog-content">
                         <div className="blog-button">
-                            <input type="text" style={{width:"70%", height:"45px", borderRadius:"5px", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}}></input>
-                            <button type="submit" style={{position:"absolute", right:"210px", borderRadius:"5px", backgroundColor:"#F6F6F6", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.2)"}}>submit</button>
-                            <div className="blog-button-container">
-                                <div className='blog-button-item'>
-                                    <img src={require('../images/chat_bubble.png')}/>
-                                </div>
+                        <input type="text" style={{width:"80%", height:"45px", borderRadius:"5px", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}}></input>
+                        <button type="submit" style={{position:"absolute", right:"140px", borderRadius:"5px", backgroundColor:"#F6F6F6", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.2)"}}>submit</button>
+                        <div className="blog-button-container" style={{width: "90px"}}>
                                 <div className='blog-button-item'>
                                     <img src={require('../images/heart.png')}/>
                                 </div>

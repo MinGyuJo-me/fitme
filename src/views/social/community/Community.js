@@ -29,6 +29,7 @@ import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 
 //******************************************************* */
 import CommunityBoardWriteModal_ from './crud/CommunityBoardWriteModal_';
+import CommunityBoardViewModal_ from './crud/CommunityBoardViewModal_';
 
 function Community() {
 
@@ -266,6 +267,22 @@ function Community() {
                                 onButtonClicked={handleButtonClickedFromChild}
                             />
                         ))}
+
+                            <CommunityBoard 
+                                key="1"
+                                accountNo="1"
+                                bno="1"
+                                name="1"
+                                image="1"
+                                address="1"
+                                postDate="1"
+                                likes="1"
+                                title="1"
+                                comment="1"
+                                isOpen={isOpen}
+                                setIsOpen={setIsOpen}
+                                onButtonClicked={handleButtonClickedFromChild}
+                            />
                         
                         {showModal && (
                             <CommunityBoardWriteModal_ onClose={() => setShowModal(false)}>
@@ -284,7 +301,7 @@ function Community() {
         </div>
         {/*푸터 영역*/}
         {isOpen && (
-            <Modal
+            <CommunityBoardViewModal_
             open={isOpen}
             onClose={() => {
               setIsOpen(false);
@@ -300,7 +317,7 @@ function Community() {
                 // title={board.title}
                 // comment={board.boardComment}
             />
-          </Modal>
+          </CommunityBoardViewModal_>
             
         )}
         <Footer/>
