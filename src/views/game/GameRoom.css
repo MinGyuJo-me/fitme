@@ -12,11 +12,14 @@
     margin: auto;
     height: 900px;
     border-radius: 5px;
-    padding: 10px;
-    gap:15px;
+    padding: 10px 50px;
+    gap:25px;
     background-color: #151412;
     display: flex;
     flex-direction: column;
+    margin-top: 100px;
+    border: 30px solid #3C4852;
+    box-sizing: content-box;
 }
 
 
@@ -43,7 +46,7 @@
     background-color: #151412;
     display: flex;
     flex-direction: column;
-    gap:15px;
+    gap:35px;
     padding:15px 0px;
     position: relative;
 }
@@ -51,13 +54,13 @@
 .webRTC-container{
     height: 50%;
     display: flex;
-    gap:15px;
+    gap:0px;
     padding: 0px;
     justify-content: space-around;
 }
 .webRTC-item{
     background-color: #272733;
-    width:50%;
+    width:47%;
     height: 100%;
     color: rgb(158, 158, 158);
     line-height: 300px;
@@ -92,20 +95,26 @@
 
 .webRTC-button-container{
     position: absolute;
-    left:0; right: 0; 
+    bottom: 0; top: 0;
     margin: auto;
-    bottom:0;
-    width: 100%;
-    height: 120px;
+    right: 0px;
+    width: 95px;
+    height: 70%;
     display: flex;
+    flex-direction: column;
     gap:15px;
     justify-content: center;
-    opacity: 1;
+    opacity: 0;
     transition: all 0.5s;
     z-index: 1;
+    border-radius: 50px;
+    padding-left:8px;
+    margin-right: 10px;
+    background-color: #ffffffcd;
 }
 
 .webRTC-button-container:hover{
+    transform: translateX(-30px);
     opacity: 1;
 }
 
@@ -119,8 +128,20 @@
     margin: auto;
     left:20px;
     box-shadow: 0px 0px 8px 3px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
+.webRTC-popup div{
+    background-color: #15141227;
+    border-radius: 50%;
+    height:100px;
+    width: 100px;
+    line-height: normal;
+    box-shadow: inset 2px 2px 5px 3px rgba(0, 0, 0, 0.67);
+}
 .wi1{
     background-image: url("https://prod-ne-cdn-media.puregym.com/media/819394/gym-workout-plan-for-gaining-muscle_header.jpg?quality=80");
     background-size: 100% 100%;

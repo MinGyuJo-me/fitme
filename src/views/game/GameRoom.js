@@ -31,7 +31,7 @@ function GameRoom() {
     });
 
   return (
-    <>
+    <div style={{position:"absolute", width:"100%"} }>
       <div style={{margin:"auto", marginTop:"20px", width:"1500px"}}>
           <div className='col-lg-12 col-md-12 game-match-container'>
             {/**************************************************************/}
@@ -60,20 +60,56 @@ function GameRoom() {
               <div className='webRTC-container'>
                 <div className='webRTC-item wi1'>
                   <div className='webRTC-popup'>
+                    <div className='div'>
+                      1
+                    </div>
+                    <div className='div'>
+                      2
+                    </div>
+                    <div className='div'>
+                      3
+                    </div>
                   </div>
                 </div>
                 <div className='webRTC-item wi2'>
-                  <div className='webRTC-popup'>
+                <div className='webRTC-popup'>
+                    <div className='div'>
+                      1
+                    </div>
+                    <div className='div'>
+                      2
+                    </div>
+                    <div className='div'>
+                      3
+                    </div>
                   </div>
                 </div>
               </div>
               <div className='webRTC-container'>
                 <div className='webRTC-item wi3'>
-                  <div className='webRTC-popup'>
+                <div className='webRTC-popup'>
+                    <div className='div'>
+                      1
+                    </div>
+                    <div className='div'>
+                      2
+                    </div>
+                    <div className='div'>
+                      3
+                    </div>
                   </div>
                 </div>
                 <div className='webRTC-item wi4'>
-                  <div className='webRTC-popup'>
+                <div className='webRTC-popup'>
+                    <div className='div'>
+                      1
+                    </div>
+                    <div className='div'>
+                      2
+                    </div>
+                    <div className='div'>
+                      3
+                    </div>
                   </div>
                 </div>
               </div>
@@ -84,7 +120,7 @@ function GameRoom() {
             </div>     
           </div>
       </div>
-    </>
+    </div>
   );
 }
 
