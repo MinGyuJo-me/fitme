@@ -268,21 +268,7 @@ function Community() {
                             />
                         ))}
 
-                            <CommunityBoard 
-                                key="board.bno"
-                                accountNo="sdfdsafadsfds"
-                                bno="sdfdsafadsfds"
-                                name="sdfdsafadsfds"
-                                image="sdfdsafadsfds"
-                                address="sdfdsafadsfds"
-                                postDate="sdfdsafadsfds"
-                                likes="sdfdsafadsfds"
-                                title="sdfdsafadsfds"
-                                comment="sdfdsafadsfds"
-                                isOpen={isOpen}
-                                setIsOpen={setIsOpen}
-                                onButtonClicked={handleButtonClickedFromChild}
-                            />
+                            
                         
                         {showModal && (
                             <CommunityBoardWriteModal_ onClose={() => setShowModal(false)}>
