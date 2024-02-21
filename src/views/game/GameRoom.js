@@ -60,20 +60,68 @@ function GameRoom() {
               <div className='webRTC-container'>
                 <div className='webRTC-item wi1'>
                   <div className='webRTC-popup'>
+                    <div className='div'>
+                      1
+                    </div>
+                    <div className='div'>
+                      2
+                    </div>
+                    <div className='div'>
+                      3
+                    </div>
+                    <div className='div'>
+                      4
+                    </div>
                   </div>
                 </div>
                 <div className='webRTC-item wi2'>
-                  <div className='webRTC-popup'>
+                <div className='webRTC-popup'>
+                    <div className='div'>
+                      1
+                    </div>
+                    <div className='div'>
+                      2
+                    </div>
+                    <div className='div'>
+                      3
+                    </div>
+                    <div className='div'>
+                      4
+                    </div>
                   </div>
                 </div>
               </div>
               <div className='webRTC-container'>
                 <div className='webRTC-item wi3'>
-                  <div className='webRTC-popup'>
+                <div className='webRTC-popup'>
+                    <div className='div'>
+                      1
+                    </div>
+                    <div className='div'>
+                      2
+                    </div>
+                    <div className='div'>
+                      3
+                    </div>
+                    <div className='div'>
+                      4
+                    </div>
                   </div>
                 </div>
                 <div className='webRTC-item wi4'>
-                  <div className='webRTC-popup'>
+                <div className='webRTC-popup'>
+                    <div className='div'>
+                      1
+                    </div>
+                    <div className='div'>
+                      2
+                    </div>
+                    <div className='div'>
+                      3
+                    </div>
+                    <div className='div'>
+                      4
+                    </div>
                   </div>
                 </div>
               </div>
