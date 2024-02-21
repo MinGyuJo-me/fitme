@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CommunityBoard.css';
 import $ from 'jquery';
+import swal from 'sweetalert';
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -94,9 +95,6 @@ function CommunityBoard(props) {
     
 
     //좋아요 버튼 기능
-
-    
-
     const [isLiked, setIsLiked] = useState(false);
     const [isBeating, setIsBeating] = useState(false);
     const [checkLike, setCheckLike] = useState();
@@ -171,7 +169,34 @@ function CommunityBoard(props) {
             console.log(response.data);
         })
     };
-    
+
+    //게시글 삭제
+
+    const onClickDelete = (e) => {
+        const bno = props.bno;
+        axios.delete(`http://192.168.0.104:8080/api/v1/boards/${bno}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(response => {
+            let resMessge = response.data;
+            if(resMessge == '성공') {
+                swal({title:"삭제 성공!",icon:"success", button:"확인"})
+                .then(value => {
+                    props.setOnDelete(value);
+                })
+                
+            } else {
+                swal({title:"삭제 실패!",icon:"error", button:"확인"})
+                .then(value => {
+                    props.setOnDelete(value);
+                })
+                
+            }
+        })
+    }
 
     return (
         <div className="col-lg-12 col-sm-12">
@@ -209,14 +234,21 @@ function CommunityBoard(props) {
                         <h2><a href="blog-details.html">{props.title}</a></h2>
                     </div>
                 
-                    
+                    <div>
+                        <div>
+                            {props.loginAccountNo == props.accountNo ? <div onClick={onClickDelete}>삭제</div> : ""}
+                            {props.loginAccountNo == props.accountNo ? <div>수정</div> : ""}
+                            {props.loginAccountNo !== props.accountNo ? <div>신고</div> : ""}
+                            
+                        </div>
+                    </div>
                     <p>{props.comment}
                     </p>
                     <div className="blog-button">
                         <a onClick={onModal}>read more</a>
                         <div className="blog-button-container">
                             <div className='blog-button-item'>
-                                <img src={require('../images/chat_bubble.png')}/>
+                                <img src={require('../images/chat_bubble.png')} onClick={onModal}/>
                             </div>
                             <div className='blog-button-item'>
                                 {/* <img src={require('../images/heart.png')}/> */}
@@ -257,18 +289,7 @@ function CommunityBoard(props) {
                                         <span className="i8"></span>
                                     </div>
                                 </div>
-                                
-
-                                {/* <div 
-                                    className={`heart ${isLiked ? 'heart-liked' : ''} ${isBeating ? 'heart-beating' : ''}`}
-                                    onMouseEnter={handleMouseEnter}
-                                    onMouseLeave={handleMouseLeave}
-                                    onClick={handleClick}>
-                                    <Heart_Example/>
-                                </div> */}
-
                             </div>
-                            
                             <div className='blog-button-item' onClick={scrapHandle}>
                                 <img src={require('../images/scrap.png')} />
                             </div>

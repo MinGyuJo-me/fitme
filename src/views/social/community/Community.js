@@ -18,7 +18,9 @@ import FriendListSideBar from './component/FriendListSideBar';
 import CommnunitySearch from './component/CommunitySearch';
 import CommunityBoardWriteModal from './crud/CommunityBoardWriteModal';
 import CommunityBoardViewModal from './crud/CommunityBoardViewModal';
-import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
+// import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
+import ChatBot from '../../component/chatBot/ChatBot';
+
 //플로팅
 //npm i --save react-floating-action-button
 
@@ -53,6 +55,7 @@ function Community() {
     const [showModal, setShowModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [accountInfo, setAccountInfo] = useState([]);
+    const [onDelete, setOnDelete] = useState(false);
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -87,7 +90,7 @@ function Community() {
             })
         })
         .catch(error => console.log(error))
-      }, []);
+      }, [onDelete]);
 
     // 팔로워 클릭 이벤트 핸들러
     function handleFollowerClick(followerInfo) {
@@ -134,7 +137,7 @@ function Community() {
             setBoards(updatedBoards);
         })
         .catch(error => console.log(error));
-    }, []);
+    }, [onDelete, showModal]);
 
     // 특정 게시글 상세 조회
     useEffect(() => {
@@ -213,7 +216,8 @@ function Community() {
   return (
     <div>
         {/* 챗봇용 플로팅 */}
-        <ChatbotFloating/>
+        {/* <ChatbotFloating/> */}
+        <ChatBot/>
         {/*헤더 위*/}
         <HeaderTop/>
         {/*헤더 메인 메뉴*/}
@@ -265,6 +269,8 @@ function Community() {
                                 isOpen={isOpen}
                                 setIsOpen={setIsOpen}
                                 onButtonClicked={handleButtonClickedFromChild}
+                                loginAccountNo={loginUser.accountNo}
+                                setOnDelete={setOnDelete}
                             />
                         ))}
 
@@ -272,7 +278,10 @@ function Community() {
                         
                         {showModal && (
                             <CommunityBoardWriteModal_ onClose={() => setShowModal(false)}>
-                               <CommunityBoardWriteModal accountNo={loginUser.accountNo}/>
+                                <CommunityBoardWriteModal 
+                                    accountNo={loginUser.accountNo}
+                                    setShowModal={setShowModal}
+                                />
                             </CommunityBoardWriteModal_>
                         )}
                         
