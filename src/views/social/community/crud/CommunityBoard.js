@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './CommunityBoard.css';
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
+import Heart_Example from './Heart_Example';
 function CommunityBoard(props) {
 
     function getCookie(name) {
@@ -50,6 +52,7 @@ function CommunityBoard(props) {
         props.onButtonClicked(accountNo);
     }
 
+    //게시글에 등록된 이미지 axios
     useEffect(() => {
         const fetchBoardImages = async () => {
             try {
@@ -73,7 +76,86 @@ function CommunityBoard(props) {
         };
     
         fetchBoardImages(); 
-    }, [props.key])
+    }, [props.key]);
+
+    
+
+    //좋아요 버튼 기능
+    const [isLiked, setIsLiked] = useState(false);
+    const [isBeating, setIsBeating] = useState(false);
+    const [checkLike, setCheckLike] = useState();
+    const data = new FormData();
+
+    //좋아요 누른지 여부 확인
+    useEffect(() => {
+        axios.get(`http://192.168.0.104:8080/api/v1/boards/like/${props.bno}`, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(response => {
+            setCheckLike(response.data);
+            if(response.data == 0) {
+                setIsLiked(false);
+            } else {
+                setIsLiked(true);
+            }
+        })
+    },[checkLike])
+
+    const handleMouseEnter = () => {
+        setIsBeating(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsBeating(false);
+    };
+
+    const handleClick = () => {
+
+        if(isLiked) {
+            data.append('bno', props.bno);
+            data.append('preState', 1);
+            axios.post('http://192.168.0.104:8080/api/v1/boards/like', data , {
+                headers: {
+                    'Authorization': `${myCookieValue}`,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                }
+            })
+            .then(response => {
+                console.log(response.data);
+            })
+        } else {
+            data.append('bno', props.bno);
+            data.append('preState', 0);
+            axios.post('http://192.168.0.104:8080/api/v1/boards/like', data , {
+                headers: {
+                    'Authorization': `${myCookieValue}`,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                }
+            })
+            .then(response => {
+                console.log(response.data);
+            })
+        }
+        setIsLiked(!isLiked);
+    };
+
+    //스크랩 관련
+    const scrapHandle = () => {
+        const bno = props.bno;
+        axios.post('http://192.168.0.104:8080/api/v1/boards/scrap', bno, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(response => {
+            console.log(response.data);
+        })
+    };
+    
 
     return (
         <div className="col-lg-12 col-sm-12">
@@ -121,11 +203,20 @@ function CommunityBoard(props) {
                                 <img src={require('../images/chat_bubble.png')}/>
                             </div>
                             <div className='blog-button-item'>
-                                <img src={require('../images/heart.png')}/>
+                                {/* <img src={require('../images/heart.png')}/> */}
+
+
+                                <Heart_Example/>
+
+                                {/*<div className={`heart ${isLiked ? 'heart-liked' : ''} ${isBeating ? 'heart-beating' : ''}`}
+                                    onMouseEnter={handleMouseEnter}
+                                    onMouseLeave={handleMouseLeave}
+                                onClick={handleClick}>*/}
+
                             </div>
                             
-                            <div className='blog-button-item'>
-                                <img src={require('../images/scrap.png')}/>
+                            <div className='blog-button-item' onClick={scrapHandle}>
+                                <img src={require('../images/scrap.png')} />
                             </div>
                         </div>
                     </div>
