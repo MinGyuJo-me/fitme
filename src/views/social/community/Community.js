@@ -267,22 +267,6 @@ function Community() {
                                 onButtonClicked={handleButtonClickedFromChild}
                             />
                         ))}
-
-                            <CommunityBoard 
-                                key="1"
-                                accountNo="1"
-                                bno="1"
-                                name="1"
-                                image="1"
-                                address="1"
-                                postDate="1"
-                                likes="1"
-                                title="1"
-                                comment="1"
-                                isOpen={isOpen}
-                                setIsOpen={setIsOpen}
-                                onButtonClicked={handleButtonClickedFromChild}
-                            />
                         
                         {showModal && (
                             <CommunityBoardWriteModal_ onClose={() => setShowModal(false)}>
