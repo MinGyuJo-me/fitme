@@ -26,9 +26,13 @@ const StyledHeader = styled.div`
 `;
 
 function GameRoom() {
-    useEffect(()=>{
-        $('body').addClass('loaded');
-    });
+
+
+
+
+  useEffect(()=>{
+      $('body').addClass('loaded');
+  });
 
   return (
     <div style={{position:"absolute", width:"100%"} }>

@@ -1,6 +1,16 @@
 import './GameRoomSideProfile.css';
+import { useState } from 'react';
 
-function GameRoomSideProfile() {
+function GameRoomSideProfile({showModal,setShowModal}){
+
+    const [show, setShow] = useState(false);
+
+    const handleClick = () => {
+        console.log("클릭");
+        setShow(prevShow => !prevShow);
+        setShowModal(prevShowModal => !prevShowModal);
+    }
+
     return (
         <div className="col-lg-3 col-md-3 game-profile-layout">
             <div className="row">
@@ -15,7 +25,7 @@ function GameRoomSideProfile() {
                 </div>
 
                 <div className='col-lg-10 col-md-10 game-play-button-layout'>
-                    <button className="game-play-button">일반 게임</button>
+                    <button className="game-play-button" onClick={handleClick}>일반 게임</button>
                     <button className="game-play-button">랭킹 게임</button>
                 </div>
 

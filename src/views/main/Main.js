@@ -216,48 +216,6 @@ function Main() {
             </div>
         </div>
     </div>
-
-
-
-
-
-
-    {/*
-        <!--==================================================-->
-        <!----- Start Search Popup Area ----->
-        <!--==================================================-->
-    */}
-        <div className="search-popup">
-            <button className="close-search style-two"><i className="fa fa-times"></i></button>
-            <button className="close-search"><i className="fas fa-arrow-up"></i></button>
-            <form method="post" action="#">
-                <div className="form-group">
-                    <input type="search" name="search-field" value="" placeholder="Search Here" required=""/>
-                    <button type="submit"><i className="fa fa-search"></i></button>
-                </div>
-            </form>
-        </div>
-            {/*
-                <!--==================================================-->
-                <!----- Start Search Popup Area ----->
-                <!--==================================================-->
-            */}
-
-            {/*
-                <!--==================================================-->
-                <!----- Start Scroll ----->
-            <!--==================================================-->
-            */}
-            <div className="scroll-area">
-                <div className="top-wrap">
-                    <div className="go-top-btn-wraper">
-                        <div className="go-top go-top-button">
-                            <i className="fa fa-angle-double-up" aria-hidden="true"></i>
-                            <i className="fa fa-angle-double-up" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
   );

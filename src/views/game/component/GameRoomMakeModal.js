@@ -33,45 +33,31 @@ function GameRoomMakeModal() {
                 <div className="game-room-modal-container grmc2">
                     <OwlCarousel items={4} nav={false} dots={false}>
                     <div className="game-mode-card">
-                    <div className='game-mode-card-image'>
+                    <div className='game-mode-card-image gmci1'>
                     </div>
                     <div className='game-mode-card-title'>
                         스쿼트
                     </div>
                     </div>
                     <div className="game-mode-card">
-                    <div className='game-mode-card-image'>
+                    <div className='game-mode-card-image gmci2'>
                     </div>
                     <div className='game-mode-card-title'>
                         윗몸 운동
                     </div>
                     </div>
                     <div className="game-mode-card">
-                    <div className='game-mode-card-image'>
+                    <div className='game-mode-card-image gmci3'>
                     </div>
                     <div className='game-mode-card-title'>
                         팔굽혀 펴기
                     </div>
                     </div>
                     <div className="game-mode-card">
-                    <div className='game-mode-card-image'>
+                    <div className='game-mode-card-image gmci4'>
                     </div>
                     <div className='game-mode-card-title'>
                         랜덤 게임
-                    </div>
-                    </div>
-                    <div className="game-mode-card">
-                    <div className='game-mode-card-image'>
-                    </div>
-                    <div className='game-mode-card-title'>
-                        (추가할 예정)
-                    </div>
-                    </div>
-                    <div className="game-mode-card">
-                    <div className='game-mode-card-image'>
-                    </div>
-                    <div className='game-mode-card-title'>
-                        (추가할 예정)
                     </div>
                     </div>
                     </OwlCarousel>
