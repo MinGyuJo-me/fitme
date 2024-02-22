@@ -169,6 +169,7 @@ function Messenger() {
     const subscribe = (num) => {
       console.log('num',num);
       setChatRoomNo(num);
+
       client.current.subscribe(`/sub/chat/${num}`, (body) => {
         try {
             const json_body = JSON.parse(body.body);

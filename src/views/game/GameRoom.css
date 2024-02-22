@@ -10,26 +10,30 @@
 
 .game-match-container{
     margin: auto;
-    height: 690px;
+    height: 900px;
     border-radius: 5px;
-    padding: 10px;
-    gap:15px;
-    background-color: #3C4852;
+    padding: 10px 50px;
+    gap:25px;
+    background-color: #151412;
     display: flex;
     flex-direction: column;
+    margin-top: 100px;
+    border: 30px solid #3C4852;
+    box-sizing: content-box;
 }
 
 
 
 .game-match-container-alarm{
-    box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.7);
     border-radius: 5px;
-    height: 13%;
-    background-color: #ffffff9f;
+    height: 7%;
+    background-color: #272733;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: scroll;
+    color:white;
+    font-weight: bold;
 }
 
 .game-match-container-alarm::-webkit-scrollbar{
@@ -37,62 +41,33 @@
 }
 
 .webRTC-layout{
-    height: 90%;
+    height: 100%;
     border-radius: 5px;
-    background-color: #ffffff9f;
-    box-shadow:inset 0px 0px 5px 4px rgba(0, 0, 0, 0.9);
+    background-color: #151412;
     display: flex;
     flex-direction: column;
+    gap:35px;
+    padding:15px 0px;
+    position: relative;
 }
 
 .webRTC-container{
-    border: 1px solid red;
     height: 50%;
     display: flex;
+    gap:0px;
+    padding: 0px;
+    justify-content: space-around;
 }
-
-.wc1{
-    padding: 0px 20px;
-    height: 20%;
-    gap:10px;
-    align-items: center;
-}
-
-.wc2{
-    padding: 5px 20px;
-    height: 40%;
-    gap:10px;
-    align-items: center;
-}
-
-.wc3{
-    margin-top: 10px;
-    padding: 0px 20px;
-    height: 10%;
-    gap:10px;
-    align-items: center;
-    justify-content: center;
-}
-
-.webRTC-sub-item{
-    position: relative;
-    background-color: #515151;
-    width:500px;
-    height: 90%;
-    text-align: center;
-    color: rgb(64, 64, 64);
-    line-height: 100px;
-    font-size: 50px;
-}
-
 .webRTC-item{
-    background-color: #515151;
-    width:500px;
-    height: 98%;
+    background-color: #272733;
+    width:47%;
+    height: 100%;
     color: rgb(158, 158, 158);
     line-height: 300px;
     font-size: 30px;
     text-align: center;
+    border-radius: 5px;
+    position: relative;
 }
 
 .webRTC-button{
@@ -100,9 +75,10 @@
     cursor: pointer;
     background-color: lightgrey;
     box-shadow: inset 2px 2px 5px 3px rgba(0, 0, 0, 0.399);
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
+    opacity: 0.8;
 }
 
 .webRTC-button:hover{
@@ -117,3 +93,68 @@
     height: 60%;
 }
 
+.webRTC-button-container{
+    position: absolute;
+    bottom: 0; top: 0;
+    margin: auto;
+    right: 0px;
+    width: 95px;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.5s;
+    z-index: 1;
+    border-radius: 50px;
+    padding-left:8px;
+    margin-right: 10px;
+    background-color: #ffffffcd;
+}
+
+.webRTC-button-container:hover{
+    transform: translateX(-30px);
+    opacity: 1;
+}
+
+
+.webRTC-popup{
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.672);
+    width: 130px;
+    height: 90%;
+    top:0; bottom: 0;
+    margin: auto;
+    left:20px;
+    box-shadow: 0px 0px 8px 3px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.webRTC-popup div{
+    background-color: #15141227;
+    border-radius: 50%;
+    height:100px;
+    width: 100px;
+    line-height: normal;
+    box-shadow: inset 2px 2px 5px 3px rgba(0, 0, 0, 0.67);
+}
+.wi1{
+    background-image: url("https://prod-ne-cdn-media.puregym.com/media/819394/gym-workout-plan-for-gaining-muscle_header.jpg?quality=80");
+    background-size: 100% 100%;
+}
+.wi2{
+    background-image: url("https://fitnesslifeadvisor.com/wp-content/uploads/2020/05/getting-harder.jpg");
+    background-size: 100% 100%;
+}
+.wi3{
+    background-image: url("https://www.themanual.com/wp-content/uploads/sites/9/2022/03/bb-lateral-raise.jpg?fit=800%2C532&p=1");
+    background-size: 100% 100%;
+}
+.wi4{
+    background-image: url("https://v6.cdnpk.net/videvo_files/video/premium/partners0191/thumbnails/BB_8c5a4687-69fe-4e85-b64a-a7192ed2a644_small.jpg");
+    background-size: 100% 100%;
+}
