@@ -14,6 +14,8 @@ import * as StompJs from '@stomp/stompjs';
 import Modal from "./modal";
 import ChatBot from '../../component/chatBot/ChatBot';
 
+import DropDown from './dropDown';
+
 let chatNo = 0;
 function getCookie(name) { //로그인 여부 확인
     const cookies = document.cookie.split(';');
@@ -26,10 +28,14 @@ function getCookie(name) { //로그인 여부 확인
     return null;
 }
 function Messenger() {
+    
     const [chatList, setChatList] = useState([]);
     const [chat, setChat] = useState('');
     const [chatNo,setChatNo] = useState();
     const [name,setName] = useState();
+
+    //
+    const [chatRoomNo,setChatRoomNo] = useState();
   
     const [chattingRoom,SetChattingRoom] = useState([]);
     const [chatRoomKing,setChatRoomKing] = useState();
@@ -75,16 +81,20 @@ function Messenger() {
         // console.log('채팅방 번호:',e.target.children[0].value);
         // chatNo = e.target.children[0].value;
         e.preventDefault();
-        var s = document.getElementById('chatRoomNo');
-        // console.log('채팅방',e.target.parentElement.children[0].value);
-        s.value = e.target.parentElement.children[0].value;
-        
-        subscribe(e.target.parentElement.children[0].value); //채팅방 연결 테스트
 
-        setChatRoomKing(e.target.parentElement.children[1].value);
+        const chatChattingNoValue = e.currentTarget.querySelector('#chatChattingNo').value;
+        const chatChattingUserNoValue = e.currentTarget.querySelector('#chatChattingUserNo').value;
+
+        var s = document.getElementById('chatRoomNo');
+        console.log('채팅방',chatChattingNoValue);
+        s.value = chatChattingNoValue;
+        
+        subscribe(chatChattingNoValue); //채팅방 연결 테스트
+
+        setChatRoomKing(chatChattingUserNoValue);
         // console.log('확인:',s.value);
-        setChatNo(e.target.parentElement.children[0].value);
-        axios.get(`/api/v1/chat/list/room/${e.target.parentElement.children[0].value}`)
+        setChatNo(chatChattingNoValue);
+        axios.get(`/api/v1/chat/list/room/${chatChattingNoValue}`)
         .then(res=>{
             // console.log('채팅 내용',res.data);
             setChatList(res.data);
@@ -139,7 +149,6 @@ function Messenger() {
     };
   
     const publish = (num,chat) => {
-        
         if (!client.current.connected) return;
             // console.log('userId',userId);
         client.current.publish({
@@ -158,18 +167,21 @@ function Messenger() {
     };
   
     const subscribe = (num) => {
-        client.current.subscribe(`/sub/chat/${num}`, (body) => {
-            try {
-                const json_body = JSON.parse(body.body);
-                // console.log('>>>', json_body);
-                axios.get(`/api/v1/chat/list/room/${num}`)
-                .then(res=>{
-                    setChatList(res.data); //웹소켓은 아니지만 대충 속이기
-                    
-                })
-            } catch (error) {
-            console.error('Error processing message:', error);
-            }
+      console.log('num',num);
+      setChatRoomNo(num);
+
+      client.current.subscribe(`/sub/chat/${num}`, (body) => {
+        try {
+            const json_body = JSON.parse(body.body);
+            // console.log('>>>', json_body);
+            axios.get(`/api/v1/chat/list/room/${num}`)
+            .then(res=>{
+              setChatList(res.data); //웹소켓은 아니지만 대충 속이기
+                
+            })
+        } catch (error) {
+        console.error('Error processing message:', error);
+        }
       });
     };
   
@@ -185,13 +197,13 @@ function Messenger() {
         // console.log('event',event.target.children[0].value);
         var num = event.target.children[1].value;
         event.target.children[0].value = '';
+        // setChatRoomNo(num)
+        publish(num,chat);
         
-        console.log('chat',chat);
-        console.log('num',num);
+        // console.log('chat',chat);
+        // console.log('num',num); //채팅방 일련번호?
         // scrollToBottom();
         event.preventDefault();
-    
-        publish(num,chat);
         
     };
     
@@ -298,6 +310,7 @@ function Messenger() {
         </div>
         <div className="blog-area style-two"></div>
 
+
         <div className="c_container clearfix">
     <div className="people-list" id="people-list">
       <div className="search">
@@ -306,22 +319,23 @@ function Messenger() {
       </div>
       <ul className="list">
         {chattingRoom.map((chat)=>(
-            <li className="clearfix">
-            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />
-            <div className="about" onClick={chatRoom}>
-                <input type='hidden' value={chat.chattingNo}/>
-                <input type='hidden' value={chat.accountNo}/>
-                <div className="name">{chat.chattingNick}</div>
-                <div className="status">
-                <i className="fa fa-circle online"></i> {chat.count}명
-                </div>
-            </div>
+            <li className="clearfix" onClick={chatRoom}>
+              <img src="" alt="avatar" />
+              <div className="about" >
+                  <input id='chatChattingNo' type='hidden' value={chat.chattingNo}/>
+                  <input id='chatChattingUserNo' type='hidden' value={chat.accountNo}/>
+                  <div className="name">{chat.chattingNick}</div>
+                  <div className="status">
+                  <i className="fa fa-circle online"></i> {chat.count}명
+                  </div>
+              </div>
+              <DropDown/>
             </li>
         ))}
       </ul>
     </div>
     
-    <div className="chat">
+    <div className="m-chat">
       <div className="chat-header clearfix">
         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
         
@@ -331,8 +345,10 @@ function Messenger() {
         </div>
         <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}></i>
         {isOpen && (
+                
                 <Modal
                   open={isOpen}
+                  chatRoomNo = {chatRoomNo}
                   onClose={() => {
                     setIsOpen(false);
                   }}

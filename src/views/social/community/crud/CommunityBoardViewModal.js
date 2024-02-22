@@ -3,6 +3,7 @@ import React, { useState,useEffect,useRef} from 'react';
 
 //npm install axios
 import axios from 'axios';
+import $ from 'jquery';
 
 
 
@@ -22,6 +23,20 @@ function CommunityBoardViewModal(props) {
         autoplayTimeout: 4500,
         smartSpeed: 450,
     };
+
+    
+    $(function() { 
+        var heart = $('.heart-icon')
+            // Add class
+        
+            heart.hover(function(){
+            heart.toggleClass('heart-dots');
+
+            heart.click(function(){
+            heart.toggleClass('heart-liked');           heart.toggleClass('heart-beating');  
+            });
+        });
+    });
 
     return (
         <div className='row justify-content-md-center' style={{backgroundColor:"lightgray", borderRadius:"5px", paddingTop:"20px"}}>
@@ -191,8 +206,36 @@ function CommunityBoardViewModal(props) {
                         <input type="text" style={{width:"80%", height:"45px", borderRadius:"5px", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}}></input>
                         <button type="submit" style={{position:"absolute", right:"140px", borderRadius:"5px", backgroundColor:"#F6F6F6", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.2)"}}>submit</button>
                         <div className="blog-button-container" style={{width: "90px"}}>
-                                <div className='blog-button-item'>
-                                    <img src={require('../images/heart.png')}/>
+                            <div className='blog-button-item'>
+                                <div className="heart-icon-wrapper">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+                                    <path d="M150 57.3C100.2-17.4.7 26.3.7 107.6c0 55 49.7 94.2 87.1 123.8 38.8 30.7 49.8 37.3 62.2 49.8 12.4-12.4 22.8-19.7 62.2-49.8 37.9-29 87.1-69.4 87.1-124.4 0-80.7-99.5-124.4-149.3-49.7z" fill-rule="evenodd" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span className="i1"></span>
+                                    <span className="i2"></span>
+                                    <span className="i3"></span>
+                                    <span className="i4"></span>
+                                    <span className="i5"></span>
+                                    <span className="i6"></span>
+                                    <span className="i7"></span>
+                                    <span className="i8"></span>
+                                    <span className="i1"></span>
+                                    <span className="i2"></span>
+                                    <span className="i3"></span>
+                                    <span className="i4"></span>
+                                    <span className="i5"></span>
+                                    <span className="i6"></span>
+                                    <span className="i7"></span>
+                                    <span className="i8"></span>
+                                    <span className="i1"></span>
+                                    <span className="i2"></span>
+                                    <span className="i3"></span>
+                                    <span className="i4"></span>
+                                    <span className="i5"></span>
+                                    <span className="i6"></span>
+                                    <span className="i7"></span>
+                                    <span className="i8"></span>
+                                    </div>
                                 </div>
                                 <div className='blog-button-item'>
                                     <img src={require('../images/scrap.png')}/>

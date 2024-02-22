@@ -53,8 +53,7 @@
 }
 
 .game-room-modal-title{
-    font-family: Lobster;
-    font-size: 25px;
+    font-size: 20px;
     line-height: 50px;
     width: 25%;
     background-color: #30393D;
@@ -105,11 +104,28 @@
     width: 90%;
     height: 70%;
     margin: auto;
-    background-image: url(../../../assets/images//blog-0.jpg);
     background-size: 100% 100%;
     border-radius: 5px;
     box-shadow: inset 2px 2px 5px 3px rgba(0, 0, 0, 0.308);
 }
+
+
+.gmci1{
+    background-image: url(../images/squat.jpg);
+}
+
+.gmci2{
+    background-image: url(../images/pushup.png);
+}
+
+.gmci3{
+    background-image: url(../images/sit-up.png);
+}
+
+.gmci4{
+    background-image: url(../images/random.png);
+}
+
 
 .game-mode-card-title{
     height: 20%;
