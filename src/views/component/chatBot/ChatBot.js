@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Chatbot.css';
-import 'material-symbols';
-import axios from 'axios'; //npm install axios
+import 'material-symbols';// npm install material-symbols@latest
+import axios from 'axios'; // npm install axios
 
 var ipAddress = '192.168.0.110';
 
