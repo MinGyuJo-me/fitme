@@ -125,9 +125,12 @@ function CommunityBoardWriteModal(props) {
         
     };
 
+
+
+
     return (
         <div className="col-lg-12 col-sm-12">
-            <form className="blog-single-box upper" style={{ backgroundColor: "#F6F4EC" }} onSubmit={onClickButton}>
+            <form className="blog-single-box upper" style={{ backgroundColor: "#F6F4EC", height:"910px"}} onSubmit={onClickButton}>
                 <div style={{position: "relative", width:"92%", height:"500px", margin:"auto", marginTop:"30px", background:"white", borderRadius:"5px", border:"1px solid #c2cfdb"}}>
                     {!inputHidden && (
                         <>
@@ -153,11 +156,16 @@ function CommunityBoardWriteModal(props) {
                     <div>
                         <textarea style={{ width: "100%", height: "200px" }} name='boardComment' onChange={(e) => setPosts({ ...posts, boardComment: e.target.value })}></textarea>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row-reverse", gap: "10px" }}>
-                        <button className="community-write-button">Back</button>
-                        <button className="community-write-button" type="submit">Post</button>
-                        <input type="text" className="community-modal-select" placeholder='HashTag'>
 
+                    {/********** 해시 태그 ***************** appeend 할 부분*/}
+                    <div className="community-hashtag">
+                        <span>ㅇㅇㅇ</span><span>ㅇㅇㅇ</span><span>ㅇㅇㅇ</span>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "row-reverse", gap: "10px" }}>
+                        <button className="community-write-button" style={{width:"160px"}}>Back</button>
+                        <button className="community-write-button" type="submit"  style={{width:"160px"}}>Post</button>
+                        <input type="text" className="community-modal-select" placeholder='HashTag'>
                         </input>
                     </div>
                 </div>

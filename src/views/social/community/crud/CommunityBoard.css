@@ -201,3 +201,26 @@
     transform:scale(1) translateY(-50%);
   }
   }
+
+
+
+
+  /************* 커뮤니티에 있는 해쉬 태그 *************/
+  .community-board-hashtag{
+    display: flex;
+    margin-left: 20px;
+  }
+
+  .community-board-hashtag span{
+    color: #0800ff91;
+    font-weight: bold;
+    display: inline-block;
+    padding: 0px 10px 0px 0px;
+  }
+
+  .community-detail-button{
+    user-select: none;
+    cursor:pointer;
+    display: flex;
+    height: 20px;
+  }
