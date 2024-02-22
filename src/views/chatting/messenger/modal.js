@@ -27,23 +27,23 @@ async function imageData(code){
 }
 
 function Modal(props) {
-
+  const myCookieValue = getCookie('Authorization');
   const [friendsInfo, setFriendsInfo] = useState([]);
   const [showFriend, setShowFriend] = useState(false);
-  const [chatRoomMember,selectChatRoomMember] = useState();
-
   //친구 리스트
   useEffect(() => {
     if (showFriend === false) {
-      const myCookieValue = getCookie('Authorization');
-      axios.get('/api/v1/boards/friend', {
+      // console.log('setChatRoomNo',props.chatRoomNo)
+      
+      axios.get(`/api/v1/chat/list/room/friends/${props.chatRoomNo}`, {
+      // axios.get('/api/v1/boards/friend', {
           headers: {
               'Authorization': `${myCookieValue}`,
               'Content-Type': 'application/json; charset=UTF-8'
           }
       })
       .then(response => {
-          console.log(response.data);
+          // console.log(response.data);
           Promise.all(response.data.map(async friend => {
               const image = await imageData(friend.image == null ? 41 :friend.image);
               friend.image = image;
@@ -110,11 +110,30 @@ const handleRemoveFriend = (friendAccountNo) => {
 // useEffect(()=>{
 //   console.log('selectedFriends',chatRoomMember);
 // },[chatRoomMember])
-function selectChatRoom(e){
-  console.log('selectedFriends',selectedFriends);
-  selectedFriends.forEach((e)=>{console.log('e:',e['accountNo']);})
+function selectChatRoom(){
+  // console.log('selectedFriends',selectedFriends);
+  const data = new FormData();
+  data.append('chattingNo',props.chatRoomNo);
+  // console.log('accountNo',selectedFriends.length);
+  if(selectedFriends != null && selectedFriends.length > 1){
+    selectedFriends.forEach((e)=>{
+      data.append('friends',e['accountNo']);
+    })
+  }
+   if(selectedFriends != null && selectedFriends.length == 1){
+    // console.log('accountNo',selectedFriends[0]);
+    data.append('accountNo',selectedFriends[0].accountNo);
+   }
+  axios.post(`/api/v1/chat/list/room/friends/post`,data,{
+    headers: {
+      'Authorization': `${myCookieValue}`,
+      'Content-Type': 'application/json; charset=UTF-8'
+  }
+  })
+  .then(res=>{console.log('res.data',res.data)});
+
+  props.onClose();
   
-  // selectChatRoomMember(selectedFriends);
 }
 
 
@@ -139,7 +158,7 @@ function selectChatRoom(e){
               </div>
             ))}
           </ul>
-          {selectedFriends.length != 0 ? <button onClick={()=>selectChatRoom(chatRoomMember)}>1</button> : ''}
+          {selectedFriends.length != 0 ? <button onClick={()=>selectChatRoom()}>추가</button> : ''}
         </div>
         <div className="f-search">
           <div className="search-container">
@@ -161,48 +180,6 @@ function selectChatRoom(e){
                   </div>
                 </div>
               ))}
-              {/* <div className="friend-item">
-                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="친구 이미지" />
-                <div className="friend-info">
-                  <span className="friend-name">이도형</span>
-                  <input type="checkbox" className="friend-checkbox" onChange={(e) => handleFriendToggle("이도형", "프로필 이미지 URL", e.target.checked)} />
-                </div>
-              </div>
-              <div className="friend-item">
-                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="친구 이미지" />
-                <div className="friend-info">
-                  <span className="friend-name">김민석</span>
-                  <input type="checkbox" className="friend-checkbox" onChange={(e) => handleFriendToggle("김민석", "프로필 이미지 URL", e.target.checked)} />
-                </div>
-              </div>
-              <div className="friend-item">
-                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="친구 이미지" />
-                <div className="friend-info">
-                  <span className="friend-name">최경태</span>
-                  <input type="checkbox" className="friend-checkbox" onChange={(e) => handleFriendToggle("최경태", "프로필 이미지 URL", e.target.checked)} />
-                </div>
-              </div>
-              <div className="friend-item">
-                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="친구 이미지" />
-                <div className="friend-info">
-                  <span className="friend-name">이한울</span>
-                  <input type="checkbox" className="friend-checkbox" onChange={(e) => handleFriendToggle("이한울", "프로필 이미지 URL", e.target.checked)} />
-                </div>
-              </div>
-              <div className="friend-item">
-                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="친구 이미지" />
-                <div className="friend-info">
-                  <span className="friend-name">김민서</span>
-                  <input type="checkbox" className="friend-checkbox" onChange={(e) => handleFriendToggle("김민서", "프로필 이미지 URL", e.target.checked)} />
-                </div>
-              </div>
-              <div className="friend-item">
-                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="친구 이미지" />
-                <div className="friend-info">
-                  <span className="friend-name">최현진</span>
-                  <input type="checkbox" className="friend-checkbox" onChange={(e) => handleFriendToggle("최현진", "프로필 이미지 URL", e.target.checked)} />
-                </div>
-              </div>              */}
             </li>
           </ul>
         </div>
