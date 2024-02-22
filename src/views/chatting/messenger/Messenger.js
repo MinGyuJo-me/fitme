@@ -12,6 +12,7 @@ import './Messenger.css';
 import * as StompJs from '@stomp/stompjs';
 //componants
 import Modal from "./modal";
+import ChatBot from '../../component/chatBot/ChatBot';
 
 let chatNo = 0;
 function getCookie(name) { //로그인 여부 확인
@@ -29,6 +30,9 @@ function Messenger() {
     const [chat, setChat] = useState('');
     const [chatNo,setChatNo] = useState();
     const [name,setName] = useState();
+
+    //
+    const [chatRoomNo,setChatRoomNo] = useState();
   
     const [chattingRoom,SetChattingRoom] = useState([]);
     const [chatRoomKing,setChatRoomKing] = useState();
@@ -138,7 +142,6 @@ function Messenger() {
     };
   
     const publish = (num,chat) => {
-        
         if (!client.current.connected) return;
             // console.log('userId',userId);
         client.current.publish({
@@ -157,18 +160,21 @@ function Messenger() {
     };
   
     const subscribe = (num) => {
-        client.current.subscribe(`/sub/chat/${num}`, (body) => {
-            try {
-                const json_body = JSON.parse(body.body);
-                // console.log('>>>', json_body);
-                axios.get(`/api/v1/chat/list/room/${num}`)
-                .then(res=>{
-                    setChatList(res.data); //웹소켓은 아니지만 대충 속이기
-                    
-                })
-            } catch (error) {
-            console.error('Error processing message:', error);
-            }
+      // console.log('num',num);
+      setChatRoomNo(num);
+      console.log('chatRoomNo',chatRoomNo)
+      client.current.subscribe(`/sub/chat/${num}`, (body) => {
+        try {
+            const json_body = JSON.parse(body.body);
+            // console.log('>>>', json_body);
+            axios.get(`/api/v1/chat/list/room/${num}`)
+            .then(res=>{
+              setChatList(res.data); //웹소켓은 아니지만 대충 속이기
+                
+            })
+        } catch (error) {
+        console.error('Error processing message:', error);
+        }
       });
     };
   
@@ -184,13 +190,13 @@ function Messenger() {
         // console.log('event',event.target.children[0].value);
         var num = event.target.children[1].value;
         event.target.children[0].value = '';
+        // setChatRoomNo(num)
+        publish(num,chat);
         
-        console.log('chat',chat);
-        console.log('num',num);
+        // console.log('chat',chat);
+        // console.log('num',num); //채팅방 일련번호?
         // scrollToBottom();
         event.preventDefault();
-    
-        publish(num,chat);
         
     };
     
@@ -330,8 +336,10 @@ function Messenger() {
         </div>
         <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}></i>
         {isOpen && (
+                
                 <Modal
                   open={isOpen}
+                  chatRoomNo = {chatRoomNo}
                   onClose={() => {
                     setIsOpen(false);
                   }}
@@ -411,6 +419,7 @@ function Messenger() {
         </div>
     </li>
     </script>
+    <ChatBot/>
     </div>
   );
 }

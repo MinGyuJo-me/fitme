@@ -4,6 +4,7 @@ import React from 'react';
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
 import Image_test from '../../../assets/images/blog-3.jpg';
+import ChatBot from '../../component/chatBot/ChatBot';
 
 function Recipe() {
   return (
@@ -382,7 +383,7 @@ function Recipe() {
         <!----- Start Search Popup Area ----->
         <!--==================================================-->
         */}
-
+        <ChatBot/>
         </div>
     </div>
   );

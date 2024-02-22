@@ -12,7 +12,6 @@ import Wrapper from '../component/Wrapper/Wrapper';
 import GameRoomSearch from './component/GameRoomSearch';
 import './Game.css';
 
-
 import GameRoomContainer from './component/GameRoomContainer';
 
 import OwlCarousel from 'react-owl-carousel';
@@ -21,15 +20,13 @@ import 'owl.carousel/dist/assets/owl.theme.default.css';
 import GameRoomSideProfile from './component/GameRoomSideProfile';
 
 import styled from "styled-components";
+import GameRoomMakeModal from './component/GameRoomMakeModal';
+import GameRoomMakeModal_ from './component/GameRoomMakeModal_';
+
 
 const StyledHeader = styled.div`
-  background: white;
+  background: black;
 `;
-
-
-
-
-
 
 function Game() {
     const options = {
@@ -45,6 +42,7 @@ function Game() {
       mouseDrag: false
     };
 
+    const [isOpen, setIsOpen] = useState(false);
 
 
 
@@ -63,7 +61,6 @@ function Game() {
         {/* 로딩 애니메이션*/}
         <Loader/>
 
-
         <div className="blog-area style-two game-background-style">
           <div className="container">
             <div className="row">
@@ -71,11 +68,14 @@ function Game() {
                 <div className="row">
                   <div className="col-lg-8 col-md-8 game-notice-layout" style={{marginRight:"50px"}}>
                       <div className='notice-box'>
+                        {/**************************************************************/}
+                        {/*게임 공지사항, 알람 목록*/}
                         <OwlCarousel {...options} className='notice-box-item'>
                           <div> <i className='fas fa-bell'></i> [공지사항] 2023년 07월 23일. 게임 업데이트 관련 안내</div>
                           <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇ님이 랭킹 게임에서 35 Points를 얻었습니다.</div>
-                          <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다.</div>
-                        </OwlCarousel>
+                         <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다.</div>
+                        </OwlCarousel> 
+                        {/**************************************************************/}
                       </div>
                     
                   </div>
@@ -83,10 +83,15 @@ function Game() {
                   <div className="col-lg-8 col-md-8 game-layout" style={{marginRight:"50px"}}>
                     <div className="row">
                       <div className='col-lg-11 col-md-11'>
+                        {/**************************************************************/}
+                        {/*게임방 검색 기능 영역 (게임방 검색 기능)*/}
                         <GameRoomSearch/>
+                        {/**************************************************************/}
                       </div>
 
                       <div className='col-lg-11 col-md-11 game-room-layout'>
+                        {/**************************************************************/}
+                        {/*게임방 목록 영역 (대기실 목록)*/}
                         <GameRoomContainer/>
                         <GameRoomContainer/>
                         <GameRoomContainer/>
@@ -95,18 +100,32 @@ function Game() {
                         <GameRoomContainer/>
                         <GameRoomContainer/>
                         <GameRoomContainer/>
+                        {/**************************************************************/}
                       </div>
                     </div>
                   </div>
-
-                  {/*게임 프로필 영역*/}
+                  
+                  {/**************************************************************/}
+                  {/*게임 프로필 영역 (오른쪽 사이드바)*/}
                   <GameRoomSideProfile/>
+                  {/**************************************************************/}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
+
+        {/**** 게임방 생성 모달 *****/}
+        <GameRoomMakeModal_ open={isOpen} onClose={() => {setIsOpen(false);}}>
+            <GameRoomMakeModal/>
+        </GameRoomMakeModal_>
+
+
+
+
+
+        {/**** 푸터 영역 *****/}
         <div className="footer_section">
           <div className="container">
             <div className="row">

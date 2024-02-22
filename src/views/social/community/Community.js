@@ -18,13 +18,20 @@ import FriendListSideBar from './component/FriendListSideBar';
 import CommnunitySearch from './component/CommunitySearch';
 import CommunityBoardWriteModal from './crud/CommunityBoardWriteModal';
 import CommunityBoardViewModal from './crud/CommunityBoardViewModal';
-import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
+// import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
+import ChatBot from '../../component/chatBot/ChatBot';
+
 //플로팅
 //npm i --save react-floating-action-button
 
 //리액트 모달
 //npm install --save react-modal
 //import Modal from 'react-modal';
+
+
+//******************************************************* */
+import CommunityBoardWriteModal_ from './crud/CommunityBoardWriteModal_';
+import CommunityBoardViewModal_ from './crud/CommunityBoardViewModal_';
 
 function Community() {
 
@@ -48,6 +55,7 @@ function Community() {
     const [showModal, setShowModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [accountInfo, setAccountInfo] = useState([]);
+    const [onDelete, setOnDelete] = useState(false);
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -68,7 +76,7 @@ function Community() {
 
     // 사용자 정보 프로필 정보 조회
     useEffect(() => {
-        axios.get('http://192.168.0.15:8080/api/v1/boards/account', {
+        axios.get('http://192.168.0.104:8080/api/v1/boards/account', {
           headers: {
             'Authorization' : `${myCookieValue}`,
             'Content-Type' : 'application/json; charset=UTF-8'
@@ -82,7 +90,7 @@ function Community() {
             })
         })
         .catch(error => console.log(error))
-      }, []);
+      }, [onDelete]);
 
     // 팔로워 클릭 이벤트 핸들러
     function handleFollowerClick(followerInfo) {
@@ -129,7 +137,7 @@ function Community() {
             setBoards(updatedBoards);
         })
         .catch(error => console.log(error));
-    }, []);
+    }, [onDelete, showModal]);
 
     // 특정 게시글 상세 조회
     useEffect(() => {
@@ -208,7 +216,8 @@ function Community() {
   return (
     <div>
         {/* 챗봇용 플로팅 */}
-        <ChatbotFloating/>
+        {/* <ChatbotFloating/> */}
+        <ChatBot/>
         {/*헤더 위*/}
         <HeaderTop/>
         {/*헤더 메인 메뉴*/}
@@ -247,6 +256,7 @@ function Community() {
                         {/*게시글 박스*/}
                         {boards.map(board => (
                             <CommunityBoard 
+                                key={board.bno}
                                 accountNo={board.accountNo}
                                 bno={board.bno} 
                                 name={board.name}
@@ -259,13 +269,20 @@ function Community() {
                                 isOpen={isOpen}
                                 setIsOpen={setIsOpen}
                                 onButtonClicked={handleButtonClickedFromChild}
+                                loginAccountNo={loginUser.accountNo}
+                                setOnDelete={setOnDelete}
                             />
                         ))}
+
+                            
                         
                         {showModal && (
-                            <Modal onClose={() => setShowModal(false)}>
-                               <CommunityBoardWriteModal accountNo={loginUser.accountNo}/>
-                            </Modal>
+                            <CommunityBoardWriteModal_ onClose={() => setShowModal(false)}>
+                                <CommunityBoardWriteModal 
+                                    accountNo={loginUser.accountNo}
+                                    setShowModal={setShowModal}
+                                />
+                            </CommunityBoardWriteModal_>
                         )}
                         
                     </div>
@@ -279,7 +296,7 @@ function Community() {
         </div>
         {/*푸터 영역*/}
         {isOpen && (
-            <Modal
+            <CommunityBoardViewModal_
             open={isOpen}
             onClose={() => {
               setIsOpen(false);
@@ -295,7 +312,7 @@ function Community() {
                 // title={board.title}
                 // comment={board.boardComment}
             />
-          </Modal>
+          </CommunityBoardViewModal_>
             
         )}
         <Footer/>
