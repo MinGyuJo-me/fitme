@@ -38,10 +38,30 @@ function CommunityBoardViewModal(props) {
         });
     });
 
+    const onClickList1 = (e) =>{
+        $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
+    }
+
+
     return (
-        <div className='row justify-content-md-center' style={{backgroundColor:"lightgray", borderRadius:"5px", paddingTop:"20px"}}>
-            <div className="col-lg-6 col-sm-6">
-                <div className="blog-single-box upper" style={{backgroundColor:"#F6F4EC"}}>
+        <div className='row justify-content-md-center' style={{borderRadius:"5px", paddingTop:"20px", height:"105%"}}>
+            <div className="col-lg-6 col-sm-6 scrolling" style={{height:"95%", overflow:"scroll", backgroundColor:"white", borderRadius:"5px"}}> 
+                <div className="community-detail-button" style={{position:"absolute", width:"37px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"10px", top:"20px", zIndex:"1"}}  onClick={onClickList1}>
+                    <svg viewBox="0 0 29 7">
+                        <circle cx="3.5" cy="3.5" r="3.5"></circle>
+                        <circle cx="14.5" cy="3.5" r="3.5"></circle>
+                        <circle cx="25.5" cy="3.5" r="3.5"></circle>
+                    </svg>
+                </div>
+                {/**************** 버튼 부분 ******************/}
+                <div className="community-detail-button-list" style={{display:"none", backgroundColor:"white", position:"absolute", width:"50px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"3px", top:"40px", textAlign:"center", zIndex:"2"}}>
+                    <div>삭제</div>
+                    <div>수정</div>
+                    <div>신고</div>
+                </div>
+
+
+                <div className="blog-single-box upper" style={{height:"100%", padding:"0px", backgroundColor:"white"}}>
                     <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                         <div className="blog-icon bi1">
                         </div>
@@ -69,27 +89,43 @@ function CommunityBoardViewModal(props) {
                     </div>
                     
                     <div className="blog-content">
-                        <div style={{display:"flex", height:"35px"}}>
-                        <select style={{width:"35px", padding:"5px", marginRight:"10px", borderRadius:"0px", border:"3px solid rgba(0, 0, 0, 0.391)", borderRadius:"0px", backgroundColor:"lightgray"}}>
-                            <option value=""></option>
-                            <option value="">신고1</option>
-                            <option value="">수정</option>
-                            <option value="">삭제</option>
-                        </select>
-                        <h2><a href="blog-details.html">{props.title}</a></h2>
-                        </div>
-                        <p>
-                            {props.comment}
+                        <h2 style={{textAlign:"left"}}>{props.title} "제목 위치임"</h2>
+                        
+                        
+                        {/* 내용 넣는 곳 */}
+                        <p style={{textAlign:"left"}}>
+                            sadasdasdassadasdasdassadasdasdassadasdasdassadasdasdassadasdasdas
+                            sadasdasdassadasdasdas
+                            sadasdasdas
+                            sadasdasdas
+                            sadasdasdas
+                            sadasdasdassadasdasdassadasdasdas<br/>
+                            <br/><br/>
+
+                            sadasdasdassadasdasdassadasdasdassadasdasdas
+
+                            sadasdasdas
+                            sadasdasdas<br/>
+                            sadasdasdas
+                            sadasdasdassadasdasdassadasdasdassadasdasdas<br/>
+                            sadasdasdassadasdasdassadasdasdassadasdasdas<br/>
+                            sadasdasdassadasdasdassadasdasdassadasdasdas<br/>
+                            sadasdasdassadasdasdassadasdasdassadasdasdas<br/>
                         </p>
-                        <div className="blog-button">
-                            <a href="#">read more</a>
+
+                        {/** 해시태그 위치 **/}
+                        <div className='community-board-hashtag' style={{border:"1px solid red", transform:"translateX(-20px)", width:"100%"}}>
+                            <span>#예시용</span>
+                            <span>#예시용</span>
+                            <span>#예시용</span>
+                            <span>#예시용</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="col-lg-6 col-sm-6" >
-                <div className="blog-single-box upper" style={{height:"97%", backgroundColor:"#F6F4EC"}}>
+            <div className="col-lg-6 col-sm-6" style={{height:"95%"}}>
+                <div className="blog-single-box upper" style={{height:"100%", backgroundColor:"#F6F4EC"}}>
                     <div className="blog-content" style={{height:"90%"}}>
                         <div className='blog-comment'>
                             <table className="blog-comment-table">

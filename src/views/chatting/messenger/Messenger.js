@@ -16,7 +16,6 @@ import ChatBot from '../../component/chatBot/ChatBot';
 
 import DropDown from './dropDown';
 
-let chatNo = 0;
 function getCookie(name) { //로그인 여부 확인
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -28,17 +27,20 @@ function getCookie(name) { //로그인 여부 확인
     return null;
 }
 function Messenger() {
-    
+
     const [chatList, setChatList] = useState([]);
     const [chat, setChat] = useState('');
-    const [chatNo,setChatNo] = useState();
     const [name,setName] = useState();
 
+    //방추가인지 확인
+    const [addChattingRoom,setAddChattingRoom] = useState();
+    //채팅방 이름 변경
+    const [editChattingRoom,setEditChattingRoom] = useState();
+    const [editRoomName,setEditRoomName] = useState();
     //
     const [chatRoomNo,setChatRoomNo] = useState();
   
     const [chattingRoom,SetChattingRoom] = useState([]);
-    const [chatRoomKing,setChatRoomKing] = useState();
 
     const [userId,setUserId] = useState();
   
@@ -73,7 +75,10 @@ function Messenger() {
         };
       }, [isOpen]);
     
-      const toggleModal = () => {
+      const toggleModal = (e) => {
+        setAddChattingRoom();
+        console.log('sdada',);
+        setAddChattingRoom(e.currentTarget.querySelector('#addChattingRoom'));
         setIsOpen(!isOpen);
       };
 
@@ -83,17 +88,13 @@ function Messenger() {
         e.preventDefault();
 
         const chatChattingNoValue = e.currentTarget.querySelector('#chatChattingNo').value;
-        const chatChattingUserNoValue = e.currentTarget.querySelector('#chatChattingUserNo').value;
 
         var s = document.getElementById('chatRoomNo');
-        console.log('채팅방',chatChattingNoValue);
+        // console.log('채팅방',chatChattingNoValue);
         s.value = chatChattingNoValue;
         
         subscribe(chatChattingNoValue); //채팅방 연결 테스트
-
-        setChatRoomKing(chatChattingUserNoValue);
         // console.log('확인:',s.value);
-        setChatNo(chatChattingNoValue);
         axios.get(`/api/v1/chat/list/room/${chatChattingNoValue}`)
         .then(res=>{
             // console.log('채팅 내용',res.data);
@@ -148,16 +149,16 @@ function Messenger() {
         client.current.activate();
     };
   
-    const publish = (num,chat) => {
+    const publish = (num,chat,check) => {
         if (!client.current.connected) return;
             // console.log('userId',userId);
-        client.current.publish({
+          client.current.publish({
             destination: '/pub/chat',
             body: JSON.stringify({
               chattingNo: num,
-              accountNo: userId,
+              accountNo: check == null ? userId : 1,
               name: name,
-              chatComment: chat
+              chatComment: check== 'in'? `${name}님이 입장하셨습니다.` :check== 'out' ? `${name}님이 퇴장하셨습니다.` : chat
             }),
         });
     
@@ -167,7 +168,7 @@ function Messenger() {
     };
   
     const subscribe = (num) => {
-      console.log('num',num);
+      // console.log('num',num);
       setChatRoomNo(num);
 
       client.current.subscribe(`/sub/chat/${num}`, (body) => {
@@ -198,7 +199,7 @@ function Messenger() {
         var num = event.target.children[1].value;
         event.target.children[0].value = '';
         // setChatRoomNo(num)
-        publish(num,chat);
+        publish(num,chat,null);
         
         // console.log('chat',chat);
         // console.log('num',num); //채팅방 일련번호?
@@ -250,42 +251,71 @@ function Messenger() {
     useEffect(()=>{
         if(userId != null){
             console.log("gdgd");
-            axios.get(`/api/v1/chat/list/${userId}`,{
-            headers: {
-                'Content-Type' : 'application/json; charset=UTF-8'
-            }
-            })
-            .then(response => {
-                console.log('chat/list',response.data);
-                SetChattingRoom(response.data);
-            })
-            .catch(error => console.log('/chat/list',error));
+            chattingList();
         }
     },[userId])
-    //방추가
-    function insertChatRoom(e) {
-        e.preventDefault();
-        console.log('추가')
-    };
-    function deleteChatRoom(e){
-        e.preventDefault();
-        if(e.target.value == '방제거'){
-            const myCookieValue = getCookie('Authorization');
-            axios.delete(`/api/v1/chat/list/room/${e.target.parentElement.children[0].value}`,{
-                headers: {
-                    'Authorization' : `${myCookieValue}`,
-                    'Content-Type' : 'application/json; charset=UTF-8'
-                }
-            } 
-            )
-            .then(res=>{
-                console.log('제거 결과:',res.data);
-            })
-        }else{
-            console.log(e.target.value,':',e.target.parentElement.children[0].value);
-        }
 
+    //채팅방 리스트
+    function chattingList(){
+      axios.get(`/api/v1/chat/list/${userId}`,{
+        headers: {
+            'Content-Type' : 'application/json; charset=UTF-8'
+        }
+        })
+        .then(response => {
+            console.log('chat/list',response.data);
+            SetChattingRoom(response.data);
+        })
+        .catch(error => console.log('/chat/list',error));
     }
+
+    //상태값 확인
+    function setCheck(e){
+      if(e[0] == '제거' || e[0] == '나가기'){
+        setChatRoomNo(null);
+        chattingList();
+        publish(e[1],'','out')
+        // chattingLog(e[1]);
+        setChatList([]);
+      }
+      else{
+        setEditChattingRoom(e[1]);
+      }
+    }
+    function editChattingRoomName(e){
+      e.preventDefault();
+      setEditChattingRoom();
+      setEditRoomName();
+      if(e.currentTarget.querySelector('input').value == '' || e.currentTarget.querySelector('input').value.length >= 20){
+        alert('공백은 20자 이상은 입력불가');
+        return;
+      }
+      //채팅방 닉네임 수정 
+      const myCookieValue = getCookie('Authorization'); //쿠키 받아주기
+      const data = new FormData();
+      data.append('chattingNick',e.currentTarget.querySelector('input').value);
+      data.append('chattingNo',e.target.parentElement.querySelector('#chatChattingNo').value);
+      // console.log(e.target.parentElement.querySelector('#chatChattingNo').value,e.currentTarget.querySelector('input').value);
+      axios.put(`/api/v1/chat/list/room`,data
+        ,{
+          headers: {
+              'Authorization' : `${myCookieValue}`,
+              'Content-Type' : 'application/json; charset=UTF-8'
+          }
+        })
+        .then(res=>{
+          // alert(res.data);
+          chattingList();
+        });
+
+
+      
+    }
+
+    //채팅방 이름 압력 함수
+    const handleInputChange = (e) => { 
+      setEditRoomName(e.target.value);
+    };
    
   return (
     <div style={{paddingBottom:"80px"}}>
@@ -317,19 +347,33 @@ function Messenger() {
         <input type="text" placeholder="search" />
         <i className="fa fa-search"></i>
       </div>
+      <div>
+        <div>방추가</div>
+        <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}>
+          <input id='addChattingRoom' type='hidden' value='0'/>
+        </i>
+        
+      </div>
       <ul className="list">
         {chattingRoom.map((chat)=>(
+          
             <li className="clearfix" onClick={chatRoom}>
               <img src="" alt="avatar" />
               <div className="about" >
                   <input id='chatChattingNo' type='hidden' value={chat.chattingNo}/>
                   <input id='chatChattingUserNo' type='hidden' value={chat.accountNo}/>
-                  <div className="name">{chat.chattingNick}</div>
+                  {editChattingRoom == chat.chattingNo ? 
+                    <form onSubmit={editChattingRoomName}>
+                      <input value={editRoomName == null ? chat.chattingNick: editRoomName} onChange={handleInputChange}/>
+                    </form>
+                  :
+                    <div className="name">{chat.chattingNick}</div>
+                  }
                   <div className="status">
-                  <i className="fa fa-circle online"></i> {chat.count}명
+                    <i className="fa fa-circle online"></i> {chat.count}명
                   </div>
               </div>
-              <DropDown/>
+              <DropDown kingNo={chat.accountNo} accountNo={userId} onCheck={setCheck} chatringNo={chat.chattingNo} />
             </li>
         ))}
       </ul>
@@ -340,29 +384,31 @@ function Messenger() {
         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
         
         <div className="chat-about">
-          <div className="chat-with">Chat with Vincent Porter</div>
+          <div className="chat-with">{userId}</div>
           <div className="chat-num-messages">already 1 902 messages</div>
         </div>
         <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}></i>
         {isOpen && (
                 
-                <Modal
-                  open={isOpen}
-                  chatRoomNo = {chatRoomNo}
-                  onClose={() => {
-                    setIsOpen(false);
-                  }}
-                > 
-                <div className="modal-addfood-label">
-                  <h2>채팅방에 친구를 추가해 보세요!</h2>
-                </div>
-                
-                {/* <form onSubmit={console.log("post")}> */}
-                <form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
-                  
-                </form>
-                </Modal>
-                    )}
+          <Modal
+            open={isOpen}
+            onCheck={setCheck}
+            chatRoomNo = {chatRoomNo}
+            addChattingRoom = {addChattingRoom}
+            onClose={() => {
+              setIsOpen(false);
+            }}
+          > 
+          <div className="modal-addfood-label">
+            <h2>{addChattingRoom == null ? '채팅방에 친구를 추가해 보세요!' :'채팅방을 추가해보세요!'}</h2>
+          </div>
+          
+          {/* <form onSubmit={console.log("post")}> */}
+          <form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
+            
+          </form>
+          </Modal>
+        )}
         </div>
       
       <div className="chat-history" ref={chatHistoryRef}>
@@ -379,6 +425,9 @@ function Messenger() {
                             {chat.chatComment}
                         </div>
                     </li>
+                :
+                chat.accountNo ==1?
+                <h4><small>{chat.chatComment}</small></h4>
                 :
                     <li>
                         <div className="message-data">
