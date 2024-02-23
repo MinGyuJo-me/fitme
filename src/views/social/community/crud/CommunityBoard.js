@@ -90,6 +90,7 @@ function CommunityBoard(props) {
         };
     
         fetchBoardImages(); 
+        
     }, [props.key]);
 
     
@@ -198,9 +199,27 @@ function CommunityBoard(props) {
         })
     }
 
+    {/**************** 버튼 사용 ************/}
+    const onClickList = (e) =>{
+        $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
+    }
+
     return (
         <div className="col-lg-12 col-sm-12">
             <div className="blog-single-box upper">
+                <div className="community-detail-button" style={{position:"absolute", width:"37px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"10px", top:"20px"}}  onClick={onClickList}>
+                    <svg viewBox="0 0 29 7">
+                        <circle cx="3.5" cy="3.5" r="3.5"></circle>
+                        <circle cx="14.5" cy="3.5" r="3.5"></circle>
+                        <circle cx="25.5" cy="3.5" r="3.5"></circle>
+                    </svg>
+                </div>
+                {/**************** 버튼 부분 ******************/}
+                <div className="community-detail-button-list" style={{display:"none", position:"absolute", width:"50px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"3px", top:"40px", textAlign:"center"}}>
+                    {props.loginAccountNo == props.accountNo ? <div onClick={onClickDelete}>삭제</div> : ""}
+                    {props.loginAccountNo == props.accountNo ? <div>수정</div> : ""}
+                    {props.loginAccountNo !== props.accountNo ? <div>신고</div> : ""}
+                </div>
                 <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                     <div className="blog-icon bi1"  style={{backgroundImage: `url(${props.image})`}} onClick={() => handleButtonClick(props.accountNo)}>
                     </div>
@@ -225,27 +244,19 @@ function CommunityBoard(props) {
                 
                 <div className="blog-content">
                     <div style={{display:"flex", height:"35px"}}>
-                        <select style={{width:"35px", padding:"5px", marginRight:"10px", borderRadius:"0px", border:"3px solid rgba(0, 0, 0, 0.391)", borderRadius:"0px", backgroundColor:"lightgray"}}>
-                            <option value=""></option>
-                            <option value="">신고</option>
-                            <option value="">수정</option>
-                            <option value="">삭제</option>
-                        </select>
                         <h2><a href="blog-details.html">{props.title}</a></h2>
-                    </div>
-                
-                    <div>
-                        <div>
-                            {props.loginAccountNo == props.accountNo ? <div onClick={onClickDelete}>삭제</div> : ""}
-                            {props.loginAccountNo == props.accountNo ? <div>수정</div> : ""}
-                            {props.loginAccountNo !== props.accountNo ? <div>신고</div> : ""}
-                            
-                        </div>
                     </div>
                     <p>{props.comment}
                     </p>
+
                     <div className="blog-button">
                         <a onClick={onModal}>read more</a>
+                                            {/********** 해시태그 위치 **************/}
+                    <div className='community-board-hashtag'>
+                        {props.category.split(",").map((tag, index) => (
+                            <span key={index}>{tag.trim()}</span>
+                        ))}
+                    </div>
                         <div className="blog-button-container">
                             <div className='blog-button-item'>
                                 <img src={require('../images/chat_bubble.png')} onClick={onModal}/>

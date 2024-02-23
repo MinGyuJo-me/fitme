@@ -5,6 +5,7 @@ import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './CommunityBoardWriteModal.css';
 import axios from 'axios';
 import swal from 'sweetalert2';
+import { post } from 'jquery';
 
 function CommunityBoardWriteModal(props) {
     function getCookie(name) {
@@ -29,6 +30,34 @@ function CommunityBoardWriteModal(props) {
         smartSpeed: 450,
     };
 
+    //해쉬태그
+    const [hashtags, setHashtags] = useState([]);
+    const [inputValue, setInputValue] = useState('');
+
+    const handleChange = (e) => {
+        setInputValue(e.target.value);
+    }
+
+    const handleKeyDown = (e) => {
+        
+        e.preventDefault();
+
+        if(e.code === 'Enter') {
+            if(!(inputValue === ''))  {
+                if(!hashtags.includes(inputValue)) {
+                setHashtags(pre => [...pre, inputValue]);
+                setInputValue("");
+                
+                }
+            }
+        }
+        
+    }
+
+    useEffect(() => {
+        
+    }, [hashtags])
+
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [boardImages, setBoardImages] = useState([]);
     const [posts, setPosts] = useState({
@@ -36,6 +65,7 @@ function CommunityBoardWriteModal(props) {
         title: "",
         boardComment: "",
         address: "서울특별시 서초구 서초대로77길 41, 4층 (서초동, 대동Ⅱ)",
+        boardCategory: [],
         uploads: ''
     });
     const [inputHidden, setInputHidden] = useState(false); 
@@ -72,11 +102,15 @@ function CommunityBoardWriteModal(props) {
     const onClickButton = async (e) => {
 
         e.preventDefault();
-
         
+        hashtags.forEach(hashtag => {
+            posts.boardCategory += `#${hashtag},`
+        }) 
+
         setPosts({
             ...posts
         });
+
     
         if (posts.title !== "") {
             try {
@@ -100,6 +134,7 @@ function CommunityBoardWriteModal(props) {
                     accountNo: props.accountNo,
                     title: posts.title,
                     boardComment: posts.boardComment,
+                    boardCategory: posts.boardCategory,
                     address: posts.address,
                     boardImages: imageResponse.data 
                 },{
@@ -114,10 +149,18 @@ function CommunityBoardWriteModal(props) {
             }
         }
 
-        swal.fire({title:"등록하시겠습니까?",icon:"question", button:"확인"})
+        await swal.fire({
+            title:"등록하시겠습니까?",
+            icon:"question", 
+            button:"확인", 
+            customClass: {
+                container: 'my-swal-container'
+            }
+        })
         .then(value => {
-            if(value)
+            if(value) {
                 props.setShowModal(false);
+            }
         })
 
         
@@ -125,9 +168,12 @@ function CommunityBoardWriteModal(props) {
         
     };
 
+
+
+
     return (
         <div className="col-lg-12 col-sm-12">
-            <form className="blog-single-box upper" style={{ backgroundColor: "#F6F4EC" }} onSubmit={onClickButton}>
+            <form className="blog-single-box upper" style={{ backgroundColor: "#F6F4EC", height:"910px"}} onSubmit={onClickButton}>
                 <div style={{position: "relative", width:"92%", height:"500px", margin:"auto", marginTop:"30px", background:"white", borderRadius:"5px", border:"1px solid #c2cfdb"}}>
                     {!inputHidden && (
                         <>
@@ -138,7 +184,7 @@ function CommunityBoardWriteModal(props) {
                     <OwlCarousel {...options}>
                         {selectedFiles.map((file, index) => (
                             <div className="blog-thumb" key={index}>
-                                <img src={URL.createObjectURL(file)} alt="" style={{ height: 600 }} />
+                                <img src={URL.createObjectURL(file)} alt="" style={{ height: 500 }} />
                                 <div className="blog-btn">
                                     <div>{`${index + 1}/${selectedFiles.length}`}</div>
                                 </div>
@@ -153,11 +199,18 @@ function CommunityBoardWriteModal(props) {
                     <div>
                         <textarea style={{ width: "100%", height: "200px" }} name='boardComment' onChange={(e) => setPosts({ ...posts, boardComment: e.target.value })}></textarea>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row-reverse", gap: "10px" }}>
-                        <button className="community-write-button">Back</button>
-                        <button className="community-write-button" type="submit">Post</button>
-                        <input type="text" className="community-modal-select" placeholder='HashTag'>
 
+                    {/********** 해시 태그 ***************** appeend 할 부분*/}
+                    <div className="community-hashtag">
+                        {hashtags.map(hashtag => (
+                            <span>{hashtag}</span>
+                        ))}
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "row-reverse", gap: "10px" }}>
+                        <button className="community-write-button" style={{width:"160px"}}>Back</button>
+                        <button className="community-write-button" style={{width:"160px"}}>Post</button>
+                        <input type="text" className="community-modal-select" placeholder='HashTag' onChange={handleChange} onKeyDown={handleKeyDown}>
                         </input>
                     </div>
                 </div>
