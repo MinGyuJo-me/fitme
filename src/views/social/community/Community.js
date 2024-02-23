@@ -56,6 +56,10 @@ function Community() {
     const [isOpen, setIsOpen] = useState(false);
     const [accountInfo, setAccountInfo] = useState([]);
     const [onDelete, setOnDelete] = useState(false);
+    function checkCategory(category) {
+        const categoryStr = category;
+        console.log(categoryStr.split(","));
+    }
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -121,13 +125,14 @@ function Community() {
 
     // 게시글 전체 목록 조회
     useEffect(() => {
-        axios.get('http://192.168.0.15:8080/api/v1/boards', {
+        axios.get('http://192.168.0.104:8080/api/v1/boards', {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'
             }
         })
         .then(async response => {
+            console.log('ddd',response.data);
             const updatedBoards = await Promise.all(response.data.map(async board => {
                 const image = await imageData(board.image);
                 board.image = image;
@@ -135,6 +140,10 @@ function Community() {
             }));
     
             setBoards(updatedBoards);
+            for(let i=0; i< response.data.length; i++) {
+                checkCategory(response.data[i].boardCategory);
+            }
+            
         })
         .catch(error => console.log(error));
     }, [onDelete, showModal]);
@@ -266,6 +275,7 @@ function Community() {
                                 likes={board.like}
                                 title={board.title}
                                 comment={board.boardComment}
+                                category={board.boardCategory}
                                 isOpen={isOpen}
                                 setIsOpen={setIsOpen}
                                 onButtonClicked={handleButtonClickedFromChild}

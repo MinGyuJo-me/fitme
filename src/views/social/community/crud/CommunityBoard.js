@@ -90,6 +90,7 @@ function CommunityBoard(props) {
         };
     
         fetchBoardImages(); 
+        
     }, [props.key]);
 
     
@@ -251,7 +252,9 @@ function CommunityBoard(props) {
                         <a onClick={onModal}>read more</a>
                                             {/********** 해시태그 위치 **************/}
                     <div className='community-board-hashtag'>
-                        <span>#고양이</span> <span>#고양이</span> <span>#고양이</span>
+                        {props.category.split(",").map((tag, index) => (
+                            <span key={index}>{tag.trim()}</span>
+                        ))}
                     </div>
                         <div className="blog-button-container">
                             <div className='blog-button-item'>
