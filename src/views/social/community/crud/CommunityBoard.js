@@ -199,15 +199,29 @@ function CommunityBoard(props) {
         })
     }
 
+    {/**************** 버튼 사용 ************/}
+    const onClickList = (e) =>{
+        $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
+    }
+
     return (
         <div className="col-lg-12 col-sm-12">
             <div className="blog-single-box upper">
-                <div className="community-detail-button" style={{position:"absolute", width:"37px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"10px", top:"20px"}}>
+                <div className="community-detail-button" style={{position:"absolute", width:"37px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"10px", top:"20px"}}  onClick={onClickList}>
                     <svg viewBox="0 0 29 7">
                         <circle cx="3.5" cy="3.5" r="3.5"></circle>
                         <circle cx="14.5" cy="3.5" r="3.5"></circle>
                         <circle cx="25.5" cy="3.5" r="3.5"></circle>
                     </svg>
+                </div>
+                {/**************** 버튼 부분 ******************/}
+                <div className="community-detail-button-list" style={{display:"none", position:"absolute", width:"50px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"3px", top:"40px", textAlign:"center"}}>
+                    <div>
+                        버튼
+                    </div>
+                    <div>
+                        버튼
+                    </div>
                 </div>
                 <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                     <div className="blog-icon bi1"  style={{backgroundImage: `url(${props.image})`}} onClick={() => handleButtonClick(props.accountNo)}>
