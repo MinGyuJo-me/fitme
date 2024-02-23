@@ -149,16 +149,16 @@ function Messenger() {
         client.current.activate();
     };
   
-    const publish = (num,chat) => {
+    const publish = (num,chat,check) => {
         if (!client.current.connected) return;
             // console.log('userId',userId);
-        client.current.publish({
+          client.current.publish({
             destination: '/pub/chat',
             body: JSON.stringify({
               chattingNo: num,
-              accountNo: userId,
+              accountNo: check == null ? userId : 1,
               name: name,
-              chatComment: chat
+              chatComment: check== 'in'? `${name}님이 입장하셨습니다.` :check== 'out' ? `${name}님이 퇴장하셨습니다.` : chat
             }),
         });
     
@@ -199,7 +199,7 @@ function Messenger() {
         var num = event.target.children[1].value;
         event.target.children[0].value = '';
         // setChatRoomNo(num)
-        publish(num,chat);
+        publish(num,chat,null);
         
         // console.log('chat',chat);
         // console.log('num',num); //채팅방 일련번호?
@@ -255,6 +255,7 @@ function Messenger() {
         }
     },[userId])
 
+    //채팅방 리스트
     function chattingList(){
       axios.get(`/api/v1/chat/list/${userId}`,{
         headers: {
@@ -268,35 +269,14 @@ function Messenger() {
         .catch(error => console.log('/chat/list',error));
     }
 
-    //방추가
-    function insertChatRoom(e) {
-        e.preventDefault();
-        console.log('추가')
-    };
-    function deleteChatRoom(e){
-        e.preventDefault();
-        if(e.target.value == '방제거'){
-            const myCookieValue = getCookie('Authorization');
-            axios.delete(`/api/v1/chat/list/room/${e.target.parentElement.children[0].value}`,{
-                headers: {
-                    'Authorization' : `${myCookieValue}`,
-                    'Content-Type' : 'application/json; charset=UTF-8'
-                }
-            } 
-            )
-            .then(res=>{
-                console.log('제거 결과:',res.data);
-            })
-        }else{
-            console.log(e.target.value,':',e.target.parentElement.children[0].value);
-        }
-
-    }
     //상태값 확인
     function setCheck(e){
-      if(e[0] == '확인'){
+      if(e[0] == '제거' || e[0] == '나가기'){
         setChatRoomNo(null);
         chattingList();
+        publish(e[1],'','out')
+        // chattingLog(e[1]);
+        setChatList([]);
       }
       else{
         setEditChattingRoom(e[1]);
@@ -404,7 +384,7 @@ function Messenger() {
         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
         
         <div className="chat-about">
-          <div className="chat-with">Chat with Vincent Porter</div>
+          <div className="chat-with">{userId}</div>
           <div className="chat-num-messages">already 1 902 messages</div>
         </div>
         <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}></i>
@@ -445,6 +425,9 @@ function Messenger() {
                             {chat.chatComment}
                         </div>
                     </li>
+                :
+                chat.accountNo ==1?
+                <h4><small>{chat.chatComment}</small></h4>
                 :
                     <li>
                         <div className="message-data">
