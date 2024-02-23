@@ -570,14 +570,14 @@ function Diet() {
 			
 		<div className="container">
 
-		<div className='chart-info-container'>
+		<div className='chart-info-container'style={{height: 500, marginBottom: 50}}>
 				<div className="main-titles-chart">
 					<h2>CHART DESCRIPTION</h2>
 				</div>
-				<div className='chart-info-left'>
+				<div className='chart-info-left' style={{height: 300}}>
 					<Bar options={options} data={data2} />
 				</div>
-				<div className='chart-info-right'>
+				<div className='chart-info-right' style={{height: 300}}>
 					<Line options={options} data={data1} />
 				</div>
 			</div>
@@ -594,7 +594,7 @@ function Diet() {
 
 			
 			
-			<OwlCarousel key={mealTime.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["⟪","⟫"]} dots >
+			<OwlCarousel key={mealTime.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["<i class='fa fa-chevron-left'/>","<i class='fa fa-chevron-right'/>"]} dots >
 				{mealTime.map((test)=>(
 				<div class="item">
 					<div class="row">

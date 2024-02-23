@@ -27,14 +27,16 @@ function ChatBot() {
       recognitionRef.current.onspeechend = () => { // 음성 입력이 끝났을 때 동작
         recognitionRef.current.stop(); // STT 종료
         setIsListening(false);
+        console.log('STT 잘 들어가는지 확인');
       };
 
       recognitionRef.current.onresult = async (event) => { // 음성 인식 결과가 나왔을 때 동작
         const transcript = Array.from(event.results) // 인식된 음성을 텍스트로 변환
           .map(result => result[0].transcript)
           .join('');
-        setUserMessage(transcript); // 인식된 텍스트를 사용자 메시지로 설정
-        await handleChat();
+          setUserMessage(transcript); //인식된 텍스트를 사용자 메시지로 설정
+          handleChat(transcript); // 인식된 텍스트를 사용자 메시지로 설정
+          console.log(transcript,'STT로 인식된 음성을 잘 변환했는지 확인')
       };
     }
   }, []);
@@ -50,10 +52,20 @@ function ChatBot() {
 
   // 채팅 메시지 생성 함수
 const createChatLi = (message, className) => {
+  const handleClick = () => {
+    // TTS로 응답 읽어주기
+    utteranceRef.current.text = message;
+    window.speechSynthesis.speak(utteranceRef.current);
+  };
+
   return (
-      <li key={Math.random()} className={`chat ${className}`}>
-          {className === "outgoing" ? <p>{message}</p> : <><span className="material-symbols-outlined">smart_toy</span><p>{message}</p></>}
-      </li>
+    <li 
+      key={Math.random()} 
+      className={`chat ${className}`}
+      onClick={className === 'incoming' ? handleClick : null} // incoming 메시지일 때만 클릭 이벤트 핸들러를 연결
+    >
+      {className === "outgoing" ? <p>{message}</p> : <><span className="material-symbols-outlined">smart_toy</span><p>{message}</p></>}
+    </li>
   );
 }
 
@@ -75,20 +87,27 @@ const generateResponse = async () => {
 
 // 채팅 처리 함수
 const handleChat = async () => {
+  // userMessage가 null인 경우에 대한 처리
+  if (!userMessage) return;
+
   const trimmedUserMessage = userMessage.trim();
   if (!trimmedUserMessage) return;
+
   // 사용자의 메시지를 채팅 상자에 추가
   setChatbox((prevChatbox) => [...prevChatbox, createChatLi(trimmedUserMessage, "outgoing")]);
+  
   // 입력 텍스트 영역을 제거
   setUserMessage("");
+  
   // 입력 텍스트 영역의 높이를 초기화
   const textareaElement = document.querySelector(".chat-input textarea");
   textareaElement.style.height = `${inputInitHeight}px`;
+  
   // 응답을 기다리는 동안 "Thinking..." 메시지를 표시
   setChatbox((prevChatbox) => [...prevChatbox, createChatLi("Thinking...🤔", "incoming")]);
 
   try {
-      const response = await generateResponse();
+      const response = await generateResponse(trimmedUserMessage);
 
       // "Thinking..." 메시지를 제거
       setChatbox((prevChatbox) => prevChatbox.slice(0, -1));
@@ -96,9 +115,9 @@ const handleChat = async () => {
       // 실제 응답을 표시
       setChatbox((prevChatbox) => [...prevChatbox, createChatLi(response, "incoming")]);
 
-      // TTS로 응답 읽어주기
-      utteranceRef.current.text = response;
-      window.speechSynthesis.speak(utteranceRef.current);
+      // 응답시 TTS로 클릭 없이 바로 읽기
+      // utteranceRef.current.text = response;
+      // window.speechSynthesis.speak(utteranceRef.current);
   } catch (error) {
       // "Thinking..." 메시지를 제거하고 오류 메시지를 표시
       setChatbox((prevChatbox) => {
@@ -145,8 +164,8 @@ return (
   // 챗봇 UI 구성
   <div>
       <button className="chatbot-toggler" onClick={() => document.body.classList.toggle('show-chatbot')}>
-        <span className="material-symbols-rounded">mode_comment</span>
-        <span className="material-symbols-outlined">close</span>
+        <span className="material-symbols-rounded" id='open-button'>android</span>
+        <span className="material-symbols-outlined" id='close-button'>close</span>
       </button>
       <div className="chatbot">
         <header>
@@ -169,12 +188,8 @@ return (
               style={{ height: `${inputInitHeight}px` }}
               required
             />
-            <button className="voice-input-button" onClick={handleListenClick}>
-                <span className="material-symbols">{isListening ? 'mic' : 'mic_none'}</span>
-            </button>
-            <button className="chat-send" onClick={handleChat}>
-                <span className="material-symbols">send</span>
-            </button>
+            <span className="material-symbols-rounded" id='send-button' onClick={handleChat}>send</span>
+            <span className="material-symbols-rounded"  id ='mic-button' onClick={handleListenClick}>{isListening ? 'mic' : 'mic_off'}</span>
         </div>
       </div>
   </div>

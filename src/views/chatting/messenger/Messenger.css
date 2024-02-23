@@ -47,12 +47,12 @@ body {
   background: #e2e3e9;
   width: 95%;
   font-size: 14px;
-  
 }
 
 .people-list .fa-search {
-  position: relative;
-  left: -25px;
+  position: absolute;
+  margin-left: -25px;
+  margin-top: 15px;
 }
 
 .people-list ul {

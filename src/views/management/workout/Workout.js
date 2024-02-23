@@ -503,7 +503,7 @@ function Workout() {
 					</div>
 				</div>
 			</div>
-			<OwlCarousel key={workout.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["⟪","⟫"]} dots >
+			<OwlCarousel key={workout.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["<i class='fa fa-chevron-left'/>","<i class='fa fa-chevron-right'/>"]} dots >
 				{workout.map((test)=>(
 				<div class="item">
 					<div class="row">
