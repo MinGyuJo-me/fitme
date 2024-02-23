@@ -216,12 +216,9 @@ function CommunityBoard(props) {
                 </div>
                 {/**************** 버튼 부분 ******************/}
                 <div className="community-detail-button-list" style={{display:"none", position:"absolute", width:"50px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"3px", top:"40px", textAlign:"center"}}>
-                    <div>
-                        버튼
-                    </div>
-                    <div>
-                        버튼
-                    </div>
+                    {props.loginAccountNo == props.accountNo ? <div onClick={onClickDelete}>삭제</div> : ""}
+                    {props.loginAccountNo == props.accountNo ? <div>수정</div> : ""}
+                    {props.loginAccountNo !== props.accountNo ? <div>신고</div> : ""}
                 </div>
                 <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                     <div className="blog-icon bi1"  style={{backgroundImage: `url(${props.image})`}} onClick={() => handleButtonClick(props.accountNo)}>
@@ -248,16 +245,6 @@ function CommunityBoard(props) {
                 <div className="blog-content">
                     <div style={{display:"flex", height:"35px"}}>
                         <h2><a href="blog-details.html">{props.title}</a></h2>
-                    </div>
-
-
-                    <div>
-                        <div>
-                            {props.loginAccountNo == props.accountNo ? <div onClick={onClickDelete}>삭제</div> : ""}
-                            {props.loginAccountNo == props.accountNo ? <div>수정</div> : ""}
-                            {props.loginAccountNo !== props.accountNo ? <div>신고</div> : ""}
-                            
-                        </div>
                     </div>
                     <p>{props.comment}
                     </p>
