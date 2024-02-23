@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import './modal.css';
 import axios from "axios";
 
+var chatCheck = null;
+
 function getCookie(name) { //로그인 여부 확인
   const cookies = document.cookie.split(';');
   for (let i = 0; i < cookies.length; i++) {
@@ -30,12 +32,16 @@ function Modal(props) {
   const myCookieValue = getCookie('Authorization');
   const [friendsInfo, setFriendsInfo] = useState([]);
   const [showFriend, setShowFriend] = useState(false);
+
   //친구 리스트
   useEffect(() => {
     if (showFriend === false) {
-      // console.log('setChatRoomNo',props.chatRoomNo)
-      
-      axios.get(`/api/v1/chat/list/room/friends/${props.chatRoomNo}`, {
+      chatCheck = props.addChattingRoom == null? null : props.addChattingRoom.value; //방생성 0, 방초대 null
+      console.log('setChatRoomNo', chatCheck);
+
+      if(props.chatRoomNo == null && chatCheck == null) return;
+
+      axios.get(`/api/v1/chat/list/room/friends/${chatCheck == null ? props.chatRoomNo : 0}`, {
       // axios.get('/api/v1/boards/friend', {
           headers: {
               'Authorization': `${myCookieValue}`,
@@ -92,49 +98,53 @@ function Modal(props) {
       setSelectedFriends(selectedFriends.filter(friend => friend.name !== friendName));
     }
   };
-// 선택한 친구 삭제 및 해당 친구의 체크박스 선택 해제 함수
-const handleRemoveFriend = (friendAccountNo) => {
-  setSelectedFriends(selectedFriends.filter(friend => friend.accountNo !== friendAccountNo));
-  // 해당 친구의 체크박스 선택 해제
-  const friendItems = document.querySelectorAll('.friend-item');
-  friendItems.forEach(item => {
-    const accountNoElement = item.querySelector('.friend-accountNo');
-    if (accountNoElement && accountNoElement.value == friendAccountNo) {
-      const friendCheckbox = item.querySelector('.friend-checkbox');
-      if (friendCheckbox) friendCheckbox.checked = false;
+  // 선택한 친구 삭제 및 해당 친구의 체크박스 선택 해제 함수
+  const handleRemoveFriend = (friendAccountNo) => {
+    setSelectedFriends(selectedFriends.filter(friend => friend.accountNo !== friendAccountNo));
+    // 해당 친구의 체크박스 선택 해제
+    const friendItems = document.querySelectorAll('.friend-item');
+    friendItems.forEach(item => {
+      const accountNoElement = item.querySelector('.friend-accountNo');
+      if (accountNoElement && accountNoElement.value == friendAccountNo) {
+        const friendCheckbox = item.querySelector('.friend-checkbox');
+        if (friendCheckbox) friendCheckbox.checked = false;
+      }
+    });
+  };
+
+  //채팅방 생성
+  // useEffect(()=>{
+  //   console.log('selectedFriends',chatRoomMember);
+  // },[chatRoomMember])
+  function selectChatRoom(){
+    // console.log('selectedFriends',selectedFriends);
+
+    const data = new FormData();
+    data.append('chattingNo', chatCheck == null ? props.chatRoomNo : 0);
+    // console.log('accountNo',selectedFriends.length);
+    if(selectedFriends != null && selectedFriends.length > 1){
+      selectedFriends.forEach((e)=>{
+        data.append('friends',e['accountNo']);
+      })
     }
-  });
-};
-
-//채팅방 생성
-// useEffect(()=>{
-//   console.log('selectedFriends',chatRoomMember);
-// },[chatRoomMember])
-function selectChatRoom(){
-  // console.log('selectedFriends',selectedFriends);
-  const data = new FormData();
-  data.append('chattingNo',props.chatRoomNo);
-  // console.log('accountNo',selectedFriends.length);
-  if(selectedFriends != null && selectedFriends.length > 1){
-    selectedFriends.forEach((e)=>{
-      data.append('friends',e['accountNo']);
+    if(selectedFriends != null && selectedFriends.length == 1){
+      // console.log('accountNo',selectedFriends[0]);
+      data.append('accountNo',selectedFriends[0].accountNo);
+    }
+    axios.post(`/api/v1/chat/list/room/friends`,data,{
+      headers: {
+        'Authorization': `${myCookieValue}`,
+        'Content-Type': 'application/json; charset=UTF-8'
+    }
     })
-  }
-   if(selectedFriends != null && selectedFriends.length == 1){
-    // console.log('accountNo',selectedFriends[0]);
-    data.append('accountNo',selectedFriends[0].accountNo);
-   }
-  axios.post(`/api/v1/chat/list/room/friends/post`,data,{
-    headers: {
-      'Authorization': `${myCookieValue}`,
-      'Content-Type': 'application/json; charset=UTF-8'
-  }
-  })
-  .then(res=>{console.log('res.data',res.data)});
+    .then(res=>{
+      console.log('res.data',res.data)
+      props.onCheck(['확인',props.chatRoomNo]);
+    });
 
-  props.onClose();
-  
-}
+    props.onClose();
+    
+  }
 
 
   return (
