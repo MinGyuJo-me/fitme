@@ -17,7 +17,8 @@ function CommunityBoard(props) {
             heart.toggleClass('heart-dots');
 
             heart.click(function(){
-            heart.toggleClass('heart-liked');           heart.toggleClass('heart-beating');  
+            heart.toggleClass('heart-liked');
+            heart.toggleClass('heart-beating');  
             });
         });
     });
@@ -253,9 +254,6 @@ function CommunityBoard(props) {
                         <a onClick={onModal}>read more</a>
                                             {/********** 해시태그 위치 **************/}
                     <div className='community-board-hashtag'>
-                        {props.category.split(",").map((tag, index) => (
-                            <span key={index}>{tag.trim()}</span>
-                        ))}
                     </div>
                         <div className="blog-button-container">
                             <div className='blog-button-item'>

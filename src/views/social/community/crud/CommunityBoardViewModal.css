@@ -47,19 +47,20 @@
 }
 
 .blog-comment td{
-    border-bottom: 3px solid #c2cfdb;
     font-size: 15px;
+    padding: 10px 15px;
 }
 
 
 .blog-comment td:nth-child(1){
-    width: 12%;
+    border: 1px solid red;
+    width: 25%;
     text-align: center;
 }
 
 .blog-comment td:nth-child(2){
     padding-left: 20px;
-    width: 70%;
+    width: 60%;
 }
 
 .blog-comment td:nth-child(3){
@@ -250,4 +251,9 @@
 
   .scrolling::-webkit-scrollbar{
     display: none;
+  }
+
+  .community-icon{
+    width: 30px;
+    text-align: center;
   }

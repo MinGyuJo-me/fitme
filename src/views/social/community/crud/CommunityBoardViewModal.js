@@ -66,9 +66,9 @@ function CommunityBoardViewModal(props) {
                         <div className="blog-icon bi1">
                         </div>
                         <div className='blog-description'>
-                            <a href="#"><i className="fas fa-address-card"></i> {props.writer}</a>
-                            <a href="#"><i className="fas fa-map-marker"></i> {props.position}</a>
-                            <span><i className="far fa-calendar-alt"></i> {props.postDate}</span>
+                            <a href="#"><i className="fas fa-address-card community-icon"></i> sdasdasdas</a>
+                            <a href="#"><i className="fas fa-map-marker community-icon"></i>adasdasdsasd {props.position}</a>
+                            <span><i className="far fa-calendar-alt community-icon"></i>asdsadsada {props.postDate}</span>
                         </div>
                     </div>
                     <div>

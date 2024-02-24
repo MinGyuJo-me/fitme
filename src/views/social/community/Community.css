@@ -65,9 +65,11 @@
     flex-direction: column;
 }
 
-.blog-description > a{
-    font-size: 30px;
+.blog-description > a, span{
+    font-size: 14px;
+    text-align: left;
 }
+
 
 
 .blog-post-description-title{
