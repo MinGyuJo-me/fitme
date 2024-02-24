@@ -123,7 +123,7 @@ function CommunityBoardViewModal(props) {
     return (
         <div className='row justify-content-md-center' style={{borderRadius:"5px", paddingTop:"20px", height:"105%"}}>
             <div className="col-lg-6 col-sm-6 scrolling" style={{height:"95%", overflow:"scroll", backgroundColor:"white", borderRadius:"5px"}}> 
-                <div className="community-detail-button" style={{position:"absolute", width:"37px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"10px", top:"20px", zIndex:"1"}}  onClick={onClickList1}>
+                <div className="community-detail-button" style={{position:"absolute", width:"37px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"10px", top:"30px", zIndex:"1"}}  onClick={onClickList1}>
                     <svg viewBox="0 0 29 7">
                         <circle cx="3.5" cy="3.5" r="3.5"></circle>
                         <circle cx="14.5" cy="3.5" r="3.5"></circle>
@@ -138,8 +138,8 @@ function CommunityBoardViewModal(props) {
                 </div>
 
 
-                <div className="blog-single-box upper" style={{height:"100%", padding:"0px", backgroundColor:"white"}}>
-                    <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
+                <div className="blog-single-box upper" style={{height:"96%", padding:"0px", backgroundColor:"white", marginTop:"20px"}}>
+                    <div className="blog-left" style={{padding:"60px 0px 40px 20px",}}>
                         <div className="blog-icon bi1" style={{backgroundImage: `url(${props.image})`}}>
                         </div>
                         <div className='blog-description'>
@@ -189,6 +189,18 @@ function CommunityBoardViewModal(props) {
                                         {comment.editDate == null ? <td>{comment.postDate}</td> : <td>{comment.editDate}</td>}
                                     </tr>
                                 ))}
+
+                                    <tr>
+                                        <td>테스트</td>
+                                        <td>테스트
+                                            <div className='comment-icon-layout'>
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                        </td>
+                                        <td>2023.04.17</td>
+                                    </tr>
                                 
                             </table>
                         </div>
