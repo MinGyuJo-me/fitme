@@ -126,7 +126,6 @@ function CommunityBoardWriteModal(props) {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                console.log(imageResponse.data);
     
                 setBoardImages(imageResponse.data);
     
