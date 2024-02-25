@@ -20,7 +20,7 @@
     border-radius: 5px;
     box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.4);
     background-color: #FFFFFF;
-    background-image: url(../../assets/images/8.jpg);
+    background-image: url(./images/gameprofile_icon.png);
     background-size: 100% 100%;
 }
 
@@ -134,7 +134,6 @@
     border-radius: 5px;
     border:1px solid lightgray;
     padding: 10px;
-    background-color: #F6F4EC;
     margin-bottom: 10px;
 }
 

@@ -22,6 +22,7 @@ import GameRoomSideProfile from './component/GameRoomSideProfile';
 import styled from "styled-components";
 import GameRoomMakeModal from './component/GameRoomMakeModal';
 import GameRoomMakeModal_ from './component/GameRoomMakeModal_';
+import GameRoomProfileModal from './component/GameRoomProfileModal';
 
 
 const StyledHeader = styled.div`
@@ -124,6 +125,11 @@ function Game() {
         </GameRoomMakeModal_>
         )}
 
+
+
+
+        <GameRoomProfileModal open={isOpen} onClose={() => {setShowModal(false);}}>
+        </GameRoomProfileModal>
 
 
 

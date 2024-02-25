@@ -15,6 +15,7 @@ function GameRoomSideProfile({showModal,setShowModal}){
         <div className="col-lg-3 col-md-3 game-profile-layout">
             <div className="row">
                 <div className='col-lg-10 col-md-10 game-profile'>
+                    <button className='game-profile-edit-button'>+</button>
                 </div>
                 <div className='col-lg-10 col-md-10 game-profile-name'>
                     <div><span>NickName</span><span>조동훈</span></div>
