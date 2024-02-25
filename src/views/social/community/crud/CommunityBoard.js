@@ -20,7 +20,8 @@ function CommunityBoard(props) {
             heart.toggleClass('heart-dots');
 
             heart.click(function(){
-            heart.toggleClass('heart-liked');           heart.toggleClass('heart-beating');  
+            heart.toggleClass('heart-liked');
+            heart.toggleClass('heart-beating');  
             });
         });
     });
