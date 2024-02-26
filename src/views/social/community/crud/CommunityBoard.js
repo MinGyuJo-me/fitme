@@ -7,6 +7,9 @@ import swal from 'sweetalert';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
+import CommunityBoardViewModal from './CommunityBoardViewModal';
+import CommunityBoardViewModal_ from './CommunityBoardViewModal_';
+
 function CommunityBoard(props) {
 
     $(function() { 
@@ -17,7 +20,8 @@ function CommunityBoard(props) {
             heart.toggleClass('heart-dots');
 
             heart.click(function(){
-            heart.toggleClass('heart-liked');           heart.toggleClass('heart-beating');  
+            heart.toggleClass('heart-liked');
+            heart.toggleClass('heart-beating');  
             });
         });
     });
@@ -34,6 +38,7 @@ function CommunityBoard(props) {
     }
     const myCookieValue = getCookie('Authorization');
 
+    //이미지 서버에서 이미지 받아오기
     async function imageData(code){
         return await new Promise((resolve,reject)=>{
         try{
@@ -59,7 +64,7 @@ function CommunityBoard(props) {
     };
 
     const onModal = () => {
-        props.setIsOpen(true);
+        setIsOpen(true);
     }
 
     function handleButtonClick(accountNo) {
@@ -99,6 +104,7 @@ function CommunityBoard(props) {
     const [isLiked, setIsLiked] = useState(false);
     const [isBeating, setIsBeating] = useState(false);
     const [checkLike, setCheckLike] = useState();
+    const [isOpen, setIsOpen] = useState(false);
     const data = new FormData();
 
     //좋아요 누른지 여부 확인
@@ -172,7 +178,6 @@ function CommunityBoard(props) {
     };
 
     //게시글 삭제
-
     const onClickDelete = (e) => {
         const bno = props.bno;
         axios.delete(`http://192.168.0.104:8080/api/v1/boards/${bno}`, {
@@ -203,6 +208,8 @@ function CommunityBoard(props) {
     const onClickList = (e) =>{
         $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
     }
+
+    
 
     return (
         <div className="col-lg-12 col-sm-12">
@@ -272,7 +279,7 @@ function CommunityBoard(props) {
                                         onClick={handleClick}
                                     >
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
-                                    <path d="M150 57.3C100.2-17.4.7 26.3.7 107.6c0 55 49.7 94.2 87.1 123.8 38.8 30.7 49.8 37.3 62.2 49.8 12.4-12.4 22.8-19.7 62.2-49.8 37.9-29 87.1-69.4 87.1-124.4 0-80.7-99.5-124.4-149.3-49.7z" fill-rule="evenodd" clip-rule="evenodd"/>
+                                    <path d="M150 57.3C100.2-17.4.7 26.3.7 107.6c0 55 49.7 94.2 87.1 123.8 38.8 30.7 49.8 37.3 62.2 49.8 12.4-12.4 22.8-19.7 62.2-49.8 37.9-29 87.1-69.4 87.1-124.4 0-80.7-99.5-124.4-149.3-49.7z" fillRule="evenodd" clipRule="evenodd"/>
                                     </svg>
                                         <span className="i1"></span>
                                         <span className="i2"></span>
@@ -308,8 +315,40 @@ function CommunityBoard(props) {
                     </div>
                 </div>
             </div>
+            {isOpen && (
+                <CommunityBoardViewModal_
+                open={isOpen}
+                onClose={() => {
+                setIsOpen(false);
+                }}
+            >
+                <CommunityBoardViewModal 
+                    accountNo={props.accountNo}
+                    bno={props.bno} 
+                    name={props.name}
+                    image={props.image}
+                    boardImages={boardImages}
+                    address={props.address}
+                    postDate={props.postDate}
+                    likes={props.likes}
+                    title={props.title}
+                    comment={props.comment}
+                    category={props.category}
+                    loginAccountNo={props.loginAccountNo}
+                    isLiked={isLiked}
+                    isBeating={isBeating}
+                    handleMouseEnter={handleMouseEnter}
+                    handleMouseLeave={handleMouseLeave}
+                    handleClick={handleClick}
+                    onClickDelete={onClickDelete}
+                    scrapHandle={scrapHandle}
+                />
+            </CommunityBoardViewModal_>
+                
+            )}
         </div>
     );
+    
 }
 
 export default CommunityBoard;

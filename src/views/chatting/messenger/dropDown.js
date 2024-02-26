@@ -58,7 +58,7 @@ const DropDown = (props) => {
             })
           .then(response => {
             alert('방나가기 성공 ');
-            props.onCheck(['확인',props.chatringNo]);
+            props.onCheck(['나가기',props.chatringNo]);
           })
         }
       }
@@ -72,7 +72,7 @@ const DropDown = (props) => {
             })
           .then(response => {
             alert('성공적으로 삭제되었습니다');
-            props.onCheck(['확인',props.chatringNo]);
+            props.onCheck(['제거',props.chatringNo]);
           }) 
         }
       }

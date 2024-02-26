@@ -1,17 +1,14 @@
 /* Import Google font - Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-
 body {
   background: #E3F2FD;
 }
-
 .chatbot-toggler {
   position: fixed;
   bottom: 30px;
@@ -61,13 +58,11 @@ body.show-chatbot .chatbot-toggler span:last-child {
   transition: all 0.1s ease;
   z-index: 10001;
 }
-
 body.show-chatbot .chatbot {
   opacity: 1;
   pointer-events: auto;
   transform: scale(1);
 }
-
 .chatbot header {
   padding: 16px 0;
   position: relative;
@@ -115,13 +110,10 @@ header h2 {
   border:none;
   background: none;
 }
-
 .chatbot .incoming{
   border:none;
   background: none;
 }
-
-
 .chatbox .incoming span {
   width: 32px;
   height: 32px;
@@ -152,7 +144,6 @@ header h2 {
   color: #721c24;
   background: #f8d7da;
 }
-
 .chatbox .incoming p {
   color: #000;
   background: #f2f2f2;
@@ -167,8 +158,6 @@ header h2 {
   padding: 3px 20px;
   border-top: 1px solid #ddd;
 }
-
-
 .chat-input textarea {
   height: 55px;
   width: 100%;
@@ -179,11 +168,9 @@ header h2 {
   padding: 15px 15px 15px 0;
   font-size: 0.95rem;
 }
-
 .chat-input-textarea::placeholder{
   color: #ccc;
 }
-
 .chat-input span {
   align-self: flex-end;
   color: #1BBC9B;
@@ -199,7 +186,6 @@ header h2 {
 .chat-input textarea:valid ~ span {
   visibility: visible;
 }
-
 @media (max-width: 490px) {
   .chatbot-toggler {
     right: 20px;
@@ -228,7 +214,6 @@ header h2 {
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 200, 'opsz' 24;
 }
-
 .material-symbols-rounded {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 200, 'opsz' 48;
 }
@@ -243,7 +228,6 @@ header h2 {
 #mic-button,
 #send-button
 {
-
   font-size: 25px;
   font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 200, 'opsz' 24;
   
