@@ -38,3 +38,15 @@
     padding-left: 10px;
     color: rgb(116, 116, 116);
 }
+
+.game-profile-edit-button{
+    position: absolute;
+    border: 1px solid #30393D;
+    border-radius: 5px;
+    right: 5px;
+    bottom:5px;
+    font-size: 25px;
+    width: 30px;
+    color: white;
+    background-color: #3C4852;
+}
