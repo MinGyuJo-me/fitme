@@ -9,6 +9,7 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import CommunityBoardViewModal from './CommunityBoardViewModal';
 import CommunityBoardViewModal_ from './CommunityBoardViewModal_';
+import { messaging } from '../../../../firebase';
 
 function CommunityBoard(props) {
 
@@ -96,7 +97,7 @@ function CommunityBoard(props) {
     
         fetchBoardImages(); 
         
-    }, [props.key]);
+    }, [props.key, messaging]);
 
     
 
@@ -106,6 +107,7 @@ function CommunityBoard(props) {
     const [checkLike, setCheckLike] = useState();
     const [isOpen, setIsOpen] = useState(false);
     const data = new FormData();
+    const notification = new FormData();
 
     //좋아요 누른지 여부 확인
     useEffect(() => {
@@ -158,6 +160,28 @@ function CommunityBoard(props) {
             })
             .then(response => {
                 console.log(response.data);
+            })
+
+            axios.get(`http://192.168.0.104:8080/api/v1/notifications/${props.accountNo}`)
+            .then(response => {
+                notification.append('title', `${props.title}게시글`)
+                notification.append('body', `${props.title}게시글을 ${props.loginAccountNo}님이 좋아합니다.`)
+                notification.append('image_url', "123")
+                notification.append('token', response.data)
+                axios.post('http://192.168.0.104:5000/serviceWorker', notification, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log(response.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            })
+            .catch(err => {
+                console.log(err);
             })
         }
         setIsLiked(!isLiked);
