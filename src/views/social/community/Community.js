@@ -20,7 +20,6 @@ import CommunityBoardWriteModal from './crud/CommunityBoardWriteModal';
 import CommunityBoardViewModal from './crud/CommunityBoardViewModal';
 // import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 import ChatBot from '../../component/chatBot/ChatBot';
-import { messaging } from '../../../firebase';
 
 
 //플로팅

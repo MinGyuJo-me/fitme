@@ -9,10 +9,6 @@ import HeaderTop from '../component/headerTop/HeaderTop';
 import Breadcumb from '../component/Breadcumb/Breadcumb';
 import Chatbot from '../component/chatBot/ChatBot';
 import './Login.css';
-//로그인 시 파이어베이스에서 발급하는 토큰 저장 처리용 - 조동훈
-import { messaging } from '../../firebase';
-import { jwtDecode } from 'jwt-decode';
-//
 
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
@@ -118,41 +114,6 @@ function SignIn() {
             
             console.log('res', res.data);
             console.log('headers',res.headers);
-            //파이어베이스 사용 로직 - 조동훈
-            const userToken = getCookie('Authorization');
-            const decodedToken = jwtDecode(userToken);
-            const accountNo = decodedToken.sub;
-
-            //메시지 처리 로직
-            messaging.getToken({vapidKey: 'BB69S_1aMazsCEKfGZWi6xFOFHbRcQ_Xl43OhgMs_1Mka4SgVRbu0ZZiEC1o23EnxnMUhUh2k5s5qMlvvGVqa-0'})
-            .then((currentToken) => {
-              if (currentToken) {
-                // console.log('current token for client: ', currentToken);
-                
-                const postData = {
-                  accountNo,
-                  token: currentToken
-                };
-    
-                axios.post('http://192.168.0.104:8080/api/v1/notifications', postData, {
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                  }
-                })
-                .then(response => {
-                  console.log('서버 반환 값 : ',response.data);
-                })
-                .catch(err => {
-                  console.log('err : ',err);
-                })
-
-              } else {
-                console.log('No registration token available. Request permission to generate one.');
-              }
-            }).catch((err) => {
-              console.log('An error occurred while retrieving token. ', err);
-            });
 
             navigate('/');
           })
