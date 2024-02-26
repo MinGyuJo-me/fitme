@@ -9,23 +9,8 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import CommunityBoardViewModal from './CommunityBoardViewModal';
 import CommunityBoardViewModal_ from './CommunityBoardViewModal_';
-import { messaging } from '../../../../firebase';
 
 function CommunityBoard(props) {
-
-    $(function() { 
-        var heart = $('.heart-icon')
-            // Add class
-        
-            heart.hover(function(){
-            heart.toggleClass('heart-dots');
-
-            heart.click(function(){
-            heart.toggleClass('heart-liked');
-            heart.toggleClass('heart-beating');  
-            });
-        });
-    });
 
     function getCookie(name) {
         const cookies = document.cookie.split(';');
@@ -97,7 +82,7 @@ function CommunityBoard(props) {
     
         fetchBoardImages(); 
         
-    }, [props.key, messaging]);
+    }, [props.key]);
 
     
 
@@ -107,7 +92,6 @@ function CommunityBoard(props) {
     const [checkLike, setCheckLike] = useState();
     const [isOpen, setIsOpen] = useState(false);
     const data = new FormData();
-    const notification = new FormData();
 
     //좋아요 누른지 여부 확인
     useEffect(() => {
@@ -127,16 +111,20 @@ function CommunityBoard(props) {
         })
     },[checkLike])
 
+    //마우스가 하트 버튼에 들어왔을 시 애니메이션 true
     const handleMouseEnter = () => {
         setIsBeating(true);
     };
 
+    //마우스가 하트 버튼에서 벗어났으 시 애니메이션 false
     const handleMouseLeave = () => {
         setIsBeating(false);
     };
-    
+
+    //좋아요 버튼 클릭 이벤트
     const handleClick = () => {
 
+        //isLiked가 true일 시 한번 더 누르면 삭제 시키게 false이면 등록 되게 만듬
         if(isLiked) {
             data.append('bno', props.bno);
             data.append('preState', 1);
@@ -160,25 +148,6 @@ function CommunityBoard(props) {
             })
             .then(response => {
                 console.log(response.data);
-            })
-
-            axios.get(`http://192.168.0.104:8080/api/v1/notifications/${props.accountNo}`)
-            .then(response => {
-                notification.append('title', `${props.title}게시글`)
-                notification.append('body', `${props.title}게시글을 ${props.loginAccountNo}님이 좋아합니다.`)
-                notification.append('image_url', "123")
-                notification.append('token', response.data)
-                axios.post('http://192.168.0.104:5000/serviceWorker', notification, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => {
-                    console.log(response.data);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
             })
             .catch(err => {
                 console.log(err);
@@ -297,7 +266,7 @@ function CommunityBoard(props) {
 
                                 <div className="heart-icon-wrapper">
                                     <div 
-                                        className={`heart-icon ${isLiked ? 'heart-liked' : ''} ${isBeating ? 'heart-beating' : ''}`}
+                                        className={`heart-icon ${isLiked ? 'heart-liked ' : ''} ${isBeating ? 'heart-beating' : ''}`}
                                         onMouseEnter={handleMouseEnter}
                                         onMouseLeave={handleMouseLeave}
                                         onClick={handleClick}
