@@ -580,7 +580,7 @@ function Diet() {
 				<div className='chart-info-right' style={{height: 300}}>
 					<Line options={options} data={data1} />
 				</div>
-			</div>
+		</div>
 
 			<div className="row">
 				<div className="col-lg-12">
@@ -594,54 +594,45 @@ function Diet() {
 
 			
 			
-			<OwlCarousel key={mealTime.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["<i class='fa fa-chevron-left'/>","<i class='fa fa-chevron-right'/>"]} dots >
-				{mealTime.map((test)=>(
-				<div class="item">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="blog-single-box">
-								<div class="blog-thumb">
-									<div type="button" className="edit-siksa-button" onClick={toggleModal}>
-										<img src={test[4]} alt="pizza"/>
-										<input type='hidden' value={test[0]} />
-									</div>
-									<div class="blog-btn">
-										<a href="#">아침</a>
-									</div>
-								</div>
-								{/* {console.log("test",test)} */}
-								<div class="blog-content">
-									<div class="blog-left">
-										<span>{test[3]}</span>
-									</div>
-									<h2>{test[1]}</h2>
-									<p>{test[2]}</p>
-									<p>{test[5]}</p>
-									<div class="blog-button" >
-										<div type="button" className="like-button" onClick={foodLike}>
-											<input type='hidden' value={test[0]} />
-											<input type='hidden' value={test[6]} />
-											{
-											test[6] != null?
-												<img src={require('./images/heart.png')} alt="like"/>
-												:
-												<img src={require('./images/empty-heart.png')} alt="like"/>
-											}
-											{/* <img src={require('./images/empty-heart.png')} alt="empty-like"/> */}
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				))}
-			</OwlCarousel>
+			
 
 			<div>
 			<button type="button" className="add-siksa-button" onClick={toggleModal}>
 			<div className="add-siksa-icon" style={{ backgroundImage: `url(${require('./images/plus6.png')})` }}></div>
 			</button>
+			
+			<div className='ai-container' >
+				<div className="main-titles-ai">
+					<h2>AI RECOMMENDATIONS</h2>
+				</div>
+				<div className='list-container-ai'>
+				<ol>
+					<li>Olivia</li>
+					<li>George</li>
+					<li>Harry</li>
+					<li>Leo</li>
+					<li>Joe</li>
+				</ol>
+				</div>
+				<div className='chart-info-container-ai' style={{width : 600,height: 600,marginTop:0}}>
+					<div className='chart-info-left-ai' style={{height: 300}}>
+						<Bar options={options} data={data2} />
+					</div>
+					<div className='chart-info-right-ai' style={{height: 300}}>
+						<Line options={options} data={data1} />
+					</div>
+			</div>
+
+				<div className="recommend-layout">
+					<div className="recommend-container">
+						<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
+					</div>
+					<div className="recommend-container">
+						<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
+					</div>
+				</div>
+			</div>
+
 			{isOpen && (
                 <Modal
                   open={isOpen}
@@ -721,6 +712,7 @@ function Diet() {
 	</div>
 	</div>
     </div>
+	
 
   );
 }

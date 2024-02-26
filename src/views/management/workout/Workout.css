@@ -3,14 +3,15 @@
   border: hidden;
   display: inline-block;
   width: 100%;
-  height: 630px;
-  margin-top: 125px;
+  height: 400px;
+  margin-top: 100px;
+  margin-bottom: 125px;
 }
 
 .chart-info-left {
   float: left;
   width: 50%;
-  height: 500px;
+  height: 300px;
   border-right: none;
   border-radius: 15px 0 0 15px;
   background-color: #FFFFFF;
@@ -20,13 +21,11 @@
 .chart-info-right {
   float: right;
   width: 50%;
-  height: 500px;
+  height: 300px;
   border-radius: 0 15px 15px 0;
   background-color: #FFFFFF;
   box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, 0.1);
 }
-
-
 
 .main-titles-chart h2 {
   color: #255946;
@@ -353,6 +352,7 @@ abbr[title] {
   width: 100%;
   height: 100%;
   cursor: pointer;
+  
 }
 
 /*수정 버튼 */
@@ -406,9 +406,10 @@ abbr[title] {
 
 /* =========== 운동페이지-TODAY WORKOUT===========*/
 .major-icon-workout {
-  margin: auto;
-  margin-top: 10px;
+  display: block;
   margin-left: 75px;
+  margin-right: auto;
+  margin-top: 10px;
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -420,6 +421,7 @@ abbr[title] {
   border: none;
   padding: 5px;
   margin: auto;
+  margin-bottom: 30px;
   margin-top: 0px;
   margin-left: 15px;
   width: 150px;
@@ -493,3 +495,85 @@ abbr[title] {
 
 
 /* =========== 운동페이지-모달 내용물 끝 ===========*/
+
+/* ============== AI추천 ==============*/
+.main-titles-ai-w h2 {
+  color: #255946;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+  text-align: left;
+  margin-left: 55px;
+  margin-bottom: 50px;
+  margin-top: 100px
+}
+
+.main-titles-ai-w h2::before {
+  content: '';
+  position: absolute;
+  height: 3px;
+  width: 40px;
+  background: #87C03D;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -50px;
+}
+
+.recommend-layout-w {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.recommend-container-w {
+  width: 49%;
+  height: 400px;
+}
+
+.recommend-container-w iframe {
+  width: 100%;
+  height: 100%;
+}
+/* ============== AI추천 ==============*/
+
+.workout-icon-container {
+  background: none;
+  border: none;
+  padding: 5px;
+  margin: auto;
+  margin-top: 0px;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 30px;
+  filter: drop-shadow(2px 2px 2px #808080);
+}
+
+.ai-icon-workout {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-size: cover;
+}
+
+.ai-workout-content h2 {
+  text-align: center;
+}
+.ai-workout-content h2 a:hover {
+  text-decoration: underline;
+  color: #A3CF6A;
+}
+.ai-workout-content p {
+  font-size: 15px;
+  font-weight: 400;
+  color: #6e7673;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.7;
+  text-align: center;
+  margin-bottom: 20px;
+}
