@@ -56,6 +56,7 @@ function Community() {
     const [isOpen, setIsOpen] = useState(false);
     const [accountInfo, setAccountInfo] = useState([]);
     const [onDelete, setOnDelete] = useState(false);
+    
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -121,7 +122,7 @@ function Community() {
 
     // 게시글 전체 목록 조회
     useEffect(() => {
-        axios.get('http://192.168.0.15:8080/api/v1/boards', {
+        axios.get('http://192.168.0.104:8080/api/v1/boards', {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -138,26 +139,6 @@ function Community() {
         })
         .catch(error => console.log(error));
     }, [onDelete, showModal]);
-
-    // 특정 게시글 상세 조회
-    useEffect(() => {
-        axios.get('http://192.168.0.15:8080/api/v1/boards', {
-            headers: {
-                'Authorization': `${myCookieValue}`,
-                'Content-Type': 'application/json; charset=UTF-8'
-            }
-        })
-        .then(async response => {
-            const updatedBoards = await Promise.all(response.data.map(async board => {
-                const image = await imageData(board.image);
-                board.image = image;
-                return board;
-            }));
-    
-            setBoards(updatedBoards);
-        })
-        .catch(error => console.log(error));
-    }, []);
 
     //모달창 외부 스크롤 방지
     useEffect(() => {
@@ -266,6 +247,7 @@ function Community() {
                                 likes={board.like}
                                 title={board.title}
                                 comment={board.boardComment}
+                                category={board.boardCategory}
                                 isOpen={isOpen}
                                 setIsOpen={setIsOpen}
                                 onButtonClicked={handleButtonClickedFromChild}
@@ -295,26 +277,6 @@ function Community() {
             </div>
         </div>
         {/*푸터 영역*/}
-        {isOpen && (
-            <CommunityBoardViewModal_
-            open={isOpen}
-            onClose={() => {
-              setIsOpen(false);
-            }}
-          >
-            <CommunityBoardViewModal 
-                // bno={board.bno} 
-                // name={board.name}
-                // image={board.image}
-                // address={board.address}
-                // postDate={board.postDate}
-                // likes={board.like}
-                // title={board.title}
-                // comment={board.boardComment}
-            />
-          </CommunityBoardViewModal_>
-            
-        )}
         <Footer/>
         {/* Scroll to top button */}
         <button

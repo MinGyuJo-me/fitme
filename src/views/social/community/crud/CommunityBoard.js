@@ -7,6 +7,9 @@ import swal from 'sweetalert';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
+import CommunityBoardViewModal from './CommunityBoardViewModal';
+import CommunityBoardViewModal_ from './CommunityBoardViewModal_';
+
 function CommunityBoard(props) {
 
     $(function() { 
@@ -17,7 +20,8 @@ function CommunityBoard(props) {
             heart.toggleClass('heart-dots');
 
             heart.click(function(){
-            heart.toggleClass('heart-liked');           heart.toggleClass('heart-beating');  
+            heart.toggleClass('heart-liked');
+            heart.toggleClass('heart-beating');  
             });
         });
     });
@@ -34,6 +38,7 @@ function CommunityBoard(props) {
     }
     const myCookieValue = getCookie('Authorization');
 
+    //이미지 서버에서 이미지 받아오기
     async function imageData(code){
         return await new Promise((resolve,reject)=>{
         try{
@@ -59,7 +64,7 @@ function CommunityBoard(props) {
     };
 
     const onModal = () => {
-        props.setIsOpen(true);
+        setIsOpen(true);
     }
 
     function handleButtonClick(accountNo) {
@@ -90,6 +95,7 @@ function CommunityBoard(props) {
         };
     
         fetchBoardImages(); 
+        
     }, [props.key]);
 
     
@@ -98,6 +104,7 @@ function CommunityBoard(props) {
     const [isLiked, setIsLiked] = useState(false);
     const [isBeating, setIsBeating] = useState(false);
     const [checkLike, setCheckLike] = useState();
+    const [isOpen, setIsOpen] = useState(false);
     const data = new FormData();
 
     //좋아요 누른지 여부 확인
@@ -171,7 +178,6 @@ function CommunityBoard(props) {
     };
 
     //게시글 삭제
-
     const onClickDelete = (e) => {
         const bno = props.bno;
         axios.delete(`http://192.168.0.104:8080/api/v1/boards/${bno}`, {
@@ -198,15 +204,28 @@ function CommunityBoard(props) {
         })
     }
 
+    {/**************** 버튼 사용 ************/}
+    const onClickList = (e) =>{
+        $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
+    }
+
+    
+
     return (
         <div className="col-lg-12 col-sm-12">
             <div className="blog-single-box upper">
-                <div className="community-detail-button" style={{position:"absolute", width:"37px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"10px", top:"20px"}}>
+                <div className="community-detail-button" style={{position:"absolute", width:"37px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"10px", top:"20px"}}  onClick={onClickList}>
                     <svg viewBox="0 0 29 7">
                         <circle cx="3.5" cy="3.5" r="3.5"></circle>
                         <circle cx="14.5" cy="3.5" r="3.5"></circle>
                         <circle cx="25.5" cy="3.5" r="3.5"></circle>
                     </svg>
+                </div>
+                {/**************** 버튼 부분 ******************/}
+                <div className="community-detail-button-list" style={{display:"none", position:"absolute", width:"50px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"3px", top:"40px", textAlign:"center"}}>
+                    {props.loginAccountNo == props.accountNo ? <div onClick={onClickDelete}>삭제</div> : ""}
+                    {props.loginAccountNo == props.accountNo ? <div>수정</div> : ""}
+                    {props.loginAccountNo !== props.accountNo ? <div>신고</div> : ""}
                 </div>
                 <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                     <div className="blog-icon bi1"  style={{backgroundImage: `url(${props.image})`}} onClick={() => handleButtonClick(props.accountNo)}>
@@ -234,16 +253,6 @@ function CommunityBoard(props) {
                     <div style={{display:"flex", height:"35px"}}>
                         <h2><a href="blog-details.html">{props.title}</a></h2>
                     </div>
-
-
-                    <div>
-                        <div>
-                            {props.loginAccountNo == props.accountNo ? <div onClick={onClickDelete}>삭제</div> : ""}
-                            {props.loginAccountNo == props.accountNo ? <div>수정</div> : ""}
-                            {props.loginAccountNo !== props.accountNo ? <div>신고</div> : ""}
-                            
-                        </div>
-                    </div>
                     <p>{props.comment}
                     </p>
 
@@ -251,7 +260,9 @@ function CommunityBoard(props) {
                         <a onClick={onModal}>read more</a>
                                             {/********** 해시태그 위치 **************/}
                     <div className='community-board-hashtag'>
-                        <span>#고양이</span> <span>#고양이</span> <span>#고양이</span>
+                        {props.category.split(",").map((tag, index) => (
+                            <span key={index}>{tag.trim()}</span>
+                        ))}
                     </div>
                         <div className="blog-button-container">
                             <div className='blog-button-item'>
@@ -268,7 +279,7 @@ function CommunityBoard(props) {
                                         onClick={handleClick}
                                     >
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
-                                    <path d="M150 57.3C100.2-17.4.7 26.3.7 107.6c0 55 49.7 94.2 87.1 123.8 38.8 30.7 49.8 37.3 62.2 49.8 12.4-12.4 22.8-19.7 62.2-49.8 37.9-29 87.1-69.4 87.1-124.4 0-80.7-99.5-124.4-149.3-49.7z" fill-rule="evenodd" clip-rule="evenodd"/>
+                                    <path d="M150 57.3C100.2-17.4.7 26.3.7 107.6c0 55 49.7 94.2 87.1 123.8 38.8 30.7 49.8 37.3 62.2 49.8 12.4-12.4 22.8-19.7 62.2-49.8 37.9-29 87.1-69.4 87.1-124.4 0-80.7-99.5-124.4-149.3-49.7z" fillRule="evenodd" clipRule="evenodd"/>
                                     </svg>
                                         <span className="i1"></span>
                                         <span className="i2"></span>
@@ -304,8 +315,40 @@ function CommunityBoard(props) {
                     </div>
                 </div>
             </div>
+            {isOpen && (
+                <CommunityBoardViewModal_
+                open={isOpen}
+                onClose={() => {
+                setIsOpen(false);
+                }}
+            >
+                <CommunityBoardViewModal 
+                    accountNo={props.accountNo}
+                    bno={props.bno} 
+                    name={props.name}
+                    image={props.image}
+                    boardImages={boardImages}
+                    address={props.address}
+                    postDate={props.postDate}
+                    likes={props.likes}
+                    title={props.title}
+                    comment={props.comment}
+                    category={props.category}
+                    loginAccountNo={props.loginAccountNo}
+                    isLiked={isLiked}
+                    isBeating={isBeating}
+                    handleMouseEnter={handleMouseEnter}
+                    handleMouseLeave={handleMouseLeave}
+                    handleClick={handleClick}
+                    onClickDelete={onClickDelete}
+                    scrapHandle={scrapHandle}
+                />
+            </CommunityBoardViewModal_>
+                
+            )}
         </div>
     );
+    
 }
 
 export default CommunityBoard;
