@@ -20,6 +20,8 @@ import CommunityBoardWriteModal from './crud/CommunityBoardWriteModal';
 import CommunityBoardViewModal from './crud/CommunityBoardViewModal';
 // import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 import ChatBot from '../../component/chatBot/ChatBot';
+import { messaging } from '../../../firebase';
+
 
 //플로팅
 //npm i --save react-floating-action-button
@@ -56,6 +58,7 @@ function Community() {
     const [isOpen, setIsOpen] = useState(false);
     const [accountInfo, setAccountInfo] = useState([]);
     const [onDelete, setOnDelete] = useState(false);
+    const [updateBoards, setUpdateBoards] = useState([]);
     
 
     useEffect(()=>{
@@ -138,7 +141,7 @@ function Community() {
             setBoards(updatedBoards);
         })
         .catch(error => console.log(error));
-    }, [onDelete, showModal]);
+    }, [onDelete, showModal, updateBoards]);
 
     //모달창 외부 스크롤 방지
     useEffect(() => {
@@ -194,6 +197,10 @@ function Community() {
         });
     }
 
+    // useEffect(() => {
+    //     console.log(messaging); 
+    // });
+
   return (
     <div>
         {/* 챗봇용 플로팅 */}
@@ -218,6 +225,7 @@ function Community() {
                         <CommnunitySearch 
                             showModal={showModal}
                             setShowModal={setShowModal}
+                            setUpdateBoards={setUpdateBoards}
                         />
                         {/*특정 사용자 프로필 영역*/}
                         <CommunityProfile
@@ -286,6 +294,7 @@ function Community() {
             <i className="fas fa-arrow-up"></i>
         </button>
     </div>
+    
   );
 }
 
