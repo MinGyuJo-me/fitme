@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import './GameRoomProfileModal.css';
 import $ from 'jquery';
+import { display } from "@mui/system";
 
 // disableScroll 및 enableScroll 함수 정의
 const disableScroll = () => {
@@ -25,36 +26,43 @@ function GameRoomProfileModal(props) {
 
 
 
-  const onClickList = (e) =>{
-    $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
-  }
-
   function closeModal() {
     props.onClose();
+  }
+
+  const editCancel = (e) =>{
+    $(e.target.parentElement.parentElement.parentElement).find(".ai-image-create").fadeToggle();
+  }
+
+  const editPopup = (e) =>{
+    $(e.target.parentElement.parentElement).find(".ai-image-create").fadeIn();
   }
 
   return (
     <div className="Modal" onMouseDown={closeModal}>
       <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{width: '400px', height: '440px', overflow:"hidden", backgroundColor:"rgb(24, 24, 24)", boxShadow:"none"}}>
-        <div className="ai-image-create">
+        <div className="ai-image-create" style={{display:"none"}}>
           <input className="ai-image-input" placeholder="생성할 이미지를 입력하세요"></input>
           <div className="game-profile-modal-edit-button-ai-layout">
             <button className="game-profile-modal-edit-button-ai">Create</button>
-            <button className="game-profile-modal-edit-button-ai">Cancel</button>
+            <button className="game-profile-modal-edit-button-ai" onClick={editCancel}>Cancel</button>
           </div>
-          
         </div>
+
+        
         <div className="game-profile-edit-image-layout">
+          {/*게임 프로필 이미지 생성 부분 */}
         </div>
 
         <div className="game-profile-edit-button-layout">
           <label htmlFor="file" className='game-profile-modal-edit-button label-line-height'>Images</label>
           <input type="file" id="file" style={{ display: "none" }}/>
-          <button className="game-profile-modal-edit-button" onClick={onClickList}>Ai Image</button>
-
+          {/*게임 프로필 이미지 사용자가 가져오는 부분 */}
+          <button className="game-profile-modal-edit-button" onClick={editPopup}>Ai Image</button>
+          {/*게임 프로필 AI가 생성하는 버튼 */}
         </div>
 
-        <button onMouseDown={closeModal} style={{position:"absolute", width:"30px" ,right:"5px", top:"5px", border:"1px solid gray", backgroundColor:"white", borderRadius:"5px"}}>
+        <button onMouseDown={closeModal} style={{position:"absolute", width:"30px" ,right:"5px", top:"5px", border:"1px solid gray", backgroundColor:"white", borderRadius:"5px", zIndex:"2"}}>
           ✖
         </button>
       </div>

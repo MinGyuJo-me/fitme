@@ -1,9 +1,12 @@
 import './GameRoomSideProfile.css';
 import { useState } from 'react';
 
-function GameRoomSideProfile({showModal,setShowModal}){
+function GameRoomSideProfile({showModal,setShowModal,showModal1,setShowModal1}){
+
+
 
     const [show, setShow] = useState(false);
+    const [show1, setShow1] = useState(false);
 
     const handleClick = () => {
         console.log("클릭");
@@ -11,11 +14,18 @@ function GameRoomSideProfile({showModal,setShowModal}){
         setShowModal(prevShowModal => !prevShowModal);
     }
 
+
+    const handleClick1 = () => {
+        console.log("클릭");
+        setShow1(prevShow => !prevShow);
+        setShowModal1(prevShowModal => !prevShowModal);
+    }
+
     return (
         <div className="col-lg-3 col-md-3 game-profile-layout">
             <div className="row">
                 <div className='col-lg-10 col-md-10 game-profile'>
-                    <button className='game-profile-edit-button'>+</button>
+                    <button className='game-profile-edit-button' onClick={handleClick1}>+</button>
                 </div>
                 <div className='col-lg-10 col-md-10 game-profile-name'>
                     <div><span>NickName</span><span>조동훈</span></div>
