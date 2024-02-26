@@ -50,18 +50,6 @@ function CommunityBoardViewModal(props) {
     };
 
     
-    $(function() { 
-        var heart = $('.heart-icon')
-            // Add class
-        
-            heart.hover(function(){
-            heart.toggleClass('heart-dots');
-
-            heart.click(function(){
-            heart.toggleClass('heart-liked');           heart.toggleClass('heart-beating');  
-            });
-        });
-    });
 
     const onClickList1 = (e) =>{
         $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
@@ -137,9 +125,8 @@ function CommunityBoardViewModal(props) {
                     {props.loginAccountNo !== props.accountNo ? <div>신고</div> : "" }
                 </div>
 
-
-                <div className="blog-single-box upper" style={{height:"96%", padding:"0px", backgroundColor:"white", marginTop:"20px"}}>
-                    <div className="blog-left" style={{padding:"60px 0px 40px 20px",}}>
+                <div className="blog-single-box upper" style={{height:"99%", padding:"0px", backgroundColor:"white", marginTop:"20px"}}>
+                    <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                         <div className="blog-icon bi1" style={{backgroundImage: `url(${props.image})`}}>
                         </div>
                         <div className='blog-description'>
@@ -164,7 +151,7 @@ function CommunityBoardViewModal(props) {
                     <div className="blog-content">
                         <h2 style={{textAlign:"left"}}>{props.title}</h2>
                         
-                        <p style={{textAlign:"left"}}>
+                        <p style={{textAlign:"left", paddingTop:"20px"}}>
                             {props.comment}
                         </p>
 
@@ -183,25 +170,102 @@ function CommunityBoardViewModal(props) {
                         <div className='blog-comment'>
                             <table className="blog-comment-table">
                                 {comments.map(comment => (
+                                    <>
                                     <tr>
                                         <td>{comment.name}</td>
-                                        <td>{comment.bcComment}</td>
-                                        {comment.editDate == null ? <td>{comment.postDate}</td> : <td>{comment.editDate}</td>}
-                                    </tr>
-                                ))}
-
-                                    <tr>
-                                        <td>테스트</td>
-                                        <td>테스트
+                                        <td>
+                                            {comment.bcComment}
+                                            {/***************** 게시판 상세보기 버튼. ***************/}
                                             <div className='comment-icon-layout'>
-                                                <div></div>
-                                                <div></div>
-                                                <div></div>
+                                                <button>
+                                                    {/*********** 좋아요 버튼  ***************/}
+                                                    <img src={require('../images/heart.png')}/>
+                                                </button>
+                                                <button>
+                                                    {/*********** 신고 버튼  ***************/}
+                                                    <img src={require('../images/community_alert.png')}/>
+                                                </button>
+                                                <button>
+                                                    {/*********** 수정 버튼  ***************/}
+                                                    <img src={require('../images/community_write.png')}/>
+                                                </button>
+                                                <button>
+                                                    {/*********** 삭제 버튼  ***************/}
+                                                    <img src={require('../images/community_trash.png')}/>
+                                                </button>
                                             </div>
                                         </td>
-                                        <td>2023.04.17</td>
+                                        {comment.editDate == null ?
+                                        <td>
+                                            {comment.postDate}
+
+                                        </td>
+                                        :
+                                        <td>
+                                            {comment.editDate}
+                                        </td>}
                                     </tr>
-                                
+                                    </>
+                                ))}
+
+
+                                    <tr>
+                                        <td>dsafsdaf</td>
+                                        <td>
+                                            adfdasfadsfadsfadsfadsfasdfadsfdsafasdfdsafadsfdasfsdafadssdfsdfdsfdsfsffdsfsdafasdfasdfds
+                                            {/***************** 게시판 상세보기 버튼. ***************/}
+                                            <div className='comment-icon-layout'>
+                                                <button>
+                                                    {/*********** 좋아요 버튼  ***************/}
+                                                    <img src={require('../images/heart.png')}/>
+                                                </button>
+                                                <button>
+                                                    {/*********** 신고 버튼  ***************/}
+                                                    <img src={require('../images/community_alert.png')}/>
+                                                </button>
+                                                <button>
+                                                    {/*********** 수정 버튼  ***************/}
+                                                    <img src={require('../images/community_write.png')}/>
+                                                </button>
+                                                <button>
+                                                    {/*********** 삭제 버튼  ***************/}
+                                                    <img src={require('../images/community_trash.png')}/>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            2017-05-14
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>dsafsdaf</td>
+                                        <td>
+                                            adfdasfadsfadsfadsfadsffasfdsfasssdfsdfdsfdsfsffdsfsdafasdfasdfds
+                                            {/***************** 게시판 상세보기 버튼. ***************/}
+                                            <div className='comment-icon-layout'>
+                                                <button>
+                                                    {/*********** 좋아요 버튼  ***************/}
+                                                    <img src={require('../images/heart.png')}/>
+                                                </button>
+                                                <button>
+                                                    {/*********** 신고 버튼  ***************/}
+                                                    <img src={require('../images/community_alert.png')}/>
+                                                </button>
+                                                <button>
+                                                    {/*********** 수정 버튼  ***************/}
+                                                    <img src={require('../images/community_write.png')}/>
+                                                </button>
+                                                <button>
+                                                    {/*********** 삭제 버튼  ***************/}
+                                                    <img src={require('../images/community_trash.png')}/>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            2017-05-14
+                                        </td>
+                                    </tr>
                             </table>
                         </div>
                     </div>
@@ -216,8 +280,7 @@ function CommunityBoardViewModal(props) {
                                         className={`heart-icon ${props.isLiked ? 'heart-liked' : ''} ${props.isBeating ? 'heart-beating' : ''}`}
                                         onMouseEnter={props.handleMouseEnter}
                                         onMouseLeave={props.handleMouseLeave}
-                                        onClick={props.handleClick}
-                                    >
+                                        onClick={props.handleClick}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
                                         <path d="M150 57.3C100.2-17.4.7 26.3.7 107.6c0 55 49.7 94.2 87.1 123.8 38.8 30.7 49.8 37.3 62.2 49.8 12.4-12.4 22.8-19.7 62.2-49.8 37.9-29 87.1-69.4 87.1-124.4 0-80.7-99.5-124.4-149.3-49.7z" fill-rule="evenodd" clip-rule="evenodd"/>
                                         </svg>

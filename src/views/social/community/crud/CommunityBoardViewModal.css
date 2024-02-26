@@ -64,7 +64,7 @@
 }
 
 .blog-comment td:nth-child(3){
-  width: 18%;
+  width: 19%;
   text-align: center;
 }
 
@@ -259,11 +259,26 @@
 }
 
 .comment-icon-layout{
-  display: flex;
+  display: inline-flex;
   transform: translateX(0px);
   gap:5px;
+  margin-left: 10px;
+  transform: translateY(5px);
 }
 
 .comment-icon-layout button{
-  border: 1px solid #212529;
+  border: 1px solid #c2cfdb;
+  border-radius: 5px;
+  width: 22px;
+  height: 22px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.comment-icon-layout button img{
+  position: absolute;
+  width: 90%;
+  height: 90%;
 }
