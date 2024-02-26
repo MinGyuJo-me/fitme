@@ -201,7 +201,9 @@ ul.sub-menu li a {
     text-transform: capitalize;
 }
 .slider-title h1 span {
+    font-family: Lobster;
     color: #87C03D;
+    font-size: 55px;
 }
 .slider-thumb img {
     width: 100%;
