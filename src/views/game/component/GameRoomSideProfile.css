@@ -22,13 +22,12 @@
 }
 
 .game-profile-name span:nth-child(1){
-    font-size: 16px;
+    font-size: 13px;
     margin-left: 15px;
     width: 40%;
     height: 80%;
     line-height: 40px;
     font-weight: bold;
-    font-family: Lobster;
     border-right: 2px solid rgba(0, 0, 0, 0.261);
     color: rgb(190, 190, 190);
 }
