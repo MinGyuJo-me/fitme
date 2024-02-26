@@ -50,18 +50,6 @@ function CommunityBoardViewModal(props) {
     };
 
     
-    $(function() { 
-        var heart = $('.heart-icon')
-            // Add class
-        
-            heart.hover(function(){
-            heart.toggleClass('heart-dots');
-
-            heart.click(function(){
-            heart.toggleClass('heart-liked');           heart.toggleClass('heart-beating');  
-            });
-        });
-    });
 
     const onClickList1 = (e) =>{
         $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
@@ -183,25 +171,38 @@ function CommunityBoardViewModal(props) {
                         <div className='blog-comment'>
                             <table className="blog-comment-table">
                                 {comments.map(comment => (
+                                    <>
                                     <tr>
                                         <td>{comment.name}</td>
-                                        <td>{comment.bcComment}</td>
-                                        {comment.editDate == null ? <td>{comment.postDate}</td> : <td>{comment.editDate}</td>}
-                                    </tr>
-                                ))}
-
-                                    <tr>
-                                        <td>테스트</td>
-                                        <td>테스트
+                                        <td>
+                                            {comment.bcComment}
                                             <div className='comment-icon-layout'>
-                                                <div></div>
-                                                <div></div>
-                                                <div></div>
+                                                <button>
+                                                    <img src={require('../images/heart.png')}/>
+                                                </button>
+                                                <button>
+                                                    <img src={require('../images/community_alert.png')}/>
+                                                </button>
+                                                <button>
+                                                    <img src={require('../images/community_write.png')}/>
+                                                </button>
+                                                <button>
+                                                <img src={require('../images/community_trash.png')}/>
+                                                </button>
                                             </div>
                                         </td>
-                                        <td>2023.04.17</td>
+                                        {comment.editDate == null ?
+                                        <td>
+                                            {comment.postDate}
+
+                                        </td>
+                                        :
+                                        <td>
+                                            {comment.editDate}
+                                        </td>}
                                     </tr>
-                                
+                                    </>
+                                ))}
                             </table>
                         </div>
                     </div>
