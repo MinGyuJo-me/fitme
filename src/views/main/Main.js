@@ -87,7 +87,7 @@ function Main() {
                     <div className="col-lg-6 col-md-6">
                         <div className="slider-content">
                             <div className="slider-title">
-                                <h1 className="text-orange">For your Health <br/> with <span>FitMe</span></h1>
+                                <h1 className="text-orange">For your Health <br/> with <span>FITME</span></h1>
                             </div>
                             <div className="slider-button">
                                 <a href="#">Login now<i className="bi bi-arrow-right"></i></a>
