@@ -42,3 +42,21 @@
 .G-button:hover {
     background-color: #1ed2ad;
   }
+
+.m-sweet-con{
+    z-index: 9999;
+}
+.m-sweet-icon {
+    font-size: 14px; /* 아이콘 크기 조절 */
+    margin-bottom: 10px; /* 아이콘과 제목 사이의 간격 조절 */
+  }
+  .swal2-icon.swal2-error {
+    font-size: 89%; /* 아이콘 크기 조절 */
+    margin-bottom: 10px; /* 아이콘과 제목 사이의 간격 조절 */
+  }
+  
+  
+
+  
+  
+  

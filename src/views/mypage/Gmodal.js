@@ -1,26 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import './Gmodal.css'
+import axios from 'axios';
+import './Gmodal.css';
+import Swal from 'sweetalert2';
+
+async function imageData(code) {
+  return await new Promise((resolve, reject) => {
+    try {
+      axios
+        .get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
+        .then((response) => {
+          resolve('data:image/png;base64,' + response.data['image']);
+        });
+    } catch (err) {
+      reject(err);
+    }
+  }, 2000);
+}
+
+async function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
 
 function Modal(props) {
-  const [previewImage, setPreviewImage] = useState(null);
+
+  
+  function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return null;
+  }
+  
   const [formData, setFormData] = useState({
     nickname: '',
-    name: '',
-    address: '',
-    hobby: '',
-    height: '', 
-    weight: '' 
+    gameImage: null,
   });
 
+  const myCookieValue = getCookie('Authorization');
+  const [previewImage, setPreviewImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  
   useEffect(() => {
     setFormData({
       nickname: props.nickname,
-      name: props.name,
-      address: props.address,
-      hobby: props.hobby,
-      height: props.height || '', 
-      weight: props.weight || '' 
+      gameImage: formData.gameImage
     });
+
   }, [props]);
 
   const handleFileChange = (event) => {
@@ -31,6 +65,10 @@ function Modal(props) {
         setPreviewImage(reader.result);
       };
       reader.readAsDataURL(file);
+      setImageFile(file);
+    } else {
+      setPreviewImage(null);
+      setImageFile(null);
     }
   };
 
@@ -42,25 +80,89 @@ function Modal(props) {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // 수정된 회원 정보 전송 로직 추가
-    console.log(formData);
-    props.onSubmit(formData);
-  };
+    try {
+      const updatedFormData = {
+        accountNo: props.accountNo,
+        nickname: formData.nickname,
+        gameImage: formData.gameImage 
+      };
+  
+      if (imageFile) {
+        // 이미지 파일이 있는 경우 처리
+        // 이미지를 업로드하고 업로드된 이미지의 URL을 formData에 추가
+        const imageData = await getBase64(imageFile);
+        const imageBase64Data = imageData.split(',')[1];
+        const imageDataForm = new FormData();
+        imageDataForm.append('uploads', imageBase64Data);
+        
+        // 이미지를 업로드합니다.
+        const response = await axios.post('http://192.168.0.15:5050/fileupload', imageDataForm, {
+          headers: {
+            'Authorization': `${getCookie('Authorization')}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        // 업로드된 이미지 데이터를 formData에 추가합니다.
+        updatedFormData.gameImage = response.data; // 이미지 업로드 후 서버에서 반환된 값
+      }
+  
+      // 게임 계정 정보를 서버로 전송합니다.
+      await axios.put(`http://192.168.0.65:8080/api/v1/games/account/${props.accountNo}`, updatedFormData, {
+        headers: {
+          'Authorization': `${myCookieValue}`,
+          'Content-Type': 'application/json'
+        }
+      });
 
+      // 수정이 완료되었을 때 SweetAlert2 알림을 띄웁니다.
+    Swal.fire({
+      icon: 'success',
+      title: '수정이 완료되었습니다.',
+      showConfirmButton: true,
+      customClass:{
+        container:'m-sweet-con',
+        icon: 'm-sweet-icon',
+      },
+      allowOutsideClick: false, // 모달 외부 클릭으로 닫히지 않도록 설정
+      allowEscapeKey: false // ESC 키로 모달 닫히지 않도록 설정
+    }).then(()=>{
+      props.onClose();
+    })
+    } catch (error) {
+      //console.error('처리 중 오류가 발생했습니다:', error);
+      Swal.fire({
+        icon: 'error',
+        title: '수정에 실패했습니다.',
+        html: '처리 중 오류가 발생했습니다.<br> 관리자에게 문의하세요',
+        showConfirmButton: true,
+        customClass: {
+          container:'m-sweet-con',
+          icon: 'm-sweet-danger',
+        },
+        allowOutsideClick: false, // 모달 외부 클릭으로 닫히지 않도록 설정
+        allowEscapeKey: false // ESC 키로 모달 닫히지 않도록 설정
+      }).then(()=>{
+        props.onClose();
+      })
+    }
+  };
+  
+  
+  
   return (
     <div className="Modal" onMouseDown={props.onClose}>
       <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{ width: '450px' }}>
         <button id="modalCloseBtn" onMouseDown={props.onClose}>
           ✖
         </button>
-        <h2>회원 정보 수정</h2>
+        <h2>게임 프로필 수정</h2>
         <form onSubmit={handleSubmit}>
           <label className="profile-picture-container">
             프로필 사진
             <div>
-              <input type="file" className="profilePicture" onChange={handleFileChange} />
+              <input type="file" name="gameImage" className="profilePicture" onChange={handleFileChange} />
               {previewImage ? (
                 <img src={previewImage} alt="프로필 사진" className="profile-picture" />
               ) : (
@@ -71,7 +173,7 @@ function Modal(props) {
           <div className="input-container">
             <label className="U-nickname-label">
               닉네임:
-              <input type="text" className="U-nickname" name="nickname" value={formData.nickname} onChange={handleChange} style={{ width: 'auto', minWidth: '150px' }} />
+              <input type="text" className="U-nickname" name="nickname" value={formData.nickname} onChange={handleChange} style={{ width: 'auto', minWidth: '150px' }}/>
             </label>
           </div>
           <button type="submit" className='G-button'>저장</button>
