@@ -1,3 +1,28 @@
+
+.chart-info-container-ai {
+  border: 1px solid black;
+  border: hidden;
+  display: inline-block;
+  width: 100%;
+  height: 400px;
+  margin-top: 100px;
+  margin-bottom: 125px;
+}
+
+
+.chart-info-left-ai {
+  border-radius: 15px ;
+  background-color: #FFFFFF;
+  box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.chart-info-right-ai {
+  border-radius: 15px ;
+  background-color: #FFFFFF;
+  box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, 0.1);
+}
+
 .chart-info-container {
   border: 1px solid black;
   border: hidden;
@@ -51,7 +76,6 @@
   transform: translateY(-50%);
   left: -50px;
 }
-
 
 /*프로파일 부분*/
 .profile-icon {
@@ -561,7 +585,110 @@ p {
 .MuiPickersPopper-root {
   z-index: 10001 !important;
 }
-
-
-
 /* =========== 식단페이지-모달 내용물 끝 ===========*/
+
+
+/* ============== AI추천 ==============*/
+.main-titles-ai h2 {
+  color: #255946;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  position: relative;
+  z-index: 1;
+  text-align: left;
+  margin-left: 55px;
+  margin-bottom: 50px;
+  margin-top: 100px
+}
+
+.main-titles-ai h2::before {
+  content: '';
+  position: absolute;
+  height: 3px;
+  width: 40px;
+  background: #87C03D;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -50px;
+}
+
+/*유튜브*/
+.recommend-layout {
+  display: flex;
+  justify-content: space-between;
+}
+
+.recommend-container {
+  width: 49%;
+  height: 400px;
+}
+
+.recommend-container iframe {
+  width: 100%;
+  height: 100%;
+}
+
+/*ai 추천-리스트*/
+.list-container-ai{
+  float: left;
+  color: black;
+}
+ol{
+  width: 300px;
+  list-style: none;
+  margin-right: 100px;
+  margin-left: 100px;
+  list-style-image: url(images/burger2.png);
+}
+ol li{
+  font-size: 1.2rem;
+  padding: 20px 30px;
+  margin: 10px 0;
+  background: white;
+  z-index: 100;
+  position: relative;
+  cursor: pointer;
+  transition: all .4s;
+  border-radius: 10px;
+  box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.1);
+}
+ol li::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  z-index: -1;
+  transition: all .4s;
+}
+ol li:hover::before{
+  width: 100%;
+}
+ol li:nth-child(1)::before{
+  background: #4285f4;
+}
+ol li:nth-child(2)::before{
+  background: #db4437;
+}
+ol li:nth-child(3)::before{
+  background: #f4b400;
+}
+ol li:nth-child(4)::before{
+  background: #0f9d58;
+}
+ol li:nth-child(5)::before{
+  background: #6f48eb;
+}
+ol li:hover{
+  transform: translateX(20px);
+}
+
+/* ============== AI추천 ==============*/
+
+#yt-save-button{
+  font-size: 50px;
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 200, 'opsz' 24;
+  margin-left: 500px;
+}

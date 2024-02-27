@@ -32,12 +32,33 @@ import dayjs from 'dayjs';
 //npm install sweetalert
 import swal from 'sweetalert';
 
+import 'material-symbols';
+
 //npm i styled-components
 import styled from 'styled-components';
 
 //componants
 import Modal from "./modal";
 import Chatbot from '../../component/chatBot/ChatBot';
+
+//chart.js
+import { Chart as ChartJS,
+	RadialLinearScale,
+	BarElement,
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Title,
+	ArcElement, 
+	Tooltip, 
+	Filler,
+	Legend } from 'chart.js';
+import { Doughnut,Bar,Line,Radar } from 'react-chartjs-2';
+  
+//기본 Line 차트
+//https://react-chartjs-2.js.org/examples/line-chart
+ChartJS.register(RadialLinearScale,CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Filler,Legend);
 
 
 export const options = {
@@ -120,7 +141,12 @@ function Workout() {
 	const [value, onChange] = useState(new Date());	//
 	const [data_, setData] = useState();	//
 	const [labels_, setLabels] = useState();	//
-  const [workout, setWorkout ] = useState([]);	//
+  	const [workout, setWorkout ] = useState([]);	//
+	
+	const [data1_, setData1] = useState();
+	const [data2_, setData2] = useState();
+	const [labels1_, setLabels1] = useState();
+	const [labels2_, setLabels2] = useState();
 
 	//
 	const toggleModal = (e) => {
@@ -386,6 +412,44 @@ function Workout() {
         };
       }, [isOpen]);
 
+
+	//chart.js data
+	const data2 = {
+		labels:labels2_,
+		datasets: [
+		{
+			label: '섭취 시간',
+			data: data2_,
+			borderColor: 'rgb(255, 99, 132)',
+			backgroundColor: 'rgba(255, 99, 132, 0.5)',
+		},
+		// {
+		//   label: 'Dataset 2',
+		//   data: [600,500,400,300,200,100],
+		//   borderColor: 'rgb(53, 162, 235)',
+		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
+		// },
+		],
+	};
+	const data1 = {
+		labels:labels1_,
+		datasets: [
+		{
+			fill: true,
+			label: '하루 영양소 섭취량',
+			data: data1_,
+			borderColor: 'rgb(255, 99, 132)',
+			backgroundColor: 'rgba(255, 99, 132, 0.5)',
+		},
+		// {
+		//   label: 'Dataset 2',
+		//   data: [600,500,400,300,200,100],
+		//   borderColor: 'rgb(53, 162, 235)',
+		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
+		// },
+		],
+	};
+
   	return (
     <div>
         <HeaderTop/>
@@ -489,8 +553,22 @@ function Workout() {
             	</div>
 				</div>
             </div>
-
+			<div className='chart-info-container'style={{height: 500, marginBottom: 0}}>
+				<div className="main-titles-chart">
+					<h2>CHART DESCRIPTION</h2>
+				</div>
+				<div className='chart-info-left' style={{height: 300}}>
+					<Bar options={options} data={data2} />
+				</div>
+				<div className='chart-info-right' style={{height: 300}}>
+					<Line options={options} data={data1} />
+				</div>
 			</div>
+			</div>
+
+			
+			
+
 			<div className="blog-area">
 		<div className="container">
 			<div className="row">
@@ -498,7 +576,6 @@ function Workout() {
 					<div className="section-titles">
 						<div className="main-titles">
 							<h2>WORKOUT DIARY</h2>
-							
 						</div>
 					</div>
 				</div>
@@ -554,6 +631,36 @@ function Workout() {
         <button type="button" className="add-siksa-button" onClick={toggleModal}>
         <div className="add-siksa-icon" style={{ backgroundImage: `url(${require('./images/plus6.png')})` }}></div>
         </button>
+
+		<div className='ai-container' >
+			<div className="main-titles-ai">
+				<h2>AI RECOMMENDATIONS</h2>
+			</div>
+			<div className='list-container-ai-w'>
+			<ol>
+				<li>Olivia</li>
+				<li>George</li>
+			</ol>
+			</div>
+			<div className='chart-info-container-ai' style={{width : 600,height: 600,marginTop:0}}>
+				<div className='chart-info-left-ai' style={{height: 300}}>
+					<Bar options={options} data={data2} />
+				</div>
+				<div className='chart-info-right-ai' style={{height: 300}}>
+					<Line options={options} data={data1} />
+				</div>
+			</div>
+			<div className="recommend-layout-w">
+				<div className="recommend-container-w">
+					<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
+					<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
+				</div>
+				<div className="recommend-container-w">
+					<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
+					<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
+				</div>
+			</div>
+		</div>
 					{isOpen && (
 						<Modal
 						open={isOpen}

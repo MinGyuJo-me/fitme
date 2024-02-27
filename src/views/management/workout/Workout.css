@@ -3,14 +3,15 @@
   border: hidden;
   display: inline-block;
   width: 100%;
-  height: 630px;
-  margin-top: 125px;
+  height: 400px;
+  margin-top: 100px;
+  margin-bottom: 125px;
 }
 
 .chart-info-left {
   float: left;
   width: 50%;
-  height: 500px;
+  height: 300px;
   border-right: none;
   border-radius: 15px 0 0 15px;
   background-color: #FFFFFF;
@@ -20,13 +21,11 @@
 .chart-info-right {
   float: right;
   width: 50%;
-  height: 500px;
+  height: 300px;
   border-radius: 0 15px 15px 0;
   background-color: #FFFFFF;
   box-shadow: 5px 10px 10px 1px rgba(0, 0, 0, 0.1);
 }
-
-
 
 .main-titles-chart h2 {
   color: #255946;
@@ -353,6 +352,7 @@ abbr[title] {
   width: 100%;
   height: 100%;
   cursor: pointer;
+  
 }
 
 /*수정 버튼 */
@@ -406,9 +406,10 @@ abbr[title] {
 
 /* =========== 운동페이지-TODAY WORKOUT===========*/
 .major-icon-workout {
-  margin: auto;
-  margin-top: 10px;
+  display: block;
   margin-left: 75px;
+  margin-right: auto;
+  margin-top: 10px;
   width: 150px;
   height: 150px;
   border-radius: 50%;
@@ -420,6 +421,7 @@ abbr[title] {
   border: none;
   padding: 5px;
   margin: auto;
+  margin-bottom: 30px;
   margin-top: 0px;
   margin-left: 15px;
   width: 150px;
@@ -493,3 +495,73 @@ abbr[title] {
 
 
 /* =========== 운동페이지-모달 내용물 끝 ===========*/
+
+/* ============== AI추천 ==============*/
+
+
+/*유튜브*/
+.recommend-layout-w {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.recommend-container-w {
+  width: 49%;
+  height: 400px;
+}
+
+.recommend-container-w iframe {
+  width: 100%;
+  height: 100%;
+}
+
+/*ai 추천-리스트*/
+.list-container-ai-w{
+  float: left;
+  color: black;
+}
+.list-container-ai-w ol{
+  width: 300px;
+  list-style: none;
+  margin-right: 100px;
+  margin-left: 100px;
+  margin-top: 200px;
+  list-style-image: url(images/training.png);
+}
+.list-container-ai-w ol li{
+  font-size: 1.2rem;
+  padding: 20px 30px;
+  margin: 10px 0;
+  background: white;
+  z-index: 100;
+  position: relative;
+  cursor: pointer;
+  transition: all .4s;
+  border-radius: 10px;
+  box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.1);
+}
+.list-container-ai-w ol li::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  z-index: -1;
+  transition: all .4s;
+}
+.list-container-ai-w ol li:hover::before{
+  width: 100%;
+}
+.list-container-ai-w ol li:nth-child(1)::before{
+  background: #4285f4;
+}
+.list-container-ai-w ol li:nth-child(2)::before{
+  background: #db4437;
+}
+.list-container-ai-w ol li:hover{
+  transform: translateX(20px);
+}
+
+/* ============== AI추천 ==============*/
