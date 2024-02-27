@@ -21,7 +21,6 @@ import GameRoomSideProfile from './component/GameRoomSideProfile';
 
 import styled from "styled-components";
 import GameRoomMakeModal from './component/GameRoomMakeModal';
-import GameRoomMakeModal_ from './component/GameRoomMakeModal_';
 import GameRoomProfileModal from './component/GameRoomProfileModal';
 
 
@@ -76,7 +75,7 @@ function Game() {
                         <OwlCarousel {...options} className='notice-box-item'>
                           <div> <i className='fas fa-bell'></i> [공지사항] 2023년 07월 23일. 게임 업데이트 관련 안내</div>
                           <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇ님이 랭킹 게임에서 35 Points를 얻었습니다.</div>
-                         <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다.</div>
+                          <div> <i className='far fa-comment-dots'></i> ㅇㅇㅇㅇ님이 랭킹 게임에서 65 Points를 얻었습니다.</div>
                         </OwlCarousel> 
                         {/**************************************************************/}
                       </div>
@@ -121,9 +120,8 @@ function Game() {
 
         {/**** 게임방 생성 모달 *****/}
         {showModal && (
-        <GameRoomMakeModal_ open={isOpen} onClose={() => {setShowModal(false);}}>
-            <GameRoomMakeModal/>
-        </GameRoomMakeModal_>
+        <GameRoomMakeModal open={isOpen} onClose={() => {setShowModal(false);}}>
+        </GameRoomMakeModal>
         )}
 
 

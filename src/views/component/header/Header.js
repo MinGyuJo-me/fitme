@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
 import React from 'react';
 import { useEffect } from 'react';
+import './Header.css';
 
 function Header() {
 
@@ -89,7 +90,7 @@ function Header() {
                                     <li>
                                         <Link to="/">Alarm</Link>
                                     </li>
-                                    {myCookieValue == null ? <li><Link to="/signin">Login</Link></li> : <li><button  onClick={handleLogout}>Logout</button></li>}
+                                    {myCookieValue == null ? <li><Link to="/signin">Login</Link></li> : <li><button className="header-logout-button" onClick={handleLogout}>Logout</button></li>}
                                     
                                 </ul>
                             </div>

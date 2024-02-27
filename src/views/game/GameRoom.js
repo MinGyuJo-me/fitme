@@ -18,7 +18,6 @@ import GameRoomSideProfile from './component/GameRoomSideProfile';
 
 import styled from "styled-components";
 import GameRoomMakeModal from './component/GameRoomMakeModal';
-import GameRoomMakeModal_ from './component/GameRoomMakeModal_';
 import './GameRoom.css';
 
 const StyledHeader = styled.div`
