@@ -346,19 +346,26 @@ function Messenger() {
       <div className="search">
         <input type="text" placeholder="search" />
         <i className="fa fa-search"></i>
-      </div>
-      <div>
-        <div>방추가</div>
-        <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}>
+
+        <i className="fa fa-plus-square" id='add-friend-icon' onClick={toggleModal}>
           <input id='addChattingRoom' type='hidden' value='0'/>
         </i>
+      
+      </div>
+      <div>
+
+        <div>
+        <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}>
+          <input id='addChattingRoom' type='hidden' value='0'/>
+          채팅방 추가하기
+        </i>
+        </div>
         
       </div>
       <ul className="list">
         {chattingRoom.map((chat)=>(
           
             <li className="clearfix" onClick={chatRoom}>
-              <img src="" alt="avatar" />
               <div className="about" >
                   <input id='chatChattingNo' type='hidden' value={chat.chattingNo}/>
                   <input id='chatChattingUserNo' type='hidden' value={chat.accountNo}/>
@@ -446,9 +453,9 @@ function Messenger() {
       
       <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)} onKeyDown={onEnterSubmit}>
             <textarea name="message-to-send" id="message-to-send" placeholder ="메시지를 입력해 주세요" onChange={handleChange} rows="3"></textarea>
-            <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>      
+            <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>     
             <button>Send</button>
-        </form> 
+      </form> 
       
     </div> 
     
