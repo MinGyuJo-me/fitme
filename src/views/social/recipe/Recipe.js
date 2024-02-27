@@ -18,7 +18,6 @@ function Recipe() {
 
   return (
     <div>
-        <RatingStars></RatingStars>
         {/*헤더 위*/}
         <HeaderTop/>
         {/*헤더 메인 메뉴*/}
