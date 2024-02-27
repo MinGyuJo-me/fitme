@@ -108,6 +108,26 @@ function CommunityBoardViewModal(props) {
     }, [postComment]);
 
 
+    {/*■■■■■■■■■■■■■■■■■■■ 수정 버튼(임시) ■■■■■■■■■■■■■■■■■■■*/}
+    const [isOpenCommunityBoardEditModal, setIsOpenCommunityBoardEditModal] = useState(false);
+    const [showCommunityBoardEditModal, setShowCommunityBoardEditModal] = useState(false);
+
+
+    {/*■■■■■■■■■■■■■■■■■■■ 수정 모달 불러오기 위해 임시로 만든 것(미완성) ■■■■■■■■■■■■■■■■■■■*/}
+    const onClickEdit = (e) =>{
+        console.log("수정");
+        setShowCommunityBoardEditModal(true);
+    }
+
+    {/*■■■■■■■■■■■■■■■■■■■ 댓글 하트 버튼 따로 이벤트하려면 여기에서 백 작업 넣으면 됨. ■■■■■■■■■■■■■■■■■■■*/}
+    const commentLike = (e) =>{
+        $(e.target.parentElement.parentElement).find(".heart-color").toggleClass("heart-liked");
+        console.log("댓글 클릭임");
+        {/*■■■■■■■■■■■■■■■■■■■ 어떤 댓글인지 내용 출력 (예시용) ■■■■■■■■■■■■■■■■■■■*/}
+        console.log($(e.target.parentElement.parentElement.parentElement).text());
+
+    }
+
     return (
         <div className='row justify-content-md-center' style={{borderRadius:"5px", paddingTop:"20px", height:"105%"}}>
             <div className="col-lg-6 col-sm-6 scrolling" style={{height:"95%", overflow:"scroll", backgroundColor:"white", borderRadius:"5px"}}> 
@@ -119,23 +139,24 @@ function CommunityBoardViewModal(props) {
                     </svg>
                 </div>
                 {/**************** 버튼 부분 ******************/}
-                <div className="community-detail-button-list" style={{display:"none", backgroundColor:"white", position:"absolute", width:"50px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"3px", top:"40px", textAlign:"center", zIndex:"2"}}>
+                <div className="community-detail-button-list" style={{display:"none", backgroundColor:"white", position:"absolute", width:"50px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"3px", top:"40px", textAlign:"center", zIndex:"2",transform:"translateY(15px)"}}>
                     {props.loginAccountNo === props.accountNo ? <div onClick={props.onClickDelete}>삭제</div> : "" }
                     {props.loginAccountNo === props.accountNo ? <div>수정</div> : "" }
                     {props.loginAccountNo !== props.accountNo ? <div>신고</div> : "" }
                 </div>
 
-                <div className="blog-single-box upper" style={{height:"99%", padding:"0px", backgroundColor:"white", marginTop:"20px"}}>
+                <div className="blog-single-box upper" style={{height:"93%", padding:"0px", backgroundColor:"white", marginTop:"20px"}}>
                     <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                         <div className="blog-icon bi1" style={{backgroundImage: `url(${props.image})`}}>
                         </div>
                         <div className='blog-description'>
-                            <a href="#"><i className="fas fa-address-card community-icon"></i> sdasdasdas {props.name}</a>
-                            <a href="#"><i className="fas fa-map-marker community-icon"></i>adasdasdsasd {props.position}</a>
-                            <span><i className="far fa-calendar-alt community-icon"></i>asdsadsada {props.postDate}</span>
+                            <a href="#"><i className="fas fa-address-card community-icon"></i>{props.name}</a>
+                            <a href="#"><i className="fas fa-map-marker community-icon"></i>{props.address}</a>
+                            <span><i className="far fa-calendar-alt community-icon"></i>{props.postDate}</span>
                         </div>
                     </div>
-                    <div>
+                    {/*■■■■■■■■■■■■■■■■■■■ 이미지 영역 border ■■■■■■■■■■■■■■■■■■■*/}
+                    <div className='community-image-border'>
                         <OwlCarousel {...options}>
                             {props.boardImages.map((image, index) => (
                                 <div className="blog-thumb" key={index}>
@@ -148,10 +169,12 @@ function CommunityBoardViewModal(props) {
                         </OwlCarousel>
                     </div>
                     
-                    <div className="blog-content">
-                        <h2 style={{textAlign:"left"}}>{props.title}</h2>
+                    {/*■■■■■■■■■■■■■■■■■■■ style ■■■■■■■■■■■■■■■■■■■*/}
+                    <div className="blog-content" style={{marginTop:"20px", paddingTop:"10px", paddingBottom:"0px"}}>
+                        <h2 style={{textAlign:"left", padding:"0px", transform:"translateY(15px)"}}>{props.title}</h2>
                         
-                        <p style={{textAlign:"left", paddingTop:"20px"}}>
+                        {/*■■■■■■■■■■■■■■■■■■■ <p></p> style ■■■■■■■■■■■■■■■■■■■*/}
+                        <p style={{textAlign:"left"}}>
                             {props.comment}
                         </p>
 
@@ -177,9 +200,39 @@ function CommunityBoardViewModal(props) {
                                             {comment.bcComment}
                                             {/***************** 게시판 상세보기 버튼. ***************/}
                                             <div className='comment-icon-layout'>
-                                                <button>
-                                                    {/*********** 좋아요 버튼  ***************/}
-                                                    <img src={require('../images/heart.png')}/>
+                                            <button>
+                                                    {/*■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 좋아요 버튼  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■*/}
+                                                    <div className="heart-icon-wrapper" onClick={commentLike}>
+                                                        <div className='heart-color' style={{pointerEvents:"none"}}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-15 0 350 350" style={{transform:"translateY(-3px)"}}>
+                                                            <path d="M150 57.3C100.2-17.4.7 26.3.7 107.6c0 55 49.7 94.2 87.1 123.8 38.8 30.7 49.8 37.3 62.2 49.8 12.4-12.4 22.8-19.7 62.2-49.8 37.9-29 87.1-69.4 87.1-124.4 0-80.7-99.5-124.4-149.3-49.7z" fill-rule="evenodd" clip-rule="evenodd"/>
+                                                            </svg>
+                                                            <span className="i1"></span>
+                                                            <span className="i2"></span>
+                                                            <span className="i3"></span>
+                                                            <span className="i4"></span>
+                                                            <span className="i5"></span>
+                                                            <span className="i6"></span>
+                                                            <span className="i7"></span>
+                                                            <span className="i8"></span>
+                                                            <span className="i1"></span>
+                                                            <span className="i2"></span>
+                                                            <span className="i3"></span>
+                                                            <span className="i4"></span>
+                                                            <span className="i5"></span>
+                                                            <span className="i6"></span>
+                                                            <span className="i7"></span>
+                                                            <span className="i8"></span>
+                                                            <span className="i1"></span>
+                                                            <span className="i2"></span>
+                                                            <span className="i3"></span>
+                                                            <span className="i4"></span>
+                                                            <span className="i5"></span>
+                                                            <span className="i6"></span>
+                                                            <span className="i7"></span>
+                                                            <span className="i8"></span>
+                                                        </div>
+                                                    </div>
                                                 </button>
                                                 <button>
                                                     {/*********** 신고 버튼  ***************/}
@@ -207,65 +260,6 @@ function CommunityBoardViewModal(props) {
                                     </tr>
                                     </>
                                 ))}
-
-
-                                    <tr>
-                                        <td>dsafsdaf</td>
-                                        <td>
-                                            adfdasfadsfadsfadsfadsfasdfadsfdsafasdfdsafadsfdasfsdafadssdfsdfdsfdsfsffdsfsdafasdfasdfds
-                                            {/***************** 게시판 상세보기 버튼. ***************/}
-                                            <div className='comment-icon-layout'>
-                                                <button>
-                                                    {/*********** 좋아요 버튼  ***************/}
-                                                    <img src={require('../images/heart.png')}/>
-                                                </button>
-                                                <button>
-                                                    {/*********** 신고 버튼  ***************/}
-                                                    <img src={require('../images/community_alert.png')}/>
-                                                </button>
-                                                <button>
-                                                    {/*********** 수정 버튼  ***************/}
-                                                    <img src={require('../images/community_write.png')}/>
-                                                </button>
-                                                <button>
-                                                    {/*********** 삭제 버튼  ***************/}
-                                                    <img src={require('../images/community_trash.png')}/>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            2017-05-14
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>dsafsdaf</td>
-                                        <td>
-                                            adfdasfadsfadsfadsfadsffasfdsfasssdfsdfdsfdsfsffdsfsdafasdfasdfds
-                                            {/***************** 게시판 상세보기 버튼. ***************/}
-                                            <div className='comment-icon-layout'>
-                                                <button>
-                                                    {/*********** 좋아요 버튼  ***************/}
-                                                    <img src={require('../images/heart.png')}/>
-                                                </button>
-                                                <button>
-                                                    {/*********** 신고 버튼  ***************/}
-                                                    <img src={require('../images/community_alert.png')}/>
-                                                </button>
-                                                <button>
-                                                    {/*********** 수정 버튼  ***************/}
-                                                    <img src={require('../images/community_write.png')}/>
-                                                </button>
-                                                <button>
-                                                    {/*********** 삭제 버튼  ***************/}
-                                                    <img src={require('../images/community_trash.png')}/>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            2017-05-14
-                                        </td>
-                                    </tr>
                             </table>
                         </div>
                     </div>
@@ -309,8 +303,8 @@ function CommunityBoardViewModal(props) {
                                         <span className="i7"></span>
                                         <span className="i8"></span>
                                     </div>
-                                    </div>
                                 </div>
+                            </div>
                                 <div className='blog-button-item'>
                                     <img src={require('../images/scrap.png')} onClick={props.scrapHandle}/>
                                 </div>

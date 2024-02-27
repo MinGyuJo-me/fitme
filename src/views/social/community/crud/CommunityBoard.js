@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CommunityBoard.css';
 import $ from 'jquery';
-import swal from 'sweetalert';
+import swal from 'sweetalert2';
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import CommunityBoardViewModal from './CommunityBoardViewModal';
 import CommunityBoardViewModal_ from './CommunityBoardViewModal_';
+/*■■■■■■■■■■■■■■■■■■   게시글 수정 모달   ■■■■■■■■■■■■■■■■■■*/
+import CommunityBoardEditModal from './CommunityBoardEditModal';
 
 function CommunityBoard(props) {
 
@@ -171,37 +173,67 @@ function CommunityBoard(props) {
     };
 
     //게시글 삭제
-    const onClickDelete = (e) => {
-        const bno = props.bno;
-        axios.delete(`http://192.168.0.104:8080/api/v1/boards/${bno}`, {
-            headers: {
-                'Authorization': `${myCookieValue}`,
-                'Content-Type': 'application/json; charset=UTF-8'
+    const onClickDelete = () => {
+        swal.fire({
+            title: "정말로 삭제하시겠습니까?",
+            text: "삭제한 데이터는 복구할 수 없습니다!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const bno = props.bno;
+                try {
+                    const response = await axios.delete(`http://192.168.0.104:8080/api/v1/boards/${bno}`, {
+                        headers: {
+                            'Authorization': `${myCookieValue}`,
+                            'Content-Type': 'application/json; charset=UTF-8'
+                        }
+                    });
+                    let resMessge = response.data;
+                    if (resMessge === '성공') {
+                        swal.fire({
+                            title: "삭제 성공!",
+                            icon: "success",
+                            button: "확인"
+                        }).then(value => {
+                            props.setOnDelete(value);
+                        });
+                    } else {
+                        swal.fire({
+                            title: "삭제 실패!",
+                            icon: "error",
+                            button: "확인"
+                        }).then(value => {
+                            props.setOnDelete(value);
+                        });
+                    }
+                } catch (error) {
+                    console.error("삭제 요청 중 오류 발생:", error);
+                }
             }
-        })
-        .then(response => {
-            let resMessge = response.data;
-            if(resMessge == '성공') {
-                swal({title:"삭제 성공!",icon:"success", button:"확인"})
-                .then(value => {
-                    props.setOnDelete(value);
-                })
-                
-            } else {
-                swal({title:"삭제 실패!",icon:"error", button:"확인"})
-                .then(value => {
-                    props.setOnDelete(value);
-                })
-                
-            }
-        })
-    }
+        });
+    };
+
+    
 
     {/**************** 버튼 사용 ************/}
     const onClickList = (e) =>{
         $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
     }
 
+    {/*■■■■■■■■■■■■■■■■■■   게시글 수정 useState   ■■■■■■■■■■■■■■■■■■*/}
+    const [isOpenCommunityBoardEditModal, setIsOpenCommunityBoardEditModal] = useState(false);
+    const [showCommunityBoardEditModal, setShowCommunityBoardEditModal] = useState(false);
+
+    {/*■■■■■■■■■■■■■■■■■■   게시글 수정 버튼   ■■■■■■■■■■■■■■■■■■*/}
+    const onClickEdit = (e) =>{
+        console.log("수정");
+        setShowCommunityBoardEditModal(true);
+    }
     
 
     return (
@@ -217,7 +249,8 @@ function CommunityBoard(props) {
                 {/**************** 버튼 부분 ******************/}
                 <div className="community-detail-button-list" style={{display:"none", position:"absolute", width:"50px", padding:"3px", marginRight:"15px", borderRadius:"0px", borderRadius:"0px", right:"3px", top:"40px", textAlign:"center"}}>
                     {props.loginAccountNo == props.accountNo ? <div onClick={onClickDelete}>삭제</div> : ""}
-                    {props.loginAccountNo == props.accountNo ? <div>수정</div> : ""}
+                    {/*■■■■■■■■■■■■■■■■■■   수정 버튼 모달 활성화 onClick   ■■■■■■■■■■■■■■■■■■*/}
+                    {props.loginAccountNo == props.accountNo ? <div onClick={onClickEdit}>수정</div> : ""}
                     {props.loginAccountNo !== props.accountNo ? <div>신고</div> : ""}
                 </div>
                 <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
@@ -232,7 +265,8 @@ function CommunityBoard(props) {
                 <div>
                     <OwlCarousel {...options}>
                         {boardImages.map((image, index) => (
-                            <div className="blog-thumb" key={index}>
+                            /*■■■■■■■■■■■■■■■■■■   이미지 테두리 넣음   ■■■■■■■■■■■■■■■■■■*/
+                            <div className="blog-thumb community-image-border" key={index}>
                                 <img src={image} alt="" style={{ height: 600 }} />
                                 <div className="blog-btn">
                                     <div>{`${index + 1}/${boardImages.length}`}</div>
@@ -251,7 +285,7 @@ function CommunityBoard(props) {
 
                     <div className="blog-button">
                         <a onClick={onModal}>read more</a>
-                                            {/********** 해시태그 위치 **************/}
+                    {/********** 해시태그 위치 **************/}
                     <div className='community-board-hashtag'>
                         {props.category.split(",").map((tag, index) => (
                             <span key={index}>{tag.trim()}</span>
@@ -337,8 +371,14 @@ function CommunityBoard(props) {
                     scrapHandle={scrapHandle}
                 />
             </CommunityBoardViewModal_>
-                
             )}
+            {/*■■■■■■■■■■■■■■■■■■ 게시판 수정 모달 ■■■■■■■■■■■■■■■■■■*/}
+            {showCommunityBoardEditModal && (
+                <CommunityBoardEditModal open={isOpenCommunityBoardEditModal} onClose={() => {setShowCommunityBoardEditModal(false);}}>
+                </CommunityBoardEditModal>
+            )}
+                
+            
         </div>
     );
     

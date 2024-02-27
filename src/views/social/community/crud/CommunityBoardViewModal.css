@@ -43,6 +43,12 @@
 
 .blog-comment tr{
   height:55px;
+  transition: all 0.2s;
+}
+
+.blog-comment tr:hover{
+  background-color: rgba(0, 0, 0, 0.05);
+
 }
 
 .blog-comment td{
@@ -277,8 +283,35 @@
   align-items: center;
 }
 
+
+
+.comment-icon-layout button:focus{
+  border: 1px solid #c2cfdb;
+  border-radius: 5px;
+  width: 22px;
+  height: 22px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .comment-icon-layout button img{
   position: absolute;
   width: 90%;
   height: 90%;
+}
+
+.community-image-border{
+  border-bottom: 1px solid #ced4da;
+  border-top: 1px solid #ced4da;
+}
+
+
+.blog-button-item{
+  border-radius: 5px;
+  border: none;
+  /*box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+  background-color: white;*/
 }
