@@ -22,6 +22,7 @@ import GameRoomSideProfile from './component/GameRoomSideProfile';
 import styled from "styled-components";
 import GameRoomMakeModal from './component/GameRoomMakeModal';
 import GameRoomMakeModal_ from './component/GameRoomMakeModal_';
+import GameRoomProfileModal from './component/GameRoomProfileModal';
 
 
 const StyledHeader = styled.div`
@@ -45,7 +46,8 @@ function Game() {
     const [showModal, setShowModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
-
+    const [showModal1, setShowModal1] = useState(false);
+    const [isOpen1, setIsOpen1] = useState(false);
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -108,7 +110,7 @@ function Game() {
                   
                   {/**************************************************************/}
                   {/*게임 프로필 영역 (오른쪽 사이드바)*/}
-                  <GameRoomSideProfile showModal={showModal} setShowModal={setShowModal}/>
+                  <GameRoomSideProfile showModal={showModal} setShowModal={setShowModal} showModal1={showModal1} setShowModal1={setShowModal1}/>
                   {/**************************************************************/}
                 </div>
               </div>
@@ -124,6 +126,12 @@ function Game() {
         </GameRoomMakeModal_>
         )}
 
+
+
+        {showModal1 && (
+        <GameRoomProfileModal open={isOpen1} onClose={() => {setShowModal1(false);}}>
+        </GameRoomProfileModal>
+        )}
 
 
 

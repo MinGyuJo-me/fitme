@@ -12,20 +12,6 @@ import CommunityBoardViewModal_ from './CommunityBoardViewModal_';
 
 function CommunityBoard(props) {
 
-    $(function() { 
-        var heart = $('.heart-icon')
-            // Add class
-        
-            heart.hover(function(){
-            heart.toggleClass('heart-dots');
-
-            heart.click(function(){
-            heart.toggleClass('heart-liked');
-            heart.toggleClass('heart-beating');  
-            });
-        });
-    });
-
     function getCookie(name) {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
@@ -125,16 +111,20 @@ function CommunityBoard(props) {
         })
     },[checkLike])
 
+    //마우스가 하트 버튼에 들어왔을 시 애니메이션 true
     const handleMouseEnter = () => {
         setIsBeating(true);
     };
 
+    //마우스가 하트 버튼에서 벗어났으 시 애니메이션 false
     const handleMouseLeave = () => {
         setIsBeating(false);
     };
-    
+
+    //좋아요 버튼 클릭 이벤트
     const handleClick = () => {
 
+        //isLiked가 true일 시 한번 더 누르면 삭제 시키게 false이면 등록 되게 만듬
         if(isLiked) {
             data.append('bno', props.bno);
             data.append('preState', 1);
@@ -158,6 +148,9 @@ function CommunityBoard(props) {
             })
             .then(response => {
                 console.log(response.data);
+            })
+            .catch(err => {
+                console.log(err);
             })
         }
         setIsLiked(!isLiked);
@@ -273,7 +266,7 @@ function CommunityBoard(props) {
 
                                 <div className="heart-icon-wrapper">
                                     <div 
-                                        className={`heart-icon ${isLiked ? 'heart-liked' : ''} ${isBeating ? 'heart-beating' : ''}`}
+                                        className={`heart-icon ${isLiked ? 'heart-liked ' : ''} ${isBeating ? 'heart-beating' : ''}`}
                                         onMouseEnter={handleMouseEnter}
                                         onMouseLeave={handleMouseLeave}
                                         onClick={handleClick}
