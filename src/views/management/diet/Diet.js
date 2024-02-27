@@ -652,16 +652,11 @@ function Diet() {
 					<li>Olivia</li>
 					<li>George</li>
 					<li>Harry</li>
-					<li>Leo</li>
-					<li>Joe</li>
 				</ol>
 				</div>
-				<div className='chart-info-container-ai' style={{width : 600,height: 600,marginTop:0}}>
+				<div className='chart-info-container-ai' style={{width : 600,height: 400,marginTop:0}}>
 					<div className='chart-info-left-ai' style={{height: 300}}>
 						<Bar options={options} data={data2} />
-					</div>
-					<div className='chart-info-right-ai' style={{height: 300}}>
-						<Line options={options} data={data1} />
 					</div>
 				</div>
 				<div className="recommend-layout">

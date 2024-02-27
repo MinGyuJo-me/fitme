@@ -418,7 +418,7 @@ function Workout() {
 		labels:labels2_,
 		datasets: [
 		{
-			label: '섭취 시간',
+			label: '소비 칼로리',
 			data: data2_,
 			borderColor: 'rgb(255, 99, 132)',
 			backgroundColor: 'rgba(255, 99, 132, 0.5)',
@@ -642,12 +642,9 @@ function Workout() {
 				<li>George</li>
 			</ol>
 			</div>
-			<div className='chart-info-container-ai' style={{width : 600,height: 600,marginTop:0}}>
-				<div className='chart-info-left-ai' style={{height: 300}}>
+			<div className='chart-info-container-ai-w' style={{width : 600,height: 400,marginTop:-150}}>
+				<div className='chart-info-left-ai' style={{height: 300, marginTop:150}}>
 					<Bar options={options} data={data2} />
-				</div>
-				<div className='chart-info-right-ai' style={{height: 300}}>
-					<Line options={options} data={data1} />
 				</div>
 			</div>
 			<div className="recommend-layout-w">

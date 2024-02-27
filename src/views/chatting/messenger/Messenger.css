@@ -23,13 +23,13 @@ body {
   margin: 0 auto;
   width: 50%; /* Adjust width to 100% */
   display: flex; /* Add flex display */
-  
+  box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.1);
 }
 
 .people-list {
   width: 350px;
   /* float: left; Remove float */
-  border: 1px solid var(--green); /* Add border */
+  border: 3px solid var(--green); /* Add border */
   border-radius: 5px 0px 0px 5px; /* Add border-radius */
   padding-bottom: 8px;
   margin-left: -1px;
@@ -37,6 +37,11 @@ body {
 
 .people-list .search {
   padding: 20px;
+}
+
+#add-friend-icon{
+ float: right;
+ margin-top: 15px;
 }
 
 .people-list input {
@@ -59,11 +64,14 @@ body {
   padding: 20px;
   height: 510px; /* Adjust height to match the chatbot */
   list-style: none;
+  
 }
 
 .people-list ul li {
   padding-bottom: 20px;
-  margin-left: 20px;
+  padding-top: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
 }
 
 .people-list img {
@@ -84,9 +92,9 @@ body {
   flex-grow: 1; /* Allow chat to grow and take remaining space */
   background: #fff;
   color: #434651;
-  border: 1px solid var(--green); /* Add border */
+  border: 3px solid var(--green); /* Add border */
   border-radius: 0px 5px 5px 0px;
-  margin-left: -1px;
+  margin-left: -3px;
 }
 
 .m-chat .chat-header {
@@ -97,6 +105,7 @@ body {
 .m-chat .chat-header img {
   float: left;
   margin-left: 20px;
+  border-radius: 50%;
 }
 
 .m-chat .chat-header .chat-about {
@@ -207,12 +216,14 @@ body {
   padding: 10px 20px;
   font: 20px/22px "Lato", Arial, sans-serif;
   margin-bottom: 10px;
-  border-radius: 5px;
+  border-radius: 10px;
   resize: none;
 }
 .m-chat .chat-message textarea::placeholder{
   color: #ccc;
 }
+
+
 
 .m-chat .chat-message button {
   float: right;
@@ -222,7 +233,7 @@ body {
   border: none;
   cursor: pointer;
   font-weight: bold;
-  background: #F2F5F8;
+  background: none;
 }
 
 .m-chat .chat-message button:hover {
@@ -271,4 +282,19 @@ body {
 
 .m-chat{
   width: 370px;
+}
+
+/*스크롤바 디자인*/
+
+.m-chat .chat-history::-webkit-scrollbar {
+  width: 10px; /* WebKit 브라우저 */
+}
+
+.m-chat .chat-history::-webkit-scrollbar-thumb {
+  background: transparent; /* 투명한 스크롤바 */
+  border-radius: 10px;
+}
+
+.m-chat .chat-history::-webkit-scrollbar-track {
+  background: transparent; /* 투명한 스크롤바 배경 */
 }
