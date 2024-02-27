@@ -32,6 +32,8 @@ import dayjs from 'dayjs';
 //npm install sweetalert
 import swal from 'sweetalert';
 
+import 'material-symbols';
+
 //npm i styled-components
 import styled from 'styled-components';
 
@@ -574,7 +576,6 @@ function Workout() {
 					<div className="section-titles">
 						<div className="main-titles">
 							<h2>WORKOUT DIARY</h2>
-							
 						</div>
 					</div>
 				</div>
@@ -631,23 +632,35 @@ function Workout() {
         <div className="add-siksa-icon" style={{ backgroundImage: `url(${require('./images/plus6.png')})` }}></div>
         </button>
 
-		<div className='ai-container-w' >
-			<div className="main-titles-ai-w">
+		<div className='ai-container' >
+			<div className="main-titles-ai">
 				<h2>AI RECOMMENDATIONS</h2>
 			</div>
-				
-
+			<div className='list-container-ai-w'>
+			<ol>
+				<li>Olivia</li>
+				<li>George</li>
+			</ol>
+			</div>
+			<div className='chart-info-container-ai' style={{width : 600,height: 600,marginTop:0}}>
+				<div className='chart-info-left-ai' style={{height: 300}}>
+					<Bar options={options} data={data2} />
+				</div>
+				<div className='chart-info-right-ai' style={{height: 300}}>
+					<Line options={options} data={data1} />
+				</div>
+			</div>
 			<div className="recommend-layout-w">
 				<div className="recommend-container-w">
 					<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
+					<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
 				</div>
 				<div className="recommend-container-w">
 					<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
+					<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
 				</div>
 			</div>
 		</div>
-
-
 					{isOpen && (
 						<Modal
 						open={isOpen}

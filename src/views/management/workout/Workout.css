@@ -497,30 +497,9 @@ abbr[title] {
 /* =========== 운동페이지-모달 내용물 끝 ===========*/
 
 /* ============== AI추천 ==============*/
-.main-titles-ai-w h2 {
-  color: #255946;
-  font-size: 40px;
-  font-weight: 700;
-  line-height: 1.2;
-  position: relative;
-  z-index: 1;
-  text-align: left;
-  margin-left: 55px;
-  margin-bottom: 50px;
-  margin-top: 100px
-}
 
-.main-titles-ai-w h2::before {
-  content: '';
-  position: absolute;
-  height: 3px;
-  width: 40px;
-  background: #87C03D;
-  top: 50%;
-  transform: translateY(-50%);
-  left: -50px;
-}
 
+/*유튜브*/
 .recommend-layout-w {
   display: flex;
   justify-content: space-between;
@@ -536,44 +515,53 @@ abbr[title] {
   width: 100%;
   height: 100%;
 }
-/* ============== AI추천 ==============*/
 
-.workout-icon-container {
-  background: none;
-  border: none;
-  padding: 5px;
-  margin: auto;
-  margin-top: 0px;
-  width: 100%;
+/*ai 추천-리스트*/
+.list-container-ai-w{
+  float: left;
+  color: black;
+}
+.list-container-ai-w ol{
+  width: 300px;
+  list-style: none;
+  margin-right: 100px;
+  margin-left: 100px;
+  margin-top: 200px;
+  list-style-image: url(images/training.png);
+}
+.list-container-ai-w ol li{
+  font-size: 1.2rem;
+  padding: 20px 30px;
+  margin: 10px 0;
+  background: white;
+  z-index: 100;
+  position: relative;
+  cursor: pointer;
+  transition: all .4s;
+  border-radius: 10px;
+  box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.1);
+}
+.list-container-ai-w ol li::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
   height: 100%;
-  margin-bottom: 30px;
-  filter: drop-shadow(2px 2px 2px #808080);
+  z-index: -1;
+  transition: all .4s;
+}
+.list-container-ai-w ol li:hover::before{
+  width: 100%;
+}
+.list-container-ai-w ol li:nth-child(1)::before{
+  background: #4285f4;
+}
+.list-container-ai-w ol li:nth-child(2)::before{
+  background: #db4437;
+}
+.list-container-ai-w ol li:hover{
+  transform: translateX(20px);
 }
 
-.ai-icon-workout {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background-size: cover;
-}
-
-.ai-workout-content h2 {
-  text-align: center;
-}
-.ai-workout-content h2 a:hover {
-  text-decoration: underline;
-  color: #A3CF6A;
-}
-.ai-workout-content p {
-  font-size: 15px;
-  font-weight: 400;
-  color: #6e7673;
-  font-family: 'Inter', sans-serif;
-  line-height: 1.7;
-  text-align: center;
-  margin-bottom: 20px;
-}
+/* ============== AI추천 ==============*/
