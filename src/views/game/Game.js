@@ -17,13 +17,13 @@ import GameRoomContainer from './component/GameRoomContainer';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
-import GameRoomSideProfile from './component/GameRoomSideProfile';
+
 
 import styled from "styled-components";
 import GameRoomMakeModal from './component/GameRoomMakeModal';
 import GameRoomMakeModal_ from './component/GameRoomMakeModal_';
 import GameRoomProfileModal from './component/GameRoomProfileModal';
-
+import GameRoomSideProfile from './component/GameRoomSideProfile';
 
 const StyledHeader = styled.div`
   background: black;
@@ -48,6 +48,15 @@ function Game() {
 
     const [showModal1, setShowModal1] = useState(false);
     const [isOpen1, setIsOpen1] = useState(false);
+
+    // const [imageUrl, setImageUrl] = useState(null);
+    const [imageUrl, setImage] = useState();
+    //잠시만 확인용 함수 만들겠습니다
+    function setImageUrl(e){
+      // console.log('setImageUrl',e); //데이타 들어오는거 확인
+      //받아온 이미지를 GameRoomSide로 데이터 전송을 위한 변수 선언
+      setImage(e);
+    }
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -110,7 +119,9 @@ function Game() {
                   
                   {/**************************************************************/}
                   {/*게임 프로필 영역 (오른쪽 사이드바)*/}
-                  <GameRoomSideProfile showModal={showModal} setShowModal={setShowModal} showModal1={showModal1} setShowModal1={setShowModal1}/>
+                  <GameRoomSideProfile showModal={showModal} setShowModal={setShowModal} showModal1={showModal1} setShowModal1={setShowModal1} imageUrl={imageUrl}/>
+                  {/* 이동 확인용 */}
+                  {/* <GameRoomSideProfile showModal={showModal} setShowModal={setShowModal} showModal1={showModal1} setShowModal1={setShowModal1}/> */}
                   {/**************************************************************/}
                 </div>
               </div>
@@ -126,15 +137,11 @@ function Game() {
         </GameRoomMakeModal_>
         )}
 
-
-
         {showModal1 && (
-        <GameRoomProfileModal open={isOpen1} onClose={() => {setShowModal1(false);}}>
+          // onConfirm의 값을 setImageUrl함수로 이동
+        <GameRoomProfileModal onConfirm={setImageUrl} open={isOpen1} onClose={() => {setShowModal1(false);}}>
         </GameRoomProfileModal>
         )}
-
-
-
 
         {/**** 푸터 영역 *****/}
         <div className="footer_section">
