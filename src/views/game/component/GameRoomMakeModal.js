@@ -7,8 +7,6 @@ function GameRoomMakeModal() {
     return (
             <div className='game-room-modal-layout'>
                 <div className="col-lg-12 col-sm-12 game-modal-layout">
-                
-                
                 <div className="game-room-modal-container grmc1">
 
                     <div className='game-room-modal-title'>

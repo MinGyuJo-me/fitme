@@ -14,7 +14,19 @@ const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
 const LOGIN_API = '/login';
 
+function getCookie(name) {
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(name + '=')) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+  return null;
+}
+
 function SignIn() {
+
     useEffect(()=>{
         function getCookie(name) { //로그인 여부 확인
           const cookies = document.cookie.split(';');
@@ -102,6 +114,7 @@ function SignIn() {
             
             console.log('res', res.data);
             console.log('headers',res.headers);
+
             navigate('/');
           })
           .catch(err=>{

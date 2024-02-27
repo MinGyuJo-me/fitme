@@ -1,7 +1,33 @@
 import {Link} from 'react-router-dom';
 import React from 'react';
+import { useEffect } from 'react';
 
 function Header() {
+
+    //로그아웃 처리 로직
+    function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+            return cookie.substring(name.length + 1);
+            }
+        }
+        return null; 
+    }
+    
+    const myCookieValue = getCookie('Authorization');
+
+    useEffect(()=>{
+        
+    },[myCookieValue])
+
+    const handleLogout = () => {
+        //로그아웃 시 쿠키에 저장된 토큰 값 삭제 후 로그인 페이지로 이동
+        document.cookie = 'Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        window.location.href = '/signin';
+    };
+
     return (
         <header className="main-header">
             <div className="container-fluid">
@@ -63,8 +89,8 @@ function Header() {
                                     <li>
                                         <Link to="/">Alarm</Link>
                                     </li>
-
-                                    <li><Link to="/signin">Login</Link></li>
+                                    {myCookieValue == null ? <li><Link to="/signin">Login</Link></li> : <li><button  onClick={handleLogout}>Logout</button></li>}
+                                    
                                 </ul>
                             </div>
                         </div>
