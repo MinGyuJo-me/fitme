@@ -5,6 +5,8 @@ import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
 import Chatbot from '../component/chatBot/ChatBot';
 import './MyPage.css';
+import Modal from './Pmodal';
+import Gmodal from './Gmodal';
 import { useNavigate } from "react-router-dom";
 
 import axios from 'axios';
@@ -51,6 +53,45 @@ function MyPage() {
     const [data2_, setData2] = useState();
     const [labels1_, setLabels1] = useState();
     const [labels2_, setLabels2] = useState();
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+    const [isGameRecordModalOpen, setIsGameRecordModalOpen] = useState(false);
+
+
+        // 회원 정보 모달 열기 함수
+    const openProfileModal = () => {
+        setIsProfileModalOpen(true);
+    };
+
+    // 회원 정보 모달 닫기 함수
+    const closeProfileModal = () => {
+        setIsProfileModalOpen(false);
+    };
+
+    // 게임 기록 모달 열기 함수
+    const openGameRecordModal = () => {
+        setIsGameRecordModalOpen(true);
+    };
+
+    // 게임 기록 모달 닫기 함수
+    const closeGameRecordModal = () => {
+        setIsGameRecordModalOpen(false);
+    };
+
+    // 회원 정보 수정 이벤트 핸들러
+    const handleProfileUpdate = (formData) => {
+    // 수정된 회원 정보 전송 로직 추가
+    console.log('수정된 회원 정보:', formData);
+    // 모달 닫기
+    closeProfileModal();
+};
+
+    // 게임 기록 수정 이벤트 핸들러
+    const handleGameRecordUpdate = (formData) => {
+        // 수정된 게임 기록 전송 로직 추가
+        console.log('수정된 게임 기록:', formData);
+        // 모달 닫기
+        closeGameRecordModal();
+};
 
     const navigate = useNavigate();
 
@@ -244,42 +285,77 @@ function MyPage() {
                 <div className="sideber-box sb-rjm1" style={{ display: 'flex', alignSelf: 'flex-start', position: 'relative' }}>
                     <div className='main-titles' style={{ top: '10px', marginTop: '-30px' }}>
                         <h1>회원 정보</h1>
+                        <div className="profile-edit-button-container">
+                        <button onClick={openProfileModal} className="profile-edit-button" disabled={isGameRecordModalOpen}>수정</button>
+                            {isProfileModalOpen && (
+                                <Modal
+                                isOpen={isProfileModalOpen}
+                                onClose={closeProfileModal}
+                                onSubmit={handleProfileUpdate}
+                                nickname={accountData.nickname}
+                                name={accountData.name}
+                                address={accountData.address}
+                                hobby={accountData.hobby}
+                                height={accountData.height}
+                                weight={accountData.weight}
+                                age={accountData.age}
+                                />
+                            )}
+                        </div>
                     </div>
                     <div className='sideber-item' style={{overflow:'hidden'}}>
                         <img id='ibox' src={accountData.image} alt="프로필 사진" style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
                         <div className="form_row">
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'50px'}}>
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">닉네임:</span>
                                     <span className="value" id="username"  style={{fontFamily:"Lobster"}}>JohnDoe123</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'50px'}}>
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">이름:</span>
                                     <span className="value" id="name">{accountData.name}</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'50px'}}>
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">주소:</span>
                                     <span className="value" id="address">{accountData.address}</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'50px'}}>
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">포인트:</span>
                                     <span className="value" id="point">500</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'50px'}}>
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">성별:</span>
                                     <span className="value" id="gender">{accountData.gender === 'M'? '남성':'여성'}</span>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'50px'}}>
+                                <div className="form_box" style={{marginBottom:'30px'}}>
+                                    <span className="label">키:</span>
+                                    <span className="value" id="height">{accountData.height}</span>
+                                </div>
+                            </div>
+                            <div className="col-lg-6 col-md-6">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
+                                    <span className="label">몸무게:</span>
+                                    <span className="value" id="weight">{accountData.weight}</span>
+                                </div>
+                            </div>
+                            <div className="col-lg-6 col-md-6">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
+                                    <span className="label">나이:</span>
+                                    <span className="value" id="age">{accountData.age}</span>
+                                </div>
+                            </div>
+                            <div className="col-lg-6 col-md-6">
+                                <div className="form_box" style={{marginBottom:'30px'}}>
                                     <span className="label">취미:</span>
                                     <span className="value" id="interest">{accountData.hobby === 'E'? '운동':'식단'}</span>
                                 </div>
@@ -295,6 +371,19 @@ function MyPage() {
                 <div className="sideber-box sb-rjm1" style={{ display: 'flex', alignSelf: 'flex-start', position: 'relative' }} >
                     <div className='main-titles' style={{ top: '10px', marginTop: '-30px' }}>
                         <h1>게임 기록</h1>
+                        <div className="Gprofile-edit-button-container">
+                        <button onClick={openGameRecordModal} className="profile-edit-button" disabled={isProfileModalOpen}>수정</button>
+                            {/* 모달 */}
+                            {isGameRecordModalOpen && (
+                                <Gmodal
+                                isOpen={isGameRecordModalOpen}
+                                onClose={closeGameRecordModal}
+                                onSubmit={handleGameRecordUpdate}
+                                nickname={accountData.nickname}
+                                
+                                />
+                            )}
+                        </div>
                     </div>
                     <div className='sideber-item' style={{overflow:'hidden'}}>
                         <img id='ibox' src={accountData.image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />

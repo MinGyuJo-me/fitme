@@ -143,3 +143,23 @@
     line-height: 20px;
     cursor: pointer;
 }
+
+.profile-edit-button-container {
+    position: absolute;
+    top: 20px; 
+    right: 20px; 
+    z-index: 999;
+}
+
+.profile-edit-button {
+    padding: 8px 20px;
+    background-color: #1BBC9B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-edit-button:hover {
+    background-color: #1ed2ad;
+}

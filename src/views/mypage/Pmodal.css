@@ -1,0 +1,75 @@
+
+.Modal .modalBody label {
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 10px; 
+}
+
+.profile-picture-container {
+border: 2px dashed #ccc;
+padding: 20px;
+border-radius: 5px;
+text-align: center;
+margin-left: 35px;
+}
+
+.profile-picture-container img {
+max-width: 100%;
+max-height: 200px; /* 예시로 지정한 최대 높이 */
+}
+
+.profile-picture-container span {
+display: block;
+margin-top: 10px;
+color: #888;
+}
+
+
+input:focus {
+  outline: none!important;
+  border-color: black!important;
+  border-radius: 3px!important;
+
+}
+
+.U-nickname-label {
+  display: block; 
+  margin-right: 0; 
+  margin-bottom: 5px; 
+  margin-left: -13px;
+}
+
+.Modal .modalBody input[type="file"] {
+  display: none;
+}
+
+.Modal .modalBody button[type="submit"] {
+  margin-top: 20px; 
+}
+
+.P-button {
+  padding: 8px 20px;
+  background-color: #1BBC9B;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.P-button:hover {
+  background-color: #1ed2ad;
+}
+.m-sweet-con{
+  z-index: 9999;
+}
+.m-sweet-icon {
+  font-size: 14px; /* 아이콘 크기 조절 */
+  margin-bottom: 10px; /* 아이콘과 제목 사이의 간격 조절 */
+}
+.swal2-icon.swal2-error {
+  font-size: 89%; /* 아이콘 크기 조절 */
+  margin-bottom: 10px; /* 아이콘과 제목 사이의 간격 조절 */
+}
