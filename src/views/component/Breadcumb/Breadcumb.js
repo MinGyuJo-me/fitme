@@ -8,10 +8,10 @@ function Breadcumb(props) {
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="breacumb-content">
-                            <div className="breadcumb-title" style={{fontSize:"85px", height:"80px", lineHeight:"80px", fontWeight:"bold", color:"#ED9E2B", textShadow:"2px 2px 2px black"}}>
+                            <div className="breadcumb-title" style={{fontSize:"85px", height:"80px", lineHeight:"80px", fontWeight:"bold", color:"#ED9E2B", textShadow:"4px 4px 2px black"}}>
                                 {props.title}
                             </div>
-                            <div className="breadcumb-content-text"  style={{fontSize:"27px", height:"50px", lineHeight:"50px", fontWeight:"bold", color:"#ED9E2B", textShadow:"2px 2px 2px rgba(0,0,0,0.3)", color:"black", transform:"translateY(5px)"}}>
+                            <div className="breadcumb-content-text"  style={{fontSize:"50px", height:"50px", lineHeight:"50px", fontWeight:"bold", color:"#ED9E2B", textShadow:"4px 4px 2px black", color:"forestGreen", transform:"translateY(5px)"}}>
                                 {props.content}
                             </div>
                         </div>

@@ -2038,6 +2038,7 @@ ul.sub-menu li a {
     left: 30px;
     opacity: 0;
     transition: .5s;
+    text-align: center;
 }
 .project-single-box:hover .project-title{
     opacity: 1;
@@ -2046,13 +2047,13 @@ ul.sub-menu li a {
     margin-bottom: 0;
 }
 .project-title h3 a {
-    display: inline-block;
     font-size: 22px;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     color: #fff;
     text-transform: capitalize;
 }
+
 .project-title span {
     font-size: 15px;
     font-weight: 400;

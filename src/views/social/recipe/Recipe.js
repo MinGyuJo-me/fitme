@@ -1,52 +1,36 @@
 import {Link} from 'react-router-dom';
-import React from 'react';
+import React,{useEffect} from 'react';
 
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
 import Image_test from '../../../assets/images/blog-3.jpg';
 import ChatBot from '../../component/chatBot/ChatBot';
+import Loader from '../../component/loader/Loader';
+import Breadcumb from '../../component/Breadcumb/Breadcumb';
+import RatingStars from './component/RatingStars';
+import RecipeBoard from './component/RecipeBoard';
+import $ from 'jquery';
 
 function Recipe() {
+    useEffect(()=>{
+        $('body').addClass('loaded');
+    });
+
   return (
     <div>
+        <RatingStars></RatingStars>
+        {/*헤더 위*/}
         <HeaderTop/>
+        {/*헤더 메인 메뉴*/}
         <Header/>
+        {/* 로딩 애니메이션*/}
+        <Loader/>
+        {/* 제목 배경화면 */}
+        <Breadcumb title="RECIPE" content="social" subContent="community"/>
 
-        <div className="breadcumb-area d-flex align-items-center">
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-12">
-                        <div className="breacumb-content">
-                            <div className="breadcumb-title">
-                                <h1>Recipe</h1>
-                            </div>
-                            <div className="breadcumb-content-text">
-                            <a href="index.html"> Social <i className="fas fa-angle-right"></i><span>Recipe</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {/*
-        <!--==================================================-->
-        <!-- Start  portfolio Area -->
-        <!--==================================================-->
-        */}
         <div className="portfolio-area">
             <div className="container">
-                <div className="row">
-                    <div className="col-lg-12">
-                        <div className="section-title">
-                            <div className="sub-title">
-                                <h5 style={{fontSize:"40px"}}>찍먹</h5>
-                            </div>
-                            <div className="main-title">
-                                <h2 style={{fontFamily:"Lobster"}}>RECIPE LIST</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {/*카테고리 영역*/}
                 <div className="row">
                     <div className="col-lg-12 col-sm-12">
                         <div className="portfolio_nav text-center">
@@ -62,115 +46,20 @@ function Recipe() {
                         </div>
                     </div>
                 </div>
+
+
                 <div className="row image_load">
-                    <div className="col-lg-4 col-md-6 col-sm-12 grid-item physics cemes">
-                        <div className="project-single-box">
-                            <div className="project-thumb">
-                                <img src={require('../../../assets/images/6.jpg')}/>
-                                <div className="project-social-menu">
-                                    <ul>
-                                        <li><a href="#"><i className="fa fa-photo"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="project-content">
-                                <div className="project-title">
-                                    <h3><a href="blog-details.html">Mula Chash Prokolpo</a></h3>
-                                    <span> Vegetable </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12 grid-item maths cemes math">
-                        <div className="project-single-box">
-                            <div className="project-thumb">
-                                <img src={require('../../../assets/images/2.jpg')}/>
-                                <div className="project-social-menu">
-                                    <ul>
-                                        <li><a href="#"><i className="fa fa-photo"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="project-content">
-                                <div className="project-title">
-                                    <h3><a href="blog-details.html">Mula Chash Prokolpo 02</a></h3>
-                                    <span> Vegetable </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12 grid-item math maths">
-                        <div className="project-single-box">
-                            <div className="project-thumb">
-                                <img src={require('../../../assets/images/3.jpg')} alt=""/>
-                                <div className="project-social-menu">
-                                    <ul>
-                                        <li><a href="#"><i className="fa fa-photo"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="project-content">
-                                <div className="project-title">
-                                    <h3><a href="blog-details.html">Mula Chash Prokolpo 03</a></h3>
-                                    <span> Vegetable </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12 grid-item math">
-                        <div className="project-single-box">
-                            <div className="project-thumb">
-                                <img src={require('../../../assets/images/8.jpg')} alt=""/>
-                                <div className="project-social-menu">
-                                    <ul>
-                                        <li><a href="#"><i className="fa fa-photo"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="project-content">
-                                <div className="project-title">
-                                    <h3><a href="blog-details.html">Mula Chash Prokolpo 04</a></h3>
-                                    <span> Vegetable </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12 grid-item physics maths">
-                        <div className="project-single-box">
-                            <div className="project-thumb">
-                                <img src={require('../../../assets/images/12.jpg')} alt=""/>
-                                <div className="project-social-menu">
-                                    <ul>
-                                        <li><a href="#"><i className="fa fa-photo"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="project-content">
-                                <div className="project-title">
-                                    <h3><a href="blog-details.html">Mula Chash Prokolpo 05</a></h3>
-                                    <span> Vegetable </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6 col-sm-12 grid-item cemes maths">
-                        <div className="project-single-box">
-                            <div className="project-thumb">
-                                <img src={require('../../../assets/images/2.jpg')} alt=""/>
-                                <div className="project-social-menu">
-                                    <ul>
-                                        <li><a href="#"><i className="fa fa-photo"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="project-content">
-                                <div className="project-title">
-                                    <h3><a href="blog-details.html">Mula Chash Prokolpo 02</a></h3>
-                                    <span> Vegetable </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
+                    <RecipeBoard/>
+                    <RecipeBoard/>
+                    <RecipeBoard/>
+                    <RecipeBoard/>
+                    <RecipeBoard/>
+                    <RecipeBoard/>
+                    <RecipeBoard/>
+
+
+
                 </div>
             </div>
         </div>
