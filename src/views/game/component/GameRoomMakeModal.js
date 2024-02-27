@@ -1,11 +1,39 @@
+// React 및 useEffect 가져오기
+import React, { useEffect } from "react";
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './GameRoomMakeModal.css';
 
-function GameRoomMakeModal() {
-    return (
-            <div className='game-room-modal-layout'>
+// disableScroll 및 enableScroll 함수 정의
+const disableScroll = () => {
+  // 스크롤 비활성화를 위한 구현
+  document.body.style.overflow = 'hidden';
+};
+
+const enableScroll = () => {
+  // 스크롤 활성화를 위한 구현
+  document.body.style.overflow = 'auto';
+};
+
+// Modal 컴포넌트
+function GameRoomMakeModal(props) {
+  useEffect(() => {
+    // modal이 떠 있을 땐 스크롤 막음
+    disableScroll();
+    // modal 닫히면 다시 스크롤 가능하도록 함
+    return () => enableScroll();
+  }, []);
+
+  function closeModal() {
+    props.onClose();
+  }
+
+  return (
+    <div className="Modal" onMouseDown={closeModal}>
+      <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{width: '700px',
+        height: '450px', overflow:"hidden", backgroundColor:"rgba(0,0,0,0)", boxShadow:"none"}}>
+        <div className='game-room-modal-layout'>
                 <div className="col-lg-12 col-sm-12 game-modal-layout">
                 <div className="game-room-modal-container grmc1">
 
@@ -63,16 +91,13 @@ function GameRoomMakeModal() {
 
                 <div className="game-room-modal-container grmc3">
                     <button className='game-room-modal-button'>게임 생성</button>
-                    <button className='game-room-modal-button'>취소</button>
+                    <button className='game-room-modal-button' onMouseDown={closeModal}>취소</button>
                 </div>
                 </div>
             </div>
-    );
-  }
-  
-  export default GameRoomMakeModal;
-  
+      </div>
+    </div>
+  );
+}
 
-
-
-
+export default GameRoomMakeModal;
