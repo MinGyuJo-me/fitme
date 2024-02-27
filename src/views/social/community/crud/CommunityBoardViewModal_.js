@@ -27,12 +27,13 @@ function CommunityBoardWriteModal_(props) {
 
   return (
     <div className="Modal" onMouseDown={closeModal}>
+
       <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{width: '1500px',
         height: '900px', overflow:"hidden", backgroundColor:"rgba(0,0,0,0)", boxShadow:"none"}}>
-        <button id="modalCloseBtn" onMouseDown={closeModal} style={{border:"1px solid gray", backgroundColor:"white", borderRadius:"5px"}}>
+        {props.children}
+        <button id="modalCloseBtn" onMouseDown={closeModal} style={{border:"1px solid gray", backgroundColor:"white", width:"35px", height:"35px", borderRadius:"5px"}}>
           ✖
         </button>
-        {props.children}
       </div>
     </div>
   );

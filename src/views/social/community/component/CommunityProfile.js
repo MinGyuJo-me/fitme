@@ -36,12 +36,16 @@ function CommunityProfile(props) {
         });
     };
 
+    const handleRefreshClick = () => {
+        props.setRefresh(!props.refresh);
+    }
+
 
     return (
         <div className="col-lg-12 col-sm-12" >
             <div className="blog-single-box upper" style={{padding:"10px 0px"}}>
             {/******** ★ 새로고침 버튼 ★  ********/}
-            <button className="community-refresh-button" style={{position:"absolute", right:"5px", bottom:"5px", width:"30px", height:"30px", borderRadius:"50%", fontSize:"25px", lineHeight:"20px"}}>↻</button>    
+            <button className="community-refresh-button" style={{position:"absolute", right:"5px", bottom:"5px", width:"30px", height:"30px", borderRadius:"50%", fontSize:"25px", lineHeight:"20px"}} onClick={handleRefreshClick} >↻</button>    
                 <div className="blog-left bl1" style={{padding:"60px 0px"}}>
                     <div style={{display:"flex"}}>
                         <div className="blog-icon bi1" style={{backgroundImage: `url(${props.image})`}}>

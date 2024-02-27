@@ -111,60 +111,54 @@ function CommunityBoardWriteModal(props) {
             ...posts
         });
 
-    
-        if (posts.title !== "") {
-            try {
-                const data = new FormData();
-    
-                for (const file of posts.uploads) {
-                    const base64 = file.split(',')[1];
-                    data.append('uploads', base64);
-                }
-                
-                const imageResponse = await axios.post('http://192.168.0.15:5050/file/uploads', data, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-    
-                setBoardImages(imageResponse.data);
-    
-                const springResponse = await axios.post('http://192.168.0.104:8080/api/v1/boards', {
-                    accountNo: props.accountNo,
-                    title: posts.title,
-                    boardComment: posts.boardComment,
-                    boardCategory: posts.boardCategory,
-                    address: posts.address,
-                    boardImages: imageResponse.data 
-                },{
-                    headers: {
-                        'Authorization' : `${myCookieValue}`,
-                        'Content-Type' : 'application/json; charset=UTF-8'
-                    }
-                });
-                console.log(springResponse.data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
         await swal.fire({
-            title:"등록하시겠습니까?",
-            icon:"question", 
-            button:"확인", 
+            title: "등록하시겠습니까?",
+            icon: "question",
+            showCancelButton: true, // 확인 취소 버튼 노출
+            confirmButtonText: "확인", // 확인 버튼 텍스트
+            cancelButtonText: "취소", // 취소 버튼 텍스트
             customClass: {
                 container: 'my-swal-container'
             }
-        })
-        .then(value => {
-            if(value) {
-                props.setShowModal(false);
+        }).then(async (result) => {
+            if (result.isConfirmed) { // 확인 버튼이 클릭되었는지 확인
+                // 확인 버튼이 클릭되었을 때의 동작
+                try {
+                    const data = new FormData();
+                    for (const file of posts.uploads) {
+                        const base64 = file.split(',')[1];
+                        data.append('uploads', base64);
+                    }
+                        
+                    const imageResponse = await axios.post('http://192.168.0.15:5050/file/uploads', data, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+        
+                    setBoardImages(imageResponse.data);
+        
+                    const springResponse = await axios.post('http://192.168.0.104:8080/api/v1/boards', {
+                        accountNo: props.accountNo,
+                        title: posts.title,
+                        boardComment: posts.boardComment,
+                        boardCategory: posts.boardCategory,
+                        address: posts.address,
+                        boardImages: imageResponse.data 
+                    },{
+                        headers: {
+                            'Authorization' : `${myCookieValue}`,
+                            'Content-Type' : 'application/json; charset=UTF-8'
+                        }
+                    });
+        
+                    props.setShowModal(false);
+
+                } catch (error) {
+                    console.error(error);
+                }
             }
-        })
-
-        
-
-        
+        });
     };
 
 

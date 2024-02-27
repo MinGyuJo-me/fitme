@@ -58,6 +58,7 @@ function Community() {
     const [accountInfo, setAccountInfo] = useState([]);
     const [onDelete, setOnDelete] = useState(false);
     const [updateBoards, setUpdateBoards] = useState([]);
+    const [refresh, setRefresh] = useState(false);
     
 
     useEffect(()=>{
@@ -93,7 +94,7 @@ function Community() {
             })
         })
         .catch(error => console.log(error))
-      }, [onDelete]);
+      }, [onDelete, refresh]);
 
     // 팔로워 클릭 이벤트 핸들러
     function handleFollowerClick(followerInfo) {
@@ -140,7 +141,7 @@ function Community() {
             setBoards(updatedBoards);
         })
         .catch(error => console.log(error));
-    }, [onDelete, showModal, updateBoards]);
+    }, [onDelete, showModal, updateBoards, refresh]);
 
     //모달창 외부 스크롤 방지
     useEffect(() => {
@@ -239,6 +240,8 @@ function Community() {
                             following={userInfo.following}
                             realation={userInfo.realation}
                             loginAccountNo={loginUser.accountNo}
+                            refresh={refresh}
+                            setRefresh={setRefresh}
                         />
                        
                         {/*게시글 박스*/}
