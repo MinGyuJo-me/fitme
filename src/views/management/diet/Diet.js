@@ -123,11 +123,18 @@ function Diet() {
 	const [labels2_, setLabels2] = useState();
 	const [mealTime, setMealTime ] = useState([]);
 
+	//추천 데이타
+	const [recommendData, setRecommendData] = useState();
+	const [recommendChart, setRecommendChart] = useState();
+	const [youtubeLink,setYoutubeLink] = useState();
+
 	//사진데이타 
 	const setYoloFood=(e)=>{
 		console.log('e',e);
 		setSelectedFood(e);
 	}
+
+
 
 	// const yoloFoodElement = fileUploadBoxRef.current.querySelector('.yolo_food');
 	// console.log('yoloFoodElement',yoloFoodElement);
@@ -178,6 +185,7 @@ function Diet() {
 			}
 		})
 		.catch(error => console.log('error',error))
+		
 	},[]);
 
 	//모달창 외부 스크롤 방지
@@ -204,6 +212,7 @@ function Diet() {
 		//프로필 코드 
 		if(dietCal != null){
 			callis(dietCal);
+			recommend(dietCal);
 		}
 	},[dietCal])
 	function callis(accountNo,date){
@@ -468,6 +477,66 @@ function Diet() {
 		],
 	};
 
+	//추천값 받아오기
+	function recommend(accountNo){
+		if(accountNo != null){
+			axios.get(`http://${ipAddress}:5000/recommend/${accountNo}`) 
+			.then((res)=>{
+				// console.log('res.data',res.data.items);//{items: Array(3)} //추천 3개 받아오기
+				setRecommendData(res.data.items); //추천값들을 뿌려주기 위한 변수
+			})
+		}
+	}
+	//추천 음식 차트에 뿌려주기 위해서
+	function recommendFoodChart(e){
+		setYoutubeLink();
+		// console.log('recommendFoodChart',recommendData.find(item=> item.food == e.target.textContent)); //추천 음식 확인
+		axios.get(`http://${ipAddress}:5000/youtube/${e.target.textContent}`) //axios
+		.then(res=>{
+			// console.log('res',res.data);
+			setYoutubeLink(res.data);
+		})
+		// setYoutubeLink(recommendData.find(item=> item.food == e.target.textContent).youtube);
+		const recommendDataNutrients = recommendData.find(item=> item.food == e.target.textContent).rank.slice(2);
+		// console.log('recommendDataNutrients',parseInt(recommendDataNutrients[0])/(calculateBmr() * 0.3)*100);
+		const weight_kg = accountData.weight;
+		// console.log('weight_kg',weight_kg);//몸무게
+		const recommendationsRatio = {
+			'에너지(kcal)': parseInt(recommendDataNutrients[0])/(calculateBmr() * 0.3)*100,   // 예시로 에너지는 전체 칼로리 중 30%로 설정
+			'수분(g)': parseInt(recommendDataNutrients[1])/(weight_kg * 30)*100 ,  // 체중(kg)에 따른 수분 섭취량 (예시)
+			'단백질(g)': parseInt(recommendDataNutrients[1])/(weight_kg * 1.2)*100,  // 체중(kg)에 따른 단백질 섭취량 (예시)
+			'지방(g)': parseInt(recommendDataNutrients[1])/ (weight_kg * 0.8) * 100,  // 체중(kg)에 따른 지방 섭취량 (예시)
+			'회분(g)': parseInt(recommendDataNutrients[1])/200*100, // 예시로 고정된 회분 섭취량 설정
+			'탄수화물(g)': parseInt(recommendDataNutrients[1])/ (weight_kg * 3.5) * 100,  // 체중(kg)에 따른 탄수화물 섭취량 (예시)
+		}
+		setRecommendChart(recommendationsRatio); //추천 음식의 영양소 저장
+	}
+	//BMR 공식
+	function calculateBmr(){
+		// accountData
+		let bmr = 0;
+		if(accountData.gender==='M')
+        	bmr = 10 * accountData.weight + 6.25 * accountData.height - 5 * accountData.age + 5
+		else
+			bmr = 10 * accountData.weight + 6.25 * accountData.height - 5 * accountData.age - 161
+
+    	return bmr;
+
+	}
+	//차트 데이타
+	const recommendChartData = {
+		labels:['에너지(kcal)','수분(g)','단백질(g)','지방(g)','회분(g)','탄수화물(g)'],
+		datasets: [
+			{
+				label: '영양소',
+				data: recommendChart,
+				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgba(255, 99, 132, 0.5)',
+			},
+		],
+	};
+
+
 
   return (
     <div>
@@ -643,31 +712,35 @@ function Diet() {
 			<div className="add-siksa-icon" style={{ backgroundImage: `url(${require('./images/plus6.png')})` }}></div>
 			</button>
 			
+			{/* 음식추천 */}
 			<div className='ai-container' >
 				<div className="main-titles-ai">
 					<h2>AI RECOMMENDATIONS</h2>
 				</div>
 				<div className='list-container-ai'>
 				<ol>
-					<li>Olivia</li>
-					<li>George</li>
-					<li>Harry</li>
+					{recommendData && recommendData.map((food)=>(
+						<li onClick={recommendFoodChart}>{food.food}</li>	
+					))}
+
 				</ol>
 				</div>
 				<div className='chart-info-container-ai' style={{width : 600,height: 400,marginTop:0}}>
 					<div className='chart-info-left-ai' style={{height: 300}}>
-						<Bar options={options} data={data2} />
+						<Bar options={options} data={recommendChartData} />
 					</div>
 				</div>
 				<div className="recommend-layout">
-					<div className="recommend-container">
-						<iframe src="https://www.youtube.com/embed/tBTNMo77h2Q"></iframe>
+					{youtubeLink && youtubeLink.map((link)=>(
+						<div className="recommend-container">
+							<iframe src={link.url}></iframe>
+							<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
+						</div>
+					))}
+					{/* <div className="recommend-container">
+						<iframe width="560" height="315" src="https://www.youtube.com/embed/gUYeEasWU58" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 						<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
-					</div>
-					<div className="recommend-container">
-						<iframe src="https://www.youtube.com/embed/tBTNMo77h2Q"></iframe>
-						<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
-					</div>
+					</div> */}
 				</div>
 			</div>
 
