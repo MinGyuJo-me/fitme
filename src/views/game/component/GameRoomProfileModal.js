@@ -67,7 +67,7 @@ function GameRoomProfileModal(props) {
         axios.post(`http://192.168.0.15:5050/file/uploads`,imagedata)
         .then((response)=>{
           console.log(response.data);
-          resolve("data:image/png;base64,"+response.data['image']);
+          
         });
     } catch(err) {
       console.error(err);
