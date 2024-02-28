@@ -503,7 +503,7 @@ abbr[title] {
 .recommend-layout-w {
   display: flex;
   justify-content: space-between;
-  margin-top: 30px;
+  margin-top: 150px;
 }
 
 .recommend-container-w {
@@ -526,7 +526,7 @@ abbr[title] {
   list-style: none;
   margin-right: 100px;
   margin-left: 100px;
-  margin-top: 200px;
+  margin-top: 50px;
   list-style-image: url(images/training.png);
 }
 .list-container-ai-w ol li{
@@ -565,3 +565,10 @@ abbr[title] {
 }
 
 /* ============== AI추천 ==============*/
+
+.chart-info-container-ai-w {
+  border: 1px solid black;
+  border: none;
+  display: inline-block;
+  margin-bottom: 0px;
+}

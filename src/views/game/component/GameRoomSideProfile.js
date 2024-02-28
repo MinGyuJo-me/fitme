@@ -1,17 +1,23 @@
 import './GameRoomSideProfile.css';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import GameRoomProfileModal from "./GameRoomProfileModal";
 
-function GameRoomSideProfile({showModal,setShowModal,showModal1,setShowModal1}){
-
-
+function GameRoomSideProfile({showModal,setShowModal,showModal1,setShowModal1,imageUrl}){
 
     const [show, setShow] = useState(false);
     const [show1, setShow1] = useState(false);
+    const profile1 = useRef(null);
+
+    const newImage =() =>{
+        profile1.current.style= "background-image:base;"
+    };
+    
 
     const handleClick = () => {
         console.log("클릭");
         setShow(prevShow => !prevShow);
         setShowModal(prevShowModal => !prevShowModal);
+        
     }
 
 
@@ -24,7 +30,8 @@ function GameRoomSideProfile({showModal,setShowModal,showModal1,setShowModal1}){
     return (
         <div className="col-lg-3 col-md-3 game-profile-layout">
             <div className="row">
-                <div className='col-lg-10 col-md-10 game-profile'>
+                <div ref={profile1} onClick={newImage} className='col-lg-10 col-md-10 game-profile'>
+                    {imageUrl && <img src={imageUrl} alt="" />}
                     <button className='game-profile-edit-button' onClick={handleClick1}>+</button>
                 </div>
                 <div className='col-lg-10 col-md-10 game-profile-name'>
