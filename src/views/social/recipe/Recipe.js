@@ -10,6 +10,7 @@ import Breadcumb from '../../component/Breadcumb/Breadcumb';
 import RatingStars from './component/RatingStars';
 import RecipeBoard from './component/RecipeBoard';
 import $ from 'jquery';
+import RecipeBoardViewModal from './crud/RecipeBoardViewModal';
 
 function Recipe() {
     useEffect(()=>{
@@ -48,7 +49,6 @@ function Recipe() {
 
 
                 <div className="row image_load">
-                    
                     <RecipeBoard/>
                     <RecipeBoard/>
                     <RecipeBoard/>
@@ -56,12 +56,19 @@ function Recipe() {
                     <RecipeBoard/>
                     <RecipeBoard/>
                     <RecipeBoard/>
-
-
-
                 </div>
             </div>
         </div>
+
+        <RecipeBoardViewModal/>
+
+
+
+
+
+
+
+
         {/*
         <!--==================================================-->
         <!-- Start brand-area -->
