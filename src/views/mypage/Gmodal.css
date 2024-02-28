@@ -17,6 +17,17 @@
   right: 20px; 
 }
 
+.PPCR img {
+  max-width: 100%;
+  max-height: 200px; /* 예시로 지정한 최대 높이 */
+  }
+
+.PPCR span {
+  display: block;
+  margin-top: 10px;
+  color: #888;
+  }
+
 .Gprofile-edit-button {
   padding: 8px 20px;
   background-color: #1BBC9B;

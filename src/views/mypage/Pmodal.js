@@ -128,7 +128,7 @@ function Modal(props) {
       showConfirmButton: true,
       customClass:{
         container:'m-sweet-con',
-        icon: 'm-sweet-icon',
+        icon: 'm-sweet-icon Mwicon',
       },
       allowOutsideClick: false, // 모달 외부 클릭으로 닫히지 않도록 설정
       allowEscapeKey: false // ESC 키로 모달 닫히지 않도록 설정
@@ -144,7 +144,7 @@ function Modal(props) {
         showConfirmButton: true,
         customClass: {
           container:'m-sweet-con',
-          icon: 'm-sweet-danger',
+          icon: 'm-sweet-danger MswdR',
         },
         allowOutsideClick: false, // 모달 외부 클릭으로 닫히지 않도록 설정
         allowEscapeKey: false // ESC 키로 모달 닫히지 않도록 설정
@@ -156,14 +156,14 @@ function Modal(props) {
   
   
   return (
-    <div className="Modal" onMouseDown={props.onClose}>
+    <div className="Modal MB" onMouseDown={props.onClose}>
       <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{ width: '450px' }}>
         <button id="modalCloseBtn" onMouseDown={props.onClose}>
           ✖
         </button>
-        <h2>회원 정보 수정</h2>
+        <h2 style={{fontSize:'30px'}}>회원 정보 수정</h2>
         <form onSubmit={handleSubmit}>
-          <label className="profile-picture-container">
+          <label className="profile-picture-container PPCR">
             프로필 사진
             <div>
               <input type="file" className="profilePicture" onChange={handleFileChange} />
