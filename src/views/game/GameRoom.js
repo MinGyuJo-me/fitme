@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
 
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useRef } from 'react';
+import io from 'socket.io-client';
 
 import Breadcumb from '../component/Breadcumb/Breadcumb';
 import Loader from '../component/loader/Loader';
@@ -26,122 +27,155 @@ const StyledHeader = styled.div`
 
 function GameRoom() {
 
+const [myStream, setMyStream] = useState(null);
+    const [cameras, setCameras] = useState([]);
+    const [selectedCamera, setSelectedCamera] = useState("");
+    const [muted, setMuted] = useState(false);
+    const [cameraOff, setCameraOff] = useState(false);
+    const [roomName, setRoomName] = useState("");
+    const myFace = useRef(null);
+    const peerFace = useRef(null);
+    
+    const socket = io("/");
 
+    // WebRTC 연결을 위한 ref
+    const myPeerConnection = useRef(null);
 
+    // 사용 가능한 카메라 목록을 가져오는 함수
+    const getCameras = async () => {
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+            setCameras(videoDevices);
+            if(videoDevices.length > 0 && !selectedCamera){
+                setSelectedCamera(videoDevices[0].deviceId);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
-  useEffect(()=>{
-      $('body').addClass('loaded');
-  });
+    // 카메라 변경 이벤트 핸들러
+    const handleCameraChange = async (event) => {
+        setSelectedCamera(event.target.value);
+        await getMedia(event.target.value);
+    };
 
-  return (
-    <div style={{position:"absolute", width:"100%"} }>
-      <div style={{margin:"auto", marginTop:"20px", width:"1500px"}}>
-          <div className='col-lg-12 col-md-12 game-match-container'>
-          {/******** 카메라 설정 영역 ***********/}
-          <select className="camera-select">
-            <option value="">1번</option>
-            <option value="">2번</option>
-            <option value="">3번</option>
-          </select>
-          {/***********************************/}
-            
-            <div className='webRTC-layout'>
-              
+    // 미디어 스트림을 가져오는 함수
+    const getMedia = async (deviceId) => {
+        const constraints = {
+            audio: true,
+            video: { deviceId: deviceId ? { exact: deviceId } : undefined },
+        };
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            if (myFace.current) {
+                myFace.current.srcObject = stream;
+            }
+            setMyStream(stream);
+            if (myPeerConnection.current) {
+                stream.getTracks().forEach(track => {
+                    myPeerConnection.current.addTrack(track, stream);
+                });
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
-            {/********************* 토글 메뉴 (음소거, 나가기 등등) **********************/}
-            <div className='webRTC-button-container'>
-                <div className="webRTC-button">
-                  {/********************* (소리 음소거 버튼) **********************/}
-                  <img src={require("./images/gamematch_sound.png")}/>
-                </div>
-                <div className="webRTC-button">
-                  {/********************* (보이스 음소거 버튼) **********************/}
-                  <img src={require("./images/gamematch_mic.png")}/>
-                </div>
-                <div className="webRTC-button">
-                  {/********************* (비디오 그기 버튼) **********************/}
-                  <img src={require("./images/gamematch_video.png")}/>
-                </div>
-                <div className="webRTC-button">
-                  {/********************* (나가기 버튼) **********************/}
-                  <img src={require("./images/gamematch_quit.png")}/>
+    const setupWebRTC = () => {
+        myPeerConnection.current = new RTCPeerConnection({
+            iceServers: [
+                {
+                    urls: [
+                      "stun:stun.l.google.com:19302",
+                      "stun:stun1.l.google.com:19302",
+                      "stun:stun2.l.google.com:19302",
+                      "stun:stun3.l.google.com:19302",
+                      "stun:stun4.l.google.com:19302",
+                  ],
+                }
+            ]
+        });
+
+        myPeerConnection.current.onicecandidate = (event) => {
+            if (event.candidate) {
+                socket.emit("ice", event.candidate, roomName);
+            }
+        };
+
+        myPeerConnection.current.ontrack = (event) => {
+            if (peerFace.current && !peerFace.current.srcObject) {
+                peerFace.current.srcObject = event.streams[0];
+            }
+        };
+
+        socket.on("offer", async (offer) => {
+            myPeerConnection.current.setRemoteDescription(new RTCSessionDescription(offer));
+            const answer = await myPeerConnection.current.createAnswer();
+            myPeerConnection.current.setLocalDescription(new RTCSessionDescription(answer));
+            socket.emit("answer", answer, roomName);
+        });
+
+        socket.on("answer", (answer) => {
+            myPeerConnection.current.setRemoteDescription(new RTCSessionDescription(answer));
+        });
+
+        socket.on("ice", (ice) => {
+            myPeerConnection.current.addIceCandidate(new RTCIceCandidate(ice));
+        });
+    };
+
+    useEffect(() => {
+        getCameras();
+        getMedia(selectedCamera).then(setupWebRTC);
+    }, [selectedCamera]);
+    
+    const toggleMute = () => {
+      setMuted(!muted);
+      if(myStream) {
+          myStream.getAudioTracks()[0].enabled = !myStream.getAudioTracks()[0].enabled;
+      }
+    };
+
+    const toggleCamera = () => {
+      setCameraOff(!cameraOff);
+      if(myStream) {
+          myStream.getVideoTracks()[0].enabled = !myStream.getVideoTracks()[0].enabled;
+      }
+    };
+
+    return (
+        <div style={{position:"absolute", width:"100%"}}>
+            <div style={{margin:"auto", marginTop:"20px", width:"1500px"}}>
+                <div className='col-lg-12 col-md-12 game-match-container'>
+                    <div className='webRTC-layout'>
+                        <div className='webRTC-button-container'>
+                            {/* 음소거 및 카메라 토글 버튼 */}
+                            <div className="webRTC-button" onClick={toggleMute}>
+                                {/* <img src={muted ? micImg : soundImg} alt="음소거 버튼"/> */}
+                                <img src={require("./images/gamematch_mic.png")}/>
+                            </div>
+                            <div className="webRTC-button" onClick={toggleCamera}>
+                                {/* <img src={cameraOff ? videoImg : quitImg} alt="카메라 온/오프 버튼"/> */}
+                                <img src={require("./images/gamematch_video.png")}/>
+                            </div>
+                        </div>
+                        <select className="camera-select" onChange={handleCameraChange} value={selectedCamera}>
+                            {cameras.map((camera) => (
+                                <option key={camera.deviceId} value={camera.deviceId}>
+                                    {camera.label || `카메라 ${camera.deviceId}`}
+                                </option>
+                            ))}
+                        </select>
+                        <div className='webRTC-container'>
+                            <div className='webRTC-item wi1'><video ref={myFace} autoPlay playsInline muted={muted}/></div>
+                            <div className='webRTC-item wi2'><video ref={peerFace} autoPlay playsInline/></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            {/**************************************************************/}
-
-
-
-              <div className='webRTC-container'>
-                <div className='webRTC-item wi1'>
-                  {/******** 화상 영상 넣는 부분(본인)  ***********/}
-                  <video muted autoPlay loop>
-                    <source src="/videos/main_title.mp4" type="video/mp4"/>
-                  </video>
-                  {/*********************************************/}
-                  <div className='webRTC-popup'>
-                    <div className='div'>
-                      {/******** 게임 통계 버튼 ***********/}
-                      1번
-                    </div>
-                    <div className='div'>
-                      {/******** 게임 통계 버튼 ***********/}
-                      2번
-                    </div>
-                    <div className='div'>
-                      {/******** 게임 통계 버튼 ***********/}
-                      3번
-                    </div>
-                  </div>
-                </div>
-
-
-                <div className='webRTC-item wi2'>
-                  {/******** 화상 영상 넣는 부분(상대방)  ***********/}
-                  <video muted autoPlay loop>
-                    <source src="/videos/main_title.mp4" type="video/mp4"/>
-                  </video>
-                  {/*********************************************/}
-                  <div className='webRTC-popup'>
-                    <div className='div'>
-                        {/******** 게임 통계 버튼 ***********/}
-                        1번
-                      </div>
-                      <div className='div'>
-                        {/******** 게임 통계 버튼 ***********/}
-                        2번
-                      </div>
-                      <div className='div'>
-                        {/******** 게임 통계 버튼 ***********/}
-                        3번
-                      </div>
-                    </div>
-
-
-                    <div className='webRTC-footer-bar'>
-                      {/******** 상대방 영상 음소거, 카메라 끄기용 버튼 ***********/}
-                      <button className='mute'>
-                      <img src={require("./images/gamematch_video.png")}/>
-                        {/******** 상대방 영상 음소거 버튼 ***********/}
-                      </button>
-                      <button  className='camera-turn-off'>
-                        <img src={require("./images/gamematch_mic.png")}/>
-                        {/******** 상대방 영상 끄기/켜기 버튼 ***********/}
-                      </button>
-                    </div>
-                  </div>
-
-                  
-              </div>
-              
-
-
-
-            </div>     
-          </div>
-      </div>
-    </div>
-  );
-}
-
+        </div>
+    );
+};
 export default GameRoom;
-

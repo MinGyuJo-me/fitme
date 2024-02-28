@@ -117,7 +117,7 @@ function GameRoomProfileModal(props) {
         //   .catch((error)=>{
         //     console.error("이미지 업로드 또는 정보 전송 중 오류 발생:",error);
         //   });
-        
+
     } catch(err) {
       console.error(err);
     } finally {
