@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom';
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
@@ -16,6 +16,9 @@ function Recipe() {
     useEffect(()=>{
         $('body').addClass('loaded');
     });
+
+
+    const [recipeBoardViewModal,setRecipeBoardViewModal] = useState(true);
 
   return (
     <div>
@@ -60,7 +63,8 @@ function Recipe() {
             </div>
         </div>
 
-        <RecipeBoardViewModal/>
+        {recipeBoardViewModal && (<RecipeBoardViewModal onClose={() => setRecipeBoardViewModal(false)}/>)}
+        
 
 
 

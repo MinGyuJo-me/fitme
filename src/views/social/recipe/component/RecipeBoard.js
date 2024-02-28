@@ -30,7 +30,7 @@ function RecipeBoard() {
                 </div>
             </div>
             <div className="project-content">
-                <div className="project-title" style={{height:"80%", left:"0", right:"0", margin:"auto"}}>
+                <div className="project-title" style={{height:"85%", left:"0", right:"0", margin:"auto"}}>
                     <div className='project-writer-image'>
                     
                     </div>
@@ -43,7 +43,7 @@ function RecipeBoard() {
                         <i className="fa-solid fa-star"></i>
                     </div>
 
-                    <h3 style={{display:"block", width:"90%", margin:"auto"}}><a href="blog-details.html">ㅇㅇㅇ 만드는 법ㅇㄴㄹㅇㄴㄹㄴㅇㅇㅁㄴㅇㅁㄴㅇ</a></h3>
+                    <h3 style={{display:"block", width:"90%", margin:"auto", marginBottom:"10px"}}><a href="blog-details.html">ㅇㅇㅇ 만드는 법ㅇㄴㄹㅇㄴㄹㄴㅇㅇㅁㄴㅇㅁㄴㅇ</a></h3>
                     <span> Vegetable </span>
                 </div>
             </div>
