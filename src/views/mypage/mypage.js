@@ -11,6 +11,20 @@ import { useNavigate } from "react-router-dom";
 
 import axios from 'axios';
 
+//datepicker사용
+//npm install @mui/x-date-pickers
+//npm install @mui/material @emotion/react @emotion/styled
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import 'dayjs/locale/ko'
+//npm install dayjs
+import dayjs from 'dayjs';
+import moment from "moment";
+
+
 import { Chart as ChartJS,
     BarElement,
     CategoryScale,
@@ -24,7 +38,6 @@ import { Chart as ChartJS,
 import { Doughnut,Bar,Line } from 'react-chartjs-2';
   
 ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Legend);
-
 
 
 var ipAddress = '192.168.0.15';
@@ -109,7 +122,7 @@ function MyPage() {
         
         const myCookieValue = getCookie('Authorization');
         setMyCookie(myCookieValue);
-        console.log('myCookieValue',myCookieValue);
+        // console.log('myCookieValue',myCookieValue);
         if(myCookieValue == null){ //로그인 확인
             navigate('/signin');
         }
@@ -123,7 +136,7 @@ function MyPage() {
         })
         .then(response => {
             var proflieData = response.data;
-            console.log('proflieData',proflieData);
+            // console.log('proflieData',proflieData);
             setAccountNo(proflieData.accountNo);
             if(proflieData.image!=null){
                 imageData(proflieData.image).then((test)=>{
@@ -152,7 +165,7 @@ function MyPage() {
     },[])
 
     useEffect(()=>{
-        console.log('accountNo',accountNo);
+        // console.log('accountNo',accountNo);
         if(accountNo != null){
             axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
                 .then(response =>{
@@ -247,6 +260,22 @@ function MyPage() {
         },
     };
 
+    //해당 일주일을 찾자준다
+    function week(startDate){
+        // 주어진 날짜가 속한 주의 일요일을 찾습니다.
+        const sunday = new Date(startDate);
+        sunday.setDate(startDate.getDate() - startDate.getDay());
+
+        // 배열을 초기화합니다.
+        const dateArray = [];
+
+        // 일요일부터 토요일까지의 날짜를 배열에 추가합니다.
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(sunday);
+            date.setDate(sunday.getDate() + i);
+            dateArray.push(date);
+        }
+    }
 
 
     return (
@@ -442,8 +471,32 @@ function MyPage() {
             </div>
         </div>
         
-
+    
+                    
     <div className="container">
+        <div className="date_picker-mp">
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+                    <DemoContainer components={['DatePicker']}>
+                    <DatePicker 
+                    // value={selectOne != null ? selectOne[5] : ''}
+                    label="날짜 설정" 
+                    //value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
+                    slotProps={{
+                        textField: {
+                        size: "small",
+                        format: 'YYYY-MM-DD HH:mm'
+                        },
+                    }}r
+                    />
+                    </DemoContainer>
+                    </LocalizationProvider>
+                    </div>
+                    {/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
+                    <div className="date_picker-mp">
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+
+                    </LocalizationProvider>
+        </div> 
 	<div className="title">
 		<h1>섭취 칼로리</h1>
 	</div>
@@ -484,6 +537,9 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
+                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                    <Line options={options} data={data1} />
+                </div>
                 <div className="col-lg-inbody">
                 <div id="status-inbody"></div>
                 </div>
@@ -497,6 +553,9 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
+                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                    <Line options={options} data={data1} />
+                </div>
                 <div className="col-lg-inbody">
                     <div id="status-workout-progress"></div>
                 </div>
@@ -511,6 +570,9 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
+                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                    <Line options={options} data={data1} />
+                </div>
                 <div className="col-lg-inbody">
                     <div id="status-meal-statistics"></div>
                 </div>
@@ -524,6 +586,9 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
+                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                    <Line options={options} data={data1} />
+                </div>
                 <div className="col-lg-inbody">
                     <div id="status-workout-statistics"></div>
                 </div>
