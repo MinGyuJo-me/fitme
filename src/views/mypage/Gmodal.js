@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Gmodal.css';
+import './Pmodal.css';
 import Swal from 'sweetalert2';
 
 async function imageData(code) {
@@ -122,7 +123,7 @@ function Modal(props) {
       title: '수정이 완료되었습니다.',
       showConfirmButton: true,
       customClass:{
-        container:'m-sweet-con',
+        container:'m-sweet-con Mwicon',
         icon: 'm-sweet-icon',
       },
       allowOutsideClick: false, // 모달 외부 클릭으로 닫히지 않도록 설정
@@ -139,7 +140,7 @@ function Modal(props) {
         showConfirmButton: true,
         customClass: {
           container:'m-sweet-con',
-          icon: 'm-sweet-danger',
+          icon: 'm-sweet-danger MswdR',
         },
         allowOutsideClick: false, // 모달 외부 클릭으로 닫히지 않도록 설정
         allowEscapeKey: false // ESC 키로 모달 닫히지 않도록 설정
@@ -152,21 +153,23 @@ function Modal(props) {
   
   
   return (
-    <div className="Modal" onMouseDown={props.onClose}>
+    <div className="Modal MB" onMouseDown={props.onClose}>
       <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{ width: '450px' }}>
         <button id="modalCloseBtn" onMouseDown={props.onClose}>
           ✖
         </button>
-        <h2>게임 프로필 수정</h2>
+        <h2 style={{fontSize:'30px'}}>게임 프로필 수정</h2>
         <form onSubmit={handleSubmit}>
-          <label className="profile-picture-container">
+          <label className="profile-picture-contaner PPCR"
+          style={{border: '2px dashed #ccc',padding:'20px',borderRadius:'5px',textAlign:'center',marginLeft:'35px'}}
+          >
             프로필 사진
             <div>
-              <input type="file" name="gameImage" className="profilePicture" onChange={handleFileChange} />
+              <input type="file" name="gameImage" className="profilePicture " onChange={handleFileChange}/>
               {previewImage ? (
                 <img src={previewImage} alt="프로필 사진" className="profile-picture" />
               ) : (
-                <span>사진을 등록해 주세요</span>
+                <span style={{display:'block',marginTop:'10px',color:'#888'}}>사진을 등록해 주세요</span>
               )}
             </div>
           </label>
