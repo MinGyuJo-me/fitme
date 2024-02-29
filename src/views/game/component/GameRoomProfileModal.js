@@ -11,6 +11,18 @@ import { upload } from "@testing-library/user-event/dist/upload";
 
 var ipAddress = '192.168.0.110';
 
+//쿠기값 받아오는 함수
+function getCookie(name) { //로그인 여부 확인
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(name + '=')) {
+    return cookie.substring(name.length + 1);
+    }
+  }
+  return null;
+  }
+
 // disableScroll 및 enableScroll 함수 정의
 const disableScroll = () => {
   // 스크롤 비활성화를 위한 구현
@@ -30,8 +42,25 @@ function GameRoomProfileModal(props) {
   const [imageUrl, setImageUrl] = useState(''); // 생성된 이미지의 URL
   const [loading, setLoading] = useState(false); // 로딩 상태
   const [confirm, setConfirm] = useState(false); // 이미지 생성 후 사용 확인 버튼 상태
+  const [accountNo, setAccountNo] = useState(); //유저 어카운트 넘버 변수
 
   useEffect(() => {
+    //로그인 확인 및 어카운트 넘버 가져오기
+    const myCookieValue = getCookie('Authorization');
+
+		axios.get(`/api/v1/foodworks/account`, {
+		headers: {
+			'Authorization' : `${myCookieValue}`,
+			'Content-Type' : 'application/json; charset=UTF-8'
+		}
+		})
+		.then(response => {
+			var proflieData = response.data;
+			// console.log('proflieData',proflieData.accountNo);
+      setAccountNo(proflieData.accountNo);
+		})
+		.catch(error => console.log('error',error))
+
     disableScroll(); // 모달이 열릴 때 스크롤 비활성화
     return () => enableScroll(); // 컴포넌트가 언마운트 될 때(modal 닫히면) 스크롤 활성화
   }, []);
@@ -56,24 +85,43 @@ function GameRoomProfileModal(props) {
       setLoading(true); //로딩 시작
 
       //POST 요청 Flask 서버에 이미지 생성 요청
-      const res = await axios.post(`http://${ipAddress}:5000/chatImage`, { message: inputText });
+      const res = await axios.post(`http://${ipAddress}:5000/chatImage`, { message: inputText,'accountNo' : accountNo});
+      console.log('resres',res); //이아래 일련번호 및 이미지 전부 메인에서
         //응답에서 base64 인코딩된 이미지 데이터를 가져와 state에 저장
         setImageUrl(`data:image/png;base64,${res.data.image_data}`);
         setConfirm(true);
         // FormData 객체 생성 및 이미지 데이터 추가
-        const imagedata=new FormData();
-        imagedata.append('uploads',res.data.image_data)
-        // 이미지 서버에 이미지 데이터 업로드 요청
-        axios.post(`http://192.168.0.15:5050/file/uploads`,imagedata)
-        .then((response)=>{
-          console.log(response.data);
-          resolve("data:image/png;base64,"+response.data['image']);
-        });
+        // const imagedata=new FormData();
+        // imagedata.append('uploads',res.data.image_data)
+        // // 이미지 서버에 이미지 데이터 업로드 요청 후, 업로드된 이미지 정보를 Flask 서버로 전송
+        // axios.post(`http://192.168.0.15:5050/file/uploads`,imagedata)
+        // .then((response)=>{
+        //   console.log(accountNo,':',response.data);//어카운트 : 이미지 일련번호 //[2161] 결과 값 (문제 3)
+        //   const formData = new FormData();
+        //   formData.append('accountNo',accountNo);
+        //   formData.append('imageUrl',response.data);
+        //   // const uploadInfo ={
+        //   //   accountNo : accountNo,           //여기에 어카운트도 같이 보내주시면 좋습니다 
+        //   //   imageUrl : response.data, // 업로드된 이미지 URL //일단 url존재 X
+        //   // };
+        //   return axios.post(`http://${ipAddress}:5000/chatImage`,formData,{
+        //     headers: {
+        //     'Content-Type': 'multipart/form-data',
+        //     },
+        //   });
+        //   })
+        //   .then((response)=>{
+        //     // flask 서버 응답 확인
+        //     console.log("이미지 정보 전송 성공:",response.data);
+        //   })
+        //   .catch((error)=>{
+        //     console.error("이미지 업로드 또는 정보 전송 중 오류 발생:",error);
+        //   });
+
     } catch(err) {
       console.error(err);
     } finally {
       setLoading(false); //로딩 종료
-      
     }
 
   };

@@ -4,100 +4,126 @@ import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './GameRoomMakeModal.css';
-
-// disableScroll 및 enableScroll 함수 정의
-const disableScroll = () => {
-  // 스크롤 비활성화를 위한 구현
-  document.body.style.overflow = 'hidden';
-};
-
-const enableScroll = () => {
-  // 스크롤 활성화를 위한 구현
-  document.body.style.overflow = 'auto';
-};
+import { useState } from 'react';
+import $ from 'jquery';
 
 // Modal 컴포넌트
 function GameRoomMakeModal(props) {
+  // disableScroll 및 enableScroll 함수 정의
+  const disableScroll = () => {
+      document.body.style.overflow = 'hidden';
+  };
+  
+  const enableScroll = () => {
+      document.body.style.overflow = 'auto';
+  };
+
   useEffect(() => {
-    // modal이 떠 있을 땐 스크롤 막음
-    disableScroll();
-    // modal 닫히면 다시 스크롤 가능하도록 함
-    return () => enableScroll();
+      disableScroll();
+      return () => enableScroll();
   }, []);
 
+  // 게임 모드 선택 상태 관리
+  const [selectedGameMode, setSelectedGameMode] = useState("");
+
+  // 쿠키에서 accountNo 가져오기
+  const getAccountNoFromCookie = () => {
+      const accountNo = getCookie('Authorization');
+      return accountNo;
+  };
+
+  // 쿠키에서 값을 가져오는 함수
+  const getCookie = (name) => {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith(name + '=')) {
+              return cookie.substring(name.length + 1);
+          }
+      }
+      return null;
+  };
+
   function closeModal() {
-    props.onClose();
+      props.onClose();
   }
+
+  const test = (e) => {
+      $(".game-mode-card-image").removeClass("card-click-active");
+      $(e.target).closest('.game-mode-card').find(".game-mode-card-image").addClass("card-click-active");
+      console.log(e.target.className);
+      setSelectedGameMode(e.target.className);
+  };
+
+  // 게임 생성 함수
+  const createGame = () => {
+      const accountNo = getAccountNoFromCookie();
+      console.log(`선택된 게임 모드: ${selectedGameMode}, accountNo: ${accountNo}`);
+
+      // AJAX를 이용한 서버로의 데이터 전송
+      $.ajax({
+          url: "/game/createRoom", // 서버의 엔드포인트 주소
+          type: "POST",
+          contentType: "application/json", // 서버가 JSON 형식의 데이터를 받을 수 있도록 설정
+          data: JSON.stringify({
+              gameMode: selectedGameMode, // 사용자가 선택한 게임 모드
+              accountNo: accountNo // 쿠키에서 가져온 accountNo
+          }),
+          success: function(response) {
+              // 서버로부터의 응답 처리
+              console.log("게임 생성 성공", response);
+              alert("게임이 성공적으로 생성되었습니다.");
+          },
+          error: function(xhr, status, error) {
+              // 에러 처리
+              console.error("게임 생성 실패", xhr, status, error);
+              alert("게임 생성에 실패하였습니다.");
+          }
+      });
+  };
+
+
 
   return (
     <div className="Modal" onMouseDown={closeModal}>
-      <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{width: '700px',
-        height: '450px', overflow:"hidden", backgroundColor:"rgba(0,0,0,0)", boxShadow:"none"}}>
-        <div className='game-room-modal-layout'>
+        <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{width: '700px', height: '450px', overflow:"hidden", backgroundColor:"rgba(0,0,0,0)", boxShadow:"none"}}>
+            <div className='game-room-modal-layout'>
                 <div className="col-lg-12 col-sm-12 game-modal-layout">
-                <div className="game-room-modal-container grmc1">
-
-                    <div className='game-room-modal-title'>
-                    Game Mode
+                    <div className="game-room-modal-container grmc1">
+                        <div className='game-room-modal-title'>Game Mode</div>
+                        <div className="game-room-modal-select">게임생성</div>
+                        <div className='game-room-modal-title'>People</div>
+                        <div className="game-room-modal-select">2</div>
                     </div>
-
-                    <select className="game-room-modal-select">
-                        <option value="">랭킹</option>
-                        <option value="">친선</option>
-                    </select>
-
-                    <div className='game-room-modal-title'>
-                    Peoples
+                    <div className="game-room-modal-container grmc2" onClick={test}>
+                        <OwlCarousel items={4} nav={false} dots={false}>
+                            <div className="game-mode-card squat">
+                                <div className='game-mode-card-image gmci1' style={{pointerEvents:"none"}}></div>
+                                <div className='game-mode-card-title'>스쿼트</div>
+                            </div>
+                            <div className="game-mode-card pushUp">
+                                <div className='game-mode-card-image gmci2'></div>
+                                <div className='game-mode-card-title'>팔굽혀 펴기</div>
+                            </div>
+                            <div className="game-mode-card sitUp">
+                                <div className='game-mode-card-image gmci3'></div>
+                                <div className='game-mode-card-title'>윗몸 일으키기</div>
+                            </div>
+                            <div className="game-mode-card random">
+                                <div className='game-mode-card-image gmci4'></div>
+                                <div className='game-mode-card-title'>랜덤 게임</div>
+                            </div>
+                        </OwlCarousel>
                     </div>
-                    <select className="game-room-modal-select">
-                        <option value="">2</option>
-                        <option value="">3</option>
-                        <option value="">4</option>
-                    </select>
-                </div>
-
-                <div className="game-room-modal-container grmc2">
-                    <OwlCarousel items={4} nav={false} dots={false}>
-                    <div className="game-mode-card">
-                    <div className='game-mode-card-image gmci1'>
+                    <div className="game-room-modal-container grmc3">
+                        <button className='game-room-modal-button' onClick={createGame}>게임 생성</button>
+                        <button className='game-room-modal-button' onMouseDown={closeModal}>취소</button>
                     </div>
-                    <div className='game-mode-card-title'>
-                        스쿼트
-                    </div>
-                    </div>
-                    <div className="game-mode-card">
-                    <div className='game-mode-card-image gmci2'>
-                    </div>
-                    <div className='game-mode-card-title'>
-                        윗몸 운동
-                    </div>
-                    </div>
-                    <div className="game-mode-card">
-                    <div className='game-mode-card-image gmci3'>
-                    </div>
-                    <div className='game-mode-card-title'>
-                        팔굽혀 펴기
-                    </div>
-                    </div>
-                    <div className="game-mode-card">
-                    <div className='game-mode-card-image gmci4'>
-                    </div>
-                    <div className='game-mode-card-title'>
-                        랜덤 게임
-                    </div>
-                    </div>
-                    </OwlCarousel>
-                </div>
-
-                <div className="game-room-modal-container grmc3">
-                    <button className='game-room-modal-button'>게임 생성</button>
-                    <button className='game-room-modal-button' onMouseDown={closeModal}>취소</button>
-                </div>
                 </div>
             </div>
-      </div>
+        </div>
     </div>
-  );
+);
 }
 
 export default GameRoomMakeModal;
