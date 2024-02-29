@@ -30,11 +30,11 @@ function MyPageSidebar() {
 
     return (
         <div className='sidebar-toggle-mode'>
-            <div className="page-wrapper chiller-theme">
+            <div className="page-wrapper chiller-theme" style={{border:"1px solid green", width:"100%"}}>
                 <a id="show-sidebar" className="btn btn-sm btn-dark">
                 <i className="fas fa-bars"></i>
                 </a>
-            <nav id="sidebar" className="sidebar-wrapper">
+            <nav id="sidebar" className="sidebar-wrapper" >
                 <div className='absolute-position-menu'>
 
                 
