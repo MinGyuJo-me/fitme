@@ -163,3 +163,7 @@
 .profile-edit-button:hover {
     background-color: #1ed2ad;
 }
+
+.date_picker-mp {    
+   float: right;
+}
