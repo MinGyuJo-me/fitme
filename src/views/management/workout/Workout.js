@@ -553,17 +553,6 @@ function Workout() {
             	</div>
 				</div>
             </div>
-			<div className='chart-info-container'style={{height: 500, marginBottom: 0}}>
-				<div className="main-titles-chart">
-					<h2>CHART DESCRIPTION</h2>
-				</div>
-				<div className='chart-info-left' style={{height: 300}}>
-					<Bar options={options} data={data2} />
-				</div>
-				<div className='chart-info-right' style={{height: 300}}>
-					<Line options={options} data={data1} />
-				</div>
-			</div>
 			</div>
 
 			

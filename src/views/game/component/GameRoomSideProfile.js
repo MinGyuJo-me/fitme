@@ -1,15 +1,35 @@
 import './GameRoomSideProfile.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import GameRoomProfileModal from "./GameRoomProfileModal";
+import axios from 'axios';
 
-function GameRoomSideProfile({showModal,setShowModal,showModal1,setShowModal1,imageUrl}){
+
+var ipAddress = '192.168.0.110';
+
+function GameRoomSideProfile({showModal,setShowModal,showModal1,setShowModal1,imageUrl,accountNo}){
 
     const [show, setShow] = useState(false);
     const [show1, setShow1] = useState(false);
+    const [profileImageUrl, setProfileImageUrl] = useState('');
     const profile1 = useRef(null);
 
+    useEffect(() => {
+        if(accountNo) {
+            axios.get(`http://${ipAddress}:5000/chatImage?accountNo=${accountNo}`)
+                .then(response => {
+                    if(response.data && response.data.image_url){
+                        setProfileImageUrl(response.data.image_url);
+                    }
+                })
+                .catch(error => console.error("프로필 이미지를 불러오는 중 에러 발생:",error));
+        }
+    })
+
+    
     const newImage =() =>{
         profile1.current.style= "background-image:base;"
+        // 이 함수는 필요에 따라 수정이 필요할 수 있습니다.
+        // console.log('새 이미지 함수 호출');
     };
     
 
@@ -17,9 +37,7 @@ function GameRoomSideProfile({showModal,setShowModal,showModal1,setShowModal1,im
         console.log("클릭");
         setShow(prevShow => !prevShow);
         setShowModal(prevShowModal => !prevShowModal);
-        
     }
-
 
     const handleClick1 = () => {
         console.log("클릭");
@@ -31,7 +49,8 @@ function GameRoomSideProfile({showModal,setShowModal,showModal1,setShowModal1,im
         <div className="col-lg-3 col-md-3 game-profile-layout">
             <div className="row">
                 <div ref={profile1} onClick={newImage} className='col-lg-10 col-md-10 game-profile'>
-                    {imageUrl && <img src={imageUrl} alt="" />}
+                    {/* {imageUrl && <img src={imageUrl} alt="" />} */}
+                    {profileImageUrl && <img src={profileImageUrl} alt="Profile"/>}
                     <button className='game-profile-edit-button' onClick={handleClick1}>+</button>
                 </div>
                 <div className='col-lg-10 col-md-10 game-profile-name'>
@@ -53,8 +72,3 @@ function GameRoomSideProfile({showModal,setShowModal,showModal1,setShowModal1,im
   }
   
   export default GameRoomSideProfile;
-  
-
-
-
-
