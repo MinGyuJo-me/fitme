@@ -16,6 +16,21 @@ import ChatBot from '../../component/chatBot/ChatBot';
 
 import DropDown from './dropDown';
 
+//이미지서버 연결 
+async function imageData(code){
+  return await new Promise((resolve,reject)=>{
+    try{
+    axios.get(`http://192.168.0.15:5050/image/${code}`)
+    .then((response)=>{
+        // console.log(response.data);
+      resolve("data:image/png;base64,"+response.data['image']);
+    })
+    }
+    catch(err){reject(err)};
+  },2000);
+  }
+
+
 function getCookie(name) { //로그인 여부 확인
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -37,7 +52,7 @@ function Messenger() {
     //채팅방 이름 변경
     const [editChattingRoom,setEditChattingRoom] = useState();
     const [editRoomName,setEditRoomName] = useState();
-    //
+ 
     const [chatRoomNo,setChatRoomNo] = useState();
   
     const [chattingRoom,SetChattingRoom] = useState([]);
@@ -57,6 +72,35 @@ function Messenger() {
       };
     //모달창 업데이트 딜리트 출력
     const [isOpen, setIsOpen] = useState();
+
+    
+
+    //검색
+    const [searchInput, setSearchInput] = useState('');
+    const [filteredChatRooms, setFilteredChatRooms] = useState([]);
+
+    
+//이미지서버 연결 
+    async function imageData(code){
+      return await new Promise((resolve,reject)=>{
+        try{
+        axios.get(`http://192.168.0.15:5050/image/${code}`)
+        .then((response)=>{
+            // console.log(response.data);
+          resolve("data:image/png;base64,"+response.data['image']);
+        })
+        }
+        catch(err){reject(err)};
+      },2000);
+      }
+
+    //유저 정보
+    const [accountData, setAccount] = useState([]);
+
+    
+
+
+    
 
     useEffect(() => {
         // Add or remove the 'no-scroll' class to the html and body elements based on the modal's open state
@@ -103,6 +147,17 @@ function Messenger() {
         })
     }
 
+    const handleSearch = (query) => {
+      setSearchInput(query);
+    
+      // 검색 쿼리를 기반으로 채팅방 필터링
+      const filteredRooms = chattingRoom.filter((room) =>
+        room.chattingNick.toLowerCase().includes(query.toLowerCase())
+      );
+    
+      setFilteredChatRooms(filteredRooms);
+    };
+
     //엔터키 막기
     const onEnterSubmit = (e) => {
       try {
@@ -148,6 +203,7 @@ function Messenger() {
         });
         client.current.activate();
     };
+
   
     const publish = (num,chat,check) => {
         if (!client.current.connected) return;
@@ -209,26 +265,37 @@ function Messenger() {
     };
     
     useEffect(() => {
-        const myCookieValue = getCookie('Authorization');
-        
-        axios.get(`/api/v1/foodworks/account`, {
+      const myCookieValue = getCookie('Authorization');
+      
+      axios.get(`/api/v1/foodworks/account`, {
           headers: {
-            'Authorization': `${myCookieValue}`,
-            'Content-Type': 'application/json; charset=UTF-8'
+              'Authorization': `${myCookieValue}`,
+              'Content-Type': 'application/json; charset=UTF-8'
           }
-        })
-        .then(response => {
+      })
+      .then(response => {
           var profileData = response.data;
           if (profileData.accountNo != null) {
-            setUserId(profileData.accountNo);
-            setName(profileData.name);
+              setUserId(profileData.accountNo);
+              setName(profileData.name);
+              if(profileData.image != null){
+                  imageData(profileData.image).then((test) => {
+                      profileData.image = test;
+                      setAccount(profileData);
+                  });
+              } else {
+                  imageData(1).then((test) => {
+                      profileData.image = test;
+                      setAccount(profileData);
+                  });
+              }
           }
-        })
-        .catch(error => console.log('error', error))
-            
-        connect();
-        return () => disconnect();
-      }, []);
+      })
+      .catch(error => console.log('error', error))
+      
+      connect();
+      return () => disconnect();
+  }, []);
       
       // handleSubmit 함수를 모달이 열릴 때 호출되는 이벤트 리스너에 연결
       useEffect(() => {
@@ -344,55 +411,79 @@ function Messenger() {
         <div className="c_container clearfix">
     <div className="people-list" id="people-list">
       <div className="search">
-        <input type="text" placeholder="search" />
+        <input
+          type="text"
+          placeholder="검색"
+          value={searchInput}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
         <i className="fa fa-search"></i>
-
+      </div>
+    <div>
+        <div>
         <i className="fa fa-plus-square" id='add-friend-icon' onClick={toggleModal}>
           <input id='addChattingRoom' type='hidden' value='0'/>
-        </i>
-      
-      </div>
-      <div>
-
-        <div>
-        <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}>
-          <input id='addChattingRoom' type='hidden' value='0'/>
-          채팅방 추가하기
+          &nbsp;&nbsp;채팅방 추가
         </i>
         </div>
-        
       </div>
       <ul className="list">
-        {chattingRoom.map((chat)=>(
-          
-            <li className="clearfix" onClick={chatRoom}>
-              <div className="about" >
-                  <input id='chatChattingNo' type='hidden' value={chat.chattingNo}/>
-                  <input id='chatChattingUserNo' type='hidden' value={chat.accountNo}/>
-                  {editChattingRoom == chat.chattingNo ? 
+        {searchInput.length > 0
+          ? filteredChatRooms.map((chat) => (
+              <li className="clearfix" key={chat.chattingNo} onClick={chatRoom}>
+                {/* 필터된 채팅방 내용 렌더링 */}
+                <div className="about">
+                  <input id="chatChattingNo" type="hidden" value={chat.chattingNo} />
+                  <input id="chatChattingUserNo" type="hidden" value={chat.accountNo} />
+                  {editChattingRoom === chat.chattingNo ? (
                     <form onSubmit={editChattingRoomName}>
-                      <input value={editRoomName == null ? chat.chattingNick: editRoomName} onChange={handleInputChange}/>
+                      <input value={editRoomName == null ? chat.chattingNick : editRoomName} onChange={handleInputChange} />
                     </form>
-                  :
+                  ) : (
                     <div className="name">{chat.chattingNick}</div>
-                  }
+                  )}
                   <div className="status">
-                    <i className="fa fa-circle online"></i> {chat.count}명
+                    <i className="fa fa-circle online"></i> {chat.count}
                   </div>
-              </div>
-              <DropDown kingNo={chat.accountNo} accountNo={userId} onCheck={setCheck} chatringNo={chat.chattingNo} />
-            </li>
-        ))}
+                </div>
+                <DropDown kingNo={chat.accountNo} accountNo={userId} onCheck={setCheck} chatringNo={chat.chattingNo} />
+              </li>
+            ))
+          : chattingRoom.map((chat) => (
+              <li className="clearfix" key={chat.chattingNo} onClick={chatRoom}>
+                {/* 전체 채팅방 내용 렌더링 */}
+                <div className="about">
+                  <input id="chatChattingNo" type="hidden" value={chat.chattingNo} />
+                  <input id="chatChattingUserNo" type="hidden" value={chat.accountNo} />
+                  {editChattingRoom === chat.chattingNo ? (
+                    <form onSubmit={editChattingRoomName}>
+                      <input value={editRoomName == null ? chat.chattingNick : editRoomName} onChange={handleInputChange} />
+                    </form>
+                  ) : (
+                    <div className="name">{chat.chattingNick}</div>
+                  )}
+                  <div className="status">
+                    <i className="fa fa-circle online"></i> {chat.count}
+                  </div>
+                </div>
+                <DropDown kingNo={chat.accountNo} accountNo={userId} onCheck={setCheck} chatringNo={chat.chattingNo} />
+              </li>
+            ))}
       </ul>
     </div>
     
     <div className="m-chat">
       <div className="chat-header clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
-        
+        <img src={accountData.image}
+        width="70px" height="70px" alt="profile-icon"/>
         <div className="chat-about">
-          <div className="chat-with">{userId}</div>
-          <div className="chat-num-messages">already 1 902 messages</div>
+          <div className="chat-with">{name}</div>
+          {chattingRoom.map((chat) => (
+            //채팅방 이름 받기
+            chat.chattingNo == chatRoomNo ? 
+          <div key={chat.chattingNo} className="chatroom-name-messages">{chat.chattingNick}에 참여중</div>
+          : ''
+        ))}
         </div>
         <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}></i>
         {isOpen && (
@@ -453,7 +544,7 @@ function Messenger() {
       
       <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)} onKeyDown={onEnterSubmit}>
             <textarea name="message-to-send" id="message-to-send" placeholder ="메시지를 입력해 주세요" onChange={handleChange} rows="3"></textarea>
-            <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>     
+            <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>  
             <button>Send</button>
       </form> 
       
