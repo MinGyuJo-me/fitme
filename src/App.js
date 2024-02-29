@@ -16,7 +16,7 @@ import MyPage from './views/mypage/MyPage.js';
 import Game from './views/game/Game.js';
 import GameRoom from './views/game/GameRoom.js'
 import FindPassword from './views/findpassword/FindPassword.js';
-import Admin from './views/admin/adminmain/AdminMain.js'
+
 
 import './assets/css/bootstrap.min.css';
 
@@ -54,8 +54,6 @@ function App() {
     <div className="App">
         <BrowserRouter>
           <Routes>
-            {/*관리자 페이지*/}
-            <Route path={'/admin'} element={<Admin/>}/>
             {/* 메인화면 */}
             <Route path={"/"} element={<Main/>}/>
 
