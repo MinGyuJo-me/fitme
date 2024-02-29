@@ -122,7 +122,7 @@ function MyPage() {
         
         const myCookieValue = getCookie('Authorization');
         setMyCookie(myCookieValue);
-        // console.log('myCookieValue',myCookieValue);
+        console.log('myCookieValue',myCookieValue);
         if(myCookieValue == null){ //로그인 확인
             navigate('/signin');
         }
@@ -136,7 +136,7 @@ function MyPage() {
         })
         .then(response => {
             var proflieData = response.data;
-            // console.log('proflieData',proflieData);
+            console.log('proflieData',proflieData);
             setAccountNo(proflieData.accountNo);
             if(proflieData.image!=null){
                 imageData(proflieData.image).then((test)=>{
@@ -165,7 +165,7 @@ function MyPage() {
     },[])
 
     useEffect(()=>{
-        // console.log('accountNo',accountNo);
+        console.log('accountNo',accountNo);
         if(accountNo != null){
             axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
                 .then(response =>{
@@ -260,22 +260,6 @@ function MyPage() {
         },
     };
 
-    //해당 일주일을 찾자준다
-    function week(startDate){
-        // 주어진 날짜가 속한 주의 일요일을 찾습니다.
-        const sunday = new Date(startDate);
-        sunday.setDate(startDate.getDate() - startDate.getDay());
-
-        // 배열을 초기화합니다.
-        const dateArray = [];
-
-        // 일요일부터 토요일까지의 날짜를 배열에 추가합니다.
-        for (let i = 0; i < 7; i++) {
-            const date = new Date(sunday);
-            date.setDate(sunday.getDate() + i);
-            dateArray.push(date);
-        }
-    }
 
 
     return (
@@ -537,9 +521,6 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
-                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                    <Line options={options} data={data1} />
-                </div>
                 <div className="col-lg-inbody">
                 <div id="status-inbody"></div>
                 </div>
@@ -553,9 +534,6 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
-                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                    <Line options={options} data={data1} />
-                </div>
                 <div className="col-lg-inbody">
                     <div id="status-workout-progress"></div>
                 </div>
@@ -570,9 +548,6 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
-                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                    <Line options={options} data={data1} />
-                </div>
                 <div className="col-lg-inbody">
                     <div id="status-meal-statistics"></div>
                 </div>
@@ -586,9 +561,6 @@ function MyPage() {
         </div>
         <div className="company-info-section">
             <div className="sideber-box">
-                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                    <Line options={options} data={data1} />
-                </div>
                 <div className="col-lg-inbody">
                     <div id="status-workout-statistics"></div>
                 </div>
