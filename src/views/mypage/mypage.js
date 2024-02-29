@@ -11,6 +11,20 @@ import { useNavigate } from "react-router-dom";
 
 import axios from 'axios';
 
+//datepicker사용
+//npm install @mui/x-date-pickers
+//npm install @mui/material @emotion/react @emotion/styled
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import 'dayjs/locale/ko'
+//npm install dayjs
+import dayjs from 'dayjs';
+import moment from "moment";
+
+
 import { Chart as ChartJS,
     BarElement,
     CategoryScale,
@@ -24,7 +38,6 @@ import { Chart as ChartJS,
 import { Doughnut,Bar,Line } from 'react-chartjs-2';
   
 ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Legend);
-
 
 
 var ipAddress = '192.168.0.15';
@@ -458,8 +471,32 @@ function MyPage() {
             </div>
         </div>
         
-
+    
+                    
     <div className="container">
+        <div className="date_picker-mp">
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+                    <DemoContainer components={['DatePicker']}>
+                    <DatePicker 
+                    // value={selectOne != null ? selectOne[5] : ''}
+                    label="날짜 설정" 
+                    //value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
+                    slotProps={{
+                        textField: {
+                        size: "small",
+                        format: 'YYYY-MM-DD HH:mm'
+                        },
+                    }}r
+                    />
+                    </DemoContainer>
+                    </LocalizationProvider>
+                    </div>
+                    {/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
+                    <div className="date_picker-mp">
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+
+                    </LocalizationProvider>
+        </div> 
 	<div className="title">
 		<h1>섭취 칼로리</h1>
 	</div>
