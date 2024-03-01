@@ -58,7 +58,8 @@ function Community() {
     const [accountInfo, setAccountInfo] = useState([]);
     const [onDelete, setOnDelete] = useState(false);
     const [updateBoards, setUpdateBoards] = useState([]);
-    const [refresh, setRefresh] = useState(false);
+    const [refresh, setRefresh] = useState(false); //초기화 버튼 상태값
+    const [hashTag, setHashtag] = useState(''); //해쉬태그 클릭시 해쉬태그 값 상태값
     
 
     useEffect(()=>{
@@ -141,7 +142,7 @@ function Community() {
             setBoards(updatedBoards);
         })
         .catch(error => console.log(error));
-    }, [onDelete, showModal, updateBoards, refresh]);
+    }, [onDelete, showModal, refresh]);
 
     //모달창 외부 스크롤 방지
     useEffect(() => {
@@ -197,14 +198,13 @@ function Community() {
         });
     }
 
-    // useEffect(() => {
-    //     console.log(messaging); 
-    // });
+    useEffect(() => {
+        setBoards(updateBoards);
+    }, [updateBoards]);
 
   return (
     <div>
         {/* 챗봇용 플로팅 */}
-        {/* <ChatbotFloating/> */}
         <ChatBot/>
         {/*헤더 위*/}
         <HeaderTop/>
@@ -226,6 +226,8 @@ function Community() {
                             showModal={showModal}
                             setShowModal={setShowModal}
                             setUpdateBoards={setUpdateBoards}
+                            hashTag={hashTag}
+                            
                         />
                         {/*특정 사용자 프로필 영역*/}
                         <CommunityProfile
@@ -263,6 +265,7 @@ function Community() {
                                 onButtonClicked={handleButtonClickedFromChild}
                                 loginAccountNo={loginUser.accountNo}
                                 setOnDelete={setOnDelete}
+                                setHashtag={setHashtag}
                             />
                         ))}
 
