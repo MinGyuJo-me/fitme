@@ -1,7 +1,8 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import './GameRoomContainer.css';
 
-function GameRoomContainer() {
+function GameRoomContainer(props) {
+  console.log(props);
   return (
     <div className="gameroom-container">
       <div className='gameroom-people-count'>
