@@ -9,7 +9,6 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import CommunityBoardViewModal from './CommunityBoardViewModal';
 import CommunityBoardViewModal_ from './CommunityBoardViewModal_';
-/*■■■■■■■■■■■■■■■■■■   게시글 수정 모달   ■■■■■■■■■■■■■■■■■■*/
 import CommunityBoardEditModal from './CommunityBoardEditModal';
 
 function CommunityBoard(props) {
@@ -147,16 +146,40 @@ function CommunityBoard(props) {
 
     //스크랩 관련
     const scrapHandle = () => {
-        const bno = props.bno;
-        axios.post('http://192.168.0.104:8080/api/v1/boards/scrap', bno, {
-            headers: {
-                'Authorization': `${myCookieValue}`,
-                'Content-Type': 'application/json; charset=UTF-8'
+
+        swal.fire({
+            title: `해당 게시글을 스크랩하시겠습니까?`,
+            text: "마이페이지에서 확인 가능",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소",
+        }).then(async (result) => {
+            if(result.isConfirmed) {
+                const bno = props.bno;
+                axios.post('http://192.168.0.104:8080/api/v1/boards/scrap', bno, {
+                    headers: {
+                        'Authorization': `${myCookieValue}`,
+                        'Content-Type': 'application/json; charset=UTF-8'
+                    }
+                })
+                .then(response => {
+                    console.log(response.data);
+                    swal.fire({
+                        title: "스크랩 성공!",
+                        icon: "success",
+                        button: "확인"
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
             }
         })
-        .then(response => {
-            console.log(response.data);
-        })
+
+        
     };
 
     //게시글 삭제
@@ -180,7 +203,7 @@ function CommunityBoard(props) {
                             'Content-Type': 'application/json; charset=UTF-8'
                         }
                     });
-                    let resMessge = response.data;
+                    const resMessge = response.data;
                     if (resMessge === '성공') {
                         swal.fire({
                             title: "삭제 성공!",
@@ -205,18 +228,15 @@ function CommunityBoard(props) {
         });
     };
 
-    
-
-    {/**************** 버튼 사용 ************/}
     const onClickList = (e) =>{
         $(e.target.parentElement.parentElement).find(".community-detail-button-list").slideToggle();
     }
 
-    {/*■■■■■■■■■■■■■■■■■■   게시글 수정 useState   ■■■■■■■■■■■■■■■■■■*/}
+    //게시글 수정 로직
     const [isOpenCommunityBoardEditModal, setIsOpenCommunityBoardEditModal] = useState(false);
     const [showCommunityBoardEditModal, setShowCommunityBoardEditModal] = useState(false);
 
-    {/*■■■■■■■■■■■■■■■■■■   게시글 수정 버튼   ■■■■■■■■■■■■■■■■■■*/}
+    //수정 버튼 클릭 이벤트
     const onClickEdit = (e) =>{
         console.log("수정");
         setShowCommunityBoardEditModal(true);
@@ -228,6 +248,72 @@ function CommunityBoard(props) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    //게시글 신고 로직
+    const onClickReport = (e) => {
+        swal.fire({
+            title: "신고하시겠습니까?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            customClass: {
+                container: 'my-swal-container'
+            },
+            input: 'text',
+            inputPlaceholder: '신고 사유를 입력하세요',
+            inputValidator: (value) => {
+                if (!value) {
+                    return '신고 사유를 입력해주세요';
+                }
+            }
+        }).then((result) => {
+            if(result.isConfirmed) {
+                const reportData = {
+                    bno:props.bno,
+                    reportComment:result.value
+                }
+                axios.post('http://192.168.0.104:8080/api/v1/boards/reports', reportData, {
+                    headers: {
+                        'Authorization' : `${myCookieValue}`,
+                        'Content-Type' : 'application/json; charset=UTF-8'
+                    }
+                })
+                .then(response => {
+                    const reportMessage = response.data;
+                    if(reportMessage === "이미 신고한 게시글 입니다!") {
+                        swal.fire({
+                            title:`${reportMessage}`,
+                            icon:"warning",
+                            confirmButtonText: "확인",
+                            customClass: {
+                                container: 'my-swal-container'
+                            }
+                        });
+                    } else {
+                        swal.fire({
+                            title:`${reportMessage}`,
+                            icon:"success",
+                            confirmButtonText: "확인",
+                            customClass: {
+                                container: 'my-swal-container'
+                            }
+                        });
+                    }                    
+                })
+                .catch(err => {
+                    swal.fire({
+                        title:`${err}`,
+                        icon:"error",
+                        confirmButtonText: "확인",
+                        customClass: {
+                            container: 'my-swal-container'
+                        }
+                    });
+                })
+            }
+        })
+        
+    }
 
     return (
         <div className="col-lg-12 col-sm-12">
@@ -244,7 +330,7 @@ function CommunityBoard(props) {
                     {props.loginAccountNo == props.accountNo ? <div onClick={onClickDelete}>삭제</div> : ""}
                     {/*■■■■■■■■■■■■■■■■■■   수정 버튼 모달 활성화 onClick   ■■■■■■■■■■■■■■■■■■*/}
                     {props.loginAccountNo == props.accountNo ? <div onClick={onClickEdit}>수정</div> : ""}
-                    {props.loginAccountNo !== props.accountNo ? <div>신고</div> : ""}
+                    {props.loginAccountNo !== props.accountNo ? <div onClick={onClickReport} >신고</div> : ""}
                 </div>
                 <div className="blog-left" style={{padding:"60px 0px 40px 20px"}}>
                     <div className="blog-icon bi1"  style={{backgroundImage: `url(${props.image})`}} onClick={() => handleButtonClick(props.accountNo)}>
@@ -372,6 +458,7 @@ function CommunityBoard(props) {
                     onClose={() => {setShowCommunityBoardEditModal(false);}}
                     bno={props.bno}
                     boardImages={boardImages}
+                    setBoardImages={setBoardImages}
                     title={props.title}
                     comment={props.comment}
                     category={props.category}

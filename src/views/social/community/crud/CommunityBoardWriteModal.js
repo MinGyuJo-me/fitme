@@ -5,7 +5,6 @@ import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './CommunityBoardWriteModal.css';
 import axios from 'axios';
 import swal from 'sweetalert2';
-import { post } from 'jquery';
 
 function CommunityBoardWriteModal(props) {
     function getCookie(name) {
@@ -39,9 +38,7 @@ function CommunityBoardWriteModal(props) {
     }
 
     const handleKeyDown = (e) => {
-        
         e.preventDefault();
-
         if(e.code === 'Enter') {
             if(!(inputValue === ''))  {
                 if(!hashtags.includes(inputValue)) {
@@ -58,6 +55,7 @@ function CommunityBoardWriteModal(props) {
         
     }, [hashtags])
 
+    //게시글 등록
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [boardImages, setBoardImages] = useState([]);
     const [posts, setPosts] = useState({
