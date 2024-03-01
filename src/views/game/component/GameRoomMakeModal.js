@@ -22,6 +22,7 @@ function GameRoomMakeModal(props) {
 
   useEffect(() => {
       disableScroll();
+
       return () => enableScroll();
   }, []);
 
@@ -46,6 +47,8 @@ function GameRoomMakeModal(props) {
       }
       return null;
   };
+  
+  const myCookieValue = getCookie('Authorization');
 
   function closeModal() {
       props.onClose();
@@ -60,12 +63,16 @@ function GameRoomMakeModal(props) {
 
   // 게임 생성 함수
     const createGame = () => {
-        const accountNo = getAccountNoFromCookie();
-        console.log(`게임 생성 요청 시작: ${selectedGameMode}, accountNo: ${accountNo}`);
+        console.log(`게임 생성 요청 시작: ${selectedGameMode}, myCookie: ${myCookieValue}`);
 
-        axios.post('/api/v1/game/createRoom', {
-        gameMode: selectedGameMode, 
-        accountNo: accountNo, 
+        axios.post(`/api/v1/game/createRoom/${selectedGameMode}`,{
+            gameMode: selectedGameMode, 
+            accountNo: myCookieValue, 
+        },{
+            headers: {
+                'Authorization' : `${myCookieValue}`,
+                'Content-Type' : 'application/json; charset=UTF-8'
+            }
         })
         .then(response => {
         console.log("게임 생성 성공", response.data);
