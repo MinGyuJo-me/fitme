@@ -6,13 +6,15 @@ import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './GameRoomMakeModal.css';
 import { useState } from 'react';
 import $ from 'jquery';
+import axios from "axios";
+import {useNavigate} from 'react-router-dom';
 
 // Modal 컴포넌트
 function GameRoomMakeModal(props) {
-  // disableScroll 및 enableScroll 함수 정의
-  const disableScroll = () => {
-      document.body.style.overflow = 'hidden';
-  };
+    const navigate = useNavigate();
+    const disableScroll = () => {
+        document.body.style.overflow = 'hidden';
+    };
   
   const enableScroll = () => {
       document.body.style.overflow = 'auto';
@@ -29,6 +31,7 @@ function GameRoomMakeModal(props) {
   // 쿠키에서 accountNo 가져오기
   const getAccountNoFromCookie = () => {
       const accountNo = getCookie('Authorization');
+      console.log(`쿠키에서 가져온 accountNo: ${accountNo}`);
       return accountNo;
   };
 
@@ -48,39 +51,32 @@ function GameRoomMakeModal(props) {
       props.onClose();
   }
 
-  const test = (e) => {
+  const workoutType = (e) => {
       $(".game-mode-card-image").removeClass("card-click-active");
       $(e.target).closest('.game-mode-card').find(".game-mode-card-image").addClass("card-click-active");
-      console.log(e.target.className);
+      console.log(`게임 모드 선택: ${e.target.className}`);
       setSelectedGameMode(e.target.className);
   };
 
   // 게임 생성 함수
-  const createGame = () => {
-      const accountNo = getAccountNoFromCookie();
-      console.log(`선택된 게임 모드: ${selectedGameMode}, accountNo: ${accountNo}`);
+    const createGame = () => {
+        const accountNo = getAccountNoFromCookie();
+        console.log(`게임 생성 요청 시작: ${selectedGameMode}, accountNo: ${accountNo}`);
 
-      // AJAX를 이용한 서버로의 데이터 전송
-      $.ajax({
-          url: "/game/createRoom", // 서버의 엔드포인트 주소
-          type: "POST",
-          contentType: "application/json", // 서버가 JSON 형식의 데이터를 받을 수 있도록 설정
-          data: JSON.stringify({
-              gameMode: selectedGameMode, // 사용자가 선택한 게임 모드
-              accountNo: accountNo // 쿠키에서 가져온 accountNo
-          }),
-          success: function(response) {
-              // 서버로부터의 응답 처리
-              console.log("게임 생성 성공", response);
-              alert("게임이 성공적으로 생성되었습니다.");
-          },
-          error: function(xhr, status, error) {
-              // 에러 처리
-              console.error("게임 생성 실패", xhr, status, error);
-              alert("게임 생성에 실패하였습니다.");
-          }
-      });
-  };
+        axios.post('/api/v1/game/createRoom', {
+        gameMode: selectedGameMode, 
+        accountNo: accountNo, 
+        })
+        .then(response => {
+        console.log("게임 생성 성공", response.data);
+        alert("게임이 성공적으로 생성되었습니다.");
+        navigate('/game/room');
+        })
+        .catch(error => {
+        console.error("게임 생성 실패", error);
+        alert("게임 생성에 실패하였습니다.");
+        });
+    };
 
 
 
@@ -95,7 +91,7 @@ function GameRoomMakeModal(props) {
                         <div className='game-room-modal-title'>People</div>
                         <div className="game-room-modal-select">2</div>
                     </div>
-                    <div className="game-room-modal-container grmc2" onClick={test}>
+                    <div className="game-room-modal-container grmc2" onClick={workoutType}>
                         <OwlCarousel items={4} nav={false} dots={false}>
                             <div className="game-mode-card squat">
                                 <div className='game-mode-card-image gmci1' style={{pointerEvents:"none"}}></div>
