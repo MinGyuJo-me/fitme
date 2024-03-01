@@ -56,14 +56,14 @@ function CommunityBoardEditModal(props) {
                         </>
                     /*)*/}
                     <OwlCarousel {...options}>
-                        {/*selectedFiles.map((file, index) => (*/}
-                            <div className="blog-thumb" /*key={index}*/>
-                                <img /*src={URL.createObjectURL(file)}*/ alt="" style={{ height: 500 }} />
+                        {props.boardImages.map((image, index) => (
+                            <div className="blog-thumb" key={index}>
+                                <img src={image} alt="" style={{ height: 500 }} />
                                 <div className="blog-btn">
-                                    <div>{/*`${index + 1}/${selectedFiles.length}`*/}</div>
+                                  <div>{`${index + 1}/${props.boardImages.length}`}</div>
                                 </div>
                             </div>
-                        {/*))*/}
+                        ))}
                     </OwlCarousel>
                 </div>
                 <div className="blog-content" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>

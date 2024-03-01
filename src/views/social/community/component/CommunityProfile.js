@@ -22,7 +22,7 @@ function CommunityProfile(props) {
     const handleAddFriendClick = () => {
         const opponentNo = props.accountNo;
         
-        axios.post(`http://192.168.0.104:8080/api/v1/boards/follow`, opponentNo , {
+        axios.post(`http://192.168.0.15:8080/api/v1/boards/follow`, opponentNo , {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'

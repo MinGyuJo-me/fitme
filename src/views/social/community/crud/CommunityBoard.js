@@ -91,7 +91,7 @@ function CommunityBoard(props) {
     //좋아요 버튼 기능
     const [isLiked, setIsLiked] = useState(false);
     const [isBeating, setIsBeating] = useState(false);
-    const [checkLike, setCheckLike] = useState();
+    const [checkLike, setCheckLike] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const data = new FormData();
 
@@ -126,36 +126,23 @@ function CommunityBoard(props) {
     //좋아요 버튼 클릭 이벤트
     const handleClick = () => {
 
-        //isLiked가 true일 시 한번 더 누르면 삭제 시키게 false이면 등록 되게 만듬
-        if(isLiked) {
-            data.append('bno', props.bno);
-            data.append('preState', 1);
-            axios.post('http://192.168.0.104:8080/api/v1/boards/like', data , {
-                headers: {
-                    'Authorization': `${myCookieValue}`,
-                    'Content-Type': 'application/json; charset=UTF-8'
-                }
-            })
-            .then(response => {
-                console.log(response.data);
-            })
-        } else {
-            data.append('bno', props.bno);
-            data.append('preState', 0);
-            axios.post('http://192.168.0.104:8080/api/v1/boards/like', data , {
-                headers: {
-                    'Authorization': `${myCookieValue}`,
-                    'Content-Type': 'application/json; charset=UTF-8'
-                }
-            })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-        }
+        data.append('bno', props.bno);
+        data.append('preState', isLiked ? 1: 0);
+
+        axios.post('http://192.168.0.104:8080/api/v1/boards/like', data , {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+            }
+        })
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
         setIsLiked(!isLiked);
+        
     };
 
     //스크랩 관련
@@ -235,6 +222,12 @@ function CommunityBoard(props) {
         setShowCommunityBoardEditModal(true);
     }
     
+    //해쉬태그 클릭 시 검색 로직
+    const hashtaingClick = (e) => {
+        props.setHashtag(e.target.innerText);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
 
     return (
         <div className="col-lg-12 col-sm-12">
@@ -288,7 +281,7 @@ function CommunityBoard(props) {
                     {/********** 해시태그 위치 **************/}
                     <div className='community-board-hashtag'>
                         {props.category.split(",").map((tag, index) => (
-                            <span key={index}>{tag.trim()}</span>
+                            <span key={index} onClick={hashtaingClick}>{tag.trim()}</span>
                         ))}
                     </div>
                         <div className="blog-button-container">
@@ -300,7 +293,7 @@ function CommunityBoard(props) {
 
                                 <div className="heart-icon-wrapper">
                                     <div 
-                                        className={`heart-icon ${isLiked ? 'heart-liked ' : ''} ${isBeating ? 'heart-beating' : ''}`}
+                                        className={`heart-icon ${isLiked ? 'heart-liked ' : ''} ${isBeating ? 'heart-dots heart-beating' : ''}`}
                                         onMouseEnter={handleMouseEnter}
                                         onMouseLeave={handleMouseLeave}
                                         onClick={handleClick}
@@ -374,8 +367,16 @@ function CommunityBoard(props) {
             )}
             {/*■■■■■■■■■■■■■■■■■■ 게시판 수정 모달 ■■■■■■■■■■■■■■■■■■*/}
             {showCommunityBoardEditModal && (
-                <CommunityBoardEditModal open={isOpenCommunityBoardEditModal} onClose={() => {setShowCommunityBoardEditModal(false);}}>
-                </CommunityBoardEditModal>
+                <CommunityBoardEditModal 
+                    open={isOpenCommunityBoardEditModal} 
+                    onClose={() => {setShowCommunityBoardEditModal(false);}}
+                    bno={props.bno}
+                    boardImages={boardImages}
+                    title={props.title}
+                    comment={props.comment}
+                    category={props.category}
+
+                />
             )}
                 
             
