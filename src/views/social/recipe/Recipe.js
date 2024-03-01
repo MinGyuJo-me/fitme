@@ -12,7 +12,7 @@ import RecipeBoard from './component/RecipeBoard';
 import $ from 'jquery';
 import axios from 'axios'; //npm install axios
 
-const ipAddress = '192.168.0.14';
+const ipAddress = '192.168.0.15';
 
 //배열 섞기
 function shuffle(array) {
