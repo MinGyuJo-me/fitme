@@ -1,16 +1,12 @@
-import {Form, Link} from 'react-router-dom';
-import React, { useState,useEffect,useRef} from 'react';
-
-//npm install axios
+import React, { useState,useEffect} from 'react';
 import axios from 'axios';
 import $ from 'jquery';
-
-
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './CommunityBoardViewModal.css';
+import CommunityComment from './CommunityComment';
 
 function CommunityBoardViewModal(props) {
 
@@ -39,6 +35,11 @@ function CommunityBoardViewModal(props) {
     //input 태그 안의 값 저장용
     const [inputValue, setInputValue] = useState('');
 
+    const [updataComment, setUpdataComment] = useState(false);
+
+    //댓글 삭제 상태값 저장용 - 댓글 삭제 시 랜더링
+    const [isDeleting, setIsDeleting] = useState(false);
+
     const options = {
         margin:10,
         loop: true,
@@ -64,10 +65,10 @@ function CommunityBoardViewModal(props) {
             }
         })
         .then(response => {
-            console.log(response.data);
             setComments(response.data);
+            setIsDeleting(false);
         })
-    },[postComment]);
+    },[postComment,updataComment, isDeleting]);
 
     //********댓글 등록 메소드**************//
     //input 태그에 입력된 값 저장
@@ -75,18 +76,20 @@ function CommunityBoardViewModal(props) {
         setInputValue(e.target.value); // 입력된 값으로 상태 업데이트
     };
 
+    
+
     //댓글 등록 
     const handlePost =(e) => {
-
-        //댓글 등록시 필요한 데이터 
-        //1.bno, 2.accountNo(현재 로그인 중인 회원), 3.bcComment
         setPostComment({
             bno:props.bno,
             accountNo:props.loginAccountNo,
             bcComment:inputValue
         });
+        setInputValue('');
+        
     }
 
+    //댓글 등록
     useEffect(() => {
         if (!postComment.bno || !postComment.accountNo || !postComment.bcComment) {
             // 필요한 데이터가 아직 모두 준비되지 않았을 경우 무시
@@ -100,7 +103,8 @@ function CommunityBoardViewModal(props) {
             }
         })
         .then(response => {
-            console.log(response.data);
+            setUpdataComment(!updataComment);
+            setInputValue('');
         })
         .catch(error => {
             console.error('Error while posting comment:', error);
@@ -119,14 +123,9 @@ function CommunityBoardViewModal(props) {
         setShowCommunityBoardEditModal(true);
     }
 
-    {/*■■■■■■■■■■■■■■■■■■■ 댓글 하트 버튼 따로 이벤트하려면 여기에서 백 작업 넣으면 됨. ■■■■■■■■■■■■■■■■■■■*/}
-    const commentLike = (e) =>{
-        $(e.target.parentElement.parentElement).find(".heart-color").toggleClass("heart-liked");
-        console.log("댓글 클릭임");
-        {/*■■■■■■■■■■■■■■■■■■■ 어떤 댓글인지 내용 출력 (예시용) ■■■■■■■■■■■■■■■■■■■*/}
-        console.log($(e.target.parentElement.parentElement.parentElement).text());
+    
 
-    }
+
 
     return (
         <div className='row justify-content-md-center' style={{borderRadius:"5px", paddingTop:"20px", height:"105%"}}>
@@ -193,85 +192,25 @@ function CommunityBoardViewModal(props) {
                         <div className='blog-comment'>
                             <table className="blog-comment-table">
                                 {comments.map(comment => (
-                                    <>
-                                    <tr>
-                                        <td>{comment.name}</td>
-                                        <td>
-                                            {comment.bcComment}
-                                            {/***************** 게시판 상세보기 버튼. ***************/}
-                                            <div className='comment-icon-layout'>
-                                            <button>
-                                                    {/*■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 좋아요 버튼  ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■*/}
-                                                    <div className="heart-icon-wrapper" onClick={commentLike}>
-                                                        <div className='heart-color' style={{pointerEvents:"none"}}>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-15 0 350 350" style={{transform:"translateY(-3px)"}}>
-                                                            <path d="M150 57.3C100.2-17.4.7 26.3.7 107.6c0 55 49.7 94.2 87.1 123.8 38.8 30.7 49.8 37.3 62.2 49.8 12.4-12.4 22.8-19.7 62.2-49.8 37.9-29 87.1-69.4 87.1-124.4 0-80.7-99.5-124.4-149.3-49.7z" fill-rule="evenodd" clip-rule="evenodd"/>
-                                                            </svg>
-                                                            <span className="i1"></span>
-                                                            <span className="i2"></span>
-                                                            <span className="i3"></span>
-                                                            <span className="i4"></span>
-                                                            <span className="i5"></span>
-                                                            <span className="i6"></span>
-                                                            <span className="i7"></span>
-                                                            <span className="i8"></span>
-                                                            <span className="i1"></span>
-                                                            <span className="i2"></span>
-                                                            <span className="i3"></span>
-                                                            <span className="i4"></span>
-                                                            <span className="i5"></span>
-                                                            <span className="i6"></span>
-                                                            <span className="i7"></span>
-                                                            <span className="i8"></span>
-                                                            <span className="i1"></span>
-                                                            <span className="i2"></span>
-                                                            <span className="i3"></span>
-                                                            <span className="i4"></span>
-                                                            <span className="i5"></span>
-                                                            <span className="i6"></span>
-                                                            <span className="i7"></span>
-                                                            <span className="i8"></span>
-                                                        </div>
-                                                    </div>
-                                                </button>
-                                                <button>
-                                                    {/*********** 신고 버튼  ***************/}
-                                                    <img src={require('../images/community_alert.png')}/>
-                                                </button>
-                                                <button>
-                                                    {/*********** 수정 버튼  ***************/}
-                                                    <img src={require('../images/community_write.png')}/>
-                                                </button>
-                                                <button>
-                                                    {/*********** 삭제 버튼  ***************/}
-                                                    <img src={require('../images/community_trash.png')}/>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        {comment.editDate == null ?
-                                        <td>
-                                            {comment.postDate}
-
-                                        </td>
-                                        :
-                                        <td>
-                                            {comment.editDate}
-                                        </td>}
-                                    </tr>
-                                    </>
+                                    <CommunityComment
+                                        key={comment.bcno}
+                                        comment={comment}
+                                        loginAccountNo={props.loginAccountNo}
+                                        setIsDeleting={setIsDeleting}
+                                    />
                                 ))}
                             </table>
                         </div>
                     </div>
                     <div className="blog-content">
                         <div className="blog-button">
-                        <input type="text" style={{width:"80%", height:"45px", borderRadius:"5px", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}} onChange={handleInputChange}></input>
+                        <input type="text" style={{width:"80%", height:"45px", borderRadius:"5px", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.1)"}} onChange={handleInputChange} value={inputValue}></input>
                         <button type="submit" style={{position:"absolute", right:"140px", borderRadius:"5px", backgroundColor:"#F6F6F6", border:"none", boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.2)"}} onClick={handlePost}>submit</button>
                         <div className="blog-button-container" style={{width: "90px"}}>
                             <div className='blog-button-item'>
                                 <div className="heart-icon-wrapper">
                                     <div 
-                                        className={`heart-icon ${props.isLiked ? 'heart-liked' : ''} ${props.isBeating ? 'heart-beating' : ''}`}
+                                        className={`heart-icon ${props.isLiked ? 'heart-liked' : ''} ${props.isBeating ? 'heart-dots heart-beating' : ''}`}
                                         onMouseEnter={props.handleMouseEnter}
                                         onMouseLeave={props.handleMouseLeave}
                                         onClick={props.handleClick}>
@@ -318,8 +257,3 @@ function CommunityBoardViewModal(props) {
   }
   
   export default CommunityBoardViewModal;
-  
-
-
-
-

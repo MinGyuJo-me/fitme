@@ -17,7 +17,6 @@ import Game from './views/game/Game.js';
 import GameRoom from './views/game/GameRoom.js'
 import FindPassword from './views/findpassword/FindPassword.js';
 
-
 import './assets/css/bootstrap.min.css';
 
 import './assets/css/owl.carousel.min.css';

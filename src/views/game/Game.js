@@ -2,6 +2,8 @@ import {Link} from 'react-router-dom';
 
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 
+import axios from "axios";
+
 import Breadcumb from '../component/Breadcumb/Breadcumb';
 import Loader from '../component/loader/Loader';
 import Header from '../component/header/Header';
@@ -48,6 +50,9 @@ function Game() {
     const [showModal1, setShowModal1] = useState(false);
     const [isOpen1, setIsOpen1] = useState(false);
 
+    //방 리스트
+    const [roomList,setRoomList] = useState([]);
+
     // const [imageUrl, setImageUrl] = useState(null);
     const [imageUrl, setImage] = useState();
     //잠시만 확인용 함수 만들겠습니다
@@ -59,7 +64,13 @@ function Game() {
 
     useEffect(()=>{
         $('body').addClass('loaded');
-    });
+      axios.get('/api/v1/gameRooms')
+      .then(res=>{
+        // console.log('세션버전',(res.data).length);
+        setRoomList(res.data);
+      })
+
+    },[]);
 
   return (
     <div>
@@ -103,14 +114,20 @@ function Game() {
                       <div className='col-lg-11 col-md-11 game-room-layout'>
                         {/**************************************************************/}
                         {/*게임방 목록 영역 (대기실 목록)*/}
+                        {Object.entries(roomList).map(([roomId, roomData])=>(
+                          <ul>
+                            {roomData.map((item) => (
+                              <GameRoomContainer data={item}/>
+                            ))}
+                          </ul>
+                        ))}
+                        {/* <GameRoomContainer/>
                         <GameRoomContainer/>
                         <GameRoomContainer/>
                         <GameRoomContainer/>
                         <GameRoomContainer/>
                         <GameRoomContainer/>
-                        <GameRoomContainer/>
-                        <GameRoomContainer/>
-                        <GameRoomContainer/>
+                        <GameRoomContainer/> */}
                         {/**************************************************************/}
                       </div>
                     </div>
