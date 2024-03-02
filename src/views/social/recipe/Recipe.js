@@ -10,15 +10,83 @@ import Breadcumb from '../../component/Breadcumb/Breadcumb';
 import RatingStars from './component/RatingStars';
 import RecipeBoard from './component/RecipeBoard';
 import $ from 'jquery';
-import RecipeBoardViewModal from './crud/RecipeBoardViewModal';
+import axios from 'axios'; //npm install axios
+
+const ipAddress = '192.168.0.15';
+
+//배열 섞기
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+}
 
 function Recipe() {
-    useEffect(()=>{
-        $('body').addClass('loaded');
-    });
-
 
     const [recipeBoardViewModal,setRecipeBoardViewModal] = useState(true);
+
+    //음식 데이타 저장
+    const [recipeData,setRecipeData] = useState([]);
+    //클릭 받은 데이타
+    const [nowRecipeData,setNowRecipeData] = useState();
+    //셔플된 전체 데이타 
+    const [recipeDataAll,setRecipeDataAll] = useState([]);
+    
+    useEffect(()=>{
+        $('body').addClass('loaded');
+
+        //서버에서 클롤링 json 가져오기
+        axios.get(`http://${ipAddress}:5000/crawling`)
+        .then(res=>{
+            setRecipeData(res.data);
+        })
+
+    },[]);
+
+    //전체값을 불러오기
+    useEffect(() => {
+        const data = [];
+        if (recipeData && recipeData['한식']) {
+            recipeData['한식'].map(item => {
+                // console.log('data', item.name);
+                data.push(item);
+            });
+            recipeData['중식'].map(item => {
+                // console.log('data', item.name);
+                data.push(item);
+            });
+            recipeData['일식'].map(item => {
+                // console.log('data', item.name);
+                data.push(item);
+            });
+            recipeData['양식'].map(item => {
+                // console.log('data', item.name);
+                data.push(item);
+            });
+            shuffle(data);
+            setRecipeDataAll(data);
+        }
+        var l = document.querySelector('.current_menu_item');
+        if(l.textContent ==='전체'){
+            setNowRecipeData(data);
+        }
+    }, [recipeData]);
+    
+
+    //음식 카테고리(?) 함수
+    function menu(e){
+        // console.log('e',e.target.textContent);
+        var l = document.querySelector('.current_menu_item');
+        if(e.target.textContent !== '전체중식일식양식한식'){ //버튼 클릭시 확인
+            // console.log(l.textContent) //현재의 강조표시가 어디인지 확인
+            l.className=''; //이전 클래스의 위치 제거
+            e.target.className = 'current_menu_item'; //현재 클릭된 위치에 클래스 씌워주기
+            if(recipeData != null) {
+                // console.log('recipeData[e.target.textContent]',recipeData[e.target.textContent]);
+                setNowRecipeData(recipeData[e.target.textContent]);
+                if(e.target.textContent === '전체') setNowRecipeData(recipeDataAll);
+            }
+
+        }
+    }
 
   return (
     <div>
@@ -38,12 +106,12 @@ function Recipe() {
                     <div className="col-lg-12 col-sm-12">
                         <div className="portfolio_nav text-center">
                             <div className="portfolio_menu">
-                                <ul className="menu-filtering">
-                                    <li className="current_menu_item" data-filter="*">전체</li>
-                                    <li data-filter=".physics">카테고리1</li>
-                                    <li data-filter=".cemes">카테고리2</li>
-                                    <li data-filter=".math">카테고리3</li>
-                                    <li data-filter=".maths">카테고리4</li>
+                                <ul className="menu-filtering" onClick = {menu}>
+                                    <li className="current_menu_item">전체</li>
+                                    <li>중식</li>
+                                    <li>일식</li>
+                                    <li>양식</li>
+                                    <li>한식</li>
                                 </ul>
                             </div>
                         </div>
@@ -52,18 +120,13 @@ function Recipe() {
 
 
                 <div className="row image_load">
-                    <RecipeBoard/>
-                    <RecipeBoard/>
-                    <RecipeBoard/>
-                    <RecipeBoard/>
-                    <RecipeBoard/>
-                    <RecipeBoard/>
-                    <RecipeBoard/>
+                    {nowRecipeData && nowRecipeData.map(item=>(
+                        <RecipeBoard data={item}/>
+                    ))}
                 </div>
             </div>
         </div>
 
-        {recipeBoardViewModal && (<RecipeBoardViewModal onClose={() => setRecipeBoardViewModal(false)}/>)}
         
 
 
