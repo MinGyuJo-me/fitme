@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DaumPostcode from "react-daum-postcode";
 
 const DaumPost = (props) => {
-    const [isOpen, setIsOpen] = useState(true);
+    const [visible, setVisible] = useState(true);
 
     const complete = (data) => {
         let fullAddress = data.address;
@@ -31,32 +31,25 @@ const DaumPost = (props) => {
         };
 
         const handleClose = () => {
-            // Close DaumPostcode component
-            setIsOpen(false);
+            setVisible(false);
+            props.setVisible(false);
         };
     
-        const handleOpen = () => {
-            // Open DaumPostcode component
-            setIsOpen(true);
-        };
-
         return (
-            <div style={{position:"fixed" ,width:"500px", height:"700px", right:0, left:0, margin:"auto", top:"30%", zIndex:5, borderRadius:"1px solid red"}}>
-                {isOpen && (
+            <div style={{ position: "absolute", width: "500px", right: 0, left: 0, top: "80%", margin: "auto" }}>
+                {visible && (
                     <div>
                         <DaumPostcode
                             autoClose
                             onComplete={complete}
                         />
-                        <button className="postmodal-close" onClick={handleClose} style={{width:"50px",position:"absolute", right:0, left:0, margin:"auto"}}>✖</button>
+                        <button className="postmodal-close" onClick={handleClose} style={{ width: "40px", position: "absolute", right: 0, left: 460 }}>✖</button>
                     </div>
-                )}
-                {!isOpen && (
-                <button className="searchaddress-button-re" onClick={handleOpen} >⟳</button>
                 )}
             </div>
         );
     };
+    
 
 export default DaumPost;
 
