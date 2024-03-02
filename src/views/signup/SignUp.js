@@ -10,6 +10,8 @@ import HeaderTop from '../component/headerTop/HeaderTop';
 import Breadcumb from '../component/Breadcumb/Breadcumb';
 import Chatbot from '../component/chatBot/ChatBot';
 
+import swal from 'sweetalert2';
+
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
 const pnumRegex = '^\\d{11}$';
@@ -21,30 +23,31 @@ function SignUp() {
   const [interMessage, setInterMessage] = useState('');
   const [postcode, setPostcode] = useState('');
   const [address, setAddress] = useState('');  
-  const [popup, setPopup] = useState(false);
   const navigate = useNavigate();
   const formData = new FormData();
   const [userEmail, setUserEmail] = useState('');
   const [emailCode, setemailCodeCode] = useState('');
   const [emailCodeMatch, setEmailCodeMatch] = useState(true);
   const [emailInput, setEmailInput] = useState('');
+  const [visible, setVisible] = useState(false);
   
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };  
   let addressChk = 0;
+  
   const handleOpenDaumPost = () => {
     addressChk = 1;
-    setPopup(true);
+    setVisible(true);
   };
 
   const handleAddressChange = (postcode, address) => {
     setPostcode(postcode);
     setAddress(address);
     // 주소를 선택한 후 DaumPost 컴포넌트를 닫습니다.
-    addressChk=0
-    setPopup(false);
+    addressChk = 0;
+    setVisible(false);
   };
 
   const handleEmailCode = () => {
@@ -76,18 +79,70 @@ function SignUp() {
   const handleRegister = (e) => {
     e.preventDefault();
     console.log('addressChk',addressChk)
-    if(addressChk == 1) return;
+    if(addressChk === 1) return;
     //유효성 체크
-    if(e.target.name.value.length == 0){alert('id'); return;}
-    if(e.target.email.value.length == 0) {alert('email'); return;}
-    if(e.target.password.value.length == 0) {alert('password'); return;}
-    if(e.target.passwordchk.value !== e.target.password.value) {alert('passwordchk'); return;}
-    if(e.target.height.value.length == 0) {alert('height'); return;}
-    if(e.target.weight.value.length == 0) {alert('weight'); return;}
-    if(e.target.children.birth.children[0].children[0].value.length == 0) {alert('birth'); return;}
-    if(e.target.address.value.length == 0) {alert('address'); return;}
-    if(document.querySelector('input[name="gender"]:checked') == null) {alert('gender'); return;}
-    if(document.querySelector('input[name="inter"]:checked') == null) {alert('inter'); return;}
+
+    if(e.target.name.value.length == 0){swal.fire({
+      title: "잠시만요!",
+      text: "닉네임을 입력해주세요",
+      icon: "warning",
+      button: "확인"
+    }); return;}
+    if(e.target.email.value.length == 0) {swal.fire({
+      title: "잠시만요!",
+      text: "이메일을 입력해주세요",
+      icon: "warning",
+      button: "확인"
+    }); return;}
+    if(e.target.password.value.length == 0) {swal.fire({
+      title: "잠시만요!",
+      text: "비밀번호를 입력해주세요",
+      icon: "warning",
+      button: "확인"
+    }); return;}
+    if(e.target.passwordchk.value !== e.target.password.value) {swal.fire({
+      title: "잠시만요!",
+      text: "입력한 비밀번호를 확인해 주세요",
+      icon: "error",
+      button: "확인"
+    }); return;}
+    if(e.target.height.value.length == 0) {swal.fire({
+      title: "잠시만요!",
+      text: "키를 입력해주세요",
+      icon: "warning",
+      button: "확인"
+    }); return;}
+    if(e.target.weight.value.length == 0) {swal.fire({
+      title: "잠시만요!",
+      text: "몸무게를 입력해주세요",
+      icon: "warning",
+      button: "확인"
+    }); return;}
+    if(e.target.children.birth.children[0].children[0].value.length == 0) {swal.fire({
+      title: "잠시만요!",
+      text: "생년월일을 입력해주세요",
+      icon: "warning",
+      button: "확인"
+    }); return;}
+    if(e.target.address.value.length == 0) {swal.fire({
+      title: "잠시만요!",
+      text: "주소를 입력해주세요",
+      icon: "warning",
+      button: "확인"
+    }); return;}
+    if(document.querySelector('input[name="gender"]:checked') == null) {swal.fire({
+      title: "잠시만요!",
+      text: "성별을 선택해주세요",
+      icon: "warning",
+      button: "확인"
+    }); return;}
+    if(document.querySelector('input[name="inter"]:checked') == null) {swal.fire({
+      title: "잠시만요!",
+      text: "관심사를 선택해주세요",
+      icon: "warning",
+      button: "확인"
+    }); return;}
+    
     const currentYear = new Date().getFullYear();
     const year = e.target.children.birth.children[0].children[0].value
     // console.log(currentYear - year + 1); //이거 왜 생일이 아니라 나이임?
@@ -128,8 +183,6 @@ function SignUp() {
         alert('에러');
       });
     
-    return;
-
    // 성별 선택 확인
    const genderSelected = document.querySelector('input[name="gender"]:checked');
    if (!genderSelected) {
@@ -143,10 +196,10 @@ function SignUp() {
      const interSelected = document.querySelector('input[name="inter"]:checked');
 
      if (!interSelected) {
-       setGenderMessage('관심사를 선택하세요.');
+       setInterMessage('관심사를 선택하세요.');
        return;
      } else {
-       setGenderMessage('');
+       setInterMessage('');
      }
 
     // 비밀번호 확인
@@ -257,10 +310,11 @@ function SignUp() {
         </div>
         <div id="find_adress">
         <input type="text" id="postcode" name="postcode" placeholder="우편번호" value={postcode} readOnly />
-
-        <button className="searchaddress-button" onClick={handleOpenDaumPost}>주소 검색</button>
-        {popup && <DaumPost handleAddressChange={handleAddressChange} />}
-        </div>
+        <button className="searchaddress-button" onClick={handleOpenDaumPost}>
+          주소 검색
+        </button>
+        {visible ? <DaumPost handleAddressChange={handleAddressChange} setVisible={setVisible} /> : null}
+      </div>
           <input type="text"  id="address" name="address" placeholder="주소" value={address} readOnly/> 
           <input type="text" id="detailAddress" name="detailaddress" placeholder="상세주소"/>
         <div className="hr-sect">선택해주세요!</div>
