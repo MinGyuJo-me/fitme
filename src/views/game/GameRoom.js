@@ -7,17 +7,12 @@ import Breadcumb from '../component/Breadcumb/Breadcumb';
 import Loader from '../component/loader/Loader';
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
-import $ from 'jquery';
-
-
 import GameRoomContainer from './component/GameRoomContainer';
 
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
 import GameRoomSideProfile from './component/GameRoomSideProfile';
-
-import SockJS from 'sockjs-client';
 
 import styled from "styled-components";
 import GameRoomMakeModal from './component/GameRoomMakeModal';
@@ -38,8 +33,7 @@ function GameRoom() {
     const myFace = useRef(null);
     const peerFace = useRef(null);   
     
-
-    // const socket = io("/");
+  
     const socket = io("/ws", {transports: ['websocket', 'polling', 'flashsocket']});
 
     // WebRTC 연결을 위한 ref
