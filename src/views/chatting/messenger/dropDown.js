@@ -16,8 +16,6 @@ function getCookie(name) { //로그인 여부 확인
 }
 
 const DropDown = (props) => {
-  // console.log('props',props.kingNo == props.accountNo); //전송 확인
-
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
