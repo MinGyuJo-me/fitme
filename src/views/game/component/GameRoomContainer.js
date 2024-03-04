@@ -23,7 +23,7 @@ function GameRoomContainer(props) {
 
   const gameModeImage = getGameModeImage(props.data.gameMode);
   const handleContainerClick = () => {
-    navigate(`/game/room?${props.data.gameroomNo}`);
+    navigate(`/game/room?${props.data.gameroomNo}`, { state: { roomNo: props.data.gameroomNo } });
   };
   
   return (
@@ -58,4 +58,3 @@ function GameRoomContainer(props) {
 }
 
 export default GameRoomContainer;
-

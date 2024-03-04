@@ -1,22 +1,14 @@
 /* Import Google font - Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-body {
-  background: #E3F2FD;
-}
+
 .chatbot-toggler {
   position: fixed;
-  bottom: 30px;
-  right: 35px;
+  bottom: 25px;
+  right: 110px;
   outline: none;
   border: none;
-  height: 60px;
-  width: 60px;
+  height: 50px;
+  width: 50px;
   display: flex;
   cursor: pointer;
   align-items: center;
@@ -237,3 +229,60 @@ header h2 {
 #mic-button{
   visibility: visible;
 }
+
+
+.messenger-toggler{
+  position: fixed;
+  bottom: 25px;
+  right: 170px;
+  outline: none;
+  border: none;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #1BBC9B;
+  transition: all 0.2s ease;
+  z-index: 10000;
+  display: flex;
+}
+
+
+.floating-button{
+  position: fixed;
+  right:25px;
+  bottom:20px;
+  background-color: #1BBC9B;
+  border: none;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+}
+
+
+.floating-button-title{
+  color:white;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.messenger-box-layout{
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  bottom: 100px;
+  right: 35px;
+  width: 520px;
+  border-radius: 15px;
+  z-index: 10002;
+  height: 586px;
+  background-color: white;
+}
+
