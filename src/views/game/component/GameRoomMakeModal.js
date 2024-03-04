@@ -8,6 +8,7 @@ import { useState } from 'react';
 import $ from 'jquery';
 import axios from "axios";
 import {useNavigate} from 'react-router-dom';
+import GameRoom from "../GameRoom";
 
 // Modal 컴포넌트
 function GameRoomMakeModal(props) {
@@ -81,7 +82,7 @@ function GameRoomMakeModal(props) {
         console.log("게임 생성 성공", response.data);
         const gameroomNo = response.data.gameroomNo;
         alert("게임이 성공적으로 생성되었습니다.");
-        navigate(`/game/room?${gameroomNo}`);
+        navigate(`/game/room?${gameroomNo}`, { state: { roomNo: gameroomNo, ...response.data } });
         })
         .catch(error => {
         console.error("게임 생성 실패", error);
