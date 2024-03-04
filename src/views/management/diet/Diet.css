@@ -542,13 +542,38 @@ p {
 }
 
 .submit-btn-modal {
-  display: block;
   margin: 0 auto;
+  display: block;
+  border: none;
+  border-radius: 5px;
+  background-color: #1BBC9B;
+  width: 100px;
+  color: white;
+  font-size: 20px;
+  transition: all 0.1s;
+  padding: 15px;
+}
+
+.submit-btn-modal:hover {
+  border: 1px solid #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .reset-btn-modal {
   margin: 0 auto;
+  border: none;
+  border-radius: 5px;
+  background-color: #1BBC9B;
+  width: 100px;
+  color: white;
+  font-size: 20px;
+  transition: all 0.1s;
+  padding: 15px;
+}
 
+.reset-btn-modal:hover {
+  border: 1px solid #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 /* datepicker css및 날짜 선택창 모달창에 보이게 위치조정 */

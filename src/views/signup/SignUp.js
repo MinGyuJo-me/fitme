@@ -30,8 +30,10 @@ function SignUp() {
   const [emailCodeMatch, setEmailCodeMatch] = useState(true);
   const [emailInput, setEmailInput] = useState('');
   const [visible, setVisible] = useState(false);
-  
 
+
+  const [showVerification, setShowVerification] = useState(false); // 추가
+  
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };  
@@ -50,25 +52,43 @@ function SignUp() {
     setVisible(false);
   };
 
+
   const handleEmailCode = () => {
+
     axios.get(`/mailCheck?email=${userEmail}`)
       .then(response => {
         console.log('응답:', response.data);
         setemailCodeCode(response.data);
-        alert('인증 코드가 전송되었습니다.');
+        swal.fire({
+          icon: "info",
+          title: "인증 코드가 전송되었습니다."
+        });
+        setShowVerification(true); // 인증 코드 입력 칸을 보이도록 설정
       })
       .catch(error => {
         console.error('에러:', error);
-        alert('인증 코드 전송에 실패했습니다.');
+        swal.fire({
+          icon: "error",
+          title: "인증 코드 전송에 실패했습니다.",
+          text: "이메일을 확인해 주세요",
+          footer: '오류가 계속될 경우 관리자에게 문의해 주세요'
+        });
+        setShowVerification(false); // 인증 코드 입력 칸 감추기
       });
   };
   const handleCodeCheck = () => {
     if (emailInput == emailCode) {      
       setEmailCodeMatch(true);
-      alert('인증 코드가 일치합니다!');      
+      swal.fire({
+        icon: "success",
+        title: "인증 코드가 일치합니다!"
+      });   
     } else {     
       setEmailCodeMatch(false);
-      alert('인증 코드가 일치하지 않습니다. 다시 시도해주세요.');
+      swal.fire({
+        icon: "warning",
+        title: "인증 코드가 일치하지 않습니다. 다시 시도해주세요."
+      });
     }
   };
 
@@ -82,66 +102,141 @@ function SignUp() {
     if(addressChk === 1) return;
     //유효성 체크
 
-    if(e.target.name.value.length == 0){swal.fire({
+    if(e.target.name.value.length == 0)
+    {swal.fire({
       title: "잠시만요!",
-      text: "닉네임을 입력해주세요",
+      text: "이름을 입력해주세요",
       icon: "warning",
-      button: "확인"
-    }); return;}
-    if(e.target.email.value.length == 0) {swal.fire({
+    }).then(() => {
+      setTimeout(() => {
+        const nameInput = document.getElementsByName('name')[0];
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 500); // 적절한 시간 지연(ms) 설정
+    });
+    return;}
+
+    if(e.target.email.value.length == 0) 
+    {swal.fire({
       title: "잠시만요!",
       text: "이메일을 입력해주세요",
-      icon: "warning",
-      button: "확인"
-    }); return;}
-    if(e.target.password.value.length == 0) {swal.fire({
+      icon: "warning"
+    }).then(() => {
+      setTimeout(() => {
+        const nameInput = document.getElementsByName('email')[0];
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 500); // 적절한 시간 지연(ms) 설정
+    }); 
+    return;}
+
+    if(e.target.password.value.length == 0) 
+    {swal.fire({
       title: "잠시만요!",
       text: "비밀번호를 입력해주세요",
-      icon: "warning",
-      button: "확인"
-    }); return;}
-    if(e.target.passwordchk.value !== e.target.password.value) {swal.fire({
+      icon: "warning"
+    }).then(() => {
+      setTimeout(() => {
+        const nameInput = document.getElementsByName('password')[0];
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 500); // 적절한 시간 지연(ms) 설정
+    }); 
+    return;}
+
+    if(e.target.passwordchk.value !== e.target.password.value) 
+    {swal.fire({
       title: "잠시만요!",
       text: "입력한 비밀번호를 확인해 주세요",
-      icon: "error",
-      button: "확인"
-    }); return;}
-    if(e.target.height.value.length == 0) {swal.fire({
+      icon: "error"
+    }).then(() => {
+      setTimeout(() => {
+        const nameInput = document.getElementsByName('passwordchk')[0];
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 500); // 적절한 시간 지연(ms) 설정
+    });  
+    return;}
+
+    if(e.target.height.value.length == 0) 
+    {swal.fire({
       title: "잠시만요!",
       text: "키를 입력해주세요",
-      icon: "warning",
-      button: "확인"
-    }); return;}
-    if(e.target.weight.value.length == 0) {swal.fire({
+      icon: "warning"
+    }).then(() => {
+      setTimeout(() => {
+        const nameInput = document.getElementsByName('height')[0];
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 500); // 적절한 시간 지연(ms) 설정
+    });  
+    return;}
+
+    if(e.target.weight.value.length == 0) 
+    {swal.fire({
       title: "잠시만요!",
       text: "몸무게를 입력해주세요",
-      icon: "warning",
-      button: "확인"
-    }); return;}
-    if(e.target.children.birth.children[0].children[0].value.length == 0) {swal.fire({
+      icon: "warning"
+    }).then(() => {
+      setTimeout(() => {
+        const nameInput = document.getElementsByName('weight')[0];
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 500); // 적절한 시간 지연(ms) 설정
+    });   
+    return;}
+
+    if(e.target.children.birth.children[0].children[0].value.length == 0) 
+    {swal.fire({
       title: "잠시만요!",
       text: "생년월일을 입력해주세요",
-      icon: "warning",
-      button: "확인"
-    }); return;}
-    if(e.target.address.value.length == 0) {swal.fire({
+      icon: "warning"
+    }).then(() => {
+      setTimeout(() => {
+        const nameInput = document.getElementsByName('year')[0];
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 500); // 적절한 시간 지연(ms) 설정
+    }); 
+    return;}
+
+    if(e.target.address.value.length == 0) 
+    {swal.fire({
       title: "잠시만요!",
       text: "주소를 입력해주세요",
-      icon: "warning",
-      button: "확인"
-    }); return;}
-    if(document.querySelector('input[name="gender"]:checked') == null) {swal.fire({
+      icon: "warning"
+    }).then(() => {
+      setTimeout(() => {
+        const nameInput = document.getElementsByName('detailaddress')[0];
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 500); // 적절한 시간 지연(ms) 설정
+    });  
+    return;}
+
+    if(document.querySelector('input[name="gender"]:checked') == null) 
+    {swal.fire({
       title: "잠시만요!",
       text: "성별을 선택해주세요",
-      icon: "warning",
-      button: "확인"
-    }); return;}
-    if(document.querySelector('input[name="inter"]:checked') == null) {swal.fire({
+      icon: "warning"
+    }); 
+    return;}
+
+    if(document.querySelector('input[name="inter"]:checked') == null) 
+    {swal.fire({
       title: "잠시만요!",
       text: "관심사를 선택해주세요",
-      icon: "warning",
-      button: "확인"
-    }); return;}
+      icon: "warning"
+    }); 
+    return;}
     
     const currentYear = new Date().getFullYear();
     const year = e.target.children.birth.children[0].children[0].value
@@ -175,12 +270,21 @@ function SignUp() {
         },
       })
       .then((response) => {
-        alert('성공');
+        {swal.fire({
+          title: "회원가입 성공",
+          icon: "success",
+          button: "확인"
+        });}
         navigate('/signin');
       })
       .catch((error) => {
         console.error('서버 오류:', error);
-        alert('에러');
+        {swal.fire({
+          title: "오류",
+          text: "관리자에게 문의해 주세요",
+          icon: "error",
+          button: "확인"
+        });}
       });
     
    // 성별 선택 확인
@@ -227,9 +331,9 @@ function SignUp() {
         {/* 배경화면 */}
         <Breadcumb title="signup" content="Account" subContent="signup"/>
 
-         <form className="login-form" onSubmit={handleRegister} method='post' style={{marginTop:"100px"}}>
-        <h2 className="login-heading">회원 가입</h2>
-        <h5 className="login-heading">다양한 서비스를 즐겨보세요!</h5>
+      <form className="login-form" onSubmit={handleRegister} method='post' style={{marginTop:"100px"}}>
+        <h1 className="login-heading">회원 가입</h1>
+        <h3 className="login-heading">다양한 서비스를 즐겨보세요!</h3>
         <br />
         <input type="text" name="name" className="text-field" placeholder="이름" />
         <div id="info__email">
@@ -246,30 +350,32 @@ function SignUp() {
 
           <button id="mail-Check-Btn" 
                   className="verification-button" 
-                  onClick={handleEmailCode}                  
+                  onClick={handleEmailCode}  
+                  type='button'  // 자동으로 submit 되는걸 방지            
                   >인증
           </button>
         </div>
 
-
-        <div id="info__email">
-        <input
-        type="text"
-        id="emailCodeInput"
-        className="mail-check-input"
-        placeholder="인증번호 입력"
-        value={emailInput}
-        onChange={handleInputChange}
-      />
-      <button
-        id="mail-Check-submit"
-        className="verification-button"
-        onClick={handleCodeCheck}        
-      >
-        확인
-      </button>
+    {showVerification && (
+      <div id="info__email">
+          <input
+          type="text"
+          id="emailCodeInput"
+          className="mail-check-input"
+          placeholder="인증번호 입력"
+          value={emailInput}
+          onChange={handleInputChange}
+          />
+          <button
+            id="mail-Check-submit"
+            className="verification-button"
+            onClick={handleCodeCheck}    
+            type='button'  // 자동으로 submit 되는걸 방지     
+          >
+            확인
+          </button>
         </div>
-
+    )}
         <input
           type="password"
           name="password"
@@ -310,7 +416,7 @@ function SignUp() {
         </div>
         <div id="find_adress">
         <input type="text" id="postcode" name="postcode" placeholder="우편번호" value={postcode} readOnly />
-        <button className="searchaddress-button" onClick={handleOpenDaumPost}>
+        <button className="searchaddress-button" onClick={handleOpenDaumPost} type='button'  > {/*자동으로 submit 되는걸 방지*/}
           주소 검색
         </button>
         {visible ? <DaumPost handleAddressChange={handleAddressChange} setVisible={setVisible} /> : null}
