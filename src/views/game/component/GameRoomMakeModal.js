@@ -11,6 +11,8 @@ import {useNavigate} from 'react-router-dom';
 
 // Modal 컴포넌트
 function GameRoomMakeModal(props) {
+    const [roomName, setRoomName] = useState("");
+
     const navigate = useNavigate();
     const disableScroll = () => {
         document.body.style.overflow = 'hidden';
@@ -63,11 +65,12 @@ function GameRoomMakeModal(props) {
 
   // 게임 생성 함수
     const createGame = () => {
-        console.log(`게임 생성 요청 시작: ${selectedGameMode}, myCookie: ${myCookieValue}`);
+        console.log(`게임 생성 요청 시작: ${selectedGameMode}, myCookie: ${myCookieValue}, roomName: ${roomName}`);
 
         axios.post(`/api/v1/game/createRoom/${selectedGameMode}`,{
             gameMode: selectedGameMode, 
             accountNo: myCookieValue, 
+            roomName: roomName,
         },{
             headers: {
                 'Authorization' : `${myCookieValue}`,
@@ -76,8 +79,9 @@ function GameRoomMakeModal(props) {
         })
         .then(response => {
         console.log("게임 생성 성공", response.data);
+        const gameroomNo = response.data.gameroomNo;
         alert("게임이 성공적으로 생성되었습니다.");
-        navigate('/game/room');
+        navigate(`/game/room?${gameroomNo}`);
         })
         .catch(error => {
         console.error("게임 생성 실패", error);
@@ -94,7 +98,12 @@ function GameRoomMakeModal(props) {
                 <div className="col-lg-12 col-sm-12 game-modal-layout">
                     <div className="game-room-modal-container grmc1">
                         <div className='game-room-modal-title'>Game Mode</div>
-                        <div className="game-room-modal-select">게임생성</div>
+                        <input
+                                className="game-room-modal-select"
+                                placeholder="RoomName"
+                                value={roomName}
+                                onChange={(e) => setRoomName(e.target.value)}
+                            />
                         <div className='game-room-modal-title'>People</div>
                         <div className="game-room-modal-select">2</div>
                     </div>
