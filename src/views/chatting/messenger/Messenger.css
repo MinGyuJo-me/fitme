@@ -13,18 +13,17 @@
   box-sizing: border-box;
 }
 
-body {
-  background: #E3F2FD;
-  font: 14px/20px "Poppins", Arial, sans-serif; /* Change font to Poppins */
-  color: #434651; /* Adjust text color */
-}
 
 .c_container {
-  margin: 0 auto;
   width: 50%; /* Adjust width to 100% */
   display: flex; /* Add flex display */
   border-radius: 15px;
   box-shadow: 0px 15px 15px 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  right: 40px;
+  bottom: 100px;
+  z-index: 10000;
+  background-color: white;
 }
 
 .people-list {
@@ -151,7 +150,7 @@ body {
   padding: 30px 30px 20px;
   border-bottom: 2px solid white;
   overflow-y: scroll;
-  height: 575px;
+  height: 505px;
 }
 
 .chat-history ul{
