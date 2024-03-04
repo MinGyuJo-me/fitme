@@ -806,17 +806,15 @@ function Diet() {
                     <div className="modal-food-chart">
                       {/* <Radar data={data} /> */}
                     </div>
-					<input type="submit"
-
+                    <input type="submit"
 					value={selectOne != '' ? "수정": "등록"} 
 					className="submit-btn-modal"/>
                     {selectOne == '' ? ''
                       : 
                       <input type="reset" value="삭제" 
 					  onClick={setCalDel} 
-					  className="reset-btn-modal" style={{marginTop: '5px'}}/>
+					  className="reset-btn-modal"/>
                     }
-
                   </form>
                 </Modal>
                 )}
