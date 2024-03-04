@@ -7,9 +7,6 @@ import Breadcumb from '../component/Breadcumb/Breadcumb';
 import Loader from '../component/loader/Loader';
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
-import $ from 'jquery';
-
-
 import GameRoomContainer from './component/GameRoomContainer';
 
 import OwlCarousel from 'react-owl-carousel';
@@ -27,16 +24,17 @@ const StyledHeader = styled.div`
 
 function GameRoom() {
 
-const [myStream, setMyStream] = useState(null);
+    const [myStream, setMyStream] = useState(null);
     const [cameras, setCameras] = useState([]);
     const [selectedCamera, setSelectedCamera] = useState("");
     const [muted, setMuted] = useState(false);
     const [cameraOff, setCameraOff] = useState(false);
     const [roomName, setRoomName] = useState("");
     const myFace = useRef(null);
-    const peerFace = useRef(null);
+    const peerFace = useRef(null);   
     
-    const socket = io("/");
+  
+    const socket = io("/ws", {transports: ['websocket', 'polling', 'flashsocket']});
 
     // WebRTC 연결을 위한 ref
     const myPeerConnection = useRef(null);
@@ -64,8 +62,8 @@ const [myStream, setMyStream] = useState(null);
     // 미디어 스트림을 가져오는 함수
     const getMedia = async (deviceId) => {
         const constraints = {
-            audio: true,
-            video: { deviceId: deviceId ? { exact: deviceId } : undefined },
+            audio: true,            
+            video: deviceId ? { deviceId: { exact: deviceId } } : true,
         };
         try {
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
