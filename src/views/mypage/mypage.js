@@ -10,6 +10,7 @@ import Gmodal from './Gmodal';
 import { useNavigate } from "react-router-dom";
 
 import axios from 'axios';
+import $ from 'jquery';
 
 //datepicker사용
 //npm install @mui/x-date-pickers
@@ -36,6 +37,7 @@ import { Chart as ChartJS,
     Tooltip, 
     Legend } from 'chart.js';
 import { Doughnut,Bar,Line } from 'react-chartjs-2';
+import MyPageSidebar from '../component/sidebar/MyPageSidebar';
   
 ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Legend);
 
@@ -278,347 +280,338 @@ function MyPage() {
     }
 
 
-    return (
-    <div>
-        <HeaderTop/>
-        <Header/>
 
+
+
+    return (
+    <div style={{position:"absolute", border:"1px solid red", height:"100%", width:"100%", display:"flex", flexDirection:"column"}}>
         {/*
-        <div className="loader-wrapper">
-            <div className="loader"></div>
-            <div className="loder-section left-section"></div>
-            <div className="loder-section right-section"></div>
+        <div style={{border:"2px solid red"}}>
+            <Header/>
         </div>
         */}
-
-        <div className="breadcumb-area d-flex align-items-center">
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-12">
-                        <div className="breacumb-content">
-                            <div className="breadcumb-title">
-                                <h1>Mypage</h1>
-                            </div>
-                            <div className="breadcumb-content-text">
-                            <a href="index.html">mypage</a>
+        <div style={{display:"flex",position:"relative"}}>
+            <MyPageSidebar/>
+            <div className='mypagesidebar-scroll-event'>
+            </div>
+            
+            {/* width 추가됨 */}
+            <div style={{width:"100%", height:"100%", border:"4px solid purple"}}>
+            <div className="company-info-section">
+                <div className="container">
+                    <div className="sideber-box sb-rjm1" style={{ display: 'flex', alignSelf: 'flex-start', position: 'relative' }}>
+                        <div className='main-titles' style={{ top: '10px', marginTop: '-30px' }}>
+                            <h1>회원 정보</h1>
+                            <div className="profile-edit-button-container">
+                            <button onClick={openProfileModal} className="profile-edit-button" disabled={isGameRecordModalOpen}>수정</button>
+                                {isProfileModalOpen && (
+                                    <Modal
+                                    isOpen={isProfileModalOpen}
+                                    onClose={closeProfileModal}
+                                    onSubmit={handleProfileUpdate}
+                                    nickname={accountData.nickname}
+                                    name={accountData.name}
+                                    address={accountData.address}
+                                    hobby={accountData.hobby}
+                                    height={accountData.height}
+                                    weight={accountData.weight}
+                                    age={accountData.age}
+                                    />
+                                )}
                             </div>
                         </div>
+                        <div className='sideber-item' style={{overflow:'hidden'}}>
+                            <img id='ibox' src={accountData.image} alt="프로필 사진" style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
+                            <div className="form_row">
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">닉네임:</span>
+                                        <span className="value" id="username"  style={{fontFamily:"Lobster"}}>JohnDoe123</span>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">이름:</span>
+                                        <span className="value" id="name">{accountData.name}</span>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">주소:</span>
+                                        <span className="value" id="address">{accountData.address}</span>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">포인트:</span>
+                                        <span className="value" id="point">500</span>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">성별:</span>
+                                        <span className="value" id="gender">{accountData.gender === 'M'? '남성':'여성'}</span>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">키:</span>
+                                        <span className="value" id="height">{accountData.height}</span>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">몸무게:</span>
+                                        <span className="value" id="weight">{accountData.weight}</span>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">나이:</span>
+                                        <span className="value" id="age">{accountData.age}</span>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">취미:</span>
+                                        <span className="value" id="interest">{accountData.hobby === 'E'? '운동':'식단'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
                     </div>
                 </div>
             </div>
-        </div>
+            
 
-
-        <div className="company-info-section">
-            <div className="container">
-                <div className="sideber-box sb-rjm1" style={{ display: 'flex', alignSelf: 'flex-start', position: 'relative' }}>
-                    <div className='main-titles' style={{ top: '10px', marginTop: '-30px' }}>
-                        <h1>회원 정보</h1>
-                        <div className="profile-edit-button-container">
-                        <button onClick={openProfileModal} className="profile-edit-button" disabled={isGameRecordModalOpen}>수정</button>
-                            {isProfileModalOpen && (
-                                <Modal
-                                isOpen={isProfileModalOpen}
-                                onClose={closeProfileModal}
-                                onSubmit={handleProfileUpdate}
-                                nickname={accountData.nickname}
-                                name={accountData.name}
-                                address={accountData.address}
-                                hobby={accountData.hobby}
-                                height={accountData.height}
-                                weight={accountData.weight}
-                                age={accountData.age}
-                                />
-                            )}
-                        </div>
-                    </div>
-                    <div className='sideber-item' style={{overflow:'hidden'}}>
-                        <img id='ibox' src={accountData.image} alt="프로필 사진" style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
-                        <div className="form_row">
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">닉네임:</span>
-                                    <span className="value" id="username"  style={{fontFamily:"Lobster"}}>JohnDoe123</span>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">이름:</span>
-                                    <span className="value" id="name">{accountData.name}</span>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">주소:</span>
-                                    <span className="value" id="address">{accountData.address}</span>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">포인트:</span>
-                                    <span className="value" id="point">500</span>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">성별:</span>
-                                    <span className="value" id="gender">{accountData.gender === 'M'? '남성':'여성'}</span>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">키:</span>
-                                    <span className="value" id="height">{accountData.height}</span>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">몸무게:</span>
-                                    <span className="value" id="weight">{accountData.weight}</span>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">나이:</span>
-                                    <span className="value" id="age">{accountData.age}</span>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">취미:</span>
-                                    <span className="value" id="interest">{accountData.hobby === 'E'? '운동':'식단'}</span>
-                                </div>
+            <div className="company-info-section">
+                <div className="container">
+                    <div className="sideber-box sb-rjm1" style={{ display: 'flex', alignSelf: 'flex-start', position: 'relative' }} >
+                        <div className='main-titles' style={{ top: '10px', marginTop: '-30px' }}>
+                            <h1>게임 기록</h1>
+                            <div className="Gprofile-edit-button-container">
+                            <button onClick={openGameRecordModal} className="profile-edit-button" disabled={isProfileModalOpen}>수정</button>
+                                {/* 모달 */}
+                                {isGameRecordModalOpen && (
+                                    <Gmodal
+                                    isOpen={isGameRecordModalOpen}
+                                    onClose={closeGameRecordModal}
+                                    onSubmit={handleGameRecordUpdate}
+                                    nickname={accountData.nickname}
+                                    
+                                    />
+                                )}
                             </div>
                         </div>
-                    </div>    
-                </div>
-            </div>
-        </div>
-
-        <div className="company-info-section">
-            <div className="container">
-                <div className="sideber-box sb-rjm1" style={{ display: 'flex', alignSelf: 'flex-start', position: 'relative' }} >
-                    <div className='main-titles' style={{ top: '10px', marginTop: '-30px' }}>
-                        <h1>게임 기록</h1>
-                        <div className="Gprofile-edit-button-container">
-                        <button onClick={openGameRecordModal} className="profile-edit-button" disabled={isProfileModalOpen}>수정</button>
-                            {/* 모달 */}
-                            {isGameRecordModalOpen && (
-                                <Gmodal
-                                isOpen={isGameRecordModalOpen}
-                                onClose={closeGameRecordModal}
-                                onSubmit={handleGameRecordUpdate}
-                                nickname={accountData.nickname}
-                                
-                                />
-                            )}
-                        </div>
-                    </div>
-                    <div className='sideber-item' style={{overflow:'hidden'}}>
-                        <img id='ibox' src={accountData.image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
-                        <div className="form_row">
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">닉네임:</span>
-                                    <span className="value" id="username">JohnDoe123</span>
+                        <div className='sideber-item' style={{overflow:'hidden'}}>
+                            <img id='ibox' src={accountData.image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
+                            <div className="form_row">
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">닉네임:</span>
+                                        <span className="value" id="username">JohnDoe123</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">평균 등수:</span>
-                                    <span className="value" id="rank">3.5</span>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">평균 등수:</span>
+                                        <span className="value" id="rank">3.5</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">승률:</span>
-                                    <span className="value" id="winrate">50%</span>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">승률:</span>
+                                        <span className="value" id="winrate">50%</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">승:</span>
-                                    <span className="value" id="win">30</span>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">승:</span>
+                                        <span className="value" id="win">30</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">패:</span>
-                                    <span className="value" id="lose">30</span>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">패:</span>
+                                        <span className="value" id="lose">30</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">스쿼트:</span>
-                                    <span className="value" id="squat">78%</span>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">스쿼트:</span>
+                                        <span className="value" id="squat">78%</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box"style={{marginBottom:'30px'}}>
-                                    <span className="label">윗몸:</span>
-                                    <span className="value" id="sit-up">50%</span>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box"style={{marginBottom:'30px'}}>
+                                        <span className="label">윗몸:</span>
+                                        <span className="value" id="sit-up">50%</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6">
-                                <div className="form_box" style={{marginBottom:'30px'}}>
-                                    <span className="label">팔굽:</span>
-                                    <span className="value" id="push-ups">44%</span>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form_box" style={{marginBottom:'30px'}}>
+                                        <span className="label">팔굽:</span>
+                                        <span className="value" id="push-ups">44%</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            
         
+                        
+        <div className="container">
+            <div className="date_picker-mp">
+                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+                        <DemoContainer components={['DatePicker']}>
+                        <DatePicker 
+                        // value={selectOne != null ? selectOne[5] : ''}
+                        label="날짜 설정" 
+                        //value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
+                        slotProps={{
+                            textField: {
+                            size: "small",
+                            format: 'YYYY-MM-DD HH:mm'
+                            },
+                        }}r
+                        />
+                        </DemoContainer>
+                        </LocalizationProvider>
+                        </div>
+                        {/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
+                        <div className="date_picker-mp">
+                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+
+                        </LocalizationProvider>
+            </div> 
+        <div className="title">
+            <h1>섭취 칼로리</h1>
+        </div>
+        <div className="company-info-section">
+            <div className="sideber-box">
+                <div className="col-lg-calorie" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
+                    <div>맛있는거</div>
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Line options={options} data={data1} />
+                        </div>
+                    <div>맛있는거</div>
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Line options={options} data={data1} />
+                        </div>
+                    <div>맛있는거</div>
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Line options={options} data={data1} />
+                        </div>
+                    <div>맛있는거</div>
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Line options={options} data={data1} />
+                        </div>
+                    <div>맛있는거</div>
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Line options={options} data={data1} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     
-                    
-    <div className="container">
-        <div className="date_picker-mp">
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-                    <DemoContainer components={['DatePicker']}>
-                    <DatePicker 
-                    // value={selectOne != null ? selectOne[5] : ''}
-                    label="날짜 설정" 
-                    //value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
-                    slotProps={{
-                        textField: {
-                        size: "small",
-                        format: 'YYYY-MM-DD HH:mm'
-                        },
-                    }}r
-                    />
-                    </DemoContainer>
-                    </LocalizationProvider>
-                    </div>
-                    {/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
-                    <div className="date_picker-mp">
-                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+        
 
-                    </LocalizationProvider>
-        </div> 
-	<div className="title">
-		<h1>섭취 칼로리</h1>
-	</div>
-	<div className="company-info-section">
-		<div className="sideber-box">
-		    <div className="col-lg-calorie" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-                <div>맛있는거</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                        <Line options={options} data={data1} />
-                    </div>
-                <div>맛있는거</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                        <Line options={options} data={data1} />
-                    </div>
-                <div>맛있는거</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                        <Line options={options} data={data1} />
-                    </div>
-                <div>맛있는거</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                        <Line options={options} data={data1} />
-                    </div>
-                <div>맛있는거</div>
-                    <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                        <Line options={options} data={data1} />
+            <div className="container">
+                <div className="title">
+                    <h1>인바디</h1>
+                </div>
+                <div className="company-info-section">
+                    <div className="sideber-box">
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Line options={options} data={data1} />
+                        </div>
+                        <div className="col-lg-inbody">
+                        <div id="status-inbody"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-	    </div>
-    </div>
 
-    
-  
-
-    <div className="container">
-        <div className="title">
-            <h1>인바디</h1>
-        </div>
-        <div className="company-info-section">
-            <div className="sideber-box">
-                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                    <Line options={options} data={data1} />
+            <div className="container">
+                <div className="title">
+                    <h1>운동 진척도</h1>
                 </div>
-                <div className="col-lg-inbody">
-                <div id="status-inbody"></div>
+                <div className="company-info-section">
+                    <div className="sideber-box">
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Line options={options} data={data1} />
+                        </div>
+                        <div className="col-lg-inbody">
+                            <div id="status-workout-progress"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div className="container">
-        <div className="title">
-            <h1>운동 진척도</h1>
-        </div>
-        <div className="company-info-section">
-            <div className="sideber-box">
-                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                    <Line options={options} data={data1} />
-                </div>
-                <div className="col-lg-inbody">
-                    <div id="status-workout-progress"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
-    <div className="container">
-        <div className="title">
-            <h1>식단 통계</h1>
-        </div>
-        <div className="company-info-section">
-            <div className="sideber-box">
-                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                    <Line options={options} data={data1} />
+            <div className="container">
+                <div className="title">
+                    <h1>식단 통계</h1>
                 </div>
-                <div className="col-lg-inbody">
-                    <div id="status-meal-statistics"></div>
+                <div className="company-info-section">
+                    <div className="sideber-box">
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Line options={options} data={data1} />
+                        </div>
+                        <div className="col-lg-inbody">
+                            <div id="status-meal-statistics"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div className="container">
-        <div className="title">
-            <h1>운동 통계</h1>
-        </div>
-        <div className="company-info-section">
-            <div className="sideber-box">
-                <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                    <Line options={options} data={data1} />
+            <div className="container">
+                <div className="title">
+                    <h1>운동 통계</h1>
                 </div>
-                <div className="col-lg-inbody">
-                    <div id="status-workout-statistics"></div>
+                <div className="company-info-section">
+                    <div className="sideber-box">
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Line options={options} data={data1} />
+                        </div>
+                        <div className="col-lg-inbody">
+                            <div id="status-workout-statistics"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div className="container">       
+                <div className="title">
+                    <h1>저장한 게시글</h1>
+                </div> 
+
+                <div className="sideber-box">
+                    {/*스크랩한 게시물*/}
+                    <MypageBulletinBoardLayout/>       
+                </div>
+
+            </div>
+
+            <div className="container">
+                <div className="title">
+                    <h1>저장한 유튜브</h1>
+                </div>
+
+                <div className="sideber-box">
+                {/*마이페이지 유튜브*/}
+                <MypageYoutubeLayout/>
+                </div>
+                <Chatbot/>
+            </div>
+            
+            </div>
         </div>
-    </div>
 
-    <div className="container">       
-        <div className="title">
-            <h1>저장한 게시글</h1>
-        </div> 
-
-        <div className="sideber-box">
-            {/*스크랩한 게시물*/}
-            <MypageBulletinBoardLayout/>       
-        </div>
-
-    </div>
-
-    <div className="container">
-        <div className="title">
-            <h1>저장한 유튜브</h1>
-        </div>
-
-        <div className="sideber-box">
-          {/*마이페이지 유튜브*/}
-          <MypageYoutubeLayout/>
-        </div>
-        <Chatbot/>
-    </div>
     </div>
   );
 }
@@ -687,4 +680,3 @@ function MypageBulletinBoardLayout(){
 /*유튜브 부문 끝*/
 
 export default MyPage;
-
