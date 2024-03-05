@@ -443,12 +443,14 @@ abbr[title] {
   order: 1;
   padding-right: 0px;
   height: 35px;
+  outline-color: #255946;
 }
 
 .modal-workout-list input[type="number"] {
   order: 2;
   padding-right: 0px;
   height: 20px;
+  outline-color: #255946;
 }
 
 .modal-workout-list input[name="MEMO"] {
@@ -457,6 +459,7 @@ abbr[title] {
   resize: none;
   overflow-y: hidden;
   overflow-y: scroll;
+  outline-color: #255946;
 }
 
 

@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chatbot.css';
+
+//챗봇에 추가할 버튼
+import $ from 'jquery';
+
 import 'material-symbols';// npm install material-symbols@latest
 import axios from 'axios'; // npm install axios
+import Messenger from '../../chatting/messenger/Messenger';
+
+import messenger_png from '../chatBot/images/messenger.png';
 
 var ipAddress = '192.168.0.110';
 
@@ -160,13 +167,88 @@ useEffect(() => {
   chatboxElement.scrollTo(0, chatboxElement.scrollHeight);
 }, [chatbox]);
 
+
+const [messengerIsOpen, setMessengerIsOpen] = useState(false);
+
+
+
+
+{/*플로팅 메뉴 열기*/}
+useEffect(()=>{
+  $(".chatbot-toggler").fadeOut();
+  $(".messenger-toggler").fadeOut();
+},[])
+
+
+
+
+{/*플로팅 메뉴 토글*/}
+const floatingToggle = () =>{
+  $(".chatbot-toggler").fadeToggle();
+  $(".messenger-toggler").fadeToggle();
+
+  if($('body').hasClass('show-chatbot')){
+    document.body.classList.toggle('show-chatbot');
+  }
+
+
+  if(messengerIsOpen == true){
+    setMessengerIsOpen(false);
+  }
+}
+
+
+
+
+
+{/*플로팅 메신저*/}
+const floatingMessenger = () =>{
+
+  if($('body').hasClass('show-chatbot')){
+    document.body.classList.toggle('show-chatbot');
+  }
+  
+  setMessengerIsOpen((e)=>!e);
+}
+
+
+const floatingChatbot = () =>{
+
+  if(messengerIsOpen == true){
+    setMessengerIsOpen(false);
+  }
+
+  document.body.classList.toggle('show-chatbot')
+
+}
+
+
 return (
   // 챗봇 UI 구성
   <div>
-      <button className="chatbot-toggler" onClick={() => document.body.classList.toggle('show-chatbot')}>
+      <button className='floating-button' onClick={floatingToggle}>
+        <span className='floating-button-title'>
+          FITME
+        </span>
+      </button>
+
+      <button className="chatbot-toggler" onClick={floatingChatbot}>
         <span className="material-symbols-rounded" id='open-button'>android</span>
         <span className="material-symbols-outlined" id='close-button'>close</span>
       </button>
+
+
+
+      {messengerIsOpen &&(
+        <Messenger/>
+      )}
+
+
+
+      <button className="messenger-toggler" onClick={floatingMessenger}>
+        <img src={messenger_png} style={{width:"60%", height:"60%", position:"absolute"}}></img>
+      </button>
+
       <div className="chatbot">
         <header>
           <h2>FitBot</h2>
@@ -195,5 +277,6 @@ return (
   </div>
 );
 }
+
 
 export default ChatBot;

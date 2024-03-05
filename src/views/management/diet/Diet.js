@@ -1,4 +1,3 @@
-import {Link} from 'react-router-dom';
 import React, { useState,useEffect,useRef} from 'react';
 import axios from 'axios'; //npm install axios
 import { useNavigate } from "react-router-dom";
@@ -11,7 +10,6 @@ import './Diet.css';
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
-import CountUp from '../../../../node_modules/counterup/jquery.counterup';
 
 //datepicker사용
 //npm install @mui/x-date-pickers
@@ -19,7 +17,6 @@ import CountUp from '../../../../node_modules/counterup/jquery.counterup';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import 'dayjs/locale/ko'
 
@@ -34,16 +31,11 @@ import swal from 'sweetalert';
 
 import 'material-symbols';
 
-//npm i styled-components
-import styled from 'styled-components';
-
 //componants
 import Modal from "./modal";
 import FileUploadBox from './FileUploadBox';
 import AutoCompleteSearch from './AutoCompleteSearch'
 import Chatbot from '../../component/chatBot/ChatBot';
-
-
 
 //chart.js
 import { Chart as ChartJS,
@@ -58,7 +50,7 @@ import { Chart as ChartJS,
 	Tooltip, 
 	Filler,
 	Legend } from 'chart.js';
-import { Doughnut,Bar,Line,Radar } from 'react-chartjs-2';
+import { Bar,Line } from 'react-chartjs-2';
   
 //기본 Line 차트
 //https://react-chartjs-2.js.org/examples/line-chart
@@ -76,7 +68,6 @@ export const options = {
 	},
 };
 
-
 var id = null;
 var ipAddress = '192.168.0.15';
 
@@ -86,7 +77,6 @@ async function imageData(code){
 	  try{
 		axios.get(`http://192.168.0.15:5050/image/${code}`)
 		.then((response)=>{
-			  // console.log(response.data);
 			resolve("data:image/png;base64,"+response.data['image']);
 		})
 	  }
@@ -94,8 +84,7 @@ async function imageData(code){
 	},2000);
   }
 
-
-
+//diet
 function Diet() {
 	const [mark, setMark] = useState([]);
 	const [selectedFood, setSelectedFood] = useState('');
@@ -115,10 +104,8 @@ function Diet() {
 
 	//하루 데이타
 	const [value, onChange] = useState(new Date());
-	const [data_, setData] = useState();
 	const [data1_, setData1] = useState();
 	const [data2_, setData2] = useState();
-	const [labels_, setLabels] = useState();
 	const [labels1_, setLabels1] = useState();
 	const [labels2_, setLabels2] = useState();
 	const [mealTime, setMealTime ] = useState([]);
@@ -130,15 +117,8 @@ function Diet() {
 
 	//사진데이타 
 	const setYoloFood=(e)=>{
-		console.log('e',e);
 		setSelectedFood(e);
 	}
-
-
-
-	// const yoloFoodElement = fileUploadBoxRef.current.querySelector('.yolo_food');
-	// console.log('yoloFoodElement',yoloFoodElement);
-
 	//로그인 확인
 	useEffect(()=>{
 		function getCookie(name) { //로그인 여부 확인
@@ -153,7 +133,6 @@ function Diet() {
 		  }
 		  
 		const myCookieValue = getCookie('Authorization');
-		// console.log('myCookieValue',myCookieValue);
 		if(myCookieValue == null){ //로그인 확인
 		navigate('/signin');
 		}
@@ -166,20 +145,15 @@ function Diet() {
 		})
 		.then(response => {
 			var proflieData = response.data;
-			console.log('proflieData',proflieData);
 			if(proflieData.accountNo != null) setDietCal(proflieData.accountNo);
-			console.log('data',proflieData);
 			if(proflieData.image!=null){
 				imageData(proflieData.image).then((test)=>{
-					// console.log('1');
 					proflieData.image = test;
 					setAccount(proflieData);
 				})
 			}else{
 				imageData(1).then((test)=>{
-					
 					proflieData.image = test;
-					// console.log('proflieData',proflieData);
 					setAccount(proflieData);
 				})
 			}
@@ -198,7 +172,6 @@ function Diet() {
           document.documentElement.style.overflow = 'auto';  // Allow scrolling on html
           document.body.style.overflow = 'auto';  // Allow scrolling on body
         }
-    
         // Cleanup: Remove the added classes when the component unmounts or modal is closed
         return () => {
           document.documentElement.style.overflow = 'auto';  // Ensure scrolling is allowed on html on unmount
@@ -219,7 +192,6 @@ function Diet() {
 		axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
 		.then(response =>{
 			//날짜 일정 추가 창
-			console.log(response.data['diet']);
 			setMark(response.data['diet']);
 			today(accountNo,date != null ? date : new Date());
 			return response.data;
@@ -236,7 +208,6 @@ function Diet() {
 	function today(accountNo,todaydate){
 		axios.get(`http://${ipAddress}:5000/diet/${accountNo}?date=`+moment(todaydate).format("YYYY-MM-DD")) //<---머지시 50 을 44로 변경
 		.then(response =>{
-			console.log("response.data['foodDiary']",response.data['foodDiary']);
 			setMealTime(response.data['foodDiary']);
 	
 			var data1_ =[];
@@ -248,9 +219,7 @@ function Diet() {
 			labels1_.push(response.data['chart1'][i].name);
 			data2_.push(response.data['chart2'][i].size);
 			labels2_.push(response.data['chart2'][i].name);
-			} 
-			setData(data1_);
-			setLabels(labels1_);
+			}
 			setData1(data2_);
 			setLabels1(labels2_);
 	
@@ -261,7 +230,6 @@ function Diet() {
 			var labels1_ = [];
 			for(let i=0; i<message.length;i++){
 				data1_.push(message[i].size);
-				// console.log(message[i].size)
 				labels1_.push(message[i].name);
 			} 
 			setData2(data1_);
@@ -271,20 +239,17 @@ function Diet() {
 
 	//VIEW
 	useEffect(()=>{
-		// console.log(isOpen);
 		if(isOpen != 'true'){
 			setFormData([]);
 			var list_ = new Array();
 			if(dietCal != null){
 			  axios.get(`http://${ipAddress}:5000/diet/${dietCal}?calId=${isOpen}`)
 			  .then(response =>{
-				// setSelect(new Array(response.data))
 				if(response.data != null){
 				  for(var i = 0; i < response.data.length; i++){
 					list_.push(response.data[i]);
 				  }
 				}
-				console.log('list_',list_);
 				setSelect(list_);
 			  })
 			}
@@ -293,63 +258,44 @@ function Diet() {
 	//DELETE
 	const setCalDel = (e) => {
 		if(true){ //confirm넣을자리
-			console.log("delete",e.target.parentElement.children[0].value);
 			axios.delete(`http://${ipAddress}:5000/diet/${e.target.parentElement.children[0].value}`)
 			.then(response => {
 				setIsOpen(false);
-				// console.log(response.data);
-				// id.parentElement.parentElement.remove();
 				callis(dietCal,value);
 			})
 		}
 	}
 
-
 	const toggleModal = (e) => {
 		id = e.target.parentElement.children[1] != null ? e.target.parentElement.children[1].value : true;
-		// console.log('e.target',id)
 		setIsOpen(id);
 	};
 
 	const handleFoodSelect = value => {
 		setSelectedFood(value);
 	  };
-	
 
 	const handleImageChange = (image) => {
 		setFormData({
 		...formData,
 		DIET_IMAGE: image, // 이미지 정보를 formData에 추가
 		});
-		
 	};
 	
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const formData2 = e.target;
-		// console.log(selectedFood);
-		
-		
-		// console.log(formData[formData.length -2].value); //작동확인
 		const formData1 = new FormData();
-		
-		const foodData = new Array();
 		// 각 폼 필드를 FormData 객체에 추가
-		console.log("확인",selectedFood)
 		if (selectedFood != null || selectedFood != 0) formData.FOOD = selectedFood;
 		for (const key in formData) {
-			console.log(key,':',formData[key]);
 			formData1.append(key, formData[key]);
 		}
 	
 		if(formData2[formData2.length -2].value == '수정'){
 		var endTime = e.target.children[2].children[0].children[0].children[1].children[0].value;
       	var accountNo = e.target.children[0].value;
-		console.log('accountNo',endTime);
 		formData1.append('END_DATE', endTime);
-		// console.log(String(formData2[2].value).split()[0])
-		// console.log('put',formData1);
-		//폼데이타 안들어가서 직접 수정
 	
 		axios.put(`http://${ipAddress}:5000/diet/${accountNo}`, formData1, {
 			headers: {
@@ -357,32 +303,24 @@ function Diet() {
 			},
 		})
 		.then(response => {
-			// console.log("주소:", response);
-			swal({title:"수정 성공!",icon:"success"})  
-			
+			swal({title:"수정 성공!",icon:"success"})
 			//서버에 데이터 입력 성공시 모달창 닫기
-			console.log('날짜',value);
 			callis(dietCal,value);
 			setIsOpen(false);
 		})
 		.catch(error => {
-			// console.error('서버 오류:', error);
 			swal({title:"입력 실패",icon:"error"})
 		});
 		}else{
 			var endTime = String(e.target.children[1].children[0].children[0].children[1].children[0].value).split()[0]
-			// console.log(endTime);
 			formData1.append('END_DATE', endTime);
-			// console.log(formData1);
 			setSelectedFood('');
-			// // console.log("post",formData['DIET_IMAGE'] == '');
 			axios.post(`http://${ipAddress}:5000/diet/${dietCal}`, formData1, {
 				headers: {
 				'Content-Type': 'multipart/form-data',
 				},
 			})
 			.then(response => {
-				// console.log("주소:", response);
 				swal({title:"입력 성공!",icon:"success"})  
 				callis(dietCal,value);
 				//서버에 데이터 입력 성공시 모달창 닫기
@@ -400,7 +338,6 @@ function Diet() {
 	const foodLike = (e) => {
 		var btnLike = e.target.parentElement.children[0].value;
 		var dateLike = e.target.parentElement.children[1].value;
-		console.log('dateLike : ', dateLike.length);
 		if(dateLike.length <= 0){
 			axios.post(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
 				headers: {
@@ -409,7 +346,6 @@ function Diet() {
 			})
 		e.target.src = require('./images/heart.png');
 		e.target.parentElement.children[1].value =new Date();
-		console.log('e.target.src',e.target.src);
 		}else{
 			axios.delete(`http://${ipAddress}:5000/calendarLike/`+btnLike,{
 				header: {
@@ -432,12 +368,10 @@ function Diet() {
 	  
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
-		console.log(name,':',value);
 		setFormData({
 		...formData,
 		[name]: value,
 		});
-		// console.log(formData);
 	};
 
 	//chart.js data
@@ -450,12 +384,6 @@ function Diet() {
 			borderColor: 'rgb(255, 99, 132)',
 			backgroundColor: 'rgba(255, 99, 132, 0.5)',
 		},
-		// {
-		//   label: 'Dataset 2',
-		//   data: [600,500,400,300,200,100],
-		//   borderColor: 'rgb(53, 162, 235)',
-		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-		// },
 		],
 	};
 	const data1 = {
@@ -468,12 +396,6 @@ function Diet() {
 			borderColor: 'rgb(255, 99, 132)',
 			backgroundColor: 'rgba(255, 99, 132, 0.5)',
 		},
-		// {
-		//   label: 'Dataset 2',
-		//   data: [600,500,400,300,200,100],
-		//   borderColor: 'rgb(53, 162, 235)',
-		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-		// },
 		],
 	};
 
@@ -482,7 +404,6 @@ function Diet() {
 		if(accountNo != null){
 			axios.get(`http://${ipAddress}:5000/recommend/${accountNo}`) 
 			.then((res)=>{
-				// console.log('res.data',res.data.items);//{items: Array(3)} //추천 3개 받아오기
 				setRecommendData(res.data.items); //추천값들을 뿌려주기 위한 변수
 			})
 		}
@@ -490,17 +411,12 @@ function Diet() {
 	//추천 음식 차트에 뿌려주기 위해서
 	function recommendFoodChart(e){
 		setYoutubeLink();
-		// console.log('recommendFoodChart',recommendData.find(item=> item.food == e.target.textContent)); //추천 음식 확인
 		axios.get(`http://${ipAddress}:5000/youtube/${e.target.textContent}`) //axios
 		.then(res=>{
-			// console.log('res',res.data);
 			setYoutubeLink(res.data);
 		})
-		// setYoutubeLink(recommendData.find(item=> item.food == e.target.textContent).youtube);
 		const recommendDataNutrients = recommendData.find(item=> item.food == e.target.textContent).rank.slice(2);
-		// console.log('recommendDataNutrients',parseInt(recommendDataNutrients[0])/(calculateBmr() * 0.3)*100);
 		const weight_kg = accountData.weight;
-		// console.log('weight_kg',weight_kg);//몸무게
 		const recommendationsRatio = {
 			'에너지(kcal)': parseInt(recommendDataNutrients[0])/(calculateBmr() * 0.3)*100,   // 예시로 에너지는 전체 칼로리 중 30%로 설정
 			'수분(g)': parseInt(recommendDataNutrients[1])/(weight_kg * 30)*100 ,  // 체중(kg)에 따른 수분 섭취량 (예시)
@@ -513,15 +429,12 @@ function Diet() {
 	}
 	//BMR 공식
 	function calculateBmr(){
-		// accountData
 		let bmr = 0;
 		if(accountData.gender==='M')
         	bmr = 10 * accountData.weight + 6.25 * accountData.height - 5 * accountData.age + 5
 		else
 			bmr = 10 * accountData.weight + 6.25 * accountData.height - 5 * accountData.age - 161
-
     	return bmr;
-
 	}
 	//차트 데이타
 	const recommendChartData = {
@@ -542,15 +455,6 @@ function Diet() {
     <div>
         <HeaderTop/>
         <Header/>
-
-        {/*
-        <div classNameName="loader-wrapper">
-            <div classNameName="loader"></div>
-            <div classNameName="loder-section left-section"></div>
-            <div classNameName="loder-section right-section"></div>
-        </div>
-        */}
-
         <div className="breadcumb-area d-flex align-items-center">
             <div className="container">
                 <div className="row">
@@ -601,20 +505,14 @@ function Diet() {
 				</div>
             <div className="col-lg-6 col-md-12" style={{ width: "600px" }}>
 				<div className="react-calendar-layout">
-					{/* <Calendar onChange={handleDateChange} value={value}></Calendar> */}
 					<Calendar 
 					calendarType='gregory'
 					onChange={onChange}
 					className="mx-auto w-full text-sm border-b"
 					navigationLabel={null}
 					showNeighboringMonth={false}
-					// onClick={onChange1}
-					
 					formatDay ={(locale, date) =>{
 						return dayjs(date).format('DD')}}
-
-					// minDetail="month" 
-					// maxDetail="month" 
 					tileContent={({ date, view }) => { // 날짜 타일에 컨텐츠 추가하기 (html 태그)
 						// 추가할 html 태그를 변수 초기화
 						let html = [];
@@ -664,8 +562,8 @@ function Diet() {
 			</div>
 
 			<OwlCarousel key={mealTime.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["<i class='fa fa-chevron-left'/>","<i class='fa fa-chevron-right'/>"]} dots >
-				{mealTime.map((test)=>(
-				<div class="item">
+				{mealTime.map((test,index)=>(
+				<div class="item" key={index}>
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="blog-single-box">
@@ -678,7 +576,6 @@ function Diet() {
 										<a href="#">아침</a>
 									</div>
 								</div>
-								{/* {console.log("test",test)} */}
 								<div class="blog-content">
 									<div class="blog-left">
 										<span>{test[3]}</span>
@@ -696,7 +593,6 @@ function Diet() {
 												:
 												<img src={require('./images/empty-heart.png')} alt="like"/>
 											}
-											{/* <img src={require('./images/empty-heart.png')} alt="empty-like"/> */}
 										</div>
 									</div>
 								</div>
@@ -719,8 +615,8 @@ function Diet() {
 				</div>
 				<div className='list-container-ai'>
 				<ol>
-					{recommendData && recommendData.map((food)=>(
-						<li onClick={recommendFoodChart}>{food.food}</li>	
+					{recommendData && recommendData.map((food,index)=>(
+						<li onClick={recommendFoodChart} key={index}>{food.food}</li>	
 					))}
 
 				</ol>
@@ -731,16 +627,12 @@ function Diet() {
 					</div>
 				</div>
 				<div className="recommend-layout">
-					{youtubeLink && youtubeLink.map((link)=>(
-						<div className="recommend-container">
+					{youtubeLink && youtubeLink.map((link,index)=>(
+						<div className="recommend-container" key={index}>
 							<iframe src={link.url}></iframe>
 							<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
 						</div>
 					))}
-					{/* <div className="recommend-container">
-						<iframe width="560" height="315" src="https://www.youtube.com/embed/gUYeEasWU58" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-						<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
-					</div> */}
 				</div>
 			</div>
 
@@ -755,8 +647,6 @@ function Diet() {
                 <div className="modal-addfood-label">
                   <h2>맛있는 음식을 추가해 주세요!</h2>
                 </div>
-                
-                {/* <form onSubmit={console.log("post")}> */}
                 <form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
                   {selectOne == '' || selectOne == null ? ''
                     : 
@@ -769,7 +659,6 @@ function Diet() {
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
                     <DemoContainer components={['DateTimePicker']}>
                     <DateTimePicker 
-                    // value={selectOne != null ? selectOne[5] : ''}
                     label="날짜와 시간 설정" 
                     value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
                     slotProps={{
@@ -782,7 +671,6 @@ function Diet() {
                     </DemoContainer>
                     </LocalizationProvider>
                     </div>
-                    {/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
                     <div className="date_picker">
                       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
 
@@ -804,24 +692,27 @@ function Diet() {
 					  placeholder="내용" onChange={handleInputChange} />
                     </div>
                     <div className="modal-food-chart">
-                      {/* <Radar data={data} /> */}
                     </div>
-                    <input type="submit"
+
+					<div style={{display:'flex',width:'250px',marginLeft: '340px',alignItems: 'center'}}>
+                   
+				    <input type="submit"
 					value={selectOne != '' ? "수정": "등록"} 
 					className="submit-btn-modal"/>
                     {selectOne == '' ? ''
                       : 
                       <input type="reset" value="삭제" 
 					  onClick={setCalDel} 
-					  className="reset-btn-modal"/>
+					  className="reset-btn-modal" style={{marginTop:'10px'}}/>
                     }
+				</div>
                   </form>
                 </Modal>
                 )}
 				</div>
 				<Chatbot/>
-	</div>
-	</div>
+			</div>
+		</div>
     </div>
 	
 
@@ -829,4 +720,3 @@ function Diet() {
 }
 
 export default Diet;
-

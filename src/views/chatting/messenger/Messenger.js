@@ -1,4 +1,3 @@
-import {Link} from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -16,32 +15,20 @@ import ChatBot from '../../component/chatBot/ChatBot';
 
 import DropDown from './dropDown';
 
-//이미지서버 연결 
-async function imageData(code){
-  return await new Promise((resolve,reject)=>{
-    try{
-    axios.get(`http://192.168.0.15:5050/image/${code}`)
-    .then((response)=>{
-        // console.log(response.data);
-      resolve("data:image/png;base64,"+response.data['image']);
-    })
-    }
-    catch(err){reject(err)};
-  },2000);
-  }
-
-
 function getCookie(name) { //로그인 여부 확인
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.startsWith(name + '=')) {
-        return cookie.substring(name.length + 1);
-      }
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(name + '=')) {
+      return cookie.substring(name.length + 1);
     }
-    return null;
+  }
+  return null;
 }
+
+const myCookieValue = getCookie('Authorization');
 function Messenger() {
+  const navigate = useNavigate();
 
     const [chatList, setChatList] = useState([]);
     const [chat, setChat] = useState('');
@@ -53,7 +40,7 @@ function Messenger() {
     const [editChattingRoom,setEditChattingRoom] = useState();
     const [editRoomName,setEditRoomName] = useState();
  
-    const [chatRoomNo,setChatRoomNo] = useState();
+    const [chatRoomNo,setChatRoomNo] = useState(0);
   
     const [chattingRoom,SetChattingRoom] = useState([]);
 
@@ -65,28 +52,24 @@ function Messenger() {
     const scrollRef = useRef();
     
     const scrollToBottom = () => {
-        if (scrollRef.current) {
-          // scrollIntoView 옵션을 사용하여 아래로 스크롤합니다.
-          scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
-        }
-      };
+      if (scrollRef.current) {
+        // scrollIntoView 옵션을 사용하여 아래로 스크롤합니다.
+        scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+      }
+    };
     //모달창 업데이트 딜리트 출력
     const [isOpen, setIsOpen] = useState();
-
-    
 
     //검색
     const [searchInput, setSearchInput] = useState('');
     const [filteredChatRooms, setFilteredChatRooms] = useState([]);
 
-    
 //이미지서버 연결 
     async function imageData(code){
       return await new Promise((resolve,reject)=>{
         try{
         axios.get(`http://192.168.0.15:5050/image/${code}`)
         .then((response)=>{
-            // console.log(response.data);
           resolve("data:image/png;base64,"+response.data['image']);
         })
         }
@@ -96,11 +79,6 @@ function Messenger() {
 
     //유저 정보
     const [accountData, setAccount] = useState([]);
-
-    
-
-
-    
 
     useEffect(() => {
         // Add or remove the 'no-scroll' class to the html and body elements based on the modal's open state
@@ -121,27 +99,21 @@ function Messenger() {
     
       const toggleModal = (e) => {
         setAddChattingRoom();
-        console.log('sdada',);
         setAddChattingRoom(e.currentTarget.querySelector('#addChattingRoom'));
         setIsOpen(!isOpen);
       };
 
     function chatRoom(e){
-        // console.log('채팅방 번호:',e.target.children[0].value);
-        // chatNo = e.target.children[0].value;
         e.preventDefault();
 
         const chatChattingNoValue = e.currentTarget.querySelector('#chatChattingNo').value;
 
         var s = document.getElementById('chatRoomNo');
-        // console.log('채팅방',chatChattingNoValue);
-        s.value = chatChattingNoValue;
+        if(s!= null)s.value = chatChattingNoValue;
         
         subscribe(chatChattingNoValue); //채팅방 연결 테스트
-        // console.log('확인:',s.value);
         axios.get(`/api/v1/chat/list/room/${chatChattingNoValue}`)
         .then(res=>{
-            // console.log('채팅 내용',res.data);
             setChatList(res.data);
             scrollToBottom();
         })
@@ -167,7 +139,6 @@ function Messenger() {
           const form = e.target.closest('.chat-message');
           const sendButton = form.querySelector('button');
           if (!sendButton) {
-            console.error("Button not found inside the form:", form);
             return;
           }
           sendButton.click();
@@ -207,35 +178,30 @@ function Messenger() {
   
     const publish = (num,chat,check) => {
         if (!client.current.connected) return;
-            // console.log('userId',userId);
-          client.current.publish({
-            destination: '/pub/chat',
-            body: JSON.stringify({
-              chattingNo: num,
-              accountNo: check == null ? userId : 1,
-              name: name,
-              chatComment: check== 'in'? `${name}님이 입장하셨습니다.` :check== 'out' ? `${name}님이 퇴장하셨습니다.` : chat
-            }),
+        client.current.publish({
+          destination: '/pub/chat',
+          body: JSON.stringify({
+            chattingNo: num,
+            accountNo: check == null ? userId : 1,
+            name: name,
+            chatComment: check== 'in'? `${name}님이 입장하셨습니다.` :check== 'out' ? `${name}님이 퇴장하셨습니다.` : chat
+          }),
         });
     
         setChat('');
-        
-        subscribe(num);
+        if(check== 'out') navigate('/messenger');
     };
   
-    const subscribe = (num) => {
-      // console.log('num',num);
-      setChatRoomNo(num);
-
-      client.current.subscribe(`/sub/chat/${num}`, (body) => {
+    const subscribe = (chatNo) => {
+      setChatRoomNo(chatNo);
+      
+      client.current.subscribe(`/sub/chat/${chatNo}`, (body) => {
         try {
-            const json_body = JSON.parse(body.body);
-            // console.log('>>>', json_body);
-            axios.get(`/api/v1/chat/list/room/${num}`)
-            .then(res=>{
-              setChatList(res.data); //웹소켓은 아니지만 대충 속이기
-                
-            })
+          axios.get(`/api/v1/chat/list/room/${chatNo}`)
+          .then(res=>{
+            setChatList(res.data);
+              
+          })
         } catch (error) {
         console.error('Error processing message:', error);
         }
@@ -251,21 +217,15 @@ function Messenger() {
     };
   
     const handleSubmit = (event, chat) => { // 보내기 버튼 눌렀을 때 publish
-        // console.log('event',event.target.children[0].value);
         var num = event.target.children[1].value;
         event.target.children[0].value = '';
-        // setChatRoomNo(num)
         publish(num,chat,null);
-        
-        // console.log('chat',chat);
-        // console.log('num',num); //채팅방 일련번호?
-        // scrollToBottom();
         event.preventDefault();
         
     };
     
     useEffect(() => {
-      const myCookieValue = getCookie('Authorization');
+      
       
       axios.get(`/api/v1/foodworks/account`, {
           headers: {
@@ -317,7 +277,6 @@ function Messenger() {
 
     useEffect(()=>{
         if(userId != null){
-            console.log("gdgd");
             chattingList();
         }
     },[userId])
@@ -330,7 +289,6 @@ function Messenger() {
         }
         })
         .then(response => {
-            console.log('chat/list',response.data);
             SetChattingRoom(response.data);
         })
         .catch(error => console.log('/chat/list',error));
@@ -339,13 +297,13 @@ function Messenger() {
     //상태값 확인
     function setCheck(e){
       if(e[0] == '제거' || e[0] == '나가기'){
-        setChatRoomNo(null);
-        chattingList();
+        setChatRoomNo(0);
+        chattingList(); //채팅 기록
         publish(e[1],'','out')
-        // chattingLog(e[1]);
-        setChatList([]);
+        subscribe(0); //방 0번으로 이동
       }
       else{
+        chattingList();
         setEditChattingRoom(e[1]);
       }
     }
@@ -362,7 +320,6 @@ function Messenger() {
       const data = new FormData();
       data.append('chattingNick',e.currentTarget.querySelector('input').value);
       data.append('chattingNo',e.target.parentElement.querySelector('#chatChattingNo').value);
-      // console.log(e.target.parentElement.querySelector('#chatChattingNo').value,e.currentTarget.querySelector('input').value);
       axios.put(`/api/v1/chat/list/room`,data
         ,{
           headers: {
@@ -371,7 +328,6 @@ function Messenger() {
           }
         })
         .then(res=>{
-          // alert(res.data);
           chattingList();
         });
 
@@ -385,30 +341,10 @@ function Messenger() {
     };
    
   return (
-    <div style={{paddingBottom:"80px"}}>
-        <HeaderTop/>
-        <Header/>
-
-        <div className="breadcumb-area d-flex align-items-center">
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-12">
-                        <div className="breacumb-content">
-                            <div className="breadcumb-title">
-                                <h1>Management</h1>
-                            </div>
-                            <div className="breadcumb-content-text">
-                            <a href="index.html">chat</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className="blog-area style-two"></div>
+    <>
 
 
-        <div className="c_container clearfix">
+  <div className="c_container clearfix">
     <div className="people-list" id="people-list">
       <div className="search">
         <input
@@ -419,12 +355,12 @@ function Messenger() {
         />
         <i className="fa fa-search"></i>
       </div>
-    <div>
+      <div>
         <div>
-        <i className="fa fa-plus-square" id='add-friend-icon' onClick={toggleModal}>
-          <input id='addChattingRoom' type='hidden' value='0'/>
-          &nbsp;&nbsp;채팅방 추가
-        </i>
+          <i className="fa fa-plus-square" id='add-friend-icon' onClick={toggleModal}>
+            <input id='addChattingRoom' type='hidden' value='0'/>
+            &nbsp;&nbsp;채팅방 추가
+          </i>
         </div>
       </div>
       <ul className="list">
@@ -485,7 +421,7 @@ function Messenger() {
           : ''
         ))}
         </div>
-        <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}></i>
+        {chatRoomNo == 0 ? '': <i className="fa fa-plus-square add-friend-icon" onClick={toggleModal}></i>}
         {isOpen && (
                 
           <Modal
@@ -500,8 +436,6 @@ function Messenger() {
           <div className="modal-addfood-label">
             <h2>{addChattingRoom == null ? '채팅방에 친구를 추가해 보세요!' :'채팅방을 추가해보세요!'}</h2>
           </div>
-          
-          {/* <form onSubmit={console.log("post")}> */}
           <form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
             
           </form>
@@ -511,7 +445,7 @@ function Messenger() {
       
       <div className="chat-history" ref={chatHistoryRef}>
         <ul>
-            {chatList.map((chat)=>(
+            {chatRoomNo != 0 && chatList && chatList.map((chat)=>(
                 chat.accountNo == userId?
                     <li className="clearfix">
                         <div className="message-data align-right">
@@ -541,16 +475,24 @@ function Messenger() {
         </ul>
         
       </div> 
-      
-      <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)} onKeyDown={onEnterSubmit}>
-            <textarea name="message-to-send" id="message-to-send" placeholder ="메시지를 입력해 주세요" onChange={handleChange} rows="3"></textarea>
-            <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>  
-            <button>Send</button>
-      </form> 
+      {chatRoomNo != 0 ?
+        <form className="chat-message clearfix" onSubmit={(event) => handleSubmit(event, chat)} onKeyDown={onEnterSubmit}>
+          <textarea name="message-to-send" id="message-to-send" placeholder ="메시지를 입력해 주세요" onChange={handleChange} rows="3"></textarea>
+          <input id='chatRoomNo' name='chatRoomNo' type='hidden'/>  
+          <button>Send</button>
+        </form> 
+        :
+        ''
+      }
       
     </div> 
     
   </div> 
+
+
+
+
+
 
     <script id="message-template" type="text/x-handlebars-template">
     <li className="clearfix">
@@ -575,8 +517,7 @@ function Messenger() {
         </div>
     </li>
     </script>
-    <ChatBot/>
-    </div>
+    </>
   );
 }
 
