@@ -341,30 +341,10 @@ function Messenger() {
     };
    
   return (
-    <div style={{paddingBottom:"80px"}}>
-        <HeaderTop/>
-        <Header/>
-
-        <div className="breadcumb-area d-flex align-items-center">
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-12">
-                        <div className="breacumb-content">
-                            <div className="breadcumb-title">
-                                <h1>Management</h1>
-                            </div>
-                            <div className="breadcumb-content-text">
-                            <a href="index.html">chat</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div className="blog-area style-two"></div>
+    <>
 
 
-        <div className="c_container clearfix">
+  <div className="c_container clearfix">
     <div className="people-list" id="people-list">
       <div className="search">
         <input
@@ -375,12 +355,12 @@ function Messenger() {
         />
         <i className="fa fa-search"></i>
       </div>
-    <div>
+      <div>
         <div>
-        <i className="fa fa-plus-square" id='add-friend-icon' onClick={toggleModal}>
-          <input id='addChattingRoom' type='hidden' value='0'/>
-          &nbsp;&nbsp;채팅방 추가
-        </i>
+          <i className="fa fa-plus-square" id='add-friend-icon' onClick={toggleModal}>
+            <input id='addChattingRoom' type='hidden' value='0'/>
+            &nbsp;&nbsp;채팅방 추가
+          </i>
         </div>
       </div>
       <ul className="list">
@@ -509,6 +489,11 @@ function Messenger() {
     
   </div> 
 
+
+
+
+
+
     <script id="message-template" type="text/x-handlebars-template">
     <li className="clearfix">
         <div className="message-data align-right">
@@ -532,8 +517,7 @@ function Messenger() {
         </div>
     </li>
     </script>
-    <ChatBot/>
-    </div>
+    </>
   );
 }
 
