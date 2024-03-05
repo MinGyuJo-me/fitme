@@ -26,6 +26,9 @@ import GameRoomMakeModal from './component/GameRoomMakeModal';
 import GameRoomProfileModal from './component/GameRoomProfileModal';
 import GameRoomSideProfile from './component/GameRoomSideProfile';
 
+
+var ipAddress = '192.168.0.110';
+
 const StyledHeader = styled.div`
   background: black;
 `;
@@ -55,6 +58,10 @@ function Game() {
 
     // const [imageUrl, setImageUrl] = useState(null);
     const [imageUrl, setImage] = useState();
+
+    // 사용자의 계정 번호저장
+    const [accountNo, setAccountNo] = useState(null);
+
     //잠시만 확인용 함수 만들겠습니다
     function setImageUrl(e){
       // console.log('setImageUrl',e); //데이타 들어오는거 확인
@@ -273,4 +280,3 @@ function Game() {
 }
 
 export default Game;
-

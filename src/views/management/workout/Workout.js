@@ -216,7 +216,7 @@ function Workout() {
 	useEffect(()=>{
 		//프로필 코드 
 		if(workoutCal != null){
-      
+			console.log(workoutCal)
       callis(workoutCal);
 	  recommend(workoutCal);
 		}
@@ -225,6 +225,7 @@ function Workout() {
   function callis(accountNo,date){
     axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=workout`)
       .then(response =>{
+		console.log(response)
         //날짜 일정 추가 창
         // console.log(response.data['workout']);
         setMark(response.data['workout']);
@@ -278,7 +279,7 @@ function Workout() {
     });
   }
 
-	//View
+	//WORKOUT DIARY 모달
   useEffect(()=>{
 		// console.log(isOpen);
     if(isOpen != 'true'){
@@ -306,30 +307,40 @@ function Workout() {
 		setSelectedWorkout(value);
 	  };
 	//
+
+	const fetchWorkoutCounts = async () => {
+		try {
+			const userId = workoutCal;
+			const response = await axios.get(`http://${ipAddress}:5000/workout/${userId}/counts`);
+			console.log('API응답 : ',response.data);
+			setRecommendChart(response.data)
+		} catch (error) {
+			console.error("운동 count 데이터를 불러오는 데 실패했습니다.", error);
+		}
+	};
+
 	
 	//운동 데이터 제출 처리 함수
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const formData2 = e.target;
 		const formData1 = new FormData();
-		const workoutData = new Array();
 
 		// 각 폼 필드를 FormData 객체에 추가
 		for (const key in formData){
-		// if(key == 'WORKOUT' || key == '')
-		console.log(key,':',formData[key])
-		formData1.append(key, formData[key]);
+			console.log(key,':',formData[key])
+			formData1.append(key, formData[key]);
 		}
 
 		if(formData2[formData2.length -2].value == '수정'){
 			var endTime = e.target.children[1].children[0].children[0].children[1].children[0].value;
 			var accountNo = e.target.children[0].value;
-			// console.log(accountNo);
+
 			formData1.append('END_DATE', endTime);
-					// console.log(String(formData2[2].value).split()[0])
+
 			axios.put(`http://${ipAddress}:5000/workout/${accountNo}`, formData1, {
 				headers:{
-				'Content-Type': 'multipart/form-data',
+					'Content-Type': 'multipart/form-data',
 				},
 			})
 			.then(response => {
@@ -338,6 +349,9 @@ function Workout() {
 				//서버에 데이터 입력 성공시 모달창 닫기
 				console.log('날짜',value);
 				callis(workoutCal,value);//새롭게 데이타 추가
+				
+				// 데이터 추가 성공 후 Allcount chart에 데이터 다시 가져오기
+				fetchWorkoutCounts();
 
 				setIsOpen(false);
 			})
@@ -349,12 +363,10 @@ function Workout() {
 		}else{
 			var endTime = e.target.children[0].children[0].children[0].children[1].children[0].value;
 			formData1.append('END_DATE', endTime);
-			// console.log('end',e.target.children[0].children[0].children[0].children[1].children[0].value);
-			// console.log("post",formData['CATEGORY'] == '');
 
 			axios.post(`http://${ipAddress}:5000/workout/${workoutCal}`, formData1, {
 				headers:{
-				'Content-Type': 'multipart/form-data',
+					'Content-Type': 'multipart/form-data',
 				},
 			})
 			.then(response => {
@@ -363,6 +375,9 @@ function Workout() {
 				//서버에 데이터 입력 성공시 모달창 닫기
 				console.log('날짜',value);
 				callis(workoutCal,value);//새롭게 데이타 추가
+
+				// 데이터 추가 성공 후 Allcount chart에 데이터 다시 가져오기
+				fetchWorkoutCounts();
 
 				setIsOpen(false);
 			})
@@ -432,12 +447,6 @@ function Workout() {
 			borderColor: 'rgb(255, 99, 132)',
 			backgroundColor: 'rgba(255, 99, 132, 0.5)',
 		},
-		// {
-		//   label: 'Dataset 2',
-		//   data: [600,500,400,300,200,100],
-		//   borderColor: 'rgb(53, 162, 235)',
-		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-		// },
 		],
 	};
 	const data1 = {
@@ -450,12 +459,6 @@ function Workout() {
 			borderColor: 'rgb(255, 99, 132)',
 			backgroundColor: 'rgba(255, 99, 132, 0.5)',
 		},
-		// {
-		//   label: 'Dataset 2',
-		//   data: [600,500,400,300,200,100],
-		//   borderColor: 'rgb(53, 162, 235)',
-		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-		// },
 		],
 	};
 	
@@ -477,26 +480,6 @@ function Workout() {
 			console.log('res.data',res.data);
 			setYoutubeLink(res.data);
 		})
-		// 운동별 칼로리 및 기초대사랑 chart뿌리기
-		// const recommendDataNutrients = recommendData.find(item=>item.category == e.target.textContent).rank.slice(2);
-		// const weight_kg = accountData.weight;
-		// const height_cm = accountData.height;
-		// const gender = accountData.gender;
-		// const age = accountData.age;
-		// // 기초대사량(BMR) 계산
-		// const bmr = calculateBmr(weight_kg, height_cm, gender, age); //
-
-		// 사용자 활동 수준을 기반으로 총 칼로리 소모량 계산 (이 부분에서 사용자 활동 수준을 정의해야 합니다)
-		// 여기서는 사용자의 활동 수준 'moderate'로 가정합니다.
-		// const totalCalories = calculateTotalCalories(bmr, 'moderate'); // <-- 총 칼로리 소모량 계산 로직 추가됨
-		
-		// 여기에 계산된 칼로리 값을 사용하거나 다른 곳에 표시할 수 있습니다.
-		// console.log(`총 칼로리 소모량: ${totalCalories.toFixed(2)} kcal`);
-
-		// const recommendationsRatio = {
-		// 	'기초대사량(BMR)': bmr, // 기초대사량(BMR) 저장
-        // 	'총 칼로리 소모량': parseInt(recommendDataNutrients[0])/(calculateBmr() * 0.3)*100, // 총 칼로리 소모량 저장
-		// }
 		//차트 뿌려주는 변수
 		// setRecommendChart(recommendationsRatio);
 		// 운동별 All Count chart뿌리기
@@ -504,41 +487,6 @@ function Workout() {
 		console.log(recommendDataNutrients)
 		console.log(recommendData.find)
 	}
-
-	// BMR 및 총 칼로리 소모량 계산 함수
-	// function calculateBmr() {
-	// 	let bmr = 0;
-	// 	if (accountData.gender === 'M') 
-	// 		bmr = 10 * accountData.weight + 6.25 * accountData.height - 5 * accountData.age + 5
-	// 	else 
-	// 		bmr =  10 * accountData.weight + 6.25 * accountData.height - 5 * accountData.age - 161
-		
-	// return bmr;
-	// }
-
-	// // 총 칼로리 소모량 계산 함수
-	// const calculateTotalCalories = (workout) => {
-	// 	const exerciseCaloriesFactors = {
-	// 	"스쿼트": 0.1,
-	// 	"데드리프트": 0.15,
-	// 	"벤치프레스": 0.1,
-	// 	"팔굽혀펴기": 0.3,
-	// 	"윗몸 일으키기": 0.2
-	// 	};
-	
-	// 	let totalCalories = 0;
-
-	// 	if(workoutCal && workoutCal.length > 0){
-	// 		workoutCal.forEach(workout => {
-	// 		  const { type, count, weight } = workout;
-	// 		  if(exerciseCaloriesFactors[type]) { // 운동 타입이 칼로리 계수 객체에 존재하는 경우에만 계산
-	// 			totalCalories += weight * count * exerciseCaloriesFactors[type];
-	// 		  }
-	// 		});
-	
-	// 	return totalCalories;
-	// };
-
 
 	useEffect(() => {
 		const fetchWorkoutCounts = async () => {
@@ -562,42 +510,25 @@ function Workout() {
 		labels: ['스쿼트','데드리프트','벤치프레스','팔굽혀펴기','윗몸 일으키기'],
 		datasets: [
 			{
-				label: 'All Count',
+				label: '운동별 총 횟수',
 				data: recommendChart,
-				borderColor: 'rgb(255, 99, 132)',
-				backgroundColor: 'rgba(255, 99, 132, 0.5)',
+				borderColor: [
+					'rgba(255, 99, 132, 0.5)',
+					'rgba(54, 162, 235, 0.5)',
+					'rgba(255, 206, 86, 0.5)',
+					'rgba(75, 192, 192, 0.5)',
+					'rgba(153, 102, 255, 0.5)'
+				],
+				backgroundColor:[
+					'rgba(255, 99, 132, 0.5)',
+					'rgba(54, 162, 235, 0.5)',
+					'rgba(255, 206, 86, 0.5)',
+					'rgba(75, 192, 192, 0.5)',
+					'rgba(153, 102, 255, 0.5)'
+				],
 			},
 		],	
 	};
-
-	// useEffect(() => {
-	// 	const fetchWorkoutCounts = async () => {
-	// 	  try {
-	// 		const userId = accountNo; // workoutCal이 사용자 ID를 저장하는 상태라고 가정
-	// 		const response = await axios.get(`http://${ipAddress}:5000/workouts/${userId}/counts?action=count`);
-	// 		const countsData = response.data; // 응답으로 받은 데이터
-	  
-	// 		// 차트 데이터 업데이트
-	// 		setRecommendChartData({
-	// 		  labels: Object.keys(countsData),
-	// 		  datasets: [
-	// 			{
-	// 			  label: '운동 횟수',
-	// 			  data: Object.values(countsData),
-	// 			  backgroundColor: 'rgba(255, 99, 132, 0.5)',
-	// 			  borderColor: 'rgba(255, 99, 132, 1)',
-	// 			},
-	// 		  ],
-	// 		});
-	// 	  } catch (error) {
-	// 		console.error("운동 count 데이터를 불러오는 중 오류 발생", error);
-	// 	  }
-	// 	};
-	  
-	// 	fetchWorkoutCounts();
-	//   }, [workoutCal]); // workoutCal 상태가 변경될 때마다 실행
-
-
 
   	return (
     <div>
