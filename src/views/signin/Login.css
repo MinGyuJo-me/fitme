@@ -2,13 +2,14 @@
 @import url('//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css');
 /* cnd,폰트,이미지 받아오기 @import로 넣기*/
 
-
-
-
+*{
+  font-family: 'Noto Sans KR', sans-serif;
+}
 
 .login-heading {
   text-align: center; /* Center-align the heading */
   color: #333333; /* Change the color if needed */
+  font-family: 'Noto Sans KR', sans-serif; 
 }
 
 .login-form {
