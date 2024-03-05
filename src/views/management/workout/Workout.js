@@ -55,6 +55,7 @@ import { Chart as ChartJS,
 	Filler,
 	Legend } from 'chart.js';
 import { Doughnut,Bar,Line,Radar } from 'react-chartjs-2';
+// import { link } from 'fs';
   
 //기본 Line 차트
 //https://react-chartjs-2.js.org/examples/line-chart
@@ -75,7 +76,7 @@ export const options = {
 
 
 var id = null;
-var ipAddress = '192.168.0.15';
+var ipAddress = '192.168.0.110';
 
 //
 //이미지서버 연결 
@@ -94,8 +95,9 @@ async function imageData(code){
 //
 
 
-//좋아요
+//좋아요 기능 구현
 const workLike = (e) => {
+	// 좋아요 버튼 클릭 시 동작하는 함수
 	var btnLike = e.target.parentElement.children[0].value;
 	var dateLike = e.target.parentElement.children[1].value;
 	console.log('dateLike : ', dateLike.length);
@@ -121,17 +123,18 @@ const workLike = (e) => {
 
 
 function Workout() {
-	const [mark, setMark] = useState([]);	//
-	const [selectedWorkout, setSelectedWorkout] = useState('');	//
-	
+	const [mark, setMark] = useState([]);	// 운동 데이터 상태 관리
+	const [selectedWorkout, setSelectedWorkout] = useState('');	// 선택된 운동 상태 관리
+
+
 	//유저 정보
-	const [accountData, setAccount ] = useState([]);	//
+	const [accountData, setAccount ] = useState([]);
 
 	//운동 캘린더용
-	const [workoutCal,setWorkoutCal] = useState();	//
+	const [workoutCal,setWorkoutCal] = useState();
 
-	//네비게이트 
-	const navigate = useNavigate();	//
+	//네비게이트 훅 사용
+	const navigate = useNavigate();
 
 	//모달창 업데이트 딜리트 출력
 	const [isOpen, setIsOpen] = useState();	//
@@ -147,6 +150,11 @@ function Workout() {
 	const [data2_, setData2] = useState();
 	const [labels1_, setLabels1] = useState();
 	const [labels2_, setLabels2] = useState();
+
+	//추천 데이타
+	const [recommendData, setRecommendData] = useState();
+	const [recommendChart, setRecommendChart] = useState();
+	const [youtubeLink,setYoutubeLink] = useState();
 
 	//
 	const toggleModal = (e) => {
@@ -210,6 +218,7 @@ function Workout() {
 		if(workoutCal != null){
       
       callis(workoutCal);
+	  recommend(workoutCal);
 		}
 	},[workoutCal])
 	//
@@ -224,7 +233,7 @@ function Workout() {
       })
   }
 
-	//delete
+	//운동 데이터 삭제
 	const setCalDel = (e) => {
 		if(true){ //confirm넣을 자리
 		  console.log("delete",e.target.parentElement[0].value);
@@ -292,13 +301,13 @@ function Workout() {
     }
 	},[isOpen]);
 
-	//
+	//운동 선택 처리 함수
 	const handleWorkoutSelect = value => {
 		setSelectedWorkout(value);
 	  };
 	//
 	
-	//
+	//운동 데이터 제출 처리 함수
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const formData2 = e.target;
@@ -365,7 +374,7 @@ function Workout() {
   };
 	//
 
-	//
+	//폼 데이터 상태 관리 및 변경 처리 함수
 	const [formData, setFormData] = useState({
 		DESCRIPTION: '',
 		CATEGORY: '',
@@ -449,6 +458,146 @@ function Workout() {
 		// },
 		],
 	};
+	
+	//추천값 받아오기
+	function recommend(accountNo){
+		if(accountNo != null){
+			axios.get(`http://${ipAddress}:5000/workoutsRecommend/${accountNo}`)
+			.then(res=>{
+				console.log('res.data.items',res.data.items); //추천값들을 뿌려주기 위한 변수
+				setRecommendData(res.data.items); //추천값들을 뿌려주기 위한 변수
+			})
+		}
+	}
+	//추천값 차트 및 유튜브
+	function recommendWorkoutChart(e){
+		setYoutubeLink();
+		axios.get(`http://${ipAddress}:5000/youtube/${e.target.textContent}`)
+		.then(res=>{
+			console.log('res.data',res.data);
+			setYoutubeLink(res.data);
+		})
+		// 운동별 칼로리 및 기초대사랑 chart뿌리기
+		// const recommendDataNutrients = recommendData.find(item=>item.category == e.target.textContent).rank.slice(2);
+		// const weight_kg = accountData.weight;
+		// const height_cm = accountData.height;
+		// const gender = accountData.gender;
+		// const age = accountData.age;
+		// // 기초대사량(BMR) 계산
+		// const bmr = calculateBmr(weight_kg, height_cm, gender, age); //
+
+		// 사용자 활동 수준을 기반으로 총 칼로리 소모량 계산 (이 부분에서 사용자 활동 수준을 정의해야 합니다)
+		// 여기서는 사용자의 활동 수준 'moderate'로 가정합니다.
+		// const totalCalories = calculateTotalCalories(bmr, 'moderate'); // <-- 총 칼로리 소모량 계산 로직 추가됨
+		
+		// 여기에 계산된 칼로리 값을 사용하거나 다른 곳에 표시할 수 있습니다.
+		// console.log(`총 칼로리 소모량: ${totalCalories.toFixed(2)} kcal`);
+
+		// const recommendationsRatio = {
+		// 	'기초대사량(BMR)': bmr, // 기초대사량(BMR) 저장
+        // 	'총 칼로리 소모량': parseInt(recommendDataNutrients[0])/(calculateBmr() * 0.3)*100, // 총 칼로리 소모량 저장
+		// }
+		//차트 뿌려주는 변수
+		// setRecommendChart(recommendationsRatio);
+		// 운동별 All Count chart뿌리기
+		const recommendDataNutrients = recommendData;
+		console.log(recommendDataNutrients)
+		console.log(recommendData.find)
+	}
+
+	// BMR 및 총 칼로리 소모량 계산 함수
+	// function calculateBmr() {
+	// 	let bmr = 0;
+	// 	if (accountData.gender === 'M') 
+	// 		bmr = 10 * accountData.weight + 6.25 * accountData.height - 5 * accountData.age + 5
+	// 	else 
+	// 		bmr =  10 * accountData.weight + 6.25 * accountData.height - 5 * accountData.age - 161
+		
+	// return bmr;
+	// }
+
+	// // 총 칼로리 소모량 계산 함수
+	// const calculateTotalCalories = (workout) => {
+	// 	const exerciseCaloriesFactors = {
+	// 	"스쿼트": 0.1,
+	// 	"데드리프트": 0.15,
+	// 	"벤치프레스": 0.1,
+	// 	"팔굽혀펴기": 0.3,
+	// 	"윗몸 일으키기": 0.2
+	// 	};
+	
+	// 	let totalCalories = 0;
+
+	// 	if(workoutCal && workoutCal.length > 0){
+	// 		workoutCal.forEach(workout => {
+	// 		  const { type, count, weight } = workout;
+	// 		  if(exerciseCaloriesFactors[type]) { // 운동 타입이 칼로리 계수 객체에 존재하는 경우에만 계산
+	// 			totalCalories += weight * count * exerciseCaloriesFactors[type];
+	// 		  }
+	// 		});
+	
+	// 	return totalCalories;
+	// };
+
+
+	useEffect(() => {
+		const fetchWorkoutCounts = async () => {
+			try {
+				const userId = workoutCal;
+				const response = await axios.get(`http://${ipAddress}:5000/workout/${userId}/counts`);
+				console.log('API응답 : ',response.data);
+				setRecommendChart(response.data)
+			} catch (error) {
+				console.error("운동 count 데이터를 불러오는 데 실패했습니다.", error);
+			}
+		};
+	
+		if (workoutCal) {
+			fetchWorkoutCounts();
+		}
+	}, [workoutCal]);
+
+	//차트 데이타
+	const recommendChartData = {
+		labels: ['스쿼트','데드리프트','벤치프레스','팔굽혀펴기','윗몸 일으키기'],
+		datasets: [
+			{
+				label: 'All Count',
+				data: recommendChart,
+				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgba(255, 99, 132, 0.5)',
+			},
+		],	
+	};
+
+	// useEffect(() => {
+	// 	const fetchWorkoutCounts = async () => {
+	// 	  try {
+	// 		const userId = accountNo; // workoutCal이 사용자 ID를 저장하는 상태라고 가정
+	// 		const response = await axios.get(`http://${ipAddress}:5000/workouts/${userId}/counts?action=count`);
+	// 		const countsData = response.data; // 응답으로 받은 데이터
+	  
+	// 		// 차트 데이터 업데이트
+	// 		setRecommendChartData({
+	// 		  labels: Object.keys(countsData),
+	// 		  datasets: [
+	// 			{
+	// 			  label: '운동 횟수',
+	// 			  data: Object.values(countsData),
+	// 			  backgroundColor: 'rgba(255, 99, 132, 0.5)',
+	// 			  borderColor: 'rgba(255, 99, 132, 1)',
+	// 			},
+	// 		  ],
+	// 		});
+	// 	  } catch (error) {
+	// 		console.error("운동 count 데이터를 불러오는 중 오류 발생", error);
+	// 	  }
+	// 	};
+	  
+	// 	fetchWorkoutCounts();
+	//   }, [workoutCal]); // workoutCal 상태가 변경될 때마다 실행
+
+
 
   	return (
     <div>
@@ -553,6 +702,17 @@ function Workout() {
             	</div>
 				</div>
             </div>
+			{/* <div className='chart-info-container'style={{height: 500, marginBottom: 0}}>
+				<div className="main-titles-chart">
+					<h2>CHART DESCRIPTION</h2>
+				</div>
+				<div className='chart-info-left' style={{height: 300}}>
+					<Bar options={options} data={data2} />
+				</div>
+				<div className='chart-info-right' style={{height: 300}}>
+					<Line options={options} data={data1} />
+				</div>
+			</div> */}
 			</div>
 
 			
@@ -621,30 +781,37 @@ function Workout() {
         <div className="add-siksa-icon" style={{ backgroundImage: `url(${require('./images/plus6.png')})` }}></div>
         </button>
 
+		{/* 운동 추천 */}
 		<div className='ai-container' >
 			<div className="main-titles-ai">
 				<h2>AI RECOMMENDATIONS</h2>
 			</div>
 			<div className='list-container-ai-w'>
 			<ol>
-				<li>Olivia</li>
-				<li>George</li>
+				{/* <li>Olivia</li>
+				<li>George</li> */}
+				{recommendData && recommendData.map((category)=>(
+					<li onClick={recommendWorkoutChart}>{category.category}</li>
+				))}
 			</ol>
 			</div>
 			<div className='chart-info-container-ai-w' style={{width : 600,height: 400,marginTop:-150}}>
 				<div className='chart-info-left-ai' style={{height: 300, marginTop:150}}>
-					<Bar options={options} data={data2} />
+					<Bar options={options} data={recommendChartData} />
 				</div>
+				
 			</div>
 			<div className="recommend-layout-w">
+				{youtubeLink && youtubeLink.map((link)=>(
 				<div className="recommend-container-w">
-					<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
+					<iframe src={link.url}></iframe>
 					<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
 				</div>
-				<div className="recommend-container-w">
+				))}
+				{/* <div className="recommend-container-w">
 					<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
 					<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
-				</div>
+				</div> */}
 			</div>
 		</div>
 					{isOpen && (
