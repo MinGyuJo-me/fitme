@@ -693,15 +693,19 @@ function Diet() {
                     </div>
                     <div className="modal-food-chart">
                     </div>
-                    <input type="submit"
+
+					<div style={{display:'flex',width:'250px',marginLeft: '340px',alignItems: 'center'}}>
+                   
+				    <input type="submit"
 					value={selectOne != '' ? "수정": "등록"} 
 					className="submit-btn-modal"/>
                     {selectOne == '' ? ''
                       : 
                       <input type="reset" value="삭제" 
 					  onClick={setCalDel} 
-					  className="reset-btn-modal"/>
+					  className="reset-btn-modal" style={{marginTop:'10px'}}/>
                     }
+				</div>
                   </form>
                 </Modal>
                 )}
@@ -716,4 +720,3 @@ function Diet() {
 }
 
 export default Diet;
-
