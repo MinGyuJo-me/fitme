@@ -8,7 +8,7 @@ async function imageData(code) {
   return await new Promise((resolve, reject) => {
     try {
       axios
-        .get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
+        .get(`http://192.168.0.53:5050/image/${code == null ? 41 : code}`)
         .then((response) => {
           resolve('data:image/png;base64,' + response.data['image']);
         });
@@ -99,7 +99,7 @@ function Modal(props) {
         imageDataForm.append('uploads', imageBase64Data);
         
         // 이미지를 업로드합니다.
-        const response = await axios.post('http://192.168.0.15:5050/fileupload', imageDataForm, {
+        const response = await axios.post('http://192.168.0.53:5050/fileupload', imageDataForm, {
           headers: {
             'Authorization': `${getCookie('Authorization')}`,
             'Content-Type': 'multipart/form-data'
@@ -110,7 +110,7 @@ function Modal(props) {
       }
   
       // 게임 계정 정보를 서버로 전송합니다.
-      await axios.put(`http://192.168.0.65:8080/api/v1/games/account/${props.accountNo}`, updatedFormData, {
+      await axios.put(`http://192.168.0.53:8080/api/v1/games/account/${props.accountNo}`, updatedFormData, {
         headers: {
           'Authorization': `${myCookieValue}`,
           'Content-Type': 'application/json'
@@ -154,32 +154,29 @@ function Modal(props) {
   
   return (
     <div className="Modal MB" onMouseDown={props.onClose}>
-      <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{ width: '450px' }}>
+      <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{ width: '450px', height:"530px", overflow:"hidden"}}>
         <button id="modalCloseBtn" onMouseDown={props.onClose}>
           ✖
         </button>
-        <h2 style={{fontSize:'30px'}}>게임 프로필 수정</h2>
-        <form onSubmit={handleSubmit}>
-          <label className="profile-picture-contaner PPCR"
-          style={{border: '2px dashed #ccc',padding:'20px',borderRadius:'5px',textAlign:'center',marginLeft:'35px'}}
-          >
-            프로필 사진
+        <div className='modal-profile-edit-title' style={{marginBottom:"30px"}}>게임 프로필 수정</div>
+        <form onSubmit={handleSubmit} style={{border:"1px solid rgba(0,0,0,0.2)", backgroundColor:"rgba(0,0,0,0.05)",  borderRadius:"5px", display:"flex", flexDirection:"column", alignItems:"center"}}>
+          <label className="profile-picture-container PPCR" style={{margin:"auto", textAlign:"center", width:"230px", height:"200px",position:"relative", marginTop:"20px"}}>
             <div>
               <input type="file" name="gameImage" className="profilePicture " onChange={handleFileChange}/>
               {previewImage ? (
                 <img src={previewImage} alt="프로필 사진" className="profile-picture" />
               ) : (
-                <span style={{display:'block',marginTop:'10px',color:'#888'}}>사진을 등록해 주세요</span>
+                <span style={{display:'block', left:"0px", right:"0px", textAlign:"center" ,margin:"auto", marginTop:"80px",position:"absolute",color:'#888'}}>사진을 등록해 주세요</span>
               )}
             </div>
           </label>
-          <div className="input-container">
-            <label className="U-nickname-label">
-              닉네임:
-              <input type="text" className="U-nickname" name="nickname" value={formData.nickname} onChange={handleChange} style={{ width: 'auto', minWidth: '150px' }}/>
-            </label>
+
+          <div className="input-container" style={{marginTop:"20px", marginBottom:"20px"}}>
+              <span className="modal-text-style" style={{display:"inline-block", marginBottom:"10px"}}>닉네임</span><br/>
+              <input type="text" className="U-age" name="nickname" value={formData.nickname} onChange={handleChange} style={{ width: 'auto', minWidth: '150px' }}/>
           </div>
-          <button type="submit" className='G-button'>저장</button>
+
+          <button type="submit" className='G-button' style={{marginBottom:"20px"}}>저장</button>
         </form>
       </div>
     </div>
