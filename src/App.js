@@ -16,6 +16,14 @@ import MyPage from './views/mypage/MyPage.js';
 import Game from './views/game/Game.js';
 import GameRoom from './views/game/GameRoom.js'
 import FindPassword from './views/findpassword/FindPassword.js';
+import Admin from './views/admin/adminmain/AdminMain.js';
+import UserList from './views/admin/admincomponent/UserManagement/UserList.js';
+import ADblackList from './views/admin/admincomponent/UserManagement/ADblackList.js';
+import Dashboard from './views/admin/admincomponent/Dashboard.js';
+import ADPosting from './views/admin/admincomponent/UserPosting/ADPosting.js';
+import GameM from './views/admin/admincomponent/GameRanking/GameM.js';
+import Rcomment from './views/admin/admincomponent/Report/Rcomment.js';
+import Rpost from './views/admin/admincomponent/Report/Rpost.js';
 
 import './assets/css/bootstrap.min.css';
 
@@ -53,6 +61,16 @@ function App() {
     <div className="App">
         <BrowserRouter>
           <Routes>
+            {/*관리자 페이지*/}
+            <Route path={'/admin'} element={<Dashboard/>}/>
+            <Route path={'/admin/userlist'} element={<UserList/>}/>
+            <Route path={'/admin/blacklist'} element={<ADblackList/>}/>
+            <Route path={'/admin/adposting'} element={<ADPosting/>}/>
+            <Route path={'/admin/gamem'} element={<GameM/>}/> 
+            <Route path={'/admin/reportpost'} element={<Rpost/>}/> 
+            <Route path={'/admin/reportcomment'} element={<Rcomment/>}/> 
+
+
             {/* 메인화면 */}
             <Route path={"/"} element={<Main/>}/>
 
