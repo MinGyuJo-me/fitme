@@ -76,14 +76,14 @@ export const options = {
 
 
 var id = null;
-var ipAddress = '192.168.0.110';
+var ipAddress = '192.168.0.53';
 
 //
 //이미지서버 연결 
 async function imageData(code){
 	return await new Promise((resolve,reject)=>{
 	  try{
-		axios.get(`http://192.168.0.15:5050/image/${code}`)
+		axios.get(`http://192.168.0.53:5050/image/${code}`)
 		.then((response)=>{
 			  // console.log(response.data);
 			resolve("data:image/png;base64,"+response.data['image']);

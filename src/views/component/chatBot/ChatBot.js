@@ -10,7 +10,7 @@ import Messenger from '../../chatting/messenger/Messenger';
 
 import messenger_png from '../chatBot/images/messenger.png';
 
-var ipAddress = '192.168.0.110';
+var ipAddress = '192.168.0.53';
 
 function ChatBot() {
   const [userMessage, setUserMessage] = useState(null);

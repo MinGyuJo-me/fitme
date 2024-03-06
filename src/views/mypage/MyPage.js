@@ -52,8 +52,7 @@ ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement
 
 var ipAddress = '192.168.0.53';
 
-const calculateTotalCalories = (exercises) => {
-    
+const calculateTotalCaloriesByDateAndExercise = (exercises) => {
     const exerciseCaloriesFactors = {
         "스쿼트": 0.1,
         "데드리프트": 0.15,
@@ -61,29 +60,36 @@ const calculateTotalCalories = (exercises) => {
         "팔굽혀펴기": 0.3, // 팔굽혀펴기는 무게를 고려하지 않습니다.
         "윗몸 일으키기": 0.2, // 윗몸일으키기는 무게를 고려하지 않습니다.
     };
-  
-    const totalArray = {
-        "스쿼트": [],
-        "데드리프트": [],
-        "벤치프레스": [],
-        "팔굽혀펴기": [], // 팔굽혀펴기는 무게를 고려하지 않습니다.
-        "윗몸 일으키기": [], // 윗몸일으키기는 무게를 고려하지 않습니다.
-    };
-  
-    
-    let totalCalories = 0;
+
+    const totalCaloriesByDateAndExercise = {};
+
     exercises.forEach(exercise => {
-        totalCalories = 0;
-        if(exercise.category === "팔굽혀펴기" || exercise.category === "윗몸 일으키기") {
-            totalCalories += exercise.counts * exerciseCaloriesFactors[exercise.category];
-        } else {
-            totalCalories += exercise.weight * exercise.counts * exerciseCaloriesFactors[exercise.category];
+        const date = exercise.endPostdate;
+        const calories = calculateCalories(exercise, exerciseCaloriesFactors);
+
+        if (!totalCaloriesByDateAndExercise[date]) {
+            totalCaloriesByDateAndExercise[date] = {};
+            for (const category in exerciseCaloriesFactors) {
+                totalCaloriesByDateAndExercise[date][category] = 0;
+            }
         }
-        totalArray[exercise.category].push(totalCalories);
+
+        totalCaloriesByDateAndExercise[date][exercise.category] += calories;
     });
-  
-    return totalArray;
+
+    return totalCaloriesByDateAndExercise;
 };
+
+const calculateCalories = (exercise, factors) => {
+    if (exercise.category === "팔굽혀펴기" || exercise.category === "윗몸 일으키기") {
+        return exercise.counts * factors[exercise.category];
+    } else {
+        return exercise.weight * exercise.counts * factors[exercise.category];
+    }
+};
+
+
+
 
 async function imageData(code){
     return await new Promise((resolve,reject)=>{
@@ -113,6 +119,7 @@ function MyPage() {
 
     //운동 데이타 전부 가져오기
     const [workData,setWorkData] = useState();
+    const [workChartData,setWorkChartData] = useState();
 
     // 회원 정보 모달 열기 함수
     const openProfileModal = () => {
@@ -140,7 +147,19 @@ function MyPage() {
     console.log('수정된 회원 정보:', formData);
     // 모달 닫기
     closeProfileModal();
-};
+    };
+
+    const getCategoryData = (category, workChartData) => {
+        return weekDate.map(date => {
+            if (workChartData) {
+                return workChartData[date] && workChartData[date][category] ? workChartData[date][category] : 0;
+            } else {
+                return 0;
+            }
+        });
+    };
+    
+    
 
     // 게임 기록 수정 이벤트 핸들러
     const handleGameRecordUpdate = (formData) => {
@@ -166,11 +185,6 @@ function MyPage() {
         
         const myCookieValue = getCookie('Authorization');
         setMyCookie(myCookieValue);
-        // console.log('myCookieValue',myCookieValue);
-        /*
-        if(myCookieValue == null){ //로그인 확인
-            navigate('/signin');
-        }*/
     
         
         axios.get('/api/v1/mypages/account', {
@@ -291,42 +305,42 @@ function MyPage() {
         labels: weekDate,
         datasets: [
             {
-              fill: true,
-              label: '데드리프트',
-              data: weekDate['데드리프트'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '데드리프트',
+                data: getCategoryData('데드리프트', workChartData),
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
             {
-              fill: true,
-              label: '벤치프레스',
-              data: weekDate['벤치프레스'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '벤치프레스',
+                data: getCategoryData('벤치프레스', workChartData),
+                borderColor: 'rgb(123, 211, 234)',
+                backgroundColor: 'rgba(123, 211, 234, 0.5)',
             },
             {
-              fill: true,
-              label: '스쿼트',
-              data: weekDate['스쿼트'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '스쿼트',
+                data: getCategoryData('스쿼트', workChartData),
+                borderColor: 'rgb(161, 238, 189)',
+                backgroundColor: 'rgba(161, 238, 189, 0.5)',
             },
             {
-              fill: true,
-              label: '윗몸 일으키기',
-              data: weekDate['윗몸 일으키기'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '윗몸 일으키기',
+                data: getCategoryData('윗몸 일으키기', workChartData),
+                borderColor: 'rgb(246, 247, 196)',
+                backgroundColor: 'rgba(246, 247, 196, 0.5)',
             },
             {
-              fill: true,
-              label: '팔굽혀펴기',
-              data: weekDate['팔굽혀펴기'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '팔굽혀펴기',
+                data: getCategoryData('팔굽혀펴기', workChartData),
+                borderColor: 'rgb(246, 214, 214)',
+                backgroundColor: 'rgba(246, 214, 214, 0.5)',
             },
-          ],
-        };
+        ],
+    };
     const data2 = {
         labels:'',
         datasets: [
@@ -362,7 +376,6 @@ function MyPage() {
 
         // 배열을 초기화합니다.
         const dateArray = [];
-        dateArray.push(moment(sunday).format("YYYY-MM-DD"));
         // date.setDate(sunday.getDate() + 7);
         // dateArray.push(date);
         for (let i = 0; i < 7; i++) {
@@ -378,13 +391,11 @@ function MyPage() {
     useEffect(()=>{
         if(workData){
             const arr =workData.filter(item => new Date(item.endPostdate) >= new Date(weekDate[0]) && new Date(item.endPostdate) <= new Date(weekDate[weekDate.length-1]));
-            console.log(calculateTotalCalories(arr));
+            setWorkChartData(calculateTotalCaloriesByDateAndExercise(arr));
         }
-
-
-
     },[weekDate]);
 
+    
 
     //인바디 파일 등록란 클릭 시 나타나는 알림 창
     const openFilePicker = () => {
@@ -617,22 +628,6 @@ function MyPage() {
                         <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
                             <Line options={options} data={data1} />
                         </div>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
                     </div>
                 </div>
             </div>
@@ -685,7 +680,7 @@ function MyPage() {
             )}
         </div>    
 
-            <div className="container">
+            {/* <div className="container">
                 <div className="title">
                     <h1>운동 진척도</h1>
                 </div>
@@ -699,7 +694,7 @@ function MyPage() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
 
             <div className="container">
@@ -724,8 +719,9 @@ function MyPage() {
                 </div>
                 <div className="company-info-section">
                     <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
+                        <div className="sub-mypage-title">맛있는거</div>
                         <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={workCharKacltData} />
+                            <Bar options={options} data={workCharKacltData} />
                         </div>
                         <div className="col-lg-inbody">
                             <div id="status-workout-statistics"></div>
