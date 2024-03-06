@@ -58,7 +58,7 @@ function CommunityBoardViewModal(props) {
 
     //게시글 댓글 전체 조회
     useEffect(() => {
-        axios.get(`http://192.168.0.104:8080/api/v1/comments/${props.bno}`, {
+        axios.get(`http://192.168.0.53:8080/api/v1/comments/${props.bno}`, {
             headers: {
                 'Authorization' : `${myCookieValue}`,
                 'Content-Type' : 'application/json; charset=UTF-8'
@@ -96,7 +96,7 @@ function CommunityBoardViewModal(props) {
             return;
         }
     
-        axios.post('http://192.168.0.104:8080/api/v1/comments', postComment, {
+        axios.post('http://192.168.0.53:8080/api/v1/comments', postComment, {
             headers: {
                 'Authorization' : `${myCookieValue}`,
                 'Content-Type' : 'application/json; charset=UTF-8'

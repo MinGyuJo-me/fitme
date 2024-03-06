@@ -70,7 +70,7 @@ function Community() {
     async function imageData(code){
         return await new Promise((resolve,reject)=>{
         try{
-            axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
+            axios.get(`http://192.168.0.53:5050/image/${code == null ? 41 : code}`)
             .then((response)=>{
                 resolve("data:image/png;base64,"+response.data['image']);
             })
@@ -81,7 +81,7 @@ function Community() {
 
     // 사용자 정보 프로필 정보 조회
     useEffect(() => {
-        axios.get('http://192.168.0.104:8080/api/v1/boards/account', {
+        axios.get('http://192.168.0.53:8080/api/v1/boards/account', {
           headers: {
             'Authorization' : `${myCookieValue}`,
             'Content-Type' : 'application/json; charset=UTF-8'
@@ -102,7 +102,7 @@ function Community() {
         setClickedFollower(followerInfo);
         setUserInfo(followerInfo);
 
-        axios.get(`http://192.168.0.104:8080/api/v1/boards/friends/${followerInfo.accountNo}`, {
+        axios.get(`http://192.168.0.53:8080/api/v1/boards/friends/${followerInfo.accountNo}`, {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -126,7 +126,7 @@ function Community() {
 
     // 게시글 전체 목록 조회
     useEffect(() => {
-        axios.get('http://192.168.0.104:8080/api/v1/boards', {
+        axios.get('http://192.168.0.53:8080/api/v1/boards', {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -161,7 +161,7 @@ function Community() {
 
     //게시글 프로필 클릭 시 사용자 정보 프로필로 출력
     function handleButtonClickedFromChild(accountNo) {
-        axios.get(`http://192.168.0.104:8080/api/v1/boards/account/${accountNo}`, {
+        axios.get(`http://192.168.0.53:8080/api/v1/boards/account/${accountNo}`, {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -177,7 +177,7 @@ function Community() {
             console.error('axios 요청 중 에러 발생:', error);
         });
 
-        axios.get(`http://192.168.0.104:8080/api/v1/boards/friends/${accountNo}`, {
+        axios.get(`http://192.168.0.53:8080/api/v1/boards/friends/${accountNo}`, {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'

@@ -128,7 +128,7 @@ function CommunityBoardWriteModal(props) {
                         data.append('uploads', base64);
                     }
                         
-                    const imageResponse = await axios.post('http://192.168.0.15:5050/file/uploads', data, {
+                    const imageResponse = await axios.post('http://192.168.0.53:5050/file/uploads', data, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -136,7 +136,7 @@ function CommunityBoardWriteModal(props) {
         
                     setBoardImages(imageResponse.data);
         
-                    const springResponse = await axios.post('http://192.168.0.104:8080/api/v1/boards', {
+                    const springResponse = await axios.post('http://192.168.0.53:8080/api/v1/boards', {
                         accountNo: props.accountNo,
                         title: posts.title,
                         boardComment: posts.boardComment,
