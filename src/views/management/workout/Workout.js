@@ -55,6 +55,7 @@ import { Chart as ChartJS,
 	Filler,
 	Legend } from 'chart.js';
 import { Doughnut,Bar,Line,Radar } from 'react-chartjs-2';
+// import { link } from 'fs';
   
 //기본 Line 차트
 //https://react-chartjs-2.js.org/examples/line-chart
@@ -75,7 +76,7 @@ export const options = {
 
 
 var id = null;
-var ipAddress = '192.168.0.15';
+var ipAddress = '192.168.0.110';
 
 //
 //이미지서버 연결 
@@ -94,8 +95,9 @@ async function imageData(code){
 //
 
 
-//좋아요
+//좋아요 기능 구현
 const workLike = (e) => {
+	// 좋아요 버튼 클릭 시 동작하는 함수
 	var btnLike = e.target.parentElement.children[0].value;
 	var dateLike = e.target.parentElement.children[1].value;
 	console.log('dateLike : ', dateLike.length);
@@ -121,17 +123,18 @@ const workLike = (e) => {
 
 
 function Workout() {
-	const [mark, setMark] = useState([]);	//
-	const [selectedWorkout, setSelectedWorkout] = useState('');	//
-	
+	const [mark, setMark] = useState([]);	// 운동 데이터 상태 관리
+	const [selectedWorkout, setSelectedWorkout] = useState('');	// 선택된 운동 상태 관리
+
+
 	//유저 정보
-	const [accountData, setAccount ] = useState([]);	//
+	const [accountData, setAccount ] = useState([]);
 
 	//운동 캘린더용
-	const [workoutCal,setWorkoutCal] = useState();	//
+	const [workoutCal,setWorkoutCal] = useState();
 
-	//네비게이트 
-	const navigate = useNavigate();	//
+	//네비게이트 훅 사용
+	const navigate = useNavigate();
 
 	//모달창 업데이트 딜리트 출력
 	const [isOpen, setIsOpen] = useState();	//
@@ -147,6 +150,11 @@ function Workout() {
 	const [data2_, setData2] = useState();
 	const [labels1_, setLabels1] = useState();
 	const [labels2_, setLabels2] = useState();
+
+	//추천 데이타
+	const [recommendData, setRecommendData] = useState();
+	const [recommendChart, setRecommendChart] = useState();
+	const [youtubeLink,setYoutubeLink] = useState();
 
 	//
 	const toggleModal = (e) => {
@@ -208,14 +216,16 @@ function Workout() {
 	useEffect(()=>{
 		//프로필 코드 
 		if(workoutCal != null){
-      
+			console.log(workoutCal)
       callis(workoutCal);
+	  recommend(workoutCal);
 		}
 	},[workoutCal])
 	//
   function callis(accountNo,date){
     axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=workout`)
       .then(response =>{
+		console.log(response)
         //날짜 일정 추가 창
         // console.log(response.data['workout']);
         setMark(response.data['workout']);
@@ -224,7 +234,7 @@ function Workout() {
       })
   }
 
-	//delete
+	//운동 데이터 삭제
 	const setCalDel = (e) => {
 		if(true){ //confirm넣을 자리
 		  console.log("delete",e.target.parentElement[0].value);
@@ -269,7 +279,7 @@ function Workout() {
     });
   }
 
-	//View
+	//WORKOUT DIARY 모달
   useEffect(()=>{
 		// console.log(isOpen);
     if(isOpen != 'true'){
@@ -292,35 +302,45 @@ function Workout() {
     }
 	},[isOpen]);
 
-	//
+	//운동 선택 처리 함수
 	const handleWorkoutSelect = value => {
 		setSelectedWorkout(value);
 	  };
 	//
+
+	const fetchWorkoutCounts = async () => {
+		try {
+			const userId = workoutCal;
+			const response = await axios.get(`http://${ipAddress}:5000/workout/${userId}/counts`);
+			console.log('API응답 : ',response.data);
+			setRecommendChart(response.data)
+		} catch (error) {
+			console.error("운동 count 데이터를 불러오는 데 실패했습니다.", error);
+		}
+	};
+
 	
-	//
+	//운동 데이터 제출 처리 함수
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const formData2 = e.target;
 		const formData1 = new FormData();
-		const workoutData = new Array();
 
 		// 각 폼 필드를 FormData 객체에 추가
 		for (const key in formData){
-		// if(key == 'WORKOUT' || key == '')
-		console.log(key,':',formData[key])
-		formData1.append(key, formData[key]);
+			console.log(key,':',formData[key])
+			formData1.append(key, formData[key]);
 		}
 
 		if(formData2[formData2.length -2].value == '수정'){
 			var endTime = e.target.children[1].children[0].children[0].children[1].children[0].value;
 			var accountNo = e.target.children[0].value;
-			// console.log(accountNo);
+
 			formData1.append('END_DATE', endTime);
-					// console.log(String(formData2[2].value).split()[0])
+
 			axios.put(`http://${ipAddress}:5000/workout/${accountNo}`, formData1, {
 				headers:{
-				'Content-Type': 'multipart/form-data',
+					'Content-Type': 'multipart/form-data',
 				},
 			})
 			.then(response => {
@@ -329,6 +349,9 @@ function Workout() {
 				//서버에 데이터 입력 성공시 모달창 닫기
 				console.log('날짜',value);
 				callis(workoutCal,value);//새롭게 데이타 추가
+				
+				// 데이터 추가 성공 후 Allcount chart에 데이터 다시 가져오기
+				fetchWorkoutCounts();
 
 				setIsOpen(false);
 			})
@@ -340,12 +363,10 @@ function Workout() {
 		}else{
 			var endTime = e.target.children[0].children[0].children[0].children[1].children[0].value;
 			formData1.append('END_DATE', endTime);
-			// console.log('end',e.target.children[0].children[0].children[0].children[1].children[0].value);
-			// console.log("post",formData['CATEGORY'] == '');
 
 			axios.post(`http://${ipAddress}:5000/workout/${workoutCal}`, formData1, {
 				headers:{
-				'Content-Type': 'multipart/form-data',
+					'Content-Type': 'multipart/form-data',
 				},
 			})
 			.then(response => {
@@ -354,6 +375,9 @@ function Workout() {
 				//서버에 데이터 입력 성공시 모달창 닫기
 				console.log('날짜',value);
 				callis(workoutCal,value);//새롭게 데이타 추가
+
+				// 데이터 추가 성공 후 Allcount chart에 데이터 다시 가져오기
+				fetchWorkoutCounts();
 
 				setIsOpen(false);
 			})
@@ -365,7 +389,7 @@ function Workout() {
   };
 	//
 
-	//
+	//폼 데이터 상태 관리 및 변경 처리 함수
 	const [formData, setFormData] = useState({
 		DESCRIPTION: '',
 		CATEGORY: '',
@@ -423,12 +447,6 @@ function Workout() {
 			borderColor: 'rgb(255, 99, 132)',
 			backgroundColor: 'rgba(255, 99, 132, 0.5)',
 		},
-		// {
-		//   label: 'Dataset 2',
-		//   data: [600,500,400,300,200,100],
-		//   borderColor: 'rgb(53, 162, 235)',
-		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-		// },
 		],
 	};
 	const data1 = {
@@ -441,13 +459,75 @@ function Workout() {
 			borderColor: 'rgb(255, 99, 132)',
 			backgroundColor: 'rgba(255, 99, 132, 0.5)',
 		},
-		// {
-		//   label: 'Dataset 2',
-		//   data: [600,500,400,300,200,100],
-		//   borderColor: 'rgb(53, 162, 235)',
-		//   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-		// },
 		],
+	};
+	
+	//추천값 받아오기
+	function recommend(accountNo){
+		if(accountNo != null){
+			axios.get(`http://${ipAddress}:5000/workoutsRecommend/${accountNo}`)
+			.then(res=>{
+				console.log('res.data.items',res.data.items); //추천값들을 뿌려주기 위한 변수
+				setRecommendData(res.data.items); //추천값들을 뿌려주기 위한 변수
+			})
+		}
+	}
+	//추천값 차트 및 유튜브
+	function recommendWorkoutChart(e){
+		setYoutubeLink();
+		axios.get(`http://${ipAddress}:5000/youtube/${e.target.textContent}`)
+		.then(res=>{
+			console.log('res.data',res.data);
+			setYoutubeLink(res.data);
+		})
+		//차트 뿌려주는 변수
+		// setRecommendChart(recommendationsRatio);
+		// 운동별 All Count chart뿌리기
+		const recommendDataNutrients = recommendData;
+		console.log(recommendDataNutrients)
+		console.log(recommendData.find)
+	}
+
+	useEffect(() => {
+		const fetchWorkoutCounts = async () => {
+			try {
+				const userId = workoutCal;
+				const response = await axios.get(`http://${ipAddress}:5000/workout/${userId}/counts`);
+				console.log('API응답 : ',response.data);
+				setRecommendChart(response.data)
+			} catch (error) {
+				console.error("운동 count 데이터를 불러오는 데 실패했습니다.", error);
+			}
+		};
+	
+		if (workoutCal) {
+			fetchWorkoutCounts();
+		}
+	}, [workoutCal]);
+
+	//차트 데이타
+	const recommendChartData = {
+		labels: ['스쿼트','데드리프트','벤치프레스','팔굽혀펴기','윗몸 일으키기'],
+		datasets: [
+			{
+				label: '운동별 총 횟수',
+				data: recommendChart,
+				borderColor: [
+					'rgba(255, 99, 132, 0.5)',
+					'rgba(54, 162, 235, 0.5)',
+					'rgba(255, 206, 86, 0.5)',
+					'rgba(75, 192, 192, 0.5)',
+					'rgba(153, 102, 255, 0.5)'
+				],
+				backgroundColor:[
+					'rgba(255, 99, 132, 0.5)',
+					'rgba(54, 162, 235, 0.5)',
+					'rgba(255, 206, 86, 0.5)',
+					'rgba(75, 192, 192, 0.5)',
+					'rgba(153, 102, 255, 0.5)'
+				],
+			},
+		],	
 	};
 
   	return (
@@ -553,6 +633,17 @@ function Workout() {
             	</div>
 				</div>
             </div>
+			{/* <div className='chart-info-container'style={{height: 500, marginBottom: 0}}>
+				<div className="main-titles-chart">
+					<h2>CHART DESCRIPTION</h2>
+				</div>
+				<div className='chart-info-left' style={{height: 300}}>
+					<Bar options={options} data={data2} />
+				</div>
+				<div className='chart-info-right' style={{height: 300}}>
+					<Line options={options} data={data1} />
+				</div>
+			</div> */}
 			</div>
 
 			
@@ -621,30 +712,37 @@ function Workout() {
         <div className="add-siksa-icon" style={{ backgroundImage: `url(${require('./images/plus6.png')})` }}></div>
         </button>
 
+		{/* 운동 추천 */}
 		<div className='ai-container' >
 			<div className="main-titles-ai">
 				<h2>AI RECOMMENDATIONS</h2>
 			</div>
 			<div className='list-container-ai-w'>
 			<ol>
-				<li>Olivia</li>
-				<li>George</li>
+				{/* <li>Olivia</li>
+				<li>George</li> */}
+				{recommendData && recommendData.map((category)=>(
+					<li onClick={recommendWorkoutChart}>{category.category}</li>
+				))}
 			</ol>
 			</div>
 			<div className='chart-info-container-ai-w' style={{width : 600,height: 400,marginTop:-150}}>
 				<div className='chart-info-left-ai' style={{height: 300, marginTop:150}}>
-					<Bar options={options} data={data2} />
+					<Bar options={options} data={recommendChartData} />
 				</div>
+				
 			</div>
 			<div className="recommend-layout-w">
+				{youtubeLink && youtubeLink.map((link)=>(
 				<div className="recommend-container-w">
-					<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
+					<iframe src={link.url}></iframe>
 					<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
 				</div>
-				<div className="recommend-container-w">
+				))}
+				{/* <div className="recommend-container-w">
 					<iframe src="https://www.youtube.com/embed/cgsqsVxd5xc"></iframe>
 					<span className="material-symbols-outlined" id='yt-save-button'>arrow_circle_down</span>
-				</div>
+				</div> */}
 			</div>
 		</div>
 					{isOpen && (
@@ -711,11 +809,13 @@ function Workout() {
 							value={formData.MEMO != null ? formData.MEMO : selectOne != null ? selectOne[2] : ''} 
 							placeholder="내용" onChange={handleInputChange} />
 							</div>
+							<div style={{display:'flex',width:'250px',marginLeft: '240px',alignItems: 'center'}}>
 							<input type="submit" value={selectOne != '' ? "수정": "등록"} className="submit-btn-modal"/>
 							{selectOne == '' ? ''
 							: 
-							<input type="reset" value="삭제" onClick={setCalDel} className="reset-btn-modal"/>
+							<input type="reset" value="삭제" onClick={setCalDel} className="reset-btn-modal" style={{marginTop: '10px'}}/>
 							}
+							</div>
 						</form>
 						</Modal>
 						)}

@@ -966,3 +966,4 @@ function MypageBulletinBoardLayout(){
 /*유튜브 부문 끝*/
 
 export default MyPage;
+
