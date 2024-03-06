@@ -36,7 +36,7 @@ const CommunityComment = ({ comment, loginAccountNo, setIsDeleting }) => {
     //좋아요 누른지 여부 확인
     useEffect((e) => {
         
-        axios.get(`http://192.168.0.104:8080/api/v1/comments/like/${comment.bcno}`, {
+        axios.get(`http://192.168.0.53:8080/api/v1/comments/like/${comment.bcno}`, {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -63,7 +63,7 @@ const CommunityComment = ({ comment, loginAccountNo, setIsDeleting }) => {
         likeData.append('bcno', bcno);
         likeData.append('preState', isCommentLiked ? 1 : 0);
 
-        axios.post('http://192.168.0.104:8080/api/v1/comments/like', likeData, {
+        axios.post('http://192.168.0.53:8080/api/v1/comments/like', likeData, {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -115,7 +115,7 @@ const CommunityComment = ({ comment, loginAccountNo, setIsDeleting }) => {
                         updateData.append('bcno', comment.bcno);
                         updateData.append('bcComment',editComment);
                         updateData.append('accountNo', comment.accountNo);
-                        axios.put('http://192.168.0.104:8080/api/v1/comments', updateData, {
+                        axios.put('http://192.168.0.53:8080/api/v1/comments', updateData, {
                             headers: {
                                 'Authorization' : `${myCookieValue}`,
                                 'Content-Type' : 'application/json; charset=UTF-8'
@@ -161,7 +161,7 @@ const CommunityComment = ({ comment, loginAccountNo, setIsDeleting }) => {
             if(result.isConfirmed) {
                 try {
 
-                    axios.delete(`http://192.168.0.104:8080/api/v1/comments/${comment.bcno}`, {
+                    axios.delete(`http://192.168.0.53:8080/api/v1/comments/${comment.bcno}`, {
                         headers: {
                             'Authorization' : `${myCookieValue}`,
                             'Content-Type' : 'application/json; charset=UTF-8'
@@ -214,7 +214,7 @@ const CommunityComment = ({ comment, loginAccountNo, setIsDeleting }) => {
                     reportReason: result.value
                 }
 
-                axios.post('http://192.168.0.104:8080/api/v1/comment/reports', reportData ,{
+                axios.post('http://192.168.0.53:8080/api/v1/comment/reports', reportData ,{
                     headers: {
                         'Authorization' : `${myCookieValue}`,
                         'Content-Type' : 'application/json; charset=UTF-8'

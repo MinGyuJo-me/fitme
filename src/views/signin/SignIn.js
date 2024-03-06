@@ -10,6 +10,9 @@ import Breadcumb from '../component/Breadcumb/Breadcumb';
 import Chatbot from '../component/chatBot/ChatBot';
 import './Login.css';
 
+//(소켓 알림) - 조동훈
+import { Stomp } from '@stomp/stompjs';
+
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
 const LOGIN_API = '/login';
@@ -27,27 +30,19 @@ function getCookie(name) {
 
 function SignIn() {
 
-    useEffect(()=>{
-        function getCookie(name) { //로그인 여부 확인
-          const cookies = document.cookie.split(';');
-          for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.startsWith(name + '=')) {
-              return cookie.substring(name.length + 1);
-            }
-          }
-          return null; 
-        }
-        
-        const myCookieValue = getCookie('Authorization');
-        // console.log(myCookieValue == null);
-        if(myCookieValue != null){ //로그 아웃 확인
-          document.cookie = 'Authorization' + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-          navigate('/');
-        }
-      
-    
-      },[])
+    // useEffect(()=>{
+    //     function getCookie(name) { //로그인 여부 확인
+    //       const cookies = document.cookie.split(';');
+    //       for (let i = 0; i < cookies.length; i++) {
+    //         const cookie = cookies[i].trim();
+    //         if (cookie.startsWith(name + '=')) {
+    //           return cookie.substring(name.length + 1);
+    //         }
+    //       }
+    //       return null; 
+    //     }
+    //     setMyCookieValue(getCookie('Authorization'));
+    //   },[])
     
       const navigate = useNavigate();
       const [formData, setFormData] = useState({
@@ -112,9 +107,34 @@ function SignIn() {
         axios.post(LOGIN_API, JSON.stringify(formData), config)
           .then((res) => {
             
-            console.log('res', res.data);
+            console.log('res', res);
             console.log('headers',res.headers);
 
+            //(소켓알림)로그인 성공 시 소켓 연결 로직 - 조동훈
+            const socket = new WebSocket('ws://localhost:8080/ws');
+            const stompClient = Stomp.over(socket);
+            
+            const myCookieValue = getCookie('Authorization');
+
+            console.log(myCookieValue);
+
+            axios.put('http://192.168.0.53:8080/api/v1/notifications/online', {}, {
+              headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+              }
+            })
+            .then(response => {
+              console.log(response.data);
+            })
+            .catch(err => {
+              console.log(err);
+            })
+
+            stompClient.connect({}, () => {
+
+            })
+            //////////////////////////////////////////////
             navigate('/');
           })
           .catch(err=>{

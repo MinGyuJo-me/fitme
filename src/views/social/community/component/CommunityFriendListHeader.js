@@ -26,7 +26,7 @@ function CommunityFriendListHeader({handleFollowerClick}) {
     async function imageData(code){
         return await new Promise((resolve,reject)=>{
         try{
-            axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
+            axios.get(`http://192.168.0.53:5050/image/${code == null ? 41 : code}`)
             .then((response)=>{
                 resolve("data:image/png;base64,"+response.data['image']);
             })
@@ -38,7 +38,7 @@ function CommunityFriendListHeader({handleFollowerClick}) {
     //친구 데이터 조회
     useEffect(() => {
         if (showFriend === false) {
-            axios.get('http://192.168.0.104:8080/api/v1/boards/friend', {
+            axios.get('http://192.168.0.53:8080/api/v1/boards/friend', {
                 headers: {
                     'Authorization': `${myCookieValue}`,
                     'Content-Type': 'application/json; charset=UTF-8'
@@ -97,7 +97,7 @@ function CommunityFriendListHeader({handleFollowerClick}) {
 function Follower(props) {
     return (
         <div className='friend-icon-item' onClick={props.onClick}>
-            <div className='blog-icon bi1' style={{ boxShadow: "none", backgroundImage: `url(${props.image})` }}>
+            <div className='blog-icon bi1' style={{ boxShadow: "none", backgroundImage: `url(${props.image})`}}>
             </div>
             <div className='blog-icon-description'>
                 {props.name}

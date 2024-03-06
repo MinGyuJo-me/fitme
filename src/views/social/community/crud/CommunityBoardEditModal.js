@@ -54,49 +54,7 @@ function CommunityBoardEditModal(props) {
     smartSpeed: 450,
   };
 
-  //게시글 수정
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [boardImages, setBoardImages] = useState([]);
-  const [posts, setPosts] = useState({
-      accountNo: `${props.accountNo}`,
-      title: "",
-      boardComment: "",
-      address: "서울특별시 서초구 서초대로77길 41, 4층 (서초동, 대동Ⅱ)",
-      boardCategory: [],
-      uploads: ''
-  });
-  const [inputHidden, setInputHidden] = useState(false); 
-
-  //이미지 파일 base64 인코딩
-  function convertToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-  }
-
-  //파일 업로드 시 로직
-  const handleFileChange = async (event) => {
-    const files = event.target.files;
-    const fileArray = Array.from(files);
-
-    const base64Array = [];
-
-    for (const file of fileArray) {
-        const base64String = await convertToBase64(file);
-        base64Array.push(base64String);
-    }
-
-    setPosts(prevPosts => ({
-        ...prevPosts,
-        uploads: base64Array 
-    }));
-
-    setSelectedFiles(fileArray);
-    setInputHidden(true); 
-  };
+  
 
   const onClickButton = async (e) => {
 
