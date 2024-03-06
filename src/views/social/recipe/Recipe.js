@@ -1,15 +1,18 @@
+import {Link} from 'react-router-dom';
 import React,{useEffect, useState} from 'react';
 
 import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
+import Image_test from '../../../assets/images/blog-3.jpg';
 import ChatBot from '../../component/chatBot/ChatBot';
 import Loader from '../../component/loader/Loader';
 import Breadcumb from '../../component/Breadcumb/Breadcumb';
+import RatingStars from './component/RatingStars';
 import RecipeBoard from './component/RecipeBoard';
 import $ from 'jquery';
 import axios from 'axios'; //npm install axios
 
-const ipAddress = '192.168.0.53';
+const ipAddress = '192.168.0.15';
 
 //배열 섞기
 function shuffle(array) {
@@ -17,6 +20,8 @@ function shuffle(array) {
 }
 
 function Recipe() {
+
+    const [recipeBoardViewModal,setRecipeBoardViewModal] = useState(true);
 
     //음식 데이타 저장
     const [recipeData,setRecipeData] = useState([]);
@@ -41,15 +46,19 @@ function Recipe() {
         const data = [];
         if (recipeData && recipeData['한식']) {
             recipeData['한식'].map(item => {
+                // console.log('data', item.name);
                 data.push(item);
             });
             recipeData['중식'].map(item => {
+                // console.log('data', item.name);
                 data.push(item);
             });
             recipeData['일식'].map(item => {
+                // console.log('data', item.name);
                 data.push(item);
             });
             recipeData['양식'].map(item => {
+                // console.log('data', item.name);
                 data.push(item);
             });
             shuffle(data);
@@ -62,13 +71,16 @@ function Recipe() {
     }, [recipeData]);
     
 
-    //음식 카테고리 함수
+    //음식 카테고리(?) 함수
     function menu(e){
+        // console.log('e',e.target.textContent);
         var l = document.querySelector('.current_menu_item');
         if(e.target.textContent !== '전체중식일식양식한식'){ //버튼 클릭시 확인
+            // console.log(l.textContent) //현재의 강조표시가 어디인지 확인
             l.className=''; //이전 클래스의 위치 제거
             e.target.className = 'current_menu_item'; //현재 클릭된 위치에 클래스 씌워주기
             if(recipeData != null) {
+                // console.log('recipeData[e.target.textContent]',recipeData[e.target.textContent]);
                 setNowRecipeData(recipeData[e.target.textContent]);
                 if(e.target.textContent === '전체') setNowRecipeData(recipeDataAll);
             }

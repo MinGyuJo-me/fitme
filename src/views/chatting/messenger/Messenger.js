@@ -68,7 +68,7 @@ function Messenger() {
     async function imageData(code){
       return await new Promise((resolve,reject)=>{
         try{
-        axios.get(`http://192.168.0.53:5050/image/${code}`)
+        axios.get(`http://192.168.0.15:5050/image/${code}`)
         .then((response)=>{
           resolve("data:image/png;base64,"+response.data['image']);
         })
@@ -159,7 +159,7 @@ function Messenger() {
 
     const connect = () => {
         client.current = new StompJs.Client({
-            brokerURL: 'ws://192.168.0.53:8080/ws',
+            brokerURL: 'ws://192.168.0.15:8080/ws',
             onConnect: (data) => {
                 console.log('success');
                 client.current.publish({

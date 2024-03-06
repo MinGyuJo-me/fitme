@@ -19,7 +19,7 @@ function getCookie(name) { //로그인 여부 확인
 async function imageData(code){
   return await new Promise((resolve,reject)=>{
   try{
-      axios.get(`http://192.168.0.53:5050/image/${code}`)
+      axios.get(`http://192.168.0.15:5050/image/${code}`)
       .then((response)=>{
           resolve("data:image/png;base64,"+response.data['image']);
       })

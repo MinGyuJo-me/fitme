@@ -22,7 +22,7 @@ import styled from 'styled-components'
 const AutoCompleteSearch = ({ onSelect }) => {
   const [wholeTextArray,setWholeTextArray] = useState([]);
   useEffect(()=>{
-    axios.get(`http://192.168.0.53:5000/public`)
+    axios.get(`http://192.168.0.15:5000/public`)
     .then((res)=>{
       // console.log(res.data);
       setWholeTextArray(res.data);
