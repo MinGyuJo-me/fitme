@@ -52,6 +52,39 @@ ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement
 
 var ipAddress = '192.168.0.53';
 
+const calculateTotalCalories = (exercises) => {
+    
+    const exerciseCaloriesFactors = {
+        "스쿼트": 0.1,
+        "데드리프트": 0.15,
+        "벤치프레스": 0.1,
+        "팔굽혀펴기": 0.3, // 팔굽혀펴기는 무게를 고려하지 않습니다.
+        "윗몸 일으키기": 0.2, // 윗몸일으키기는 무게를 고려하지 않습니다.
+    };
+  
+    const totalArray = {
+        "스쿼트": [],
+        "데드리프트": [],
+        "벤치프레스": [],
+        "팔굽혀펴기": [], // 팔굽혀펴기는 무게를 고려하지 않습니다.
+        "윗몸 일으키기": [], // 윗몸일으키기는 무게를 고려하지 않습니다.
+    };
+  
+    
+    let totalCalories = 0;
+    exercises.forEach(exercise => {
+        totalCalories = 0;
+        if(exercise.category === "팔굽혀펴기" || exercise.category === "윗몸 일으키기") {
+            totalCalories += exercise.counts * exerciseCaloriesFactors[exercise.category];
+        } else {
+            totalCalories += exercise.weight * exercise.counts * exerciseCaloriesFactors[exercise.category];
+        }
+        totalArray[exercise.category].push(totalCalories);
+    });
+  
+    return totalArray;
+};
+
 async function imageData(code){
     return await new Promise((resolve,reject)=>{
         try{
@@ -72,16 +105,14 @@ function MyPage() {
 
     const [mark, setMark] = useState([]);
 
-    const [data1_, setData1] = useState();
-    const [data2_, setData2] = useState();
-    const [labels1_, setLabels1] = useState();
-    const [labels2_, setLabels2] = useState();
+    const [weekDate,setWeekDate] = useState([]);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [isGameRecordModalOpen, setIsGameRecordModalOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(null)//파일 미리보기 저장할 상태 추가
     const [isExampleImageOpen, setIsExampleImageOpen] = useState(true);//예시 사진을 저장할 상태 추가
 
-
+    //운동 데이타 전부 가져오기
+    const [workData,setWorkData] = useState();
 
     // 회원 정보 모달 열기 함수
     const openProfileModal = () => {
@@ -188,24 +219,14 @@ function MyPage() {
                 setMark(response.data['diet']);
                 return response.data;
             })
-            axios.get(`/api/v1/mypages/workAccuracy/${accountNo}`, {
+            axios.get(`/api/v1/mypages/work/${accountNo}`, {
                 headers: {
                     'Authorization' : `${myCookie}`,
                     'Content-Type' : 'application/json; charset=UTF-8'
                 }
             })
             .then(response => {
-                console.log('workAccuracy',response.data);
-            })
-            .catch(error => console.log(error));
-            axios.get(`/api/v1/mypages/workBigThree/${accountNo}`, {
-                headers: {
-                    'Authorization' : `${myCookie}`,
-                    'Content-Type' : 'application/json; charset=UTF-8'
-                }
-            })
-            .then(response => {
-                console.log('workBigThree',response.data);
+                setWorkData(response.data);
             })
             .catch(error => console.log(error));
             axios.get(`/api/v1/chat/list/${accountNo}`,{
@@ -220,7 +241,6 @@ function MyPage() {
             .catch(error => console.log('/chat/list',error));
             
             const date = new Date() 
-            // console.log(`${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`);
         }
     },[accountNo]);
 
@@ -244,15 +264,16 @@ function MyPage() {
         closeInbodyModal();
     };
 
+
     
     //차트
     const data1 = {
-        labels:labels1_,
+        labels:'',
         datasets: [
             {
               fill: true,
               label: '하루 영양소 섭취량',
-              data: data1_,
+              data: '',
               borderColor: 'rgb(255, 99, 132)',
               backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
@@ -265,21 +286,56 @@ function MyPage() {
             },
           ],
         };
+    //소모칼로리
+    const workCharKacltData = {
+        labels: weekDate,
+        datasets: [
+            {
+              fill: true,
+              label: '데드리프트',
+              data: weekDate['데드리프트'],
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+              fill: true,
+              label: '벤치프레스',
+              data: weekDate['벤치프레스'],
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+              fill: true,
+              label: '스쿼트',
+              data: weekDate['스쿼트'],
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+              fill: true,
+              label: '윗몸 일으키기',
+              data: weekDate['윗몸 일으키기'],
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+              fill: true,
+              label: '팔굽혀펴기',
+              data: weekDate['팔굽혀펴기'],
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+          ],
+        };
     const data2 = {
-        labels:labels2_,
+        labels:'',
         datasets: [
         {
             label: '섭취 시간',
-            data: data2_,
+            data: '',
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
         },
-        // {
-        //   label: 'Dataset 2',
-        //   data: [600,500,400,300,200,100],
-        //   borderColor: 'rgb(53, 162, 235)',
-        //   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        // },
         ],
     };
     const options = {
@@ -295,22 +351,39 @@ function MyPage() {
         },
     };
 
-    //해당 일주일을 찾자준다
+    //해당 일주일을 찾아준다
     function week(startDate){
-        // 주어진 날짜가 속한 주의 일요일을 찾습니다.
-        const sunday = new Date(startDate);
-        sunday.setDate(startDate.getDate() - startDate.getDay());
+        
+        setWeekDate([]);
+        
+        // // 주어진 날짜가 속한 주의 일요일을 찾습니다.
+        const sunday = new Date(startDate.$d);
+        sunday.setDate((startDate.$d).getDate() - (startDate.$d).getDay());
 
         // 배열을 초기화합니다.
         const dateArray = [];
-
-        // 일요일부터 토요일까지의 날짜를 배열에 추가합니다.
+        dateArray.push(moment(sunday).format("YYYY-MM-DD"));
+        // date.setDate(sunday.getDate() + 7);
+        // dateArray.push(date);
         for (let i = 0; i < 7; i++) {
             const date = new Date(sunday);
             date.setDate(sunday.getDate() + i);
-            dateArray.push(date);
+            dateArray.push(moment(date).format("YYYY-MM-DD"));
         }
+        setWeekDate(dateArray);
+        
     }
+
+    //날짜에 맞춰서 데이타 필터링
+    useEffect(()=>{
+        if(workData){
+            const arr =workData.filter(item => new Date(item.endPostdate) >= new Date(weekDate[0]) && new Date(item.endPostdate) <= new Date(weekDate[weekDate.length-1]));
+            console.log(calculateTotalCalories(arr));
+        }
+
+
+
+    },[weekDate]);
 
 
     //인바디 파일 등록란 클릭 시 나타나는 알림 창
@@ -512,16 +585,18 @@ function MyPage() {
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
             <DemoContainer components={['DatePicker']}>
             <DatePicker
-            // value={selectOne != null ? selectOne[5] : ''}
-            label="날짜 설정" 
-            //value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
-            slotProps={{
-                textField: {
-                size: "small",
-                format: 'YYYY-MM-DD HH:mm',
-                style:{backgroundColor:'white'}
-                },
-            }}
+                // value={selectOne != null ? selectOne[5] : ''}
+                label="날짜 설정" 
+                onChange={(e) => week(e)} // 변경값을 콘솔에 출력
+                //value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
+                slotProps={{
+                    textField: {
+                        size: "small",
+                        format: 'YYYY-MM-DD HH:mm',
+                        style:{backgroundColor:'white'},
+                    },
+                    }
+                }
             />
             </DemoContainer>
             </LocalizationProvider>
@@ -650,7 +725,7 @@ function MyPage() {
                 <div className="company-info-section">
                     <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
                         <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
+                            <Line options={options} data={workCharKacltData} />
                         </div>
                         <div className="col-lg-inbody">
                             <div id="status-workout-statistics"></div>
