@@ -9,7 +9,7 @@ import AI_Image_Loading from "./AI_Image_Loading"; // 이미지 로딩 컴포넌
 import { upload } from "@testing-library/user-event/dist/upload";
 
 
-var ipAddress = '192.168.0.110';
+var ipAddress = '192.168.0.53';
 
 //쿠기값 받아오는 함수
 function getCookie(name) { //로그인 여부 확인
@@ -94,7 +94,7 @@ function GameRoomProfileModal(props) {
         // const imagedata=new FormData();
         // imagedata.append('uploads',res.data.image_data)
         // // 이미지 서버에 이미지 데이터 업로드 요청 후, 업로드된 이미지 정보를 Flask 서버로 전송
-        // axios.post(`http://192.168.0.15:5050/file/uploads`,imagedata)
+        // axios.post(`http://192.168.0.53:5050/file/uploads`,imagedata)
         // .then((response)=>{
         //   console.log(accountNo,':',response.data);//어카운트 : 이미지 일련번호 //[2161] 결과 값 (문제 3)
         //   const formData = new FormData();

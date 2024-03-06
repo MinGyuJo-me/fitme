@@ -27,7 +27,7 @@ import GameRoomProfileModal from './component/GameRoomProfileModal';
 import GameRoomSideProfile from './component/GameRoomSideProfile';
 
 
-var ipAddress = '192.168.0.110';
+var ipAddress = '192.168.0.53';
 
 const StyledHeader = styled.div`
   background: black;
