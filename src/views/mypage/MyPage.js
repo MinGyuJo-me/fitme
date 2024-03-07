@@ -50,7 +50,7 @@ import MyPageSidebar from '../component/sidebar/MyPageSidebar.js';
 ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Legend);
 
 
-var ipAddress = '192.168.0.53';
+var ipAddress = '192.168.0.110';
 
 const calculateTotalCaloriesByDateAndExercise = (exercises) => {
     const exerciseCaloriesFactors = {
@@ -70,11 +70,14 @@ const calculateTotalCaloriesByDateAndExercise = (exercises) => {
         if (!totalCaloriesByDateAndExercise[date]) {
             totalCaloriesByDateAndExercise[date] = {};
             for (const category in exerciseCaloriesFactors) {
-                totalCaloriesByDateAndExercise[date][category] = 0;
+                totalCaloriesByDateAndExercise[date][category] = { kcal: 0, counts: 0 };
             }
         }
 
-        totalCaloriesByDateAndExercise[date][exercise.category] += calories;
+        totalCaloriesByDateAndExercise[date][exercise.category] = {
+            kcal: calories,
+            counts: exercise.counts
+        };
     });
 
     return totalCaloriesByDateAndExercise;
@@ -96,7 +99,6 @@ async function imageData(code){
         try{
             axios.get(`http://192.168.0.53:5050/image/${code}`)
             .then((response)=>{
-                // console.log(response.data);
                 resolve("data:image/png;base64,"+response.data['image']);
             })
         }
@@ -116,6 +118,7 @@ function MyPage() {
     const [isGameRecordModalOpen, setIsGameRecordModalOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(null)//파일 미리보기 저장할 상태 추가
     const [isExampleImageOpen, setIsExampleImageOpen] = useState(true);//예시 사진을 저장할 상태 추가
+    const [ocrData, setOcrData] = useState([]); //OCR데이터 상태관리
 
     //운동 데이타 전부 가져오기
     const [workData,setWorkData] = useState();
@@ -152,7 +155,16 @@ function MyPage() {
     const getCategoryData = (category, workChartData) => {
         return weekDate.map(date => {
             if (workChartData) {
-                return workChartData[date] && workChartData[date][category] ? workChartData[date][category] : 0;
+                return workChartData[date] && workChartData[date][category].kcal ? workChartData[date][category].kcal : 0;
+            } else {
+                return 0;
+            }
+        });
+    };
+    const getCategoryCountData = (category, workChartData) => {
+        return weekDate.map(date => {
+            if (workChartData) {
+                return workChartData[date] && workChartData[date][category].counts ? workChartData[date][category].counts : 0;
             } else {
                 return 0;
             }
@@ -185,6 +197,9 @@ function MyPage() {
         
         const myCookieValue = getCookie('Authorization');
         setMyCookie(myCookieValue);
+        if(myCookieValue == null){ //로그인 확인
+            navigate('/signin');
+        }
     
         
         axios.get('/api/v1/mypages/account', {
@@ -195,7 +210,6 @@ function MyPage() {
         })
         .then(response => {
             var proflieData = response.data;
-            // console.log('proflieData',proflieData);
             setAccountNo(proflieData.accountNo);
             if(proflieData.image!=null){
                 imageData(proflieData.image).then((test)=>{
@@ -224,12 +238,9 @@ function MyPage() {
     },[])
 
     useEffect(()=>{
-        // console.log('accountNo',accountNo);
         if(accountNo != null){
             axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
                 .then(response =>{
-                //날짜 일정 추가 창
-                console.log('diet',response.data);
                 setMark(response.data['diet']);
                 return response.data;
             })
@@ -250,7 +261,6 @@ function MyPage() {
                 }
             })
             .then(response => {
-                console.log('chat/list',response.data);
             })
             .catch(error => console.log('/chat/list',error));
             
@@ -341,17 +351,47 @@ function MyPage() {
             },
         ],
     };
-    const data2 = {
-        labels:'',
+    const workCharCountData = {
+        labels: weekDate,
         datasets: [
-        {
-            label: '섭취 시간',
-            data: '',
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
+            {
+                fill: true,
+                label: '데드리프트',
+                data: getCategoryCountData('데드리프트', workChartData),
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+                fill: true,
+                label: '벤치프레스',
+                data: getCategoryCountData('벤치프레스', workChartData),
+                borderColor: 'rgb(123, 211, 234)',
+                backgroundColor: 'rgba(123, 211, 234, 0.5)',
+            },
+            {
+                fill: true,
+                label: '스쿼트',
+                data: getCategoryCountData('스쿼트', workChartData),
+                borderColor: 'rgb(161, 238, 189)',
+                backgroundColor: 'rgba(161, 238, 189, 0.5)',
+            },
+            {
+                fill: true,
+                label: '윗몸 일으키기',
+                data: getCategoryCountData('윗몸 일으키기', workChartData),
+                borderColor: 'rgb(246, 247, 196)',
+                backgroundColor: 'rgba(246, 247, 196, 0.5)',
+            },
+            {
+                fill: true,
+                label: '팔굽혀펴기',
+                data: getCategoryCountData('팔굽혀펴기', workChartData),
+                borderColor: 'rgb(246, 214, 214)',
+                backgroundColor: 'rgba(246, 214, 214, 0.5)',
+            },
         ],
     };
+
     const options = {
         maintainAspectRatio: false,
         responsive: true,
@@ -415,21 +455,43 @@ function MyPage() {
         });
     };
 
-    // 파일 선택 후 모달 닫기
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImage(reader.result);
-            // 파일 선택 후 알람창 닫기
-            Swal.close();
-        };
-        reader.readAsDataURL(file);
-    };
+    // // 파일 선택 후 모달 닫기
+    // const handleFileChange = (event) => {
+    //     const file = event.target.files[0];
+    //     const reader = new FileReader();
+    //     reader.onloadend = () => {
+    //         setPreviewImage(reader.result);
+    //         // 파일 선택 후 알람창 닫기
+    //         Swal.close();
+    //     };
+    //     reader.readAsDataURL(file);
+    // };
 
      $('.datepicker').css("background-color","red");
-
-
+    
+     const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        try {
+            const response = await axios.post('http://localhost:5000/ocr', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            setOcrData(response.data); // OCR 결과 상태 업데이트
+            Swal.fire('성공!', '이미지가 성공적으로 처리되었습니다.', 'success');
+        } catch (error) {
+            console.error('Error uploading and processing image:', error);
+            Swal.fire('오류', '이미지 처리 중 오류가 발생했습니다.', 'error');
+        }
+    };
+    
   
 
 
@@ -443,7 +505,7 @@ function MyPage() {
 
         
         <div style={{display:"flex",position:"relative"}}>
-            <MyPageSidebar/>
+            <MyPageSidebar week={(e) => week(e)}/>
             <div className='mypagesidebar-scroll-event'>
             </div>
             
@@ -614,23 +676,10 @@ function MyPage() {
             </div>
             {/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
             <div className="date_picker-mp">
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
 
-            </LocalizationProvider>
-        </div> 
-        <div className="title">
-            <h1>섭취 칼로리</h1>
-        </div>
-        <div className="company-info-section" style={{width:"100%"}}>
-            <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.5)", backgroundColor:"#e8ebec"}}>
-                <div className="col-lg-calorie" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </LocalizationProvider>
+            </div> 
         </div>
 
     
@@ -660,12 +709,9 @@ function MyPage() {
                             </div>
                             <button className='inbody-U-button' onClick={openInbodyModal}>직접 수정하기</button>
                         </div>
-
                         <div className="chart-container cc1">
                            <Chart/>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -675,27 +721,11 @@ function MyPage() {
                     isOpen={isInbodyModalOpen}
                     onClose={closeInbodyModal}
                     onSubmit={handleInbodyUpdate}
+                    ocrData={ocrData} // OCR 데이터를 모달로 전달
                     // 필요한 props 추가
                 />
             )}
         </div>    
-
-            {/* <div className="container">
-                <div className="title">
-                    <h1>운동 진척도</h1>
-                </div>
-                <div className="company-info-section">
-                    <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                        <div className="col-lg-inbody">
-                            <div id="status-workout-progress"></div>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
-
 
             <div className="container">
                 <div className="title">
@@ -703,6 +733,7 @@ function MyPage() {
                 </div>
                 <div className="company-info-section">
                     <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
+                    <div className="sub-mypage-title">맛있는거</div>
                         <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
                             <Line options={options} data={data1} />
                         </div>
@@ -719,9 +750,16 @@ function MyPage() {
                 </div>
                 <div className="company-info-section">
                     <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
-                        <div className="sub-mypage-title">맛있는거</div>
+                        <div className="sub-mypage-title">운동 날짜별 소모 칼로리</div>
                         <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
                             <Bar options={options} data={workCharKacltData} />
+                        </div>
+                        <div className="col-lg-inbody">
+                            <div id="status-workout-statistics"></div>
+                        </div>
+                        <div className="sub-mypage-title">날짜별 운동 횟수</div>
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Bar options={options} data={workCharCountData} />
                         </div>
                         <div className="col-lg-inbody">
                             <div id="status-workout-statistics"></div>
