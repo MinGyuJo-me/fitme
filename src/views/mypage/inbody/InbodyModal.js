@@ -37,7 +37,7 @@ function InbodyModal({ inbodyData, onClose }) {
             {/* 배경 오버레이 */}
             <div className="overlay-background"></div>
             {/* 인바디 모달 */}
-            <div className='inbody-modal'  style={{height:"580px"}}>
+            <div className='inbody-modal'  style={{height:"610px"}}>
                 <div className='modal-profile-edit-title' style={{textAlign:"center",marginTop:"10px"}}>인바디 데이터 수정</div>
                 
                 
@@ -51,6 +51,10 @@ function InbodyModal({ inbodyData, onClose }) {
                     <input type="text" value={height} onChange={(e) => setHeight(e.target.value)} style={{marginTop:"10px", height:"40px", width:"200px"}}  />
                 </div>
 
+                <div className='inbody-modal-div'>
+                    <span className="inbody-modal-text-style">ㅇㅇ</span><br/>
+                    <input type="text" value={height} onChange={(e) => setHeight(e.target.value)} style={{marginTop:"10px", height:"40px", width:"200px"}}  />
+                </div>
 
 
                 <div className='inbody-modal-div'>
