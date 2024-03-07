@@ -106,6 +106,17 @@ async function imageData(code){
     },2000);
 }
 
+async function dietData(accountNo,dietCal){
+    return await new Promise((resolve,reject)=>{
+        try{
+            axios.get(`http://${ipAddress}:5000/diet/${accountNo}?date=`+dietCal) //<---머지시 50 을 44로 변경
+            .then(response =>{
+                resolve(response.data['chart2']);
+            })
+        }
+        catch(err){reject(err)};
+    },2000);
+}
 function MyPage() {
     const [accountData, setAccount ] = useState([]);
     const [accountNo, setAccountNo] = useState();
@@ -119,6 +130,9 @@ function MyPage() {
     const [previewImage, setPreviewImage] = useState(null)//파일 미리보기 저장할 상태 추가
     const [isExampleImageOpen, setIsExampleImageOpen] = useState(true);//예시 사진을 저장할 상태 추가
     const [ocrData, setOcrData] = useState([]); //OCR데이터 상태관리
+
+    //식단 데이타
+    const [weekFoodChartData,setWeekFoodChartData] = useState([]);
 
     //운동 데이타 전부 가져오기
     const [workData,setWorkData] = useState();
@@ -210,6 +224,7 @@ function MyPage() {
         })
         .then(response => {
             var proflieData = response.data;
+
             setAccountNo(proflieData.accountNo);
             if(proflieData.image!=null){
                 imageData(proflieData.image).then((test)=>{
@@ -222,14 +237,15 @@ function MyPage() {
                     setAccount(proflieData);
                 })
             }
-            if(proflieData.game_image!=null){
-                imageData(proflieData.game_image).then((test)=>{
-                    proflieData.image = test;
+            if(proflieData.gameImage!=null){
+                imageData(proflieData.gameImage).then((test)=>{
+                    
+                    proflieData.gameImage = test;
                     setAccount(proflieData);
                 })
             }else{
                 imageData('1').then((test)=>{
-                    proflieData.game_image = test;
+                    proflieData.gameImage = test;
                     setAccount(proflieData);
                 })
             }
@@ -240,7 +256,9 @@ function MyPage() {
     useEffect(()=>{
         if(accountNo != null){
             axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
-                .then(response =>{
+
+            .then(response =>{
+
                 setMark(response.data['diet']);
                 return response.data;
             })
@@ -268,7 +286,6 @@ function MyPage() {
         }
     },[accountNo]);
 
-
     const [isInbodyModalOpen, setIsInbodyModalOpen] = useState(false); // 상태 변수 추가
     // 인바디 정보 모달 열기 함수
     const openInbodyModal = () => {
@@ -291,25 +308,19 @@ function MyPage() {
 
     
     //차트
-    const data1 = {
-        labels:'',
+    const dataFood = {
+        labels:['에너지(kcal)','수분(g)','단백질(g)','지방(g)','회분(g)','탄수화물(g)'],
         datasets: [
             {
               fill: true,
-              label: '하루 영양소 섭취량',
-              data: '',
+              label: '일주일 평균 영향소',
+              data: weekFoodChartData.map(item=>item.size),
               borderColor: 'rgb(255, 99, 132)',
               backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
-            {
-                fill: true,
-                label: 'Dataset 2',
-                data: [600,500,400,300,200,100],
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            },
           ],
         };
+
     //소모칼로리
     const workCharKacltData = {
         labels: weekDate,
@@ -428,12 +439,50 @@ function MyPage() {
     }
 
     //날짜에 맞춰서 데이타 필터링
-    useEffect(()=>{
-        if(workData){
-            const arr =workData.filter(item => new Date(item.endPostdate) >= new Date(weekDate[0]) && new Date(item.endPostdate) <= new Date(weekDate[weekDate.length-1]));
+    useEffect(() => {
+        if (workData) {
+            const arr = workData.filter(item => new Date(item.endPostdate) >= new Date(weekDate[0]) && new Date(item.endPostdate) <= new Date(weekDate[weekDate.length - 1]));
             setWorkChartData(calculateTotalCaloriesByDateAndExercise(arr));
+    
+            // 비동기 호출을 모두 기다릴 프로미스 배열 생성
+            const promises = weekDate.map(date => dietData(accountNo, date));
+    
+            // 모든 비동기 호출이 완료되면 sumSizes 함수 호출
+            Promise.all(promises)
+                .then(results => {
+                    // console.log('sumSizes', sumSizes(results));
+                    const processedData = sumSizes(results);
+                    const normalizedData = processedData.map(item => ({ ...item, size: (item.size / results.length).toFixed(2) }));
+
+                    setWeekFoodChartData(normalizedData);
+                })
+                .catch(error => {
+                    console.error('Error while fetching diet data:', error);
+                });
         }
-    },[weekDate]);
+    }, [weekDate]);
+    
+
+    function sumSizes(data) {
+        const result = {};
+      
+        // 데이터를 순회하며 name 별로 size를 더합니다.
+        data.forEach(arr => {
+            arr.forEach(obj => {
+                const { name, size } = obj;
+                if (result[name]) {
+                result[name] += size;
+                } else {
+                result[name] = size;
+                }
+            });
+        });
+      
+        // 결과를 배열로 변환합니다.
+        const finalResult = Object.entries(result).map(([name, size]) => ({ name, size }));
+      
+        return finalResult;
+    }
 
     
 
@@ -600,7 +649,7 @@ function MyPage() {
                             </div>
                         </div>
                         <div className='sideber-item' style={{overflow:'hidden', display:"flex", flexDirection:"column"}}>
-                            <img id='ibox' src={accountData.image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
+                            <img id='ibox' src={accountData.game_image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
                             <div className="form_row" style={{width:"80%", margin:"0px"}}>
                                 <div>
                                     <span className="label">닉네임</span>
@@ -733,9 +782,13 @@ function MyPage() {
                 </div>
                 <div className="company-info-section">
                     <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
+
                     <div className="sub-mypage-title">맛있는거</div>
+
+                    <div className="sub-mypage-title">해당주차 영양소 통계</div>
+
                         <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
+                            <Bar options={options} data={dataFood} />
                         </div>
                         <div className="col-lg-inbody">
                             <div id="status-meal-statistics"></div>

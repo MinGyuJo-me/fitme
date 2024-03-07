@@ -54,8 +54,10 @@ function InbodyModal({ isOpen, onClose, onSubmit, ocrData }) {
                 </div>
 
                 <div className='inbody-modal-div'>
+
                     <span className="inbody-modal-text-style">체지방량</span><br/>
                     <input type="text" value={bodyFat_mass} onChange={(e) => setBodyFat_mass(e.target.value)} style={{marginTop:"10px", height:"40px", width:"200px"}}  />
+
                 </div>
 
 
