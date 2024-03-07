@@ -50,7 +50,7 @@ import MyPageSidebar from '../component/sidebar/MyPageSidebar.js';
 ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Legend);
 
 
-var ipAddress = '192.168.0.53';
+var ipAddress = '192.168.0.110';
 
 const calculateTotalCaloriesByDateAndExercise = (exercises) => {
     const exerciseCaloriesFactors = {
@@ -129,6 +129,7 @@ function MyPage() {
     const [isGameRecordModalOpen, setIsGameRecordModalOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(null)//파일 미리보기 저장할 상태 추가
     const [isExampleImageOpen, setIsExampleImageOpen] = useState(true);//예시 사진을 저장할 상태 추가
+    const [ocrData, setOcrData] = useState([]); //OCR데이터 상태관리
 
     //식단 데이타
     const [weekFoodChartData,setWeekFoodChartData] = useState([]);
@@ -210,6 +211,9 @@ function MyPage() {
         
         const myCookieValue = getCookie('Authorization');
         setMyCookie(myCookieValue);
+        if(myCookieValue == null){ //로그인 확인
+            navigate('/signin');
+        }
     
         
         axios.get('/api/v1/mypages/account', {
@@ -220,7 +224,7 @@ function MyPage() {
         })
         .then(response => {
             var proflieData = response.data;
-            
+
             setAccountNo(proflieData.accountNo);
             if(proflieData.image!=null){
                 imageData(proflieData.image).then((test)=>{
@@ -252,7 +256,9 @@ function MyPage() {
     useEffect(()=>{
         if(accountNo != null){
             axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
+
             .then(response =>{
+
                 setMark(response.data['diet']);
                 return response.data;
             })
@@ -498,21 +504,43 @@ function MyPage() {
         });
     };
 
-    // 파일 선택 후 모달 닫기
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImage(reader.result);
-            // 파일 선택 후 알람창 닫기
-            Swal.close();
-        };
-        reader.readAsDataURL(file);
-    };
+    // // 파일 선택 후 모달 닫기
+    // const handleFileChange = (event) => {
+    //     const file = event.target.files[0];
+    //     const reader = new FileReader();
+    //     reader.onloadend = () => {
+    //         setPreviewImage(reader.result);
+    //         // 파일 선택 후 알람창 닫기
+    //         Swal.close();
+    //     };
+    //     reader.readAsDataURL(file);
+    // };
 
      $('.datepicker').css("background-color","red");
-
-
+    
+     const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        try {
+            const response = await axios.post('http://localhost:5000/ocr', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            setOcrData(response.data); // OCR 결과 상태 업데이트
+            Swal.fire('성공!', '이미지가 성공적으로 처리되었습니다.', 'success');
+        } catch (error) {
+            console.error('Error uploading and processing image:', error);
+            Swal.fire('오류', '이미지 처리 중 오류가 발생했습니다.', 'error');
+        }
+    };
+    
   
 
 
@@ -730,12 +758,9 @@ function MyPage() {
                             </div>
                             <button className='inbody-U-button' onClick={openInbodyModal}>직접 수정하기</button>
                         </div>
-
                         <div className="chart-container cc1">
                            <Chart/>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -745,6 +770,7 @@ function MyPage() {
                     isOpen={isInbodyModalOpen}
                     onClose={closeInbodyModal}
                     onSubmit={handleInbodyUpdate}
+                    ocrData={ocrData} // OCR 데이터를 모달로 전달
                     // 필요한 props 추가
                 />
             )}
@@ -756,7 +782,11 @@ function MyPage() {
                 </div>
                 <div className="company-info-section">
                     <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
+
+                    <div className="sub-mypage-title">맛있는거</div>
+
                     <div className="sub-mypage-title">해당주차 영양소 통계</div>
+
                         <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
                             <Bar options={options} data={dataFood} />
                         </div>
