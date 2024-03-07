@@ -118,18 +118,18 @@ function SignIn() {
 
             console.log(myCookieValue);
 
-            axios.put('http://192.168.0.53:8080/api/v1/notifications/online', {}, {
-              headers: {
-                'Authorization': `${myCookieValue}`,
-                'Content-Type': 'application/json; charset=UTF-8'
-              }
-            })
-            .then(response => {
-              console.log(response.data);
-            })
-            .catch(err => {
-              console.log(err);
-            })
+            // axios.put('http://192.168.0.53:8080/api/v1/notifications/online', {}, {
+            //   headers: {
+            //     'Authorization': `${myCookieValue}`,
+            //     'Content-Type': 'application/json; charset=UTF-8'
+            //   }
+            // })
+            // .then(response => {
+            //   console.log(response.data);
+            // })
+            // .catch(err => {
+            //   console.log(err);
+            // })
 
             stompClient.connect({}, () => {
 
