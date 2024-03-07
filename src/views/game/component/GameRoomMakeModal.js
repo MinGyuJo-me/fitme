@@ -10,6 +10,10 @@ import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import GameRoom from "../GameRoom";
 
+
+import swal from 'sweetalert2';
+
+
 // Modal 컴포넌트
 function GameRoomMakeModal(props) {
     const [roomName, setRoomName] = useState("");
@@ -81,12 +85,18 @@ function GameRoomMakeModal(props) {
         .then(response => {
         console.log("게임 생성 성공", response.data);
         const gameroomNo = response.data.gameroomNo;
-        alert("게임이 성공적으로 생성되었습니다.");
+        swal.fire({
+            icon: "success",
+            title: "게임이 성공적으로 생성되었습니다."
+          }); 
         navigate(`/game/room?${gameroomNo}`, { state: { roomNo: gameroomNo, ...response.data } });
         })
         .catch(error => {
         console.error("게임 생성 실패", error);
-        alert("게임 생성에 실패하였습니다.");
+        swal.fire({
+            icon: "warning",
+            title: "게임 생성에 실패하였습니다."
+          });
         });
     };
 

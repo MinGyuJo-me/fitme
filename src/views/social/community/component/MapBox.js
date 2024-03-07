@@ -118,7 +118,7 @@ function MapBox(props) {
     };
 
     return (
-        <div className="sideber-search-box">
+        <div className="sideber-search-box" style={{backgroundColor:'#ffffff',boxShadow: '0px 5px 5px 5px rgba(0, 0, 0, 0.1)'}}>
             <div id="map" className="sidebar-map-box">
             {showError && (
                 <div id="errorText" className="error-text">장소 검색에 실패했습니다.</div>
@@ -135,7 +135,7 @@ function MapBox(props) {
                         placeholder="Search...."
                     />
                     <button className="button search-button" type="submit">
-                        <i className="fas fa-search icon-manipulate"></i>
+                        <i className="fas fa-search icon-manipulate" style={{marginTop:'15px'}}></i>
                     </button>
                 </form>
             </div>
