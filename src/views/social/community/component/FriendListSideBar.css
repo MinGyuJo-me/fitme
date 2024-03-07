@@ -1,95 +1,128 @@
-
-.friends-icon{
-    position: relative;;
-    border: 3px solid #0000003d;
-    overflow: hidden;
-    border-radius: 50%;
-    height: 70px;
-    width: 70px;
-    box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.2);
-}
-
-.friends-icon img{
-    width: 100%;
-    height: 100%;
-}
-
-
-.friend-list-body{
-    box-shadow: inset 3px 3px 3px 3px rgba(0, 0, 0, 0.2);
-    border-radius: 50px;
-    padding: 5px;
+.FLbody {
     display: flex;
-    height: 80px;
-    margin-bottom: 13px;
-    background-color: #f6f6f6cd;
-}
-
-
-.friend-icon > img{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    
-}
-
-
-
-.friends-list-body-description{
-    width: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content:center;
-}
-
-.friends-list-body-description div{
-    font-size: 15px;
-    padding-left: 20px;
-    height: 33%;
-}
-
-
-.friends-list-body-description div:nth-child(1){
-    font-weight: bold;
-    font-size: 20px;
-    color: #255946;
-}
-
-.sideber-content .st1{
-    display: flex;
-    margin-bottom: 20px;
-}
-
-
-.st1{
-    display: flex;
+    align-items: center;
     justify-content: center;
-    gap:30px
-}
-.st1 div{
-    width: 40%;
-}
+  }
 
-.st1 .title{
-    width: 100%;
-    border-left: 5px solid #255946;
-    padding-left: 20px;
+.showcase {
+    width: 350px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    min-height: 380px;
+    margin-bottom: 20px;
+    box-Shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1)
+  }
+  
+  h1 {
+    margin: 0;
+    margin-bottom: 20px;
+  }
+  
+  small {
+    display: block;
+    color: #666;
+    text-align: center;
+  
+    a {
+      color: #f1708f;
+  
+      &:hover {
+        color: #ee406a;
+      }
+    }
+  }
+  
+  /* 탭 스타일 */
+  
+  .tabgroup {
+    display: flex;
+    margin-bottom: 15px;
+    height: 50px;
+  }
+  
+  .tab {
+    flex: 1; /* Adjust this value as needed to make all tabs have the same width */
+    border: 1px solid #dcdcdc;
+    padding: 15px 20px;
+    margin-left: -12px;
+    border-radius: 5px;
+    line-height: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
     font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 20px;
-}
+  
+    &:hover {
+      background-color: #eee;
+      border-color: #b1b1b1;
+    }
+  
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  .tab:nth-of-type(2),
+  .tab:nth-of-type(3) {
+    margin-left: -5px;
+  }
+  
+  .tab-active {
+    z-index: 1;
+    border-top: 4px solid #0fa3ff; /* 변경된 상단 보더 색상 및 두께 */
+    border-right: 1px solid #dcdcdc; /* 우측 보더 추가 */
+    border-left: 1px solid #dcdcdc; /* 좌측 보더 추가 */
+    border-bottom: 1px solid #dcdcdc; /* 하단 보더 추가 */
 
-.st1 .title:nth-child(2){
-    font-weight: normal;
-    font-size: 17px;
-    border-left: 5px solid #255946;
-}
+    &:hover {
+        border-top: 4px solid #0fa3ff;
+        border-right: 1px solid #dcdcdc; 
+        border-left: 1px solid #dcdcdc;
+        border-bottom: 1px solid #dcdcdc;
+    }
 
-.friend-status{
-    margin-top: 24px;
-    background-color: green;
-    width: 25px;
-    height: 25px;
+    &:focus {
+        border-top: 4px solid #0fa3ff;
+        border-right: 1px solid #dcdcdc;
+        border-left: 1px solid #dcdcdc;
+        border-bottom: 1px solid #dcdcdc;
+    }
+}
+  
+
+
+  /* 리스트 */
+  
+  .person-list {
+    padding: 0;
+    margin: 0 15px 30px;
+    list-style: none;
+    color: #555;
+    border-top: 1px solid #ddd;
+  }
+  
+  .person-item {
+    padding: 16px 0;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    color: #444;
+    text-decoration: none;
+  
+    &:hover {
+      background-color: #eee;
+    }
+  }
+  
+  .person-name {
+    padding-left: 20px;
+    flex: 1;
+  }
+  
+  .person-avatar {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-}
+    margin-left: 16px;
+  }
