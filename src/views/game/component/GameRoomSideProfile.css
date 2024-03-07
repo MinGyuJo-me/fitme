@@ -49,3 +49,9 @@
     color: white;
     background-color: #3C4852;
 }
+
+.game-profile img{
+    position: absolute;
+    left:0;
+    border-radius: 5px;
+}

@@ -36,7 +36,7 @@ const DaumPost = (props) => {
         };
     
         return (
-            <div style={{ position: "absolute", width: "500px", right: 0, left: 0, top: "80%", margin: "auto" }}>
+            <div style={{ position: "absolute", width: "500px", right: 0, left: 0, top: "10%", margin: "auto" }}>
                 {visible && (
                     <div>
                         <DaumPostcode

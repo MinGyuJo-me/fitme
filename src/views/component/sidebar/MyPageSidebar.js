@@ -1,36 +1,49 @@
 import {Link} from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './MyPageSidebar.css';
-import $ from 'jquery'
+import $, { event } from 'jquery'
 
-function MyPageSidebar() {
+
+
+//datepicker사용
+//npm install @mui/x-date-pickers
+//npm install @mui/material @emotion/react @emotion/styled
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
+//npm install dayjs
+import dayjs from 'dayjs';
+import moment from "moment";
+
+function MyPageSidebar({week}) {
 
     const MenuSlide = (e) =>{
-        if($(e.target).hasClass("active")){
-        }
-        else{
-            $(".sidebar-submenu").slideUp();
+        if($(e.target.parentElement).hasClass("sidebar-dropdown") && !$(e.target.parentElement).hasClass("active")){
             $(".sidebar-dropdown").removeClass("active");
-            $(e.target).addClass("active");
-            $(e.target).find(".sidebar-submenu").slideDown();
+            $(e.target.parentElement).addClass("active");
+            $(".sidebar-submenu").slideUp();
+            $(e.target.parentElement).find(".sidebar-submenu").slideDown();
         }
     }
 
-    $("#close-sidebar").on("click",function() {
-            $(".page-wrapper").removeClass("toggled");
-            $(".page-wrapper").css("width","0px");
-        });
+    $("#close-sidebar").on("click", function () {
+        $(".page-wrapper").removeClass("toggled");
+        $(".page-wrapper").css("width", "0px");
+    });
 
-        $("#show-sidebar").on("click",function() {
-            $(".page-wrapper").addClass("toggled");
-            $(".page-wrapper").css("width","260px");
+    $("#show-sidebar").on("click", function () {
+        $(".page-wrapper").addClass("toggled");
+        $(".page-wrapper").css("width", "360px");
     });
 
 
 
     return (
         <div className='sidebar-toggle-mode'>
-            <div className="page-wrapper chiller-theme" style={{border:"1px solid green", width:"100%"}}>
+            <div className="page-wrapper chiller-theme toggled" style={{width:"100%"}}>
                 <a id="show-sidebar" className="btn btn-sm btn-dark">
                 <i className="fas fa-bars"></i>
                 </a>
@@ -41,11 +54,11 @@ function MyPageSidebar() {
                 <div className="sidebar-content">
                     <div className="sidebar-brand">
                     {/*-- 메인화면으로 이동 링크 걸 예정 --*/}
-                    <Link to="/">FITME</Link>
+                    <span style={{display:"inline-block", marginRight:"210px", marginTop:"5px"}}><Link to="/"><span style={{color:"black", fontSize:"30px", fontWeight:"bold"}}>FITME</span></Link></span>
                     
                     {/*-- 사이드바 토글 jquery --*/}
                     <div id="close-sidebar">
-                        <i className="fas fa-times"></i>
+                        <i className="fas fa-times" style={{fontSize:"25px"}}></i>
                     </div>
                     </div>
                     <div className="sidebar-header">
@@ -55,8 +68,8 @@ function MyPageSidebar() {
                     </div>
                     {/*-- 사용자 이름 정보 --*/}
                     <div className="user-info">
-                        <span className="user-name">Jo
-                        <strong>Dong-hun</strong>
+                        <span className="user-name">
+                        <strong>Jo-Dong-hun</strong>
                         </span>
                         <span className="user-status">
                         <i className="fa fa-circle"></i>
@@ -66,24 +79,47 @@ function MyPageSidebar() {
                     </div>
                     {/*-- sidebar-header --*/}
                     <div className="sidebar-search" style={{padding:"0px"}}>
+
+                        {/* ★★★★★★★★★★★★★★★  날짜 설정  ★★★★★★★★★★★★★★★*/}
                         <div className="input-group">
-                            <input type="text" className="form-control search-menu" placeholder="Search..."/>
-                            <button className="sidebar-button-style">
-                                <i className="fa fa-search" aria-hidden="true"></i>
-                            </button>
+                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+                        <DemoContainer components={['DatePicker']}>
+                        <DatePicker
+                            // value={selectOne != null ? selectOne[5] : ''}
+                            label="날짜 설정" 
+                            onChange={(e) => week(e)} // 변경값을 콘솔에 출력
+                            //value={dayjs(selectOne == '' || selectOne == null ? moment(value).format("YYYY-MM-DD 00:00") : selectOne[5])}
+                            slotProps={{
+                                textField: {
+                                    size: "small",
+                                    format: 'YYYY-MM-DD HH:mm',
+                                    style:{backgroundColor:'white', width:"350px"},
+                                },
+                                }
+                            }
+                        />
+                        </DemoContainer>
+                        </LocalizationProvider>
+                        </div>
+                        {/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
+                        <div className="date_picker-mp">
+                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+
+                        </LocalizationProvider>
                         </div>
                     </div>
+
                     {/*-- sidebar-header --*/}
                     <div className="sidebar-menu">
                     <ul>
                         <li className="sidebar-header-menu">
-                        <span>Menu</span>
+                            <span className="sidebar-header-menu-title">Menu</span>
                         </li>
                         {/*-- 대메뉴 영역  --*/}
-                        <li className="sidebar-dropdown"  onClick={MenuSlide}>
+                        <li className="sidebar-dropdown" onClick={MenuSlide}>
                         <a>
-                            <i className="fa-solid fa-user"></i>
-                            <span>User</span>
+                            <i className="fa-solid fa-user event-null"></i>
+                            <span className="event-null">User</span>
                         </a>
                         <div className="sidebar-submenu">
                             <ul>
@@ -103,10 +139,10 @@ function MyPageSidebar() {
 
 
                         {/*--------- 대메뉴 영역  ---------*/}
-                        <li className="sidebar-dropdown"  onClick={MenuSlide}>
+                        <li className="sidebar-dropdown" onClick={MenuSlide}>
                             <a>
-                                <i className="fa-solid fa-chart-pie"></i>
-                                <span>Statistic</span>
+                                <i className="fa-solid fa-chart-pie event-null"></i>
+                                <span className="event-null">Statistic</span>
                             </a>
                             <div className="sidebar-submenu">
                                 <ul>
@@ -140,8 +176,8 @@ function MyPageSidebar() {
                         {/*--------- 대메뉴 영역  ---------*/}
                         <li className="sidebar-dropdown" onClick={MenuSlide}>
                             <a>
-                                <i className="fa-solid fa-box"></i>
-                                <span>MyBox</span>
+                                <i className="fa-solid fa-box event-null"></i>
+                                <span className="event-null">MyBox</span>
                             </a>
                             <div className="sidebar-submenu">
                                 <ul>
@@ -163,7 +199,7 @@ function MyPageSidebar() {
                         
                         
                         <li className="sidebar-header-menu">
-                        <span>Extra</span>
+                            <span className="sidebar-header-menu-title">Extra</span>
                         </li>
                         <li>
                         <a href="#">

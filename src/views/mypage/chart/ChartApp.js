@@ -20,10 +20,10 @@ ChartJS.register(
 );
 
 const data = {
-  labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5'],
+  labels: ['체중', '골격근량', '체지방량', 'BMI', '체지방률'],
   datasets: [
     {
-      label: '# of Votes',
+      label: '인바디_OCR',
       data: [2, 9, 3, 5, 2],
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',

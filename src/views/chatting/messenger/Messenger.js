@@ -189,7 +189,6 @@ function Messenger() {
         });
     
         setChat('');
-        if(check== 'out') navigate('/messenger');
     };
   
     const subscribe = (chatNo) => {
