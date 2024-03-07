@@ -4,14 +4,14 @@ import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
 
-var ipAddress = '192.168.0.110';
+var ipAddress = '192.168.0.53';
 
 //
 //이미지서버 연결 
 async function imageData(code){
     return await new Promise((resolve,reject)=>{
     try{
-        axios.get(`http://192.168.0.15:5050/image/${code}`)
+        axios.get(`http://192.168.0.53:5050/image/${code}`)
         .then((response)=>{
             console.log(response.data);
             resolve("data:image/png;base64,"+response.data['image']);
@@ -135,8 +135,7 @@ function GameRoomSideProfile({setShowModal,setShowModal1,imageUrl}){
                 </div>
 
                 <div className='col-lg-10 col-md-10 game-play-button-layout'>
-                    <button className="game-play-button" onClick={handleClick}>일반 게임</button>
-                    <button className="game-play-button">랭킹 게임</button>
+                    <button className="game-play-button" onClick={handleClick}>Game Start</button>
                 </div>
 
             </div>

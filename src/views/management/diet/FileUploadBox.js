@@ -74,7 +74,7 @@ const FileUploadBox = ({ onImageChange,setFile  }) => {
     data.append("base64Encoded",code);
     return await new Promise((resolve,reject)=>{
       try{
-        axios.post((`http://192.168.0.15:5000/food`),data)
+        axios.post((`http://192.168.0.53:5000/food`),data)
         // .then(response=>response.json())
           .then((response)=>{
             console.log(response.data);
