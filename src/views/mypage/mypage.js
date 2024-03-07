@@ -50,10 +50,9 @@ import MyPageSidebar from '../component/sidebar/MyPageSidebar.js';
 ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Legend);
 
 
-var ipAddress = '192.168.0.53';
+var ipAddress = '192.168.0.110';
 
-const calculateTotalCalories = (exercises) => {
-    
+const calculateTotalCaloriesByDateAndExercise = (exercises) => {
     const exerciseCaloriesFactors = {
         "스쿼트": 0.1,
         "데드리프트": 0.15,
@@ -61,36 +60,45 @@ const calculateTotalCalories = (exercises) => {
         "팔굽혀펴기": 0.3, // 팔굽혀펴기는 무게를 고려하지 않습니다.
         "윗몸 일으키기": 0.2, // 윗몸일으키기는 무게를 고려하지 않습니다.
     };
-  
-    const totalArray = {
-        "스쿼트": [],
-        "데드리프트": [],
-        "벤치프레스": [],
-        "팔굽혀펴기": [], // 팔굽혀펴기는 무게를 고려하지 않습니다.
-        "윗몸 일으키기": [], // 윗몸일으키기는 무게를 고려하지 않습니다.
-    };
-  
-    
-    let totalCalories = 0;
+
+    const totalCaloriesByDateAndExercise = {};
+
     exercises.forEach(exercise => {
-        totalCalories = 0;
-        if(exercise.category === "팔굽혀펴기" || exercise.category === "윗몸 일으키기") {
-            totalCalories += exercise.counts * exerciseCaloriesFactors[exercise.category];
-        } else {
-            totalCalories += exercise.weight * exercise.counts * exerciseCaloriesFactors[exercise.category];
+        const date = exercise.endPostdate;
+        const calories = calculateCalories(exercise, exerciseCaloriesFactors);
+
+        if (!totalCaloriesByDateAndExercise[date]) {
+            totalCaloriesByDateAndExercise[date] = {};
+            for (const category in exerciseCaloriesFactors) {
+                totalCaloriesByDateAndExercise[date][category] = { kcal: 0, counts: 0 };
+            }
         }
-        totalArray[exercise.category].push(totalCalories);
+
+        totalCaloriesByDateAndExercise[date][exercise.category] = {
+            kcal: calories,
+            counts: exercise.counts
+        };
     });
-  
-    return totalArray;
+
+    return totalCaloriesByDateAndExercise;
 };
+
+const calculateCalories = (exercise, factors) => {
+    if (exercise.category === "팔굽혀펴기" || exercise.category === "윗몸 일으키기") {
+        return exercise.counts * factors[exercise.category];
+    } else {
+        return exercise.weight * exercise.counts * factors[exercise.category];
+    }
+};
+
+
+
 
 async function imageData(code){
     return await new Promise((resolve,reject)=>{
         try{
             axios.get(`http://192.168.0.53:5050/image/${code}`)
             .then((response)=>{
-                // console.log(response.data);
                 resolve("data:image/png;base64,"+response.data['image']);
             })
         }
@@ -98,6 +106,17 @@ async function imageData(code){
     },2000);
 }
 
+async function dietData(accountNo,dietCal){
+    return await new Promise((resolve,reject)=>{
+        try{
+            axios.get(`http://${ipAddress}:5000/diet/${accountNo}?date=`+dietCal) //<---머지시 50 을 44로 변경
+            .then(response =>{
+                resolve(response.data['chart2']);
+            })
+        }
+        catch(err){reject(err)};
+    },2000);
+}
 function MyPage() {
     const [accountData, setAccount ] = useState([]);
     const [accountNo, setAccountNo] = useState();
@@ -110,9 +129,14 @@ function MyPage() {
     const [isGameRecordModalOpen, setIsGameRecordModalOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState(null)//파일 미리보기 저장할 상태 추가
     const [isExampleImageOpen, setIsExampleImageOpen] = useState(true);//예시 사진을 저장할 상태 추가
+    const [ocrData, setOcrData] = useState([]); //OCR데이터 상태관리
+
+    //식단 데이타
+    const [weekFoodChartData,setWeekFoodChartData] = useState([]);
 
     //운동 데이타 전부 가져오기
     const [workData,setWorkData] = useState();
+    const [workChartData,setWorkChartData] = useState();
 
     // 회원 정보 모달 열기 함수
     const openProfileModal = () => {
@@ -140,7 +164,28 @@ function MyPage() {
     console.log('수정된 회원 정보:', formData);
     // 모달 닫기
     closeProfileModal();
-};
+    };
+
+    const getCategoryData = (category, workChartData) => {
+        return weekDate.map(date => {
+            if (workChartData) {
+                return workChartData[date] && workChartData[date][category].kcal ? workChartData[date][category].kcal : 0;
+            } else {
+                return 0;
+            }
+        });
+    };
+    const getCategoryCountData = (category, workChartData) => {
+        return weekDate.map(date => {
+            if (workChartData) {
+                return workChartData[date] && workChartData[date][category].counts ? workChartData[date][category].counts : 0;
+            } else {
+                return 0;
+            }
+        });
+    };
+    
+    
 
     // 게임 기록 수정 이벤트 핸들러
     const handleGameRecordUpdate = (formData) => {
@@ -166,11 +211,9 @@ function MyPage() {
         
         const myCookieValue = getCookie('Authorization');
         setMyCookie(myCookieValue);
-        // console.log('myCookieValue',myCookieValue);
-        /*
         if(myCookieValue == null){ //로그인 확인
             navigate('/signin');
-        }*/
+        }
     
         
         axios.get('/api/v1/mypages/account', {
@@ -181,7 +224,7 @@ function MyPage() {
         })
         .then(response => {
             var proflieData = response.data;
-            // console.log('proflieData',proflieData);
+
             setAccountNo(proflieData.accountNo);
             if(proflieData.image!=null){
                 imageData(proflieData.image).then((test)=>{
@@ -194,14 +237,15 @@ function MyPage() {
                     setAccount(proflieData);
                 })
             }
-            if(proflieData.game_image!=null){
-                imageData(proflieData.game_image).then((test)=>{
-                    proflieData.image = test;
+            if(proflieData.gameImage!=null){
+                imageData(proflieData.gameImage).then((test)=>{
+                    
+                    proflieData.gameImage = test;
                     setAccount(proflieData);
                 })
             }else{
                 imageData('1').then((test)=>{
-                    proflieData.game_image = test;
+                    proflieData.gameImage = test;
                     setAccount(proflieData);
                 })
             }
@@ -210,12 +254,11 @@ function MyPage() {
     },[])
 
     useEffect(()=>{
-        // console.log('accountNo',accountNo);
         if(accountNo != null){
             axios.get(`http://${ipAddress}:5000/account/${accountNo}?hobby=diet`)
-                .then(response =>{
-                //날짜 일정 추가 창
-                console.log('diet',response.data);
+
+            .then(response =>{
+
                 setMark(response.data['diet']);
                 return response.data;
             })
@@ -236,14 +279,12 @@ function MyPage() {
                 }
             })
             .then(response => {
-                console.log('chat/list',response.data);
             })
             .catch(error => console.log('/chat/list',error));
             
             const date = new Date() 
         }
     },[accountNo]);
-
 
     const [isInbodyModalOpen, setIsInbodyModalOpen] = useState(false); // 상태 변수 추가
     // 인바디 정보 모달 열기 함수
@@ -267,77 +308,101 @@ function MyPage() {
 
     
     //차트
-    const data1 = {
-        labels:'',
+    const dataFood = {
+        labels:['에너지(kcal)','수분(g)','단백질(g)','지방(g)','회분(g)','탄수화물(g)'],
         datasets: [
             {
               fill: true,
-              label: '하루 영양소 섭취량',
-              data: '',
+              label: '일주일 평균 영향소',
+              data: weekFoodChartData.map(item=>item.size),
               borderColor: 'rgb(255, 99, 132)',
               backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
-            {
-                fill: true,
-                label: 'Dataset 2',
-                data: [600,500,400,300,200,100],
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            },
           ],
         };
+
     //소모칼로리
     const workCharKacltData = {
         labels: weekDate,
         datasets: [
             {
-              fill: true,
-              label: '데드리프트',
-              data: weekDate['데드리프트'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '데드리프트',
+                data: getCategoryData('데드리프트', workChartData),
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
             {
-              fill: true,
-              label: '벤치프레스',
-              data: weekDate['벤치프레스'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '벤치프레스',
+                data: getCategoryData('벤치프레스', workChartData),
+                borderColor: 'rgb(123, 211, 234)',
+                backgroundColor: 'rgba(123, 211, 234, 0.5)',
             },
             {
-              fill: true,
-              label: '스쿼트',
-              data: weekDate['스쿼트'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '스쿼트',
+                data: getCategoryData('스쿼트', workChartData),
+                borderColor: 'rgb(161, 238, 189)',
+                backgroundColor: 'rgba(161, 238, 189, 0.5)',
             },
             {
-              fill: true,
-              label: '윗몸 일으키기',
-              data: weekDate['윗몸 일으키기'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '윗몸 일으키기',
+                data: getCategoryData('윗몸 일으키기', workChartData),
+                borderColor: 'rgb(246, 247, 196)',
+                backgroundColor: 'rgba(246, 247, 196, 0.5)',
             },
             {
-              fill: true,
-              label: '팔굽혀펴기',
-              data: weekDate['팔굽혀펴기'],
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                fill: true,
+                label: '팔굽혀펴기',
+                data: getCategoryData('팔굽혀펴기', workChartData),
+                borderColor: 'rgb(246, 214, 214)',
+                backgroundColor: 'rgba(246, 214, 214, 0.5)',
             },
-          ],
-        };
-    const data2 = {
-        labels:'',
-        datasets: [
-        {
-            label: '섭취 시간',
-            data: '',
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
         ],
     };
+    const workCharCountData = {
+        labels: weekDate,
+        datasets: [
+            {
+                fill: true,
+                label: '데드리프트',
+                data: getCategoryCountData('데드리프트', workChartData),
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+                fill: true,
+                label: '벤치프레스',
+                data: getCategoryCountData('벤치프레스', workChartData),
+                borderColor: 'rgb(123, 211, 234)',
+                backgroundColor: 'rgba(123, 211, 234, 0.5)',
+            },
+            {
+                fill: true,
+                label: '스쿼트',
+                data: getCategoryCountData('스쿼트', workChartData),
+                borderColor: 'rgb(161, 238, 189)',
+                backgroundColor: 'rgba(161, 238, 189, 0.5)',
+            },
+            {
+                fill: true,
+                label: '윗몸 일으키기',
+                data: getCategoryCountData('윗몸 일으키기', workChartData),
+                borderColor: 'rgb(246, 247, 196)',
+                backgroundColor: 'rgba(246, 247, 196, 0.5)',
+            },
+            {
+                fill: true,
+                label: '팔굽혀펴기',
+                data: getCategoryCountData('팔굽혀펴기', workChartData),
+                borderColor: 'rgb(246, 214, 214)',
+                backgroundColor: 'rgba(246, 214, 214, 0.5)',
+            },
+        ],
+    };
+
     const options = {
         maintainAspectRatio: false,
         responsive: true,
@@ -362,7 +427,6 @@ function MyPage() {
 
         // 배열을 초기화합니다.
         const dateArray = [];
-        dateArray.push(moment(sunday).format("YYYY-MM-DD"));
         // date.setDate(sunday.getDate() + 7);
         // dateArray.push(date);
         for (let i = 0; i < 7; i++) {
@@ -375,16 +439,52 @@ function MyPage() {
     }
 
     //날짜에 맞춰서 데이타 필터링
-    useEffect(()=>{
-        if(workData){
-            const arr =workData.filter(item => new Date(item.endPostdate) >= new Date(weekDate[0]) && new Date(item.endPostdate) <= new Date(weekDate[weekDate.length-1]));
-            console.log(calculateTotalCalories(arr));
+    useEffect(() => {
+        if (workData) {
+            const arr = workData.filter(item => new Date(item.endPostdate) >= new Date(weekDate[0]) && new Date(item.endPostdate) <= new Date(weekDate[weekDate.length - 1]));
+            setWorkChartData(calculateTotalCaloriesByDateAndExercise(arr));
+    
+            // 비동기 호출을 모두 기다릴 프로미스 배열 생성
+            const promises = weekDate.map(date => dietData(accountNo, date));
+    
+            // 모든 비동기 호출이 완료되면 sumSizes 함수 호출
+            Promise.all(promises)
+                .then(results => {
+                    // console.log('sumSizes', sumSizes(results));
+                    const processedData = sumSizes(results);
+                    const normalizedData = processedData.map(item => ({ ...item, size: (item.size / results.length).toFixed(2) }));
+
+                    setWeekFoodChartData(normalizedData);
+                })
+                .catch(error => {
+                    console.error('Error while fetching diet data:', error);
+                });
         }
+    }, [weekDate]);
+    
 
+    function sumSizes(data) {
+        const result = {};
+      
+        // 데이터를 순회하며 name 별로 size를 더합니다.
+        data.forEach(arr => {
+            arr.forEach(obj => {
+                const { name, size } = obj;
+                if (result[name]) {
+                result[name] += size;
+                } else {
+                result[name] = size;
+                }
+            });
+        });
+      
+        // 결과를 배열로 변환합니다.
+        const finalResult = Object.entries(result).map(([name, size]) => ({ name, size }));
+      
+        return finalResult;
+    }
 
-
-    },[weekDate]);
-
+    
 
     //인바디 파일 등록란 클릭 시 나타나는 알림 창
     const openFilePicker = () => {
@@ -404,21 +504,43 @@ function MyPage() {
         });
     };
 
-    // 파일 선택 후 모달 닫기
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImage(reader.result);
-            // 파일 선택 후 알람창 닫기
-            Swal.close();
-        };
-        reader.readAsDataURL(file);
-    };
+    // // 파일 선택 후 모달 닫기
+    // const handleFileChange = (event) => {
+    //     const file = event.target.files[0];
+    //     const reader = new FileReader();
+    //     reader.onloadend = () => {
+    //         setPreviewImage(reader.result);
+    //         // 파일 선택 후 알람창 닫기
+    //         Swal.close();
+    //     };
+    //     reader.readAsDataURL(file);
+    // };
 
      $('.datepicker').css("background-color","red");
-
-
+    
+     const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        try {
+            const response = await axios.post('http://localhost:5000/ocr', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            setOcrData(response.data); // OCR 결과 상태 업데이트
+            Swal.fire('성공!', '이미지가 성공적으로 처리되었습니다.', 'success');
+        } catch (error) {
+            console.error('Error uploading and processing image:', error);
+            Swal.fire('오류', '이미지 처리 중 오류가 발생했습니다.', 'error');
+        }
+    };
+    
   
 
 
@@ -432,7 +554,7 @@ function MyPage() {
 
         
         <div style={{display:"flex",position:"relative"}}>
-            <MyPageSidebar/>
+            <MyPageSidebar week={(e) => week(e)}/>
             <div className='mypagesidebar-scroll-event'>
             </div>
             
@@ -527,7 +649,7 @@ function MyPage() {
                             </div>
                         </div>
                         <div className='sideber-item' style={{overflow:'hidden', display:"flex", flexDirection:"column"}}>
-                            <img id='ibox' src={accountData.image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
+                            <img id='ibox' src={accountData.game_image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
                             <div className="form_row" style={{width:"80%", margin:"0px"}}>
                                 <div>
                                     <span className="label">닉네임</span>
@@ -603,39 +725,10 @@ function MyPage() {
             </div>
             {/* <div>{moment(value).format("YYYY-MM-DD 01:00")}</div> */}
             <div className="date_picker-mp">
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
 
-            </LocalizationProvider>
-        </div> 
-        <div className="title">
-            <h1>섭취 칼로리</h1>
-        </div>
-        <div className="company-info-section" style={{width:"100%"}}>
-            <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0,0,0,0.5)", backgroundColor:"#e8ebec"}}>
-                <div className="col-lg-calorie" style={{display:"flex", flexDirection:"column", gap:"20px"}}>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                    <div className="sub-mypage-title">맛있는거</div>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </LocalizationProvider>
+            </div> 
         </div>
 
     
@@ -665,12 +758,9 @@ function MyPage() {
                             </div>
                             <button className='inbody-U-button' onClick={openInbodyModal}>직접 수정하기</button>
                         </div>
-
                         <div className="chart-container cc1">
                            <Chart/>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -680,6 +770,7 @@ function MyPage() {
                     isOpen={isInbodyModalOpen}
                     onClose={closeInbodyModal}
                     onSubmit={handleInbodyUpdate}
+                    ocrData={ocrData} // OCR 데이터를 모달로 전달
                     // 필요한 props 추가
                 />
             )}
@@ -687,29 +778,17 @@ function MyPage() {
 
             <div className="container">
                 <div className="title">
-                    <h1>운동 진척도</h1>
-                </div>
-                <div className="company-info-section">
-                    <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
-                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
-                        </div>
-                        <div className="col-lg-inbody">
-                            <div id="status-workout-progress"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div className="container">
-                <div className="title">
                     <h1>식단 통계</h1>
                 </div>
                 <div className="company-info-section">
                     <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
+
+                    <div className="sub-mypage-title">맛있는거</div>
+
+                    <div className="sub-mypage-title">해당주차 영양소 통계</div>
+
                         <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={data1} />
+                            <Bar options={options} data={dataFood} />
                         </div>
                         <div className="col-lg-inbody">
                             <div id="status-meal-statistics"></div>
@@ -724,8 +803,16 @@ function MyPage() {
                 </div>
                 <div className="company-info-section">
                     <div className="sideber-box" style={{boxShadow:"0px 0px 5px 1px rgba(0, 0, 0, 0.5)", backgroundColor:"#e8ebec"}}>
+                        <div className="sub-mypage-title">운동 날짜별 소모 칼로리</div>
                         <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
-                            <Line options={options} data={workCharKacltData} />
+                            <Bar options={options} data={workCharKacltData} />
+                        </div>
+                        <div className="col-lg-inbody">
+                            <div id="status-workout-statistics"></div>
+                        </div>
+                        <div className="sub-mypage-title">날짜별 운동 횟수</div>
+                        <div id="status" style={{backgroundColor:'white', borderRadius:"5px", height:300}}>
+                            <Bar options={options} data={workCharCountData} />
                         </div>
                         <div className="col-lg-inbody">
                             <div id="status-workout-statistics"></div>
