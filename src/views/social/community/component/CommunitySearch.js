@@ -20,7 +20,7 @@ function CommunitySearch({showModal, setShowModal, setUpdateBoards, hashTag}) {
     async function imageData(code){
         return await new Promise((resolve,reject)=>{
         try{
-            axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
+            axios.get(`http://192.168.0.53:5050/image/${code == null ? 41 : code}`)
             .then((response)=>{
                 resolve("data:image/png;base64,"+response.data['image']);
             })
@@ -53,7 +53,7 @@ function CommunitySearch({showModal, setShowModal, setUpdateBoards, hashTag}) {
             searchWord: inputValue
         }
 
-        axios.get(`http://192.168.0.104:8080/api/v1/boards/search`, {
+        axios.get(`http://192.168.0.53:8080/api/v1/boards/search`, {
             params: searchData,
             headers: {
                 'Authorization': `${myCookieValue}`,
@@ -77,7 +77,7 @@ function CommunitySearch({showModal, setShowModal, setUpdateBoards, hashTag}) {
             searchBy : 'hashtag',
             searchWord: hashTag
         }
-        axios.get(`http://192.168.0.104:8080/api/v1/boards/search`, {
+        axios.get(`http://192.168.0.53:8080/api/v1/boards/search`, {
             params: searchData,
             headers: {
                 'Authorization': `${myCookieValue}`,

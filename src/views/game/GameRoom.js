@@ -3,7 +3,8 @@ import {Link} from 'react-router-dom';
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import SockJS from 'sockjs-client';
-import * as Stomp from '@stomp/stompjs';
+// import * as Stomp from '@stomp/stompjs';
+import { Stomp } from '@stomp/stompjs';
 import { Client } from '@stomp/stompjs';
 
 import Breadcumb from '../component/Breadcumb/Breadcumb';
@@ -264,62 +265,92 @@ function GameRoom() {
     }, [selectedCamera]);
 
     useEffect(() => {
-        if (roomNo) {
-            connectWebSocket();
-        }
-    }, [roomNo]);
+        const socket = new SockJS('http://localhost:3000/rtc'); // Provide the appropriate URL for your SockJS server
+        const stompClient = Stomp.over(socket);
 
-    const connectWebSocket = async() => {
-        const stompClient = new Client({
-            brokerURL: 'ws://localhost:3000/rtc',
-            onConnect: (frame) => {
-                console.log("연결 성공", frame);
+        const connectWebSocket = async () => {
+            stompClient.connect({}, (frame) => {
+            console.log("Connected", frame);
 
-                stompClient.subscribe(`/sub/room/${roomNo}`, message => {
-                    const { type, from, data } = JSON.parse(message.body);
-                    if (from == myKey.current) return;
+            stompClient.subscribe(`/sub/room/${roomNo}/offer`, message => {
+                const { type, from, data } = JSON.parse(message.body);
+                console.log('messages', JSON.parse(message.body));
+                if (from === myKey.current) return;
+                console.log('type: %s, from:%s, data:%s', type, from, data);
+                switch (type) {
+                case 'offer':
+                    handleOffer(from, data);
+                    break;
+                case 'answer':
+                    peerConnectionsRef.current[from]?.setRemoteDescription(new RTCSessionDescription(data));
+                    break;
+                case 'candidate':
+                    peerConnectionsRef.current[from]?.addIceCandidate(new RTCIceCandidate(data));
+                    break;
+                default:
+                    console.log("Unknown message type:", type);
+                    break;
+                }
+            });
 
-                    switch (type) {
-                        case 'offer':
-                            handleOffer(from, data);
-                            break;
-                        case 'answer':
-                            peerConnectionsRef.current[from]?.setRemoteDescription(new RTCSessionDescription(data));
-                            break;
-                        case 'candidate':
-                            peerConnectionsRef.current[from]?.addIceCandidate(new RTCIceCandidate(data));
-                            break;
-                        default:
-                            console.log("알 수 없는 메시지 타입:", type);
-                            break;
-                    }
-                });
+            stompClient.send(`/pub/room/${roomNo}/offer`, {}, JSON.stringify({ type: 'offer', from: myKey.current }));
+            }, (error) => {
+            console.error("Error connecting to WebSocket:", error);
+            });
 
-                stompClient.publish({
-                    destination: `/app/room/${roomNo}`,
-                    body: JSON.stringify({ type: 'join', from: myKey.current }),
-                });
-            },
-            onStompError: (frame) => {
-                console.error('Broker reported error: ' + frame.headers['message']);
-                console.error('Additional details: ' + frame.body);
-            },
-        });
+            stompClientRef.current = stompClient;
+        };
+    
+        connectWebSocket();
+    
+        // Clean up function if needed
+        return () => {
+          if (stompClientRef.current) {
+            stompClientRef.current.disconnect();
+          }
+        };
+      }, []);
+    const setLocalAndSendMessage = (pc ,sessionDescription) =>{
+        pc.setLocalDescription(sessionDescription);
+    }
 
-        stompClient.activate();
-        stompClientRef.current = stompClient;
-    };
+    // let sendOffer = (pc) => {
+    //         pc.createOffer().then(offer =>{
+    //             setLocalAndSendMessage(pc, offer);
+    //             stompClientRef.current.send(`/pub/room/${roomNo}/offer`, {}, JSON.stringify({
+    //                 type: 'candidate',
+    //                 key : myKey.current,
+    //                 body : offer
+    //             }));
+    //             console.log('Send offer');
+    //         });
+    //     };
 
     const createPeerConnection = (otherKey) => {
         const pc = new RTCPeerConnection({
-            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+            iceServers: [
+                {
+                    urls:[
+                        "stun:stun.l.google.com:19302"
+                    ],
+                }
+            ],
         });
 
-        localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+        
+
+        console.log('%O',localStream.getTracks());
+        localStream.getTracks().forEach(track => {
+            console.log('%O',track);
+            
+            pc.addTrack(track, localStream);
+
+        });
+        
 
         pc.onicecandidate = event => {
             if (event.candidate) {
-                stompClientRef.current.send(`/app/room/${roomNo}`, {}, JSON.stringify({ type: 'candidate', from: myKey.current, to: otherKey, data: event.candidate }));
+                stompClientRef.current.send(`/pub/room/${roomNo}/offer`, {}, JSON.stringify({ type: 'candidate', from: myKey.current, to: otherKey, data: event.candidate }));
             }
         };
 
@@ -333,11 +364,16 @@ function GameRoom() {
 
     const handleOffer = (from, offer) => {
         const pc = createPeerConnection(from);
-        pc.setRemoteDescription(new RTCSessionDescription(offer))
+        console.log('pc', pc);
+        console.log('offer', offer);
+        const rtcOffer = new RTCSessionDescription({type:'offer', sdp: offer.sdp})
+        console.log('rtcOffer', rtcOffer);
+        pc.setRemoteDescription(rtcOffer)
             .then(() => pc.createAnswer())
             .then(answer => {
+                console.log('ddddddddd',answer)
                 pc.setLocalDescription(answer);
-                stompClientRef.current.send(`/app/room/${roomNo}`, {}, JSON.stringify({ type: 'answer', from: myKey.current, to: from, data: answer }));
+                stompClientRef.current.send(`/pub/room/${roomNo}/offer`, {}, JSON.stringify({ type: 'answer', from: myKey.current, to: from, data: answer }));
             })
             .catch(error => console.error(error));
     };

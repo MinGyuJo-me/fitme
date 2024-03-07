@@ -29,7 +29,7 @@ function CommunityBoard(props) {
     async function imageData(code){
         return await new Promise((resolve,reject)=>{
         try{
-            axios.get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
+            axios.get(`http://192.168.0.53:5050/image/${code == null ? 41 : code}`)
             .then((response)=>{
                 resolve("data:image/png;base64,"+response.data['image']);
             })
@@ -63,7 +63,7 @@ function CommunityBoard(props) {
         const fetchBoardImages = async () => {
             try {
                 
-                const response = await axios.get(`http://192.168.0.104:8080/api/v1/boards/images/${props.bno}`, {
+                const response = await axios.get(`http://192.168.0.53:8080/api/v1/boards/images/${props.bno}`, {
                     headers: {
                         'Authorization': `${myCookieValue}`,
                         'Content-Type': 'application/json; charset=UTF-8'
@@ -96,7 +96,7 @@ function CommunityBoard(props) {
 
     //좋아요 누른지 여부 확인
     useEffect(() => {
-        axios.get(`http://192.168.0.104:8080/api/v1/boards/like/${props.bno}`, {
+        axios.get(`http://192.168.0.53:8080/api/v1/boards/like/${props.bno}`, {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -128,7 +128,7 @@ function CommunityBoard(props) {
         data.append('bno', props.bno);
         data.append('preState', isLiked ? 1: 0);
 
-        axios.post('http://192.168.0.104:8080/api/v1/boards/like', data , {
+        axios.post('http://192.168.0.53:8080/api/v1/boards/like', data , {
             headers: {
                 'Authorization': `${myCookieValue}`,
                 'Content-Type': 'application/json; charset=UTF-8'
@@ -159,7 +159,7 @@ function CommunityBoard(props) {
         }).then(async (result) => {
             if(result.isConfirmed) {
                 const bno = props.bno;
-                axios.post('http://192.168.0.104:8080/api/v1/boards/scrap', bno, {
+                axios.post('http://192.168.0.53:8080/api/v1/boards/scrap', bno, {
                     headers: {
                         'Authorization': `${myCookieValue}`,
                         'Content-Type': 'application/json; charset=UTF-8'
@@ -197,7 +197,7 @@ function CommunityBoard(props) {
             if (result.isConfirmed) {
                 const bno = props.bno;
                 try {
-                    const response = await axios.delete(`http://192.168.0.104:8080/api/v1/boards/${bno}`, {
+                    const response = await axios.delete(`http://192.168.0.53:8080/api/v1/boards/${bno}`, {
                         headers: {
                             'Authorization': `${myCookieValue}`,
                             'Content-Type': 'application/json; charset=UTF-8'
@@ -272,7 +272,7 @@ function CommunityBoard(props) {
                     bno:props.bno,
                     reportComment:result.value
                 }
-                axios.post('http://192.168.0.104:8080/api/v1/boards/reports', reportData, {
+                axios.post('http://192.168.0.53:8080/api/v1/boards/reports', reportData, {
                     headers: {
                         'Authorization' : `${myCookieValue}`,
                         'Content-Type' : 'application/json; charset=UTF-8'

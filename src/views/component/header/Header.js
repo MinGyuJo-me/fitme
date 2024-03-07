@@ -2,6 +2,8 @@ import {Link} from 'react-router-dom';
 import React from 'react';
 import { useEffect } from 'react';
 import './Header.css';
+import axios from 'axios';
+import { Stomp } from "@stomp/stompjs";
 
 function Header() {
 
@@ -24,9 +26,28 @@ function Header() {
     },[myCookieValue])
 
     const handleLogout = () => {
+        const socket = new WebSocket('ws://localhost:8080/ws');
+        const stompClient = Stomp.over(socket);
         //로그아웃 시 쿠키에 저장된 토큰 값 삭제 후 로그인 페이지로 이동
+        axios.put('http://192.168.0.53:8080/api/v1/notification/offline', {}, {
+            headers: {
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
+              }
+        })
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+        
         document.cookie = 'Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         window.location.href = '/signin';
+        
+        return () => {
+            stompClient.disconnect();
+        };
     };
 
     return (

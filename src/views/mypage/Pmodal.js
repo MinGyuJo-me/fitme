@@ -7,7 +7,7 @@ async function imageData(code) {
   return await new Promise((resolve, reject) => {
     try {
       axios
-        .get(`http://192.168.0.15:5050/image/${code == null ? 41 : code}`)
+        .get(`http://192.168.0.53:5050/image/${code == null ? 41 : code}`)
         .then((response) => {
           resolve('data:image/png;base64,' + response.data['image']);
         });
@@ -100,9 +100,9 @@ function Modal(props) {
   
         // 이미지 코드가 있는 경우와 없는 경우에 따라 다른 요청을 보냅니다.
         if (props.imageCode) {
-          await axios.put(`http://192.168.0.15:5050/image/${props.imageCode}`, imageDataForm);
+          await axios.put(`http://192.168.0.53:5050/image/${props.imageCode}`, imageDataForm);
         } else {
-          await axios.post('http://192.168.0.15:5050/fileupload/', imageDataForm);
+          await axios.post('http://192.168.0.53:5050/fileupload/', imageDataForm);
         }
       }
   
@@ -115,7 +115,7 @@ function Modal(props) {
         image:formData.image
       };
       
-      await axios.put(`http://192.168.0.65:8080/api/v1/mypages/account/${props.accountNo}`, updatedFormData, {
+      await axios.put(`http://192.168.0.53:8080/api/v1/mypages/account/${props.accountNo}`, updatedFormData, {
         headers: {
           'Authorization': `${myCookieValue}`,
           'Content-Type': 'application/json; charset=UTF-8'
@@ -156,43 +156,50 @@ function Modal(props) {
   
   
   return (
-    <div className="Modal MB" onMouseDown={props.onClose}>
-      <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{ width: '450px' }}>
+    <div className="Modal MB" onMouseDown={props.onClose} style={{overflow:"hidden"}}>
+      <div className="modalBody" onMouseDown={(e) => e.stopPropagation()} style={{ width: '450px', height:"730px", overflow:"hidden"}}>
         <button id="modalCloseBtn" onMouseDown={props.onClose}>
           ✖
         </button>
-        <h2 style={{fontSize:'30px'}}>회원 정보 수정</h2>
-        <form onSubmit={handleSubmit}>
-          <label className="profile-picture-container PPCR">
-            프로필 사진
-            <div>
-              <input type="file" className="profilePicture" onChange={handleFileChange} />
+        <div className='modal-profile-edit-title'>
+          회원 정보 수정
+        </div>
+
+        <form onSubmit={handleSubmit} style={{border:"1px solid rgba(0,0,0,0.2)", backgroundColor:"rgba(0,0,0,0.05)",  borderRadius:"5px", display:"flex", flexDirection:"column", alignItems:"center"}}>
+          <label className="profile-picture-container PPCR" style={{margin:"auto", textAlign:"center", width:"230px", height:"200px",position:"relative", marginTop:"20px"}}>
+            <div style={{textAlign:"center", width:"100%", height:"100%",position:"absolute"}}>
               {previewImage ? (
-                <img src={previewImage} alt="프로필 사진" className="profile-picture" />
+                <img src={previewImage} alt="프로필 사진" className="profile-picture"/>
               ) : (
-                <span>사진을 등록해 주세요</span>
+                <span style={{display:'block', left:"0px", right:"0px", textAlign:"center" ,margin:"auto", marginTop:"80px",position:"absolute",color:'#888'}}>사진을 등록해 주세요</span>
               )}
+              <input type="file" className="profilePicture" onChange={handleFileChange} style={{display:"none"}}/>
             </div>
           </label>
           <div className="input-container">
-            <label>
-              이름:
-              <input type="text" className="U-name" name="name" value={formData.name} onChange={handleChange} style={{ marginBottom: '10px', width: 'auto', minWidth: '150px' }} />
-            </label>
-            <label>
-              나이:
-              <input type="text" className="U-age" name="age" value={formData.age} onChange={handleChange} style={{ marginBottom: '10px', width: 'auto', minWidth: '150px' }} />
-            </label>
-            <label>
-              주소
-              <input type="text" className="U-address" name="address" value={formData.address} onChange={handleChange} />
-            </label>
+
+            <div style={{marginTop:"20px"}}>
+              <span className="modal-text-style">이름</span><br/>
+              <input type="text" className="U-name" name="name" value={formData.name} onChange={handleChange} style={{ marginBottom: '10px'}} />
+            </div>
+
+            <div>
+              <span className="modal-text-style">나이</span><br/>
+              <input type="text" className="U-age" name="age" value={formData.age} onChange={handleChange} style={{ marginBottom: '10px'}} />
+            </div>
+
+            <div>
+              <span className="modal-text-style">주소</span><br/>
+              <input type="text" className="U-age" name="address" value={formData.address} onChange={handleChange}  style={{border:"1px solid rgba(0, 0, 0, 0.479)", height:"33px", width:"225px"}} />
+            </div>
+
+
             <div className="section-heading">관심사</div>
             <div className="select_inter">
               <input type="radio" id="select_d" name="hobby" value="D" onChange={handleChange} checked={formData.hobby === 'D'} />
-              <label htmlFor="select_d" style={{ marginBottom: '10px', marginRight: '0px', paddingBottom: '30px' }}>식단</label>
+              <label htmlFor="select_d" style={{ marginBottom: '10px', lineHeight:"30px"}}>식단</label>
               <input type="radio" id="select_w" name="hobby" value="E" onChange={handleChange} checked={formData.hobby === 'E'} />
-              <label htmlFor="select_w" style={{ marginBottom: '10px', paddingBottom: '30px' }}>운동</label>
+              <label htmlFor="select_w" style={{ marginBottom: '10px', lineHeight:"30px"}}>운동</label>
             </div>
           </div>
           <button type="submit" className='P-button'>저장</button>
