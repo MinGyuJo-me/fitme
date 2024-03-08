@@ -237,13 +237,13 @@ function Workout() {
 	//운동 데이터 삭제
 	const setCalDel = (e) => {
 		if(true){ //confirm넣을 자리
-		  console.log("delete",e.target.parentElement[0].value);
-		  axios.delete(`http://${ipAddress}:5000/workout/${e.target.parentElement[0].value}`,{})
-		  .then(response => {
-        console.log(response.data);
-        setIsOpen(false);
-        callis(workoutCal,value);
-		  })
+			//   console.log("delete",e.target.parentElement[0].value);
+			axios.delete(`http://${ipAddress}:5000/workout/${selectOne[0]}`)
+			.then(response => {
+				console.log(response.data);
+				setIsOpen(false);
+				callis(workoutCal,value);
+			})
 		}
 	}
 	//
