@@ -135,8 +135,7 @@ function GameRoomSideProfile({setShowModal,setShowModal1,imageUrl}){
                 </div>
 
                 <div className='col-lg-10 col-md-10 game-play-button-layout'>
-                    <button className="game-play-button" onClick={handleClick}>일반 게임</button>
-                    <button className="game-play-button">랭킹 게임</button>
+                    <button className="game-play-button" onClick={handleClick}>Game Start</button>
                 </div>
 
             </div>
