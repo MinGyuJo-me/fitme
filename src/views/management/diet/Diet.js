@@ -572,9 +572,11 @@ function Diet() {
 										<img src={test[4]} alt="pizza"/>
 										<input type='hidden' value={test[0]} />
 									</div>
+									{/*
 									<div class="blog-btn">
 										<a href="#">아침</a>
 									</div>
+									*/}
 								</div>
 								<div class="blog-content">
 									<div class="blog-left">
