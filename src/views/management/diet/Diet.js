@@ -258,7 +258,7 @@ function Diet() {
 	//DELETE
 	const setCalDel = (e) => {
 		if(true){ //confirm넣을자리
-			axios.delete(`http://${ipAddress}:5000/diet/${e.target.parentElement.children[0].value}`)
+			axios.delete(`http://${ipAddress}:5000/diet/${selectOne[0]}`)
 			.then(response => {
 				setIsOpen(false);
 				callis(dietCal,value);
@@ -572,9 +572,11 @@ function Diet() {
 										<img src={test[4]} alt="pizza"/>
 										<input type='hidden' value={test[0]} />
 									</div>
+									{/*
 									<div class="blog-btn">
 										<a href="#">아침</a>
 									</div>
+									*/}
 								</div>
 								<div class="blog-content">
 									<div class="blog-left">
