@@ -5,10 +5,12 @@ import Breadcumb from "../component/Breadcumb/Breadcumb";
 import ChatBot from "../component/chatBot/ChatBot";
 import $ from 'jquery';
 import { useEffect } from "react";
-import './Pay.css';
+import './Shop.css';
+import ShopListContainer from "./component/ShopListContainer";
+import ShopListMenu from "./component/ShopListMenu";
 
 
-function Pay() {
+function Shop() {
 
     useEffect(()=>{
         $('body').addClass('loaded');
@@ -24,58 +26,51 @@ function Pay() {
         {/* 로딩 애니메이션*/}
         <Loader/>
 
-        <div className="portfolio-area food-template">
+        <div className="footer-top-2 d-flex align-items-center">
             <div className="container">
                 <div className="row">
-                    <div className="col-lg-12 col-sm-12">
-                        <div className="portfolio_nav text-center">
-                            <div className="food-div-layout">
-                                <div className="food-div">
-                                </div>
-                                <div className="food-div">
-                                </div>
-                                <div className="food-div">
-                                </div>
-                                <div className="food-div">
-                                </div>
-                                <div className="food-div">
-                                </div>
-                                <div className="food-div">
-                                </div>
+                    <div className="col-lg-6 col-md-6">
+                        <div className="single-footer-top-box">
+                            <div className="footer-top-title">
+                                <h1>Purchase health item<br/>for your health</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-lg-6 col-md-6">
+                        <div className="single-footer-top-box">
+                            <div className="footer-top-button">
+                                <a>Refresh Shop List</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            
-            <div class="container">
-                <div class="food-menu">
-                    <div class="food">
-                        <div class="food-image">
-                        <img src="https://image.freepik.com/free-photo/chicken-steak-with-lemon-tomato-chili-carrot-white-plate_1150-25887.jpg" alt="Food" />
-                        </div>
-                        <div class="food-info">
-                        <h1>[맛있닭] 닭가슴살 스테이크</h1>
+        <div className="portfolio-area food-template">
+            <ShopListMenu/>
 
-
-                        <span class="date">
-                            <i class="fa-solid fa-tag"></i> 20%
-                        </span>
-                        <span class="comments">
-                            <i class="fa-solid fa-star"></i> 5 stars
-                        </span>
-
-                        <p>
-                            내용 넣을 부분임 ㅇㅇ.
-                        </p>
-                        <a href="#">Read More</a>
-                        </div>
-                    </div>
-
-
-
+            <div className="food-list-selector">
+                <div>
+                    오늘의 전체 랭킹 순위!
                 </div>
+
+                <button>
+                    판매량
+                </button>
+
+                <button>
+                    실시간
+                </button>
+            </div>
+            
+            <div className="container">
+                <ShopListContainer/>
+                <ShopListContainer/>
+                <ShopListContainer/>
+                <ShopListContainer/>
+                <ShopListContainer/>
+                <ShopListContainer/>
             </div>
         </div>
 
@@ -141,26 +136,7 @@ function Pay() {
         <!-- Start footer-top-area -->
         <!--==================================================-->
         */}
-        <div className="footer-top-2 d-flex align-items-center">
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-6 col-md-6">
-                        <div className="single-footer-top-box">
-                            <div className="footer-top-title">
-                                <h1>Awesome harvest we grow last 10 years</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6">
-                        <div className="single-footer-top-box">
-                            <div className="footer-top-button">
-                                <a href="#">Discover More</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         {/*
         <!--==================================================-->
         <!-- Start footer_section -->
@@ -282,5 +258,5 @@ function Pay() {
   );
 }
 
-export default Pay;
+export default Shop;
 
