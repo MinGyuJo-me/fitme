@@ -24,6 +24,8 @@ import ADPosting from './views/admin/admincomponent/UserPosting/ADPosting.js';
 import GameM from './views/admin/admincomponent/GameRanking/GameM.js';
 import Rcomment from './views/admin/admincomponent/Report/Rcomment.js';
 import Rpost from './views/admin/admincomponent/Report/Rpost.js';
+import Shop from './views/shop/Shop.js';
+
 
 import './assets/css/bootstrap.min.css';
 
@@ -96,7 +98,8 @@ function App() {
             {/*게임 페이지*/}
             <Route path={"/game"} element={<Game/>}/>
             <Route path={"/game/room"} element={<GameRoom/>}/>
-            
+
+            <Route path={"/shop"} element={<Shop/>}/>
           </Routes>
         </BrowserRouter>
     </div>
