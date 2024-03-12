@@ -8,7 +8,7 @@ import './MyPage.css';
 import Modal from './Pmodal.js';
 import Gmodal from './Gmodal.js';
 import { useNavigate } from "react-router-dom";
-import Chart from './chart/ChartApp.js'
+import ChartApp from './chart/ChartApp.js';
 import Swal from 'sweetalert2';
 import InbodyP from './inbody/InbodyP.jpeg';
 
@@ -44,8 +44,9 @@ import { Chart as ChartJS,
     ArcElement, 
     Tooltip, 
     Legend } from 'chart.js';
-import { Doughnut,Bar,Line } from 'react-chartjs-2';
+import { Doughnut,Bar,Line, Chart } from 'react-chartjs-2';
 import MyPageSidebar from '../component/sidebar/MyPageSidebar.js';
+
   
 ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Legend);
 
@@ -60,7 +61,7 @@ function getCookie(name) {
     return null;
   }
 
-var ipAddress = '192.168.0.53';
+var ipAddress = '192.168.0.110';
 
 const calculateTotalCaloriesByDateAndExercise = (exercises) => {
     const exerciseCaloriesFactors = {
@@ -308,25 +309,25 @@ function MyPage() {
 
       const navigate = useNavigate();
 
-      useEffect(() => {
-          const myCookieValue = getCookie('Authorization');
-          if (myCookieValue === null) {
-              navigate('/signin');
-          } else {
-              axios.put(`/api/v1/mypage/account`, {
-                  headers: {
-                      'Authorization': `${myCookieValue}`,
-                      'Content-Type': 'application/json; charset=UTF-8'
-                  }
-              })
-              .then(response => {
-                  // 응답으로 받은 데이터를 상태로 설정
-                  setAccountData(response.data,); 
-              })
-              .catch(error => console.log(error));
-          }
-          
-      }, [navigate]);
+    useEffect(() => {
+        const myCookieValue = getCookie('Authorization');
+        if (myCookieValue === null) {
+            navigate('/signin');
+        } else {
+            axios.put(`/api/v1/mypage/account`, {
+                headers: {
+                    'Authorization': `${myCookieValue}`,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                }
+            })
+            .then(response => {
+                // 응답으로 받은 데이터를 상태로 설정
+                setAccountData(response.data,); 
+            })
+            .catch(error => console.log(error));
+        }
+        
+    }, [navigate]);
   
   
       const [imageCode, setImageCode] = useState('');
@@ -652,16 +653,27 @@ function MyPage() {
         if (!file) {
             return;
         }
-    
+        
+        if (!accountNo) { // accountNo가 설정되지 않았을 때 처리
+            console.log('accountNo',accountNo);
+            Swal.fire('오류', 'accountNo없음.', 'error');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('file', file);
-    
+        formData.append('accountNo',accountNo);
+        console.log('accountNo',accountNo);
         try {
-            const response = await axios.post('http://localhost:5000/ocr', formData, {
+            console.log(formData)
+            const response = await axios.post(`http://192.168.0.110:5000/ocr`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            console.log('accountNo',accountNo);
+            console.log('response',response);
+            console.log('response.data',response.data);
             setOcrData(response.data); // OCR 결과 상태 업데이트
             Swal.fire('성공!', '이미지가 성공적으로 처리되었습니다.', 'success');
         } catch (error) {
@@ -889,7 +901,8 @@ function MyPage() {
                             <button className='inbody-U-button' onClick={openInbodyModal}>직접 수정하기</button>
                         </div>
                         <div className="chart-container cc1">
-                           <Chart/>
+                           {/* <ChartApp/> */}
+                           <ChartApp ocrData={ocrData}/>
                         </div>
                     </div>
                 </div>
