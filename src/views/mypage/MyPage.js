@@ -209,9 +209,9 @@ function MyPage() {
       };
       // FormData를 서버로 전송하는 함수
       const sendFormData = (formData) => {
-        axios.put(`http://192.168.0.65:8080/api/v1/mypages/account/${accountNo}`, formData, {
-    /*put 해서 수정된 회원 정보 보내는 서버 http://192.168.0.65:8080/mypages/account/${accountNo},
-      post로 이미지 처리를 할 서버         http://192.168.0.15:5050/images/${accountNo}*/
+        axios.put(`http://192.168.0.53:8080/api/v1/mypages/account/${accountNo}`, formData, {
+    /*put 해서 수정된 회원 정보 보내는 서버 http://192.168.0.53:8080/mypages/account/${accountNo},
+      post로 이미지 처리를 할 서버         http://192.168.0.53:5050/images/${accountNo}*/
     
             headers: {
               Authorization: `${myCookieValue}`,
@@ -269,9 +269,9 @@ function MyPage() {
       };
         // FormData를 서버로 전송하는 함수
   const GsendFormData = (GformData) => {
-    axios.put(`http://192.168.0.65:8080/api/v1/games/account/${accountNo}`, GformData, {
-/*put 해서 수정된 회원 정보 보내는 서버 http://192.168.0.65:8080/mypages/account/${accountNo},
-  post로 이미지 처리를 할 서버         http://192.168.0.15:5050/images/${accountNo}*/
+    axios.put(`http://192.168.0.53:8080/api/v1/games/account/${accountNo}`, GformData, {
+/*put 해서 수정된 회원 정보 보내는 서버 http://192.168.0.53:8080/mypages/account/${accountNo},
+  post로 이미지 처리를 할 서버         http://192.168.0.53:5050/images/${accountNo}*/
     
         headers: {
           Authorization: `${myCookieValue}`,
