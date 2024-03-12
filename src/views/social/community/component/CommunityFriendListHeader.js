@@ -75,9 +75,9 @@ function CommunityFriendListHeader({handleFollowerClick}) {
     }
 
     return (
-        <div className="row" style={{ marginTop: "-50px", marginBottom: "40px" }}>
+        <div className="row" style={{ marginTop: "-30px", marginBottom: "20px"}}>
             <div className="col-lg-12 col-sm-12 friendlist ">
-                <div className="blog-single-box upper friend-icon-box" style={{ background: "#F6F4EC" }}>
+                <div className="blog-single-box upper friend-icon-box" style={{ background: "#ffffff",borderRadius:'5px',boxShadow: '0px 5px 5px 5px rgba(0, 0, 0, 0.1)' }}>
                     <OwlCarousel items={9} nav={false} dots={false} {...friendsOption}>
                         {friendsInfo.map((friendInfo, index) => (
                             <Follower

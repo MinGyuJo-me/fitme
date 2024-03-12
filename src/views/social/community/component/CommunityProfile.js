@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
+import 'material-symbols';// npm install material-symbols@latest
+
 function CommunityProfile(props) {
 
     function getCookie(name) {
@@ -45,7 +47,8 @@ function CommunityProfile(props) {
         <div className="col-lg-12 col-sm-12" >
             <div className="blog-single-box upper" style={{padding:"10px 0px"}}>
             {/******** ★ 새로고침 버튼 ★  ********/}
-            <button className="community-refresh-button" style={{position:"absolute", right:"5px", bottom:"5px", width:"30px", height:"30px", borderRadius:"50%", fontSize:"25px", lineHeight:"20px"}} onClick={handleRefreshClick} >↻</button>    
+            <button className="community-refresh-button" style={{background:'none',border:'none',position:"absolute", right:"5px", bottom:"5px", width:"30px", height:"30px", borderRadius:"50%", fontSize:"25px", lineHeight:"20px"}} onClick={handleRefreshClick} >
+                <span className="material-symbols-rounded" id='open-button' style={{position:"absolute",right:'-4px',bottom:'-4px'}}>refresh</span></button>    
                 <div className="blog-left bl1" style={{padding:"60px 0px"}}>
                     <div style={{display:"flex"}}>
                         <div className="blog-icon bi1" style={{backgroundImage: `url(${props.image})`}}>

@@ -55,6 +55,7 @@ import { Chart as ChartJS,
 	Filler,
 	Legend } from 'chart.js';
 import { Doughnut,Bar,Line,Radar } from 'react-chartjs-2';
+import VideoPlayer from './VideoPlayer ';
 // import { link } from 'fs';
   
 //기본 Line 차트
@@ -124,7 +125,6 @@ const workLike = (e) => {
 
 function Workout() {
 	const [mark, setMark] = useState([]);	// 운동 데이터 상태 관리
-	const [selectedWorkout, setSelectedWorkout] = useState('');	// 선택된 운동 상태 관리
 
 
 	//유저 정보
@@ -301,12 +301,6 @@ function Workout() {
       }
     }
 	},[isOpen]);
-
-	//운동 선택 처리 함수
-	const handleWorkoutSelect = value => {
-		setSelectedWorkout(value);
-	  };
-	//
 
 	const fetchWorkoutCounts = async () => {
 		try {
@@ -711,7 +705,13 @@ function Workout() {
         <button type="button" className="add-siksa-button" onClick={toggleModal}>
         <div className="add-siksa-icon" style={{ backgroundImage: `url(${require('./images/plus6.png')})` }}></div>
         </button>
-
+		
+		<div className='ai-container' >
+			<div className="main-titles-ai">
+				<h2>POSE DETECTION</h2>
+				<VideoPlayer videoSrc="영상 파일 경로"/> 
+			</div>
+		</div>
 		{/* 운동 추천 */}
 		<div className='ai-container' >
 			<div className="main-titles-ai">
@@ -749,7 +749,6 @@ function Workout() {
 						<Modal
 						open={isOpen}
 						onClose={() => {
-							setSelectedWorkout('');
 							setIsOpen(false);
 						}}
 						> 

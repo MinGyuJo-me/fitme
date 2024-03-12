@@ -4,21 +4,60 @@ import Loader from "../component/loader/Loader";
 import Breadcumb from "../component/Breadcumb/Breadcumb";
 import ChatBot from "../component/chatBot/ChatBot";
 import $ from 'jquery';
-import { useEffect } from "react";
+import React,{useEffect, useState} from 'react';
 import './Shop.css';
 import ShopListContainer from "./component/ShopListContainer";
 import ShopListMenu from "./component/ShopListMenu";
+import axios from 'axios'; //npm install axios
 
+
+const ipAddress = '192.168.0.114';
+
+//배열 섞기
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+}
 
 function Shop() {
 
+    //목록 데이타 저장
+    const [shopData,setShopData] = useState([]);
+    //셔플된 전체 데이타 
+    const [shopDataAll,setShopDataAll] = useState([]);
+
     useEffect(()=>{
         $('body').addClass('loaded');
-    });
+
+        //서버에서 크롤링 json 가져오기
+        axios.get(`http://${ipAddress}:5000/crawlingShop`)
+        .then(res=>{
+            setShopData(res.data);
+            console.log(res.data); // 데이터를 콘솔에 로그로 출력
+        })
+        .catch(error => {
+            console.error('데이터 가져오기 오류:', error);
+        });
+
+    },[]);
+
+    useEffect(() => {
+        const data = [];
+        if (shopData != null) {
+            console.log('data', shopData);
+            shopData.map(item => {
+                console.log('data', item.name);
+                data.push(item);
+            });
+            shuffle(data);
+            setShopDataAll(data);
+        }
+    }, [shopData]);
+
+
 
 
   return (
-    <div>
+    <div className="shop1">
         {/*헤더 위*/}
         <HeaderTop/>
         {/*헤더 메인 메뉴*/}
@@ -38,9 +77,12 @@ function Shop() {
                     </div>
                     <div className="col-lg-6 col-md-6">
                         <div className="single-footer-top-box">
+
+                            {/*
                             <div className="footer-top-button">
                                 <a>Refresh Shop List</a>
-                            </div>
+                             </div>
+                             */}
                         </div>
                     </div>
                 </div>
@@ -48,29 +90,28 @@ function Shop() {
         </div>
 
         <div className="portfolio-area food-template">
-            <ShopListMenu/>
+            {/*<ShopListMenu/>*/}
 
             <div className="food-list-selector">
+                {/*
                 <div>
                     오늘의 전체 랭킹 순위!
                 </div>
+                */}
 
                 <button>
-                    판매량
+                    높은 가격순
                 </button>
 
                 <button>
-                    실시간
+                    낮은 가격순
                 </button>
             </div>
             
             <div className="container">
-                <ShopListContainer/>
-                <ShopListContainer/>
-                <ShopListContainer/>
-                <ShopListContainer/>
-                <ShopListContainer/>
-                <ShopListContainer/>
+                {shopDataAll.map(item => (
+                    <ShopListContainer data={item} />
+                ))}
             </div>
         </div>
 
