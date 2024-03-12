@@ -108,9 +108,14 @@ function Header() {
                                         </ul>
                                     </li>
 
-                                    <li>
-                                        <Link to="/">Alarm</Link>
+                                    <li><Link to="/shop">Shop</Link>
+                                        <ul className='sub-menu'>
+                                            <li><Link to="/shop">Shop</Link></li>
+                                            <li><Link to="/cart">Cart</Link></li>
+                                            <li><Link to="/purchaselist">purchase list</Link></li>
+                                        </ul>
                                     </li>
+                                    
                                     {myCookieValue == null ? <li><Link to="/signin">Login</Link></li> : <li><button className="header-logout-button" onClick={handleLogout}>Logout</button></li>}
                                     
                                 </ul>
