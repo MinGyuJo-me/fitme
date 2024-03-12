@@ -353,6 +353,11 @@ abbr[title] {
   cursor: pointer;
 }
 
+.edit-siksa-button img{
+  width: 300px;
+  height: 250px;
+}
+
 /*식단 수정 버튼*/
 
 
