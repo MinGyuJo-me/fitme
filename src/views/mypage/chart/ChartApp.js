@@ -19,21 +19,43 @@ ChartJS.register(
   Legend
 );
 
-const data = {
-  labels: ['체중', '골격근량', '체지방량', 'BMI', '체지방률'],
-  datasets: [
-    {
-      label: '인바디_OCR',
-      data: [2, 9, 3, 5, 2],
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
-      borderWidth: 1,
-    },
-  ],
-};
+function ChartApp({ocrData = {}}) {
+  const data = {
+    labels: ['체중', '골격근량', '체지방량', 'BMI', '체지방률'],
+    datasets: [
+      {
+        label: '인바디_OCR',
+        data: [
+          ocrData[0] || 0,
+          ocrData[1] || 0,
+          ocrData[2] || 0,
+          ocrData[3] || 0,
+          ocrData[4] || 0
+        ],
+        pointRadius: 2,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
 
-function App() {
-  return <Radar data={data} />;
+      },
+    ],
+  };
+  const options = {
+    scales: {
+      r: {
+        angleLines: {
+          display: false
+        },
+        min: 0,
+        max: 80,
+        ticks: {
+          stepSize: 10
+        }
+      }
+    }
+  };
+
+  return <Radar data={data} options={options} />;
 }
 
-export default App;
+export default ChartApp;

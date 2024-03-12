@@ -3,11 +3,11 @@ import axios from 'axios';
 import './InbodyModal.css';
 
 function InbodyModal({ isOpen, onClose, onSubmit, ocrData }) {
-    const [weight, setWeight] = useState(ocrData.weight || '');
-    const [skeletal_muscle, setSkeletal_muscle] = useState(ocrData.skeletal_muscle || '');
-    const [bodyFat_mass, setBodyFat_mass] = useState(ocrData.bodyFat_mass || '');
-    const [BMI, setBMI] = useState(ocrData.BMI || '');
-    const [bodyFat_percent, setBodyFat_percent] = useState(ocrData.bodyFat_percent || '');
+    const [weight, setWeight] = useState(ocrData[0] || '');
+    const [skeletal_muscle, setSkeletal_muscle] = useState(ocrData[1] || '');
+    const [bodyFat_mass, setBodyFat_mass] = useState(ocrData[2] || '');
+    const [BMI, setBMI] = useState(ocrData[3] || '');
+    const [bodyFat_percent, setBodyFat_percent] = useState(ocrData[4] || '');
 
     const handleSave = () => {
         // 수정된 데이터를 axios를 사용하여 서버에 저장
@@ -18,15 +18,18 @@ function InbodyModal({ isOpen, onClose, onSubmit, ocrData }) {
             BMI: BMI,
             bodyFat_percent: bodyFat_percent
         };
-        axios.put('/api/inbody', modifiedData)
-            .then(response => {
-                // 성공적으로 처리한 경우
-                onClose();
-            })
-            .catch(error => {
-                // 오류 처리
-                console.error('Inbody 데이터 업데이트 오류:', error);
-            });
+        // axios.put('/api/inbody', modifiedData)
+        //     .then(response => {
+        //         // 성공적으로 처리한 경우
+        //         onClose();
+        //     })
+        //     .catch(error => {
+        //         // 오류 처리
+        //         console.error('Inbody 데이터 업데이트 오류:', error);
+        //     });
+        // onSubmit을 호출하여 수정된 데이터를 상위 컴포넌트로 전달
+        onSubmit(modifiedData);
+        onClose();
     };
 
     const closeModal = () => {
