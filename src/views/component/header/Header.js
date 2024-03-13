@@ -100,14 +100,15 @@ function Header() {
                                         </ul>
                                     </li>
 
-                                                                        
+                                    {/*                           
                                     <li><Link to="/">chatting</Link>
                                         <ul className="sub-menu">
                                             <li><Link to="/">GPT chat</Link></li>
                                             <li><Link to="/messenger">messenger</Link></li>
                                         </ul>
                                     </li>
-
+                                    */}    
+                                    
                                     <li><Link to="/shop">Shop</Link>
                                         <ul className='sub-menu'>
                                             <li><Link to="/shop">Shop</Link></li>
