@@ -127,7 +127,7 @@ const VideoPlayer = () => {
 
   return (
     <div>
-      <div ref={dropRef} style={{ width: '100%', height: '300px', border: '2px dashed #ccc', textAlign: 'center', paddingTop: '30px' }} onDrop={handleDrop} onDragOver={handleDragOver}>
+      <div ref={dropRef} style={{ width: '100%', height: '600px', border: '2px dashed #ccc', textAlign: 'center', paddingTop: '30px' }} onDrop={handleDrop} onDragOver={handleDragOver}>
         {videoSrc ? (
           <video ref={videoRef} controls style={{ width: '100%', height: '100%' }}>
             <source src={videoSrc} type="video/mp4" />
@@ -139,7 +139,7 @@ const VideoPlayer = () => {
       </div>
 
       <div>
-        <h2 id='pose-counts'>예측 정확도: {count}</h2>
+        <h2 id='pose-counts'>횟수: {count}</h2>
       </div>
     </div>
   );
