@@ -25,7 +25,7 @@ import GameM from './views/admin/admincomponent/GameRanking/GameM.js';
 import Rcomment from './views/admin/admincomponent/Report/Rcomment.js';
 import Rpost from './views/admin/admincomponent/Report/Rpost.js';
 import Shop from './views/shop/Shop.js';
-import Cart from './views/shop/Cart.js';
+//import Cart from './views/shop/Cart.js';
 
 
 import './assets/css/bootstrap.min.css';
@@ -57,6 +57,7 @@ import './venobox/venobox.css';
 import './assets/css/widget.css';
 
 import './assets/css/responsive.css';
+import Medical from './views/medical/Medical.js';
 
 
 function App() {
@@ -102,8 +103,11 @@ function App() {
             
             {/*쇼핑몰 페이지*/}
             <Route path={"/shop"} element={<Shop/>}/>
+            {/*
             <Route path={"/cart"} element={<Cart/>}/>
-
+            */}
+            {/*메디컬 판단 페이지*/}
+            <Route path={"/medical"} element={<Medical/>}/>
           </Routes>
         </BrowserRouter>
     </div>
