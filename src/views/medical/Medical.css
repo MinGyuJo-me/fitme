@@ -293,3 +293,40 @@ input[type="radio"]:checked + label span {
 	box-shadow: 0 0 0 3px rgba(0,123,255,.25);
 	text-align: center;
 }
+
+.mm-survey-result-div{
+	display: flex;
+	gap:30px;
+}
+
+
+.mm-survey-result-div button{
+	border-radius: 5px;
+	width: 150px;
+	height: 60px;
+	font-size: 25px;
+	background-color: #3DD2AF;
+	border: none;
+	box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.34);
+
+}
+
+.mm-survey-result-div button:hover{
+	box-shadow: inset 0px 0px 5px 3px rgba(0,0,0,0.34);
+}
+
+.mm-survey-result-container{
+	position: relative;
+	width: 100%;
+	height: 480px;
+	margin-bottom: 20px;
+	font-size: 40px;
+	line-height: 70px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.mm-survey-result-item{
+	width: 80%;
+}
