@@ -25,7 +25,7 @@ import GameM from './views/admin/admincomponent/GameRanking/GameM.js';
 import Rcomment from './views/admin/admincomponent/Report/Rcomment.js';
 import Rpost from './views/admin/admincomponent/Report/Rpost.js';
 import Shop from './views/shop/Shop.js';
-import Medical from './views/medical/Medical.js';
+import Cart from './views/shop/Cart.js';
 
 
 import './assets/css/bootstrap.min.css';
@@ -102,9 +102,7 @@ function App() {
             
             {/*쇼핑몰 페이지*/}
             <Route path={"/shop"} element={<Shop/>}/>
-
-            {/*메디컬 페이지*/}
-            <Route path={"/medical"} element={<Medical/>}/>
+            <Route path={"/cart"} element={<Cart/>}/>
 
           </Routes>
         </BrowserRouter>
