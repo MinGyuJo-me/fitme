@@ -210,11 +210,6 @@ function Medical() {
 		});
 	}
 
-	function lastPage() {
-		if( $('.mm-next-btn').hasClass('cool') ) {
-			alert('cool');
-		}
-	}
 
 	function buttonConfig() {
 		if( $('.mm-survey').hasClass('okay') ) {
@@ -264,7 +259,8 @@ function Medical() {
 						{/* 결과값 나오는 부분 */}
 						<div className="mm-survey-results">
 							<div className="mm-survey-results-container">
-								결과값 나오는 부분
+								<span>당신의 당뇨병 확률은</span>
+								<span style={{fontSize:"60px"}}>% 입니다.</span>
 							</div>
 
 							{/*
