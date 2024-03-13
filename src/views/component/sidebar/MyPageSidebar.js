@@ -43,7 +43,7 @@ function MyPageSidebar({week}) {
 
     return (
         <div className='sidebar-toggle-mode'>
-            <div className="page-wrapper chiller-theme toggled" style={{width:"100%"}}>
+            <div className="page-wrapper chiller-theme" style={{width:"100%"}}>
                 <a id="show-sidebar" className="btn btn-sm btn-dark">
                 <i className="fas fa-bars"></i>
                 </a>
