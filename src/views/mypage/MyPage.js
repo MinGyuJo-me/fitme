@@ -682,7 +682,39 @@ function MyPage() {
         }
     };
     
-  
+    {/*★★★★★★★★★★ 스크롤 용 ★★★★★★★★★★*/}
+    const Scroll_Profile = () => {
+        var offset = $(".scroll-profile").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+
+    const Scroll_Inbody = () => {
+        var offset = $(".scroll-inbody").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+    const Scroll_Statistic_Diet = () => {
+        var offset = $(".scroll-statistic-diet").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+    const Scroll_Statistic_Workout = () => {
+        var offset = $(".scroll-statistic-workout").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+    const Scroll_BulletinBoard = () => {
+        var offset = $(".scroll-bulletin-board").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+
+
+    const Scroll_Youtube = () => {
+        var offset = $(".scroll-youtube").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
 
 
     return (
@@ -695,13 +727,18 @@ function MyPage() {
 
         
         <div style={{display:"flex",position:"relative"}}>
-            <MyPageSidebar week={(e) => week(e)}/>
+            {/*★★★★★★★★★★ 스크롤 용 이벤트 props 추가 ★★★★★★★★★★*/}
+            <MyPageSidebar week={(e) => week(e)} 
+            Scroll_Youtube={Scroll_Youtube} Scroll_Profile={Scroll_Profile}
+            Scroll_Inbody={Scroll_Inbody} Scroll_Statistic_Diet={Scroll_Statistic_Diet}
+            Scroll_Statistic_Workout={Scroll_Statistic_Workout} Scroll_BulletinBoard={Scroll_BulletinBoard}
+            />
             <div className='mypagesidebar-scroll-event'>
             </div>
             
             {/* width 추가됨 */}
             <div style={{width:"100%", height:"100%"}}>
-            <div className="company-info-section">
+            <div className="company-info-section scroll-profile">
                 <div style={{display:"flex", width:"100%", gap:"80px", placeItems:"center", justifyContent:"center", height:"950px"}}>
 
 
@@ -876,7 +913,7 @@ function MyPage() {
     
         
 
-        <div className="container">
+        <div className="container scroll-inbody">
             <div className="title">
                 <h1>인바디</h1>
             </div>
@@ -919,7 +956,7 @@ function MyPage() {
             )}
         </div>    
 
-            <div className="container">
+            <div className="container scroll-statistic-diet">
                 <div className="title">
                     <h1>식단 통계</h1>
                 </div>
@@ -940,7 +977,7 @@ function MyPage() {
                 </div>
             </div>
 
-            <div className="container">
+            <div className="container scroll-statistic-workout">
                 <div className="title">
                     <h1>운동 통계</h1>
                 </div>
@@ -964,7 +1001,7 @@ function MyPage() {
                 </div>
             </div>
 
-            <div className="container">       
+            <div className="container scroll-bulletin-board">       
                 <div className="title">
                     <h1>저장한 게시글</h1>
                 </div> 
@@ -976,7 +1013,7 @@ function MyPage() {
 
             </div>
 
-            <div className="container">
+            <div className="container scroll-youtube">
                 <div className="title">
                     <h1>저장한 유튜브</h1>
                 </div>
