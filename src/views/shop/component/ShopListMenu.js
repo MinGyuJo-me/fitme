@@ -29,10 +29,6 @@ function ShopListMenu() {
                             <i className='fa fa-shopping-cart'></i>
                             <span>다른 음식 메뉴</span>
                         </div>
-                        <div className="food-div">
-                            <i className='fa fa-shopping-cart'></i>
-                            <span>다른 음식 메뉴</span>
-                        </div>
                     </div>
                 </div>
             </div>
