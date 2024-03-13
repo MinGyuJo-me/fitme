@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState} from 'react';
 import Breadcumb from '../component/Breadcumb/Breadcumb';
 import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
@@ -238,6 +238,23 @@ function Medical() {
 		});
 	}
 
+
+	const [viewDiabetes, setViewDiabetes] = useState(true);
+	const [viewHighBloodPressure, setViewHighBloodPressure] = useState(false);
+
+	{/* 당뇨병 확인 클릭 */}
+	const Diabetes = () =>{
+		setViewDiabetes(true);
+		setViewHighBloodPressure(false);
+	}
+	
+	{/* 고혈압 확인 클릭 */}
+	const HighBloodPressure = () =>{
+		setViewDiabetes(false);
+		setViewHighBloodPressure(true);
+	}
+
+
   return (
     <>
 		{/*헤더 위*/}
@@ -259,8 +276,25 @@ function Medical() {
 						{/* 결과값 나오는 부분 */}
 						<div className="mm-survey-results">
 							<div className="mm-survey-results-container">
-								<span>당신의 당뇨병 확률은</span>
-								<span style={{fontSize:"60px"}}>% 입니다.</span>
+
+								<div className='mm-survey-result-container'>
+									{viewDiabetes &&(<div className='mm-survey-result-item'>
+										다이어트 들어갈 부분 다이어트 들어갈 부분 다이어트 들어갈 부분 다이어트 들어갈 부분
+									</div>)}
+
+									{viewHighBloodPressure &&(<div className='mm-survey-result-item'>
+										고혈압 들어갈 부분 고혈압 들어갈 부분 고혈압 들어갈 부분 고혈압 들어갈 부분 고혈압 들어갈 부분
+									</div>)}
+								</div>
+
+								<div className="mm-survey-result-div">
+									<button onClick={Diabetes}>
+										당뇨병
+									</button>
+									<button onClick={HighBloodPressure}>
+										고혈압
+									</button>
+								</div>
 							</div>
 
 							{/*
@@ -295,6 +329,8 @@ function Medical() {
 									</div>
 								</div>
 
+
+								
 								<div className="mm-survey-page" data-page="2">
 									<div className="mm-survery-content">
 										<div className="mm-survey-question">
@@ -310,7 +346,7 @@ function Medical() {
 										</div>
 									</div>
 								</div>
-								
+								{/*
 								<div className="mm-survey-page" data-page="3">
 									<div className="mm-survery-content">
 										<div className="mm-survey-question">
@@ -459,6 +495,7 @@ function Medical() {
 										</div>
 									</div>
 								</div>
+								*/}
 								
 
 								
