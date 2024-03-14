@@ -59,6 +59,7 @@ function Header() {
                             <div className="header-logo">
                                 <a href="index.html"><img src="assets/images/logo.png" alt=""/></a>
                                 <a className="main_sticky" href="index.html"><img src="assets/images/logo-2.png" alt=""/></a>
+                                <a href="/" className='logo-f'>FitMe</a>
                             </div>
                             <div className="header-menu">
                                 <ul>

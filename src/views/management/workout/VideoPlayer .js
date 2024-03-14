@@ -92,9 +92,9 @@ const VideoPlayer = () => {
       const prediction = await model.predict(posenetOutput);
 
       let accuracy = prediction[1].probability.toFixed(2);
-      if(!pause && accuracy > 0.95 && stand==0){
+      if(!pause && accuracy > 0.8 && stand==0){
         check++;
-        if(check >= 2){
+        if(check >= 1){
           setCount(count=>count+1);
           setStand(stand=>stand+1);
           check = 0;
@@ -110,7 +110,7 @@ const VideoPlayer = () => {
 
   useInterval(() => {
     getPredictionAccuracy();
-  }, 300);
+  }, 200);
 
   const handlePlaying = () => {
     setPause(false);
@@ -136,8 +136,8 @@ const VideoPlayer = () => {
   }, [videoRef]);
 
   return (
-    <div>
-      <div ref={dropRef} style={{ width: '100%', height: '600px', border: '2px dashed #ccc', textAlign: 'center', paddingTop: '30px' }} onDrop={handleDrop} onDragOver={handleDragOver}>
+    <div class="video-container">
+      <div class="upload-container" ref={dropRef} style={{ width: '100%', height: '600px', border: '2px dashed #ccc', textAlign: 'center', paddingTop: '30px' }} onDrop={handleDrop} onDragOver={handleDragOver}>
         {videoSrc ? (
           <video ref={videoRef} controls style={{ width: '100%', height: '100%' }}>
             <source src={videoSrc} type="video/mp4" />
@@ -152,7 +152,7 @@ const VideoPlayer = () => {
         )}
       </div>
       
-      <div>
+      <div class="counter-container">
         <h4 class="title-counter" id='pose-counts'>Counts</h4>
         <span class="number-counter">{count}</span>
       </div>

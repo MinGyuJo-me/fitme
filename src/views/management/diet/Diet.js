@@ -563,11 +563,11 @@ function Diet() {
 
 			<OwlCarousel key={mealTime.length} items={3}  margin={20} autoplay autoplayTimeout={5000} autoplayHoverPause nav navText={["<i class='fa fa-chevron-left'/>","<i class='fa fa-chevron-right'/>"]} dots >
 				{mealTime.map((test,index)=>(
-				<div class="item" key={index}>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="blog-single-box">
-								<div class="blog-thumb">
+				<div className="item" key={index}>
+					<div className="row">
+						<div className="col-lg-12">
+							<div className="blog-single-box">
+								<div className="blog-thumb">
 									<div type="button" className="edit-siksa-button" onClick={toggleModal}>
 										<img src={test[4]} alt="pizza"/>
 										<input type='hidden' value={test[0]} />
@@ -578,14 +578,14 @@ function Diet() {
 									</div>
 									*/}
 								</div>
-								<div class="blog-content">
-									<div class="blog-left">
+								<div className="blog-content">
+									<div className="blog-left">
 										<span>{test[3]}</span>
 									</div>
 									<h2>{test[1]}</h2>
 									<p>{test[2]}</p>
 									<p>{test[5]}</p>
-									<div class="blog-button" >
+									<div className="blog-button" >
 										<div type="button" className="like-button" onClick={foodLike}>
 											<input type='hidden' value={test[0]} />
 											<input type='hidden' value={test[6]} />

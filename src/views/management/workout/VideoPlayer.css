@@ -1,3 +1,18 @@
+.video-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .upload-container {
+    width: calc(70% - 10px); /* 50% width with margin */
+    margin-right: 10px; /* Adjust margin as needed */
+  }
+  
+  .counter-container {
+    width: calc(30% - 10px); /* 50% width with margin */
+    margin-left: 10px; /* Adjust margin as needed */
+    margin-top: 170px;
+  }
 .title-counter{
     text-align:center;
     display:block;
