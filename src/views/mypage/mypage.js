@@ -8,7 +8,7 @@ import './MyPage.css';
 import Modal from './Pmodal.js';
 import Gmodal from './Gmodal.js';
 import { useNavigate } from "react-router-dom";
-import Chart from './chart/ChartApp.js'
+import ChartApp from './chart/ChartApp.js';
 import Swal from 'sweetalert2';
 import InbodyP from './inbody/InbodyP.jpeg';
 
@@ -44,11 +44,22 @@ import { Chart as ChartJS,
     ArcElement, 
     Tooltip, 
     Legend } from 'chart.js';
-import { Doughnut,Bar,Line } from 'react-chartjs-2';
+import { Doughnut,Bar,Line, Chart } from 'react-chartjs-2';
 import MyPageSidebar from '../component/sidebar/MyPageSidebar.js';
+
   
 ChartJS.register(CategoryScale,CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title, Tooltip, Legend);
 
+function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return null;
+  }
 
 var ipAddress = '192.168.0.110';
 
@@ -93,7 +104,7 @@ const calculateCalories = (exercise, factors) => {
 
 
 
-
+const myCookieValue = getCookie('Authorization');
 async function imageData(code){
     return await new Promise((resolve,reject)=>{
         try{
@@ -118,12 +129,12 @@ async function dietData(accountNo,dietCal){
     },2000);
 }
 function MyPage() {
-    const [accountData, setAccount ] = useState([]);
+
+    const [accountData, setAccountData ] = useState([]);
     const [accountNo, setAccountNo] = useState();
     const [myCookie, setMyCookie] = useState();
-
+    const [gameData, SetGameData] = useState({});
     const [mark, setMark] = useState([]);
-
     const [weekDate,setWeekDate] = useState([]);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [isGameRecordModalOpen, setIsGameRecordModalOpen] = useState(false);
@@ -158,14 +169,63 @@ function MyPage() {
         setIsGameRecordModalOpen(false);
     };
 
-    // 회원 정보 수정 이벤트 핸들러
     const handleProfileUpdate = (formData) => {
-    // 수정된 회원 정보 전송 로직 추가
-    console.log('수정된 회원 정보:', formData);
-    // 모달 닫기
-    closeProfileModal();
-    };
-
+        // FormData 객체 생성
+        const formDataToSend = new FormData();
+        // 수정된 정보 추가
+        Object.entries(formData).forEach(([key, value]) => {
+          formDataToSend.append(key, value);
+        });
+      
+        // 이미지 추가 (base64로 변환된 이미지)
+        if (previewImage) {
+          // base64 데이터를 Blob으로 변환하여 FormData에 추가
+          const base64Data = previewImage.split(',')[1]; // 쉼표(,)를 기준으로 분리한 두 번째 요소 가져오기
+          const blob = base64ToBlob(base64Data);
+          formDataToSend.append('image', blob);
+          // 서버로 데이터 전송
+          sendFormData(formDataToSend);
+        } else {
+          // 이미지가 없는 경우에도 서버로 데이터 전송
+          sendFormData(formDataToSend);
+        }
+      };
+      // base64 데이터를 Blob으로 변환하는 함수
+      const base64ToBlob = (base64Data) => {
+        const byteCharacters = atob(base64Data);
+        const byteArrays = [];
+        
+        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+          const slice = byteCharacters.slice(offset, offset + 512);
+          
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+    
+          const byteArray = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
+        }
+        return new Blob(byteArrays, { type: '' });
+      };
+      // FormData를 서버로 전송하는 함수
+      const sendFormData = (formData) => {
+        axios.put(`http://${ipAddress}:8080/api/v1/mypages/account/${accountNo}`, formData, {
+    /*put 해서 수정된 회원 정보 보내는 서버 http://192.168.0.65:8080/mypages/account/${accountNo},
+      post로 이미지 처리를 할 서버         http://192.168.0.15:5050/images/${accountNo}*/
+    
+            headers: {
+              Authorization: `${myCookieValue}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => {
+            console.log('회원 정보가 성공적으로 업데이트되었습니다.');
+          })
+          .catch((error) => {
+            console.error('회원 정보 업데이트에 실패했습니다:', error);
+          });
+      };
     const getCategoryData = (category, workChartData) => {
         return weekDate.map(date => {
             if (workChartData) {
@@ -187,71 +247,140 @@ function MyPage() {
     
     
 
-    // 게임 기록 수정 이벤트 핸들러
-    const handleGameRecordUpdate = (formData) => {
-        // 수정된 게임 기록 전송 로직 추가
-        console.log('수정된 게임 기록:', formData);
-        // 모달 닫기
-        closeGameRecordModal();
-};
-
-    const navigate = useNavigate();
-
-    useEffect(()=>{
-        function getCookie(name) { //로그인 여부 확인
-          const cookies = document.cookie.split(';');
-          for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.startsWith(name + '=')) {
-                return cookie.substring(name.length + 1);
-            }
+    const handleGameRecordUpdate = (GformData) => {
+        // FormData 객체 생성
+        const GformDataToSend = new FormData();
+        // 수정된 정보 추가
+        Object.entries(GformData).forEach(([key, value]) => {
+            GformDataToSend.append(key, value);
+        });
+      
+        // 이미지 추가 (base64로 변환된 이미지)
+        if (previewImage) {
+          // base64 데이터를 Blob으로 변환하여 FormData에 추가
+          const base64Data = previewImage.split(',')[1]; // 쉼표(,)를 기준으로 분리한 두 번째 요소 가져오기
+          const blob = Gbase64ToBlob(base64Data);
+          GformDataToSend.append('image', blob);
+          // 서버로 데이터 전송
+          GsendFormData(GformDataToSend);
+        } else {
+          // 이미지가 없는 경우에도 서버로 데이터 전송
+          GsendFormData(GformDataToSend);
+        }
+      };
+        // FormData를 서버로 전송하는 함수
+  const GsendFormData = (GformData) => {
+    axios.put(`http://${ipAddress}:8080/api/v1/games/account/${accountNo}`, GformData, {
+/*put 해서 수정된 회원 정보 보내는 서버 http://192.168.0.65:8080/mypages/account/${accountNo},
+  post로 이미지 처리를 할 서버         http://192.168.0.15:5050/images/${accountNo}*/
+    
+        headers: {
+          Authorization: `${myCookieValue}`,
+          'Content-Type': 'multipart/form-data',
+          
+        },
+        
+      })
+      .then((response) => {
+        console.log('게임 정보가 성공적으로 업데이트되었습니다.');
+      })
+      .catch((error) => {
+        console.error('게임 정보 업데이트에 실패했습니다:', error);
+      });
+  };
+      // base64 데이터를 Blob으로 변환하는 함수
+      const Gbase64ToBlob = (base64Data) => {
+        const byteCharacters = atob(base64Data);
+        const byteArrays = [];
+        
+        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+          const slice = byteCharacters.slice(offset, offset + 512);
+    
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
           }
-          return null;
+    
+          const byteArray = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
+        }
+        return new Blob(byteArrays, { type: '' });
+      };
+
+      const navigate = useNavigate();
+
+    useEffect(() => {
+        const myCookieValue = getCookie('Authorization');
+        if (myCookieValue === null) {
+            navigate('/signin');
+        } else {
+            axios.put(`/api/v1/mypage/account`, {
+                headers: {
+                    'Authorization': `${myCookieValue}`,
+                    'Content-Type': 'application/json; charset=UTF-8'
+                }
+            })
+            .then(response => {
+                // 응답으로 받은 데이터를 상태로 설정
+                setAccountData(response.data,); 
+            })
+            .catch(error => console.log(error));
         }
         
+    }, [navigate]);
+  
+  
+      const [imageCode, setImageCode] = useState('');
+
+    useEffect(() => {
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    return cookie.substring(name.length + 1);
+                }
+            }
+            return null;
+        }
+
+
         const myCookieValue = getCookie('Authorization');
         setMyCookie(myCookieValue);
-        if(myCookieValue == null){ //로그인 확인
+
+        if (myCookieValue == null) { //로그인 확인
             navigate('/signin');
         }
-    
-        
+
         axios.get('/api/v1/mypages/account', {
             headers: {
-                'Authorization' : `${myCookieValue}`,
-                'Content-Type' : 'application/json; charset=UTF-8'
+                'Authorization': `${myCookieValue}`,
+                'Content-Type': 'application/json; charset=UTF-8'
             }
         })
         .then(response => {
-            var proflieData = response.data;
+            var profileData = response.data;
+            const imageCode = response.data.image;
+            setImageCode(imageCode);
 
-            setAccountNo(proflieData.accountNo);
-            if(proflieData.image!=null){
-                imageData(proflieData.image).then((test)=>{
-                    proflieData.image = test;
-                    setAccount(proflieData);
-                })
-            }else{
-                imageData('1').then((test)=>{
-                    proflieData.image = test;
-                    setAccount(proflieData);
-                })
-            }
-            if(proflieData.gameImage!=null){
-                imageData(proflieData.gameImage).then((test)=>{
-                    
-                    proflieData.gameImage = test;
-                    setAccount(proflieData);
-                })
-            }else{
-                imageData('1').then((test)=>{
-                    proflieData.gameImage = test;
-                    setAccount(proflieData);
-                })
-            }
+            setAccountNo(profileData.accountNo);
+            Promise.all([
+                profileData.image != null ? imageData(profileData.image) : imageData('1'),
+                profileData.gameImage != null ? imageData(profileData.gameImage) : imageData('1')
+            ]).then(([image1, image2]) => {
+                profileData.image = image1;
+                profileData.gameImage = image2;
+                setAccountData(profileData);
+                SetGameData(profileData);
+
+            }).catch(error => {
+                console.error('이미지 데이터 가져오기 실패:', error);
+            });
+            
         })
         .catch(error => console.log(error))
-    },[])
+    }, [isProfileModalOpen, isGameRecordModalOpen]);
+
 
     useEffect(()=>{
         if(accountNo != null){
@@ -437,6 +566,7 @@ function MyPage() {
         setWeekDate(dateArray);
         
     }
+    
 
     //날짜에 맞춰서 데이타 필터링
     useEffect(() => {
@@ -523,16 +653,27 @@ function MyPage() {
         if (!file) {
             return;
         }
-    
+        
+        if (!accountNo) { // accountNo가 설정되지 않았을 때 처리
+            console.log('accountNo',accountNo);
+            Swal.fire('오류', 'accountNo없음.', 'error');
+            return;
+        }
+
         const formData = new FormData();
         formData.append('file', file);
-    
+        formData.append('accountNo',accountNo);
+        console.log('accountNo',accountNo);
         try {
-            const response = await axios.post('http://localhost:5000/ocr', formData, {
+            console.log(formData)
+            const response = await axios.post(`http://192.168.0.110:5000/ocr`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            console.log('accountNo',accountNo);
+            console.log('response',response);
+            console.log('response.data',response.data);
             setOcrData(response.data); // OCR 결과 상태 업데이트
             Swal.fire('성공!', '이미지가 성공적으로 처리되었습니다.', 'success');
         } catch (error) {
@@ -541,7 +682,39 @@ function MyPage() {
         }
     };
     
-  
+    {/*★★★★★★★★★★ 스크롤 용 ★★★★★★★★★★*/}
+    const Scroll_Profile = () => {
+        var offset = $(".scroll-profile").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+
+    const Scroll_Inbody = () => {
+        var offset = $(".scroll-inbody").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+    const Scroll_Statistic_Diet = () => {
+        var offset = $(".scroll-statistic-diet").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+    const Scroll_Statistic_Workout = () => {
+        var offset = $(".scroll-statistic-workout").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+    const Scroll_BulletinBoard = () => {
+        var offset = $(".scroll-bulletin-board").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
+
+
+
+    const Scroll_Youtube = () => {
+        var offset = $(".scroll-youtube").offset();
+        $("html, body").animate({scrollTop: offset.top},1000);
+    }
 
 
     return (
@@ -554,13 +727,18 @@ function MyPage() {
 
         
         <div style={{display:"flex",position:"relative"}}>
-            <MyPageSidebar week={(e) => week(e)}/>
+            {/*★★★★★★★★★★ 스크롤 용 이벤트 props 추가 ★★★★★★★★★★*/}
+            <MyPageSidebar week={(e) => week(e)} 
+            Scroll_Youtube={Scroll_Youtube} Scroll_Profile={Scroll_Profile}
+            Scroll_Inbody={Scroll_Inbody} Scroll_Statistic_Diet={Scroll_Statistic_Diet}
+            Scroll_Statistic_Workout={Scroll_Statistic_Workout} Scroll_BulletinBoard={Scroll_BulletinBoard}
+            />
             <div className='mypagesidebar-scroll-event'>
             </div>
             
             {/* width 추가됨 */}
             <div style={{width:"100%", height:"100%"}}>
-            <div className="company-info-section">
+            <div className="company-info-section scroll-profile">
                 <div style={{display:"flex", width:"100%", gap:"80px", placeItems:"center", justifyContent:"center", height:"950px"}}>
 
 
@@ -575,13 +753,14 @@ function MyPage() {
                                     isOpen={isProfileModalOpen}
                                     onClose={closeProfileModal}
                                     onSubmit={handleProfileUpdate}
-                                    nickname={accountData.nickname}
                                     name={accountData.name}
                                     address={accountData.address}
                                     hobby={accountData.hobby}
-                                    height={accountData.height}
                                     weight={accountData.weight}
                                     age={accountData.age}
+                                    imageCode={imageCode}
+                                    accountNo={accountNo}
+                                    myCookieValue={myCookieValue}
                                     />
                                 )}
                             </div>
@@ -589,10 +768,7 @@ function MyPage() {
                         <div className='sideber-item' style={{overflow:'hidden', display:"flex", flexDirection:"column"}}>
                             <img id='ibox' src={accountData.image} alt="프로필 사진" style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }}/>
                             <div className="form_row" style={{width:"80%", margin:"0px"}}>
-                                <div>
-                                    <span className="label">닉네임</span>
-                                    <span className="value" id="username">JohnDoe123</span>
-                                </div>
+
                                 <div>
                                     <span className="label">이름</span>
                                     <span className="value" id="name">{accountData.name}</span>
@@ -643,17 +819,20 @@ function MyPage() {
                                     onClose={closeGameRecordModal}
                                     onSubmit={handleGameRecordUpdate}
                                     nickname={accountData.nickname}
-                                    
+                                    gameImage={accountData.gameImage}
+                                    accountNo={accountNo}
+                                    imageCode={accountData.imageCode}
+                                    myCookieValue={myCookieValue}
                                     />
                                 )}
                             </div>
                         </div>
                         <div className='sideber-item' style={{overflow:'hidden', display:"flex", flexDirection:"column"}}>
-                            <img id='ibox' src={accountData.game_image} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
+                            <img id='ibox' src={accountData.gameImage} alt="프로필 사진"  style={{ maxWidth: 'auto', height: 'auto',objectFit: 'contain' }} />
                             <div className="form_row" style={{width:"80%", margin:"0px"}}>
                                 <div>
                                     <span className="label">닉네임</span>
-                                    <span className="value" id="username">JohnDoe123</span>
+                                    <span className="value" id="username">{accountData.nickname}</span>
                                 </div>
                                 <div>
                                     <span className="label">평균 등수</span>
@@ -734,7 +913,7 @@ function MyPage() {
     
         
 
-        <div className="container">
+        <div className="container scroll-inbody">
             <div className="title">
                 <h1>인바디</h1>
             </div>
@@ -759,7 +938,8 @@ function MyPage() {
                             <button className='inbody-U-button' onClick={openInbodyModal}>직접 수정하기</button>
                         </div>
                         <div className="chart-container cc1">
-                           <Chart/>
+                           {/* <ChartApp/> */}
+                           <ChartApp ocrData={ocrData}/>
                         </div>
                     </div>
                 </div>
@@ -776,7 +956,7 @@ function MyPage() {
             )}
         </div>    
 
-            <div className="container">
+            <div className="container scroll-statistic-diet">
                 <div className="title">
                     <h1>식단 통계</h1>
                 </div>
@@ -797,7 +977,7 @@ function MyPage() {
                 </div>
             </div>
 
-            <div className="container">
+            <div className="container scroll-statistic-workout">
                 <div className="title">
                     <h1>운동 통계</h1>
                 </div>
@@ -821,7 +1001,7 @@ function MyPage() {
                 </div>
             </div>
 
-            <div className="container">       
+            <div className="container scroll-bulletin-board">       
                 <div className="title">
                     <h1>저장한 게시글</h1>
                 </div> 
@@ -833,7 +1013,7 @@ function MyPage() {
 
             </div>
 
-            <div className="container">
+            <div className="container scroll-youtube">
                 <div className="title">
                     <h1>저장한 유튜브</h1>
                 </div>
@@ -847,8 +1027,8 @@ function MyPage() {
             
             </div>
         </div>
-
     </div>
+
   );
 }
 /*게시물 스크랩 부문 */

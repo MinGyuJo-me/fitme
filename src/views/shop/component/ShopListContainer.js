@@ -20,13 +20,21 @@ function ShopListContainer(props) {
     
         // SweetAlert2를 사용하여 알림 표시
         Swal.fire({
+            title: '장바구니에 상품이 추가되었습니다.',
+            text: '장바구니로 이동하시겠습니까?',
             icon: 'success',
-            title: '장바구니에 추가되었습니다!',
-            showConfirmButton: false,
-            timer: 1500 // 1.5초 동안 알림을 표시합니다.
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '예',
+            cancelButtonText: '아니오'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/cart'; // '/cart' 페이지로 이동
+            }
         });
-        }
     };
+}
 
   return (
         <div className="container">

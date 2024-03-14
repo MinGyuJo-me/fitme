@@ -18,7 +18,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 import moment from "moment";
 
-function MyPageSidebar({week}) {
+function MyPageSidebar({week,Scroll_Profile, Scroll_Inbody, Scroll_Statistic_Diet, Scroll_Statistic_Workout, Scroll_BulletinBoard, Scroll_Youtube}) {
 
     const MenuSlide = (e) =>{
         if($(e.target.parentElement).hasClass("sidebar-dropdown") && !$(e.target.parentElement).hasClass("active")){
@@ -43,7 +43,7 @@ function MyPageSidebar({week}) {
 
     return (
         <div className='sidebar-toggle-mode'>
-            <div className="page-wrapper chiller-theme" style={{width:"100%"}}>
+            <div className="page-wrapper chiller-theme toggled" style={{width:"100%"}}>
                 <a id="show-sidebar" className="btn btn-sm btn-dark">
                 <i className="fas fa-bars"></i>
                 </a>
@@ -124,12 +124,12 @@ function MyPageSidebar({week}) {
                         <div className="sidebar-submenu">
                             <ul>
                             <li>
-                                <span>
+                                <span onClick={Scroll_Profile}>
                                     Profile
                                 </span>
                             </li>
                             <li>
-                                <span>
+                                <span onClick={Scroll_Inbody}>
                                     Inbody
                                 </span>
                             </li>
@@ -147,23 +147,13 @@ function MyPageSidebar({week}) {
                             <div className="sidebar-submenu">
                                 <ul>
                                     <li>
-                                        <span>
-                                            Game
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span>
-                                            Workout
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span>
+                                        <span onClick={Scroll_Statistic_Diet}>
                                             Diet
                                         </span>
                                     </li>
                                     <li>
-                                        <span>
-                                            Calories
+                                        <span onClick={Scroll_Statistic_Workout}>
+                                            Workout
                                         </span>
                                     </li>
                                 </ul>
@@ -182,12 +172,12 @@ function MyPageSidebar({week}) {
                             <div className="sidebar-submenu">
                                 <ul>
                                     <li>
-                                        <span>
+                                        <span onClick={Scroll_BulletinBoard}>
                                             Bulletin Board
                                         </span>
                                     </li>
                                     <li>
-                                        <span>
+                                        <span onClick={Scroll_Youtube}>
                                             Youtube
                                         </span>
                                     </li>
