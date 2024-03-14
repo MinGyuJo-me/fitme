@@ -92,9 +92,9 @@ const VideoPlayer = () => {
       const prediction = await model.predict(posenetOutput);
 
       let accuracy = prediction[1].probability.toFixed(2);
-      if(!pause && accuracy > 0.95 && stand==0){
+      if(!pause && accuracy > 0.8 && stand==0){
         check++;
-        if(check >= 2){
+        if(check >= 1){
           setCount(count=>count+1);
           setStand(stand=>stand+1);
           check = 0;
@@ -110,7 +110,7 @@ const VideoPlayer = () => {
 
   useInterval(() => {
     getPredictionAccuracy();
-  }, 300);
+  }, 200);
 
   const handlePlaying = () => {
     setPause(false);
