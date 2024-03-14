@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
-
+import Header from '../component/header/Header';
+import HeaderTop from '../component/headerTop/HeaderTop';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import $ from 'jquery';
 import './Main.css';
@@ -16,7 +17,7 @@ function Main() {
             <div className="loder-section left-section"></div>
             <div className="loder-section right-section"></div>
         </div>
-
+    
     {/*
         <!--==================================================-->
         <!-- 메인 영상
@@ -29,7 +30,12 @@ function Main() {
                 <source src={require('../../assets/videos/main_title.mp4')} type="video/mp4"/>
             </video>
             </div>
+            <div>
+                <HeaderTop/>
+                <Header/>
+            </div>
                 <div className="container" style={{marginTop:'400px'}}>
+                
                     <div className="row align-items-center">
                         <div className="col-lg-6 col-md-6">
                             <div className="slider-content">
