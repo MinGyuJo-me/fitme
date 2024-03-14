@@ -6,6 +6,9 @@ import Header from '../../component/header/Header';
 import HeaderTop from '../../component/headerTop/HeaderTop';
 import './Diet.css';
 
+import Breadcumb from '../../component/Breadcumb/Breadcumb';
+import img_diet from '../../../assets/images/breadcumb/diet.jpg';
+
 //크루셀 npm i react-owl-carousel
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
@@ -455,22 +458,7 @@ function Diet() {
     <div>
         <HeaderTop/>
         <Header/>
-        <div className="breadcumb-area d-flex align-items-center">
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-12">
-                        <div className="breacumb-content">
-                            <div className="breadcumb-title">
-                                <h1>Management</h1>
-                            </div>
-                            <div className="breadcumb-content-text">
-                            <a href="index.html">Diet</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Breadcumb title="Diet" content="Management"  img_title={img_diet}/>
         <div className="blog-area style-two">
             
 	<div className="container">

@@ -9,6 +9,8 @@ import Header from '../component/header/Header';
 import HeaderTop from '../component/headerTop/HeaderTop';
 import Breadcumb from '../component/Breadcumb/Breadcumb';
 
+import img_login from '../../assets/images/breadcumb/login.jpg';
+
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
 
@@ -91,7 +93,7 @@ function FindPassword() {
         <Header/>
 
         {/* 제목 배경화면 */}
-        <Breadcumb title="findpassword" content="Account" subContent="findpassword"/>
+        <Breadcumb title="FindPassword" content="Account" img_title={img_login} />
 
 
 

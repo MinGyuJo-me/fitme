@@ -9,6 +9,7 @@ import HeaderTop from '../component/headerTop/HeaderTop';
 import Breadcumb from '../component/Breadcumb/Breadcumb';
 import Chatbot from '../component/chatBot/ChatBot';
 import './Login.css';
+import img_login from '../../assets/images/breadcumb/login.jpg';
 
 //(소켓 알림) - 조동훈
 import { Stomp } from '@stomp/stompjs';
@@ -164,7 +165,7 @@ function SignIn() {
         */}
 
         {/* 제목 배경화면 */}
-        <Breadcumb title="Login" content="Account" subContent="Login"/>
+        <Breadcumb title="Login" content="Account"  img_title={img_login}/>
 
         <div className="login-form" style={{marginTop:"100px"}}>
           <h1 className="login-heading">환영합니다!</h1>

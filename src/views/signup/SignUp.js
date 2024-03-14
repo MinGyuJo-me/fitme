@@ -12,6 +12,8 @@ import Chatbot from '../component/chatBot/ChatBot';
 
 import swal from 'sweetalert2';
 
+import img_login from '../../assets/images/breadcumb/login.jpg';
+
 const emailRegex = '[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}';
 const passwordRegex = '^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,12}$';
 const pnumRegex = '^\\d{11}$';
@@ -326,7 +328,7 @@ function SignUp() {
         <Header/>
 
         {/* 배경화면 */}
-        <Breadcumb title="signup" content="Account" subContent="signup"/>
+        <Breadcumb title="Signup" content="Account" img_title={img_login}/>
 
          <form className="login-form" onSubmit={handleRegister} method='post' style={{marginTop:"100px"}}>
         <h1 className="login-heading">회원 가입</h1>

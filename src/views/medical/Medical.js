@@ -6,6 +6,7 @@ import Loader from '../component/loader/Loader';
 import './Medical.css';
 import $ from 'jquery';
 
+import img_medical from '../../../src/assets/images/breadcumb/medical.jpg'
 
 function Medical() {
 
@@ -262,7 +263,7 @@ function Medical() {
 		{/*헤더 메인 메뉴*/}
 		<Header/>
 		{/* 제목 배경화면 */}
-		<Breadcumb title="Medical" content="social"/>
+		<Breadcumb title="Medical" content="" img_title={img_medical} />
 
 		<div className="container">
 			{/* 전체 값을 보내는 방식 form post 또는 get으로*/}

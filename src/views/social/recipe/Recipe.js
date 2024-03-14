@@ -12,6 +12,8 @@ import RecipeBoard from './component/RecipeBoard';
 import $ from 'jquery';
 import axios from 'axios'; //npm install axios
 
+import img_recipe from '../../../assets/images/breadcumb/recipe.jpg'
+
 const ipAddress = '192.168.0.53';
 
 //배열 섞기
@@ -97,7 +99,7 @@ function Recipe() {
         {/* 로딩 애니메이션*/}
         <Loader/>
         {/* 제목 배경화면 */}
-        <Breadcumb title="RECIPE" content="social" subContent="community"/>
+        <Breadcumb title="Recipe" content="Social" img_title={img_recipe}/>
 
         <div className="portfolio-area">
             <div className="container">

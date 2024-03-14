@@ -21,6 +21,8 @@ import CommunityBoardViewModal from './crud/CommunityBoardViewModal';
 // import ChatbotFloating from '../../component/chatbotFloating/ChatbotFloating';
 import ChatBot from '../../component/chatBot/ChatBot';
 
+import img_community from '../../../assets/images/breadcumb/community.png'
+
 
 //플로팅
 //npm i --save react-floating-action-button
@@ -213,7 +215,7 @@ function Community() {
         {/* 로딩 애니메이션*/}
         <Loader/>
         {/* 제목 배경화면 */}
-        <Breadcumb title="Commnunity" content="social" subContent="community"/>
+        <Breadcumb title="Community" content="Social" img_title={img_community}/>
         
         {/*게시글 영역*/}
         <div className="blog-area style-two">
