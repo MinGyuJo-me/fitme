@@ -319,7 +319,7 @@ ul.sub-menu li a {
 <!-- Start  slider-area.style-two   Css -->
 <!-- ============================================================== -->*/
 .slider-area.style-two {
-    height: 750px;
+    height: 100vh;
     background: url(assets/images/hero-bg1.png);
     background-position: center;
     background-size: cover;
@@ -336,6 +336,7 @@ ul.sub-menu li a {
     color: #F8A532;
     text-transform: capitalize;
     text-shadow: 2px 2px 5px black;
+    width: 800px;
 }
 .slider-area.style-two .slider-title h3 {
     line-height: 26px;
@@ -356,7 +357,7 @@ ul.sub-menu li a {
 .slider-area.style-two .slider-button a {
     background:#FFD850;
     font-family: Inter;
-    color: rgb(255, 255, 255);
+    color: black;
     text-decoration: none;
     text-align: center;
     letter-spacing: 0px;

@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Orelega+One&display=swap');
+
+
 .header-logout-button{
     border: none;
     background-color: rgba(0,0,0,0);
@@ -8,4 +11,11 @@
 
 .header-logout-button:hover{
     color:red;
+}
+
+.logo-f{
+    font-family: "Orelega One", serif;
+    font-size: 40px;
+    color: black;
+    font-weight: 400;
 }
