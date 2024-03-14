@@ -11,14 +11,14 @@ import BootPay from "../bootpay/BootPay.js";
 
 function Cart() {
     // 장바구니 아이템 상태 정의
-     const [cartItems, setCartItems] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
     // 총 가격 상태 정의
-     const [totalAmount, setTotalAmount] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
     // 선택된 상품들의 이름 상태 정의
-     const [productNames, setProductNames] = useState([]); // 선택된 상품들의 이름을 저장할 상태
+    const [productNames, setProductNames] = useState([]); // 선택된 상품들의 이름을 저장할 상태
     // 계정 번호 상태 정의
     const [accountNo, setAccountNo] = useState('');
-     // 선택된 상품들의 상태 정의
+    // 선택된 상품들의 상태 정의
     const [selectedItems, setSelectedItems] = useState([]);
     // 선택된 상품들의 이름을 관리하는 상태 정의
     const [selectedProductNames, setSelectedProductNames] = useState([]);
@@ -27,16 +27,27 @@ function Cart() {
     const handleProductNamesChange = (productNames) => {
         setSelectedProductNames(productNames);
     };
-      
- 
-     // 총 가격 변경 시 실행되는 함수
-     const handleTotalAmountChange = (totalAmount) => {
-       setTotalAmount(totalAmount);
-     };
- 
-     useEffect(()=>{
-         $('body').addClass('loaded');
-     });
+
+    // 총 가격 변경 시 실행되는 함수
+    const handleTotalAmountChange = (totalAmount) => {
+        setTotalAmount(totalAmount);
+    };
+
+    useEffect(() => {
+        $('body').addClass('loaded');
+
+        const storedCartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+        setCartItems(storedCartItems);  
+    }, []);
+
+    // 결제 성공 후 실행되는 함수
+    const handlePaymentSuccess = () => {
+        // 결제가 완료된 후에 실행되는 로직
+        const updatedCartItems = cartItems.filter(item => !selectedProductNames.includes(item.title));
+        setCartItems(updatedCartItems);
+        sessionStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+        window.location.reload();
+    };
 
     return (
         <div>
@@ -77,25 +88,25 @@ function Cart() {
                 </div>
                 
                 <div className="container">
-                {/* CartListContainer에 cartItems와 함수를 전달 */}
-                <CartListContainer
-                    cartItems={cartItems}  // 장바구니 아이템 목록 전달
-                    selectedItems={selectedItems}  // 선택된 아이템 목록 전달
-                    onProductNamesChange={handleProductNamesChange}  // 상품명 변경 시 실행될 함수 전달
-                    onTotalAmountChange={handleTotalAmountChange}  // 총 가격 변경 시 실행될 함수 전달
-                />
+                    {/* CartListContainer에 cartItems와 함수를 전달 */}
+                    <CartListContainer
+                        cartItems={cartItems}  // 장바구니 아이템 목록 전달
+                        selectedItems={selectedItems}  // 선택된 아이템 목록 전달
+                        onProductNamesChange={handleProductNamesChange}  // 상품명 변경 시 실행될 함수 전달
+                        onTotalAmountChange={handleTotalAmountChange}  // 총 가격 변경 시 실행될 함수 전달
+                    />
                 </div>
                 
                 <BootPay 
                     totalAmount={totalAmount} 
                     accountNo={accountNo}
                     productNames={selectedProductNames} // 전달받은 상품명을 props로 전달
+                    onSuccess={handlePaymentSuccess}  // 결제 완료 콜백 함수 전달
                 />
             </div>
             <ChatBot/>
         </div>
-  );
+    );
 }
 
 export default Cart;
-
