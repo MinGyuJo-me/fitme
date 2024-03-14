@@ -27,7 +27,9 @@ function ShopListContainer(props) {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: '예',
-            cancelButtonText: '아니오'
+            cancelButtonText: '아니오',
+            scrollbarPadding: false,
+            heightAuto: false
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = '/cart'; // '/cart' 페이지로 이동

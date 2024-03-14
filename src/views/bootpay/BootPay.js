@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 function Payment(props) {
   
   const [myCookieValue, setMyCookieValue] = useState('');
+  const [cartItems, setCartItems] = useState([]);
+
   console.log('totalAmount:', props.totalAmount);
   console.log('props.productNames:', props.productNames);
   console.log('productNames:', props.productNames ? props.productNames.join(', ') : 'No product names available');
@@ -26,6 +28,10 @@ function Payment(props) {
 
     BootPay.setApplicationId('65e7fca2d25985001b6e5d69');
 
+    // 세션 스토리지에서 저장된 장바구니 정보 가져오기
+    const storedCartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+    setCartItems(storedCartItems);
+
     return () => {
       BootPay.removePaymentWindow();
     };
@@ -38,6 +44,19 @@ function Payment(props) {
   
   const generateOrderId = () => {
     return 'order_' + new Date().getTime();
+  };
+
+  const removeItemsAfterPayment = () => {
+    // 결제가 완료된 상품명 가져오기
+    const productNames = props.productNames;
+    
+    // 결제가 완료된 상품을 장바구니에서 제거
+    const updatedCartItems = cartItems.filter(item => !productNames.includes(item.title));
+    setCartItems(updatedCartItems);
+    sessionStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    
+    console.log('결제가 완료되어 세션 스토리지에서 상품을 삭제했습니다.');
+    window.location.reload();
   };
 
   const openBootPay = (orderId, payNo) => {
@@ -76,9 +95,9 @@ function Payment(props) {
         title: '결제 완료',
         text: '결제가 완료되었습니다.'
       });
+      removeItemsAfterPayment(); // 결제가 완료된 후에 장바구니에서 상품 삭제
     });    
   };
-  
 
   const sendPaymentData = async (payNo, payMethod) => {
     try {
@@ -109,6 +128,7 @@ function Payment(props) {
         text: '결제가 실패되었습니다.'
       });
     }
+    
   };
 
   const payListInsert = async () => {
