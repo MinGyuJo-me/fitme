@@ -51,7 +51,10 @@ function CartListContainer(props) {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: '삭제',
-      cancelButtonText: '취소'
+      cancelButtonText: '취소',
+      scrollbarPadding: false,
+      heightAuto: false
+      
     }).then((result) => {
       if (result.isConfirmed) {
         const newCartItems = cartItems.filter((item, idx) => idx !== index);
@@ -67,6 +70,17 @@ function CartListContainer(props) {
         );
       }
     });
+  };
+
+  // 결제가 완료된 상품을 장바구니에서 삭제하는 함수
+  const removeItemsAfterPayment = (selectedItems) => {
+    selectedItems.forEach((index) => {
+      const newCartItems = cartItems.filter((item, idx) => idx !== index);
+      setCartItems(newCartItems);
+    });
+    setSelectedItems([]);
+    sendProductNamesToParent([]); // 선택된 상품명 업데이트
+    sessionStorage.removeItem('selectedItems'); // 선택된 상품 세션 스토리지에서 삭제
   };
 
   const calculateTotalAmount = (selectedItems) => {
